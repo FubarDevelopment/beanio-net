@@ -1,0 +1,21 @@
+<StyleCopSettings Version="105">
+  <GlobalSettings>
+    <StringProperty Name="Culture">en-US</StringProperty>
+    <CollectionProperty Name="RecognizedWords">
+      <Value>unmarshal</Value>
+      <Value>unmarshals</Value>
+      <Value>unmarshalled</Value>
+      <Value>unmarshalling</Value>
+      <Value>marshalled</Value>
+      <Value>marshalling</Value>
+      <Value>stateful</Value>
+    </CollectionProperty>
+  </GlobalSettings>
+  <Analyzers>
+    <Analyzer AnalyzerId="StyleCopPlus.StyleCopPlusRules">
+      <AnalyzerSettings>
+        <StringProperty Name="AdvancedNaming_Words">3D A B C DE EN FxCop ID IDs IO OK StyleCop US X</StringProperty>
+      </AnalyzerSettings>
+    </Analyzer>
+  </Analyzers>
+</StyleCopSettings>
