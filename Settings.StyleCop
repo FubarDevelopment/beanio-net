@@ -2,19 +2,26 @@
   <GlobalSettings>
     <StringProperty Name="Culture">en-US</StringProperty>
     <CollectionProperty Name="RecognizedWords">
-      <Value>unmarshal</Value>
-      <Value>unmarshals</Value>
-      <Value>unmarshalled</Value>
-      <Value>unmarshalling</Value>
       <Value>marshalled</Value>
       <Value>marshalling</Value>
+      <Value>nillable</Value>
       <Value>stateful</Value>
+      <Value>unmarshal</Value>
+      <Value>unmarshalled</Value>
+      <Value>unmarshalling</Value>
+      <Value>unmarshals</Value>
     </CollectionProperty>
   </GlobalSettings>
   <Analyzers>
     <Analyzer AnalyzerId="StyleCopPlus.StyleCopPlusRules">
       <AnalyzerSettings>
         <StringProperty Name="AdvancedNaming_Words">3D A B C DE EN FxCop ID IDs IO OK StyleCop US X</StringProperty>
+        <StringProperty Name="AdvancedNaming_PublicConst">$(AaBb):$(AABB):$(AA_BB)</StringProperty>
+        <StringProperty Name="AdvancedNaming_ProtectedConst">$(AaBb):c_$(aaBb):$(AABB):$(AA_BB)</StringProperty>
+        <StringProperty Name="AdvancedNaming_PrivateConst">$(AaBb):c_$(aaBb):$(AABB):$(AA_BB)</StringProperty>
+        <StringProperty Name="AdvancedNaming_InternalConst">$(AaBb):$(AABB):$(AA_BB)</StringProperty>
+        <StringProperty Name="AdvancedNaming_EnumItem">$(AaBb):$(AABB):$(AA_BB)</StringProperty>
+        <StringProperty Name="AdvancedNaming_Enum">$(AaBb):$(AABB):$(AA_BB)</StringProperty>
       </AnalyzerSettings>
     </Analyzer>
   </Analyzers>

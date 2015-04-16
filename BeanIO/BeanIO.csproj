@@ -37,10 +37,26 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Annotation\AnnotationConstants.cs" />
+    <Compile Include="Annotation\FieldAttribute.cs" />
+    <Compile Include="Annotation\FieldsAttribute.cs" />
+    <Compile Include="Annotation\RecordAttribute.cs" />
+    <Compile Include="Annotation\GroupAttribute.cs" />
+    <Compile Include="Annotation\SegmentAttribute.cs" />
     <Compile Include="BeanReader.cs" />
     <Compile Include="BeanReaderErrorEventArgs.cs" />
+    <Compile Include="Builder\Align.cs" />
     <Compile Include="IUnmarshaller.cs" />
     <Compile Include="StreamFactory.cs" />
+    <Compile Include="Types\CharacterTypeHandler.cs" />
+    <Compile Include="Types\BooleanCharacterTypeHandler.cs" />
+    <Compile Include="Types\BooleanIntegerTypeHandler.cs" />
+    <Compile Include="Types\DefaultTypeConfigurationProperties.cs" />
+    <Compile Include="Types\IConfigurableTypeHandler.cs" />
+    <Compile Include="Types\ITypeHandler.cs" />
+    <Compile Include="Types\CultureSupport.cs" />
+    <Compile Include="Types\NumberTypeHandler.cs" />
+    <Compile Include="Types\StringTypeHandler.cs" />
     <Compile Include="UnidentifiedRecordException.cs" />
     <Compile Include="UnexpectedRecordException.cs" />
     <Compile Include="IMarshaller .cs" />
@@ -58,6 +74,14 @@
     <Compile Include="InvalidRecordException.cs" />
     <Compile Include="IRecordContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Xsd\2011\01\mapping.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Xsd\2012\03\mapping.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

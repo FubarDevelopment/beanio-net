@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 
 namespace BeanIO
@@ -16,14 +17,37 @@ namespace BeanIO
         /// <param name="name">The name of the stream in the mapping file</param>
         /// <param name="input">The input stream to read from</param>
         /// <returns>The new <see cref="IBeanReader"/></returns>
-        public abstract IBeanReader CreateReader(string name, Stream input);
+        public virtual IBeanReader CreateReader(string name, Stream input)
+        {
+            return CreateReader(name, input, CultureInfo.CurrentCulture);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="IBeanReader"/> for reading from the given input stream.
+        /// </summary>
+        /// <param name="name">The name of the stream in the mapping file</param>
+        /// <param name="input">The input stream to read from</param>
+        /// <param name="culture">The culture used to format error messages.</param>
+        /// <returns>The new <see cref="IBeanReader"/></returns>
+        public abstract IBeanReader CreateReader(string name, Stream input, CultureInfo culture);
 
         /// <summary>
         /// Creates a new <see cref="IUnmarshaller"/> for unmarshalling records.
         /// </summary>
         /// <param name="name">The name of the stream in the mapping file</param>
         /// <returns>The new <see cref="IUnmarshaller"/></returns>
-        public abstract IUnmarshaller CreateUnmarshaller(string name);
+        public virtual IUnmarshaller CreateUnmarshaller(string name)
+        {
+            return CreateUnmarshaller(name, CultureInfo.CurrentCulture);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="IUnmarshaller"/> for unmarshalling records.
+        /// </summary>
+        /// <param name="name">The name of the stream in the mapping file</param>
+        /// <param name="culture">The culture used to format error messages.</param>
+        /// <returns>The new <see cref="IUnmarshaller"/></returns>
+        public abstract IUnmarshaller CreateUnmarshaller(string name, CultureInfo culture);
 
         /// <summary>
         /// Creates a new <see cref="IBeanWriter"/> for writing to the given output stream.
