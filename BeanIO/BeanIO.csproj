@@ -46,8 +46,10 @@
     <Compile Include="BeanReader.cs" />
     <Compile Include="BeanReaderErrorEventArgs.cs" />
     <Compile Include="Builder\Align.cs" />
+    <Compile Include="Internal\Config\BeanConfig.cs" />
     <Compile Include="IUnmarshaller.cs" />
     <Compile Include="StreamFactory.cs" />
+    <Compile Include="Stream\RecordIOException.cs" />
     <Compile Include="Types\CharacterTypeHandler.cs" />
     <Compile Include="Types\BooleanCharacterTypeHandler.cs" />
     <Compile Include="Types\BooleanIntegerTypeHandler.cs" />
