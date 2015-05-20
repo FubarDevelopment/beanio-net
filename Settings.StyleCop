@@ -3,6 +3,7 @@
     <StringProperty Name="Culture">en-US</StringProperty>
     <CollectionProperty Name="RecognizedWords">
       <Value>marshalled</Value>
+      <Value>marshaller</Value>
       <Value>marshalling</Value>
       <Value>nillable</Value>
       <Value>stateful</Value>

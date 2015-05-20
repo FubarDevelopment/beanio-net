@@ -34,9 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .NET Framework is automatically included -->
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Annotation\AnnotationConstants.cs" />
     <Compile Include="Annotation\FieldAttribute.cs" />
     <Compile Include="Annotation\FieldsAttribute.cs" />
@@ -46,9 +43,21 @@
     <Compile Include="BeanReader.cs" />
     <Compile Include="BeanReaderErrorEventArgs.cs" />
     <Compile Include="Builder\Align.cs" />
+    <Compile Include="Builder\IParserBuilder.cs" />
+    <Compile Include="Builder\PropertyBuilderSupport.cs" />
     <Compile Include="Internal\Config\BeanConfig.cs" />
+    <Compile Include="Internal\Config\ComponentConfig.cs" />
+    <Compile Include="Internal\Config\ComponentType.cs" />
+    <Compile Include="Internal\Config\PropertyConfig.cs" />
+    <Compile Include="Internal\Util\TreeNode.cs" />
     <Compile Include="IUnmarshaller.cs" />
     <Compile Include="StreamFactory.cs" />
+    <Compile Include="Stream\IRecordMarshaller.cs" />
+    <Compile Include="Stream\IRecordParserFactory.cs" />
+    <Compile Include="Stream\RecordParserFactorySupport.cs" />
+    <Compile Include="Stream\IRecordReader.cs" />
+    <Compile Include="Stream\IRecordUnmarshaller.cs" />
+    <Compile Include="Stream\IRecordWriter.cs" />
     <Compile Include="Stream\RecordIOException.cs" />
     <Compile Include="Types\CharacterTypeHandler.cs" />
     <Compile Include="Types\BooleanCharacterTypeHandler.cs" />
@@ -84,6 +93,19 @@
     <EmbeddedResource Include="Xsd\2012\03\mapping.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\portable-windows8+net40+wp8+wpa81+sl5+MonoAndroid+MonoTouch\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\portable-net45+wp80+win8+wpa81+aspnetcore50\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

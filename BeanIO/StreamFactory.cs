@@ -17,7 +17,7 @@ namespace BeanIO
         /// <param name="name">The name of the stream in the mapping file</param>
         /// <param name="input">The input stream to read from</param>
         /// <returns>The new <see cref="IBeanReader"/></returns>
-        public virtual IBeanReader CreateReader(string name, Stream input)
+        public virtual IBeanReader CreateReader(string name, TextReader input)
         {
             return CreateReader(name, input, CultureInfo.CurrentCulture);
         }
@@ -29,7 +29,7 @@ namespace BeanIO
         /// <param name="input">The input stream to read from</param>
         /// <param name="culture">The culture used to format error messages.</param>
         /// <returns>The new <see cref="IBeanReader"/></returns>
-        public abstract IBeanReader CreateReader(string name, Stream input, CultureInfo culture);
+        public abstract IBeanReader CreateReader(string name, TextReader input, CultureInfo culture);
 
         /// <summary>
         /// Creates a new <see cref="IUnmarshaller"/> for unmarshalling records.
@@ -55,7 +55,7 @@ namespace BeanIO
         /// <param name="name">The name of the stream in the mapping file</param>
         /// <param name="output">The output stream to write to</param>
         /// <returns>The new <see cref="IBeanWriter"/></returns>
-        public abstract IBeanWriter CreateWriter(string name, Stream output);
+        public abstract IBeanWriter CreateWriter(string name, TextWriter output);
 
         /// <summary>
         /// Creates a new <see cref="IMarshaller"/> for marshalling records.
@@ -76,7 +76,7 @@ namespace BeanIO
         /// Loads a BeanIO mapping file, and adds the configured streams to this factory.
         /// </summary>
         /// <param name="input">The input stream to read the mapping file from</param>
-        public abstract void Load(Stream input);
+        public abstract void Load(System.IO.Stream input);
 
         /// <summary>
         /// Test whether a mapping configuration exists for a named stream.
