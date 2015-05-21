@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Collections.Generic;
+using System.Xml;
 
 using BeanIO.Internal.Util;
 
@@ -61,7 +62,7 @@ namespace BeanIO.Internal.Config
         /// of the first character in the component.</para>
         /// <para>A negative number is counted from the end of the record.</para>
         /// </remarks>
-        public int Position { get; set; }
+        public int? Position { get; set; }
 
         /// <summary>
         /// Gets or sets the excluded maximum position of this component which may be
@@ -188,7 +189,7 @@ namespace BeanIO.Internal.Config
 
         /// <summary>
         /// Gets the name of the property descendant to use for the Map key when
-        /// <see cref="Collection"/> is set to <tt>map</tt>.
+        /// <see cref="Collection"/> is set to <see cref="Dictionary{TKey,TValue}"/> (map).
         /// </summary>
         public virtual string Key
         {

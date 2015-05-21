@@ -39,7 +39,7 @@ namespace BeanIO.Internal.Config
         /// <summary>
         /// Gets or sets the relative position of this component within its parent components
         /// </summary>
-        public int Ordinal { get; set; }
+        public int? Ordinal { get; set; }
 
         /// <summary>
         /// Gets or sets the XML element or attribute name of this component

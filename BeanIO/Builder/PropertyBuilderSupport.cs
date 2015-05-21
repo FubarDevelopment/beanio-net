@@ -2,6 +2,7 @@
 using System.Xml;
 
 using BeanIO.Internal.Config;
+using BeanIO.Internal.Util;
 
 namespace BeanIO.Builder
 {
@@ -11,7 +12,10 @@ namespace BeanIO.Builder
     /// <remarks>Methods may throw a <see cref="BeanIOConfigurationException" /> if an
     /// invalid setting is configured.</remarks>
     /// <typeparam name="T">The builder subclass</typeparam>
-    public abstract class PropertyBuilderSupport<T> where T : PropertyBuilderSupport<T>
+    /// <typeparam name="TConfig">The component configuration subclass</typeparam>
+    public abstract class PropertyBuilderSupport<T, TConfig>
+        where T : PropertyBuilderSupport<T, TConfig>
+        where TConfig : PropertyConfig
     {
         /// <summary>
         /// Gets this.
@@ -21,7 +25,7 @@ namespace BeanIO.Builder
         /// <summary>
         /// Gets the configuration settings.
         /// </summary>
-        protected abstract PropertyConfig Config { get; }
+        protected abstract TConfig Config { get; }
 
         /// <summary>
         /// Sets the minimum occurrences of this component.
@@ -74,7 +78,7 @@ namespace BeanIO.Builder
         /// <returns>The value of <see cref="Me"/></returns>
         public T Type(Type type)
         {
-            Config.Type = type.AssemblyQualifiedName;
+            Config.Type = type.GetFullName();
             return Me;
         }
 
@@ -85,7 +89,7 @@ namespace BeanIO.Builder
         /// <returns>The value of <see cref="Me"/></returns>
         public T Collection(Type type)
         {
-            Config.Collection = type.AssemblyQualifiedName;
+            Config.Collection = type.GetFullName();
             return Me;
         }
 

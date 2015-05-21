@@ -36,21 +36,39 @@
   <ItemGroup>
     <Compile Include="Annotation\AnnotationConstants.cs" />
     <Compile Include="Annotation\FieldAttribute.cs" />
-    <Compile Include="Annotation\FieldsAttribute.cs" />
+    <Compile Include="Annotation\UnboundFieldAttribute.cs" />
     <Compile Include="Annotation\RecordAttribute.cs" />
     <Compile Include="Annotation\GroupAttribute.cs" />
     <Compile Include="Annotation\SegmentAttribute.cs" />
     <Compile Include="BeanReader.cs" />
     <Compile Include="BeanReaderErrorEventArgs.cs" />
     <Compile Include="Builder\Align.cs" />
+    <Compile Include="Builder\FieldBuilder.cs" />
+    <Compile Include="Builder\GroupBuilder.cs" />
     <Compile Include="Builder\IParserBuilder.cs" />
     <Compile Include="Builder\PropertyBuilderSupport.cs" />
+    <Compile Include="Builder\RecordBuilder.cs" />
+    <Compile Include="Builder\SegmentBuilder.cs" />
+    <Compile Include="Builder\GroupBuilderSupport.cs" />
+    <Compile Include="Builder\SegmentBuilderSupport.cs" />
+    <Compile Include="Internal\Config\Annotation\AnnotationParser.cs" />
     <Compile Include="Internal\Config\BeanConfig.cs" />
     <Compile Include="Internal\Config\ComponentConfig.cs" />
     <Compile Include="Internal\Config\ComponentType.cs" />
+    <Compile Include="Internal\Config\FieldConfig.cs" />
+    <Compile Include="Internal\Config\GroupConfig.cs" />
+    <Compile Include="Internal\Config\ISelectorConfig.cs" />
     <Compile Include="Internal\Config\PropertyConfig.cs" />
+    <Compile Include="Internal\Config\RecordConfig.cs" />
+    <Compile Include="Internal\Config\SegmentConfig.cs" />
+    <Compile Include="Internal\Config\SimplePropertyConfig.cs" />
     <Compile Include="Internal\Util\TreeNode.cs" />
+    <Compile Include="Internal\Util\TypeUtil.cs" />
+    <Compile Include="Introspector.cs" />
     <Compile Include="IUnmarshaller.cs" />
+    <Compile Include="JetBrains.Annotations.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="StreamFactory.cs" />
     <Compile Include="Stream\IRecordMarshaller.cs" />
     <Compile Include="Stream\IRecordParserFactory.cs" />

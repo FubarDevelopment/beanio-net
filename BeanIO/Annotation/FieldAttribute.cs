@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Xml;
-using System.Xml.Linq;
 
 using BeanIO.Builder;
 using BeanIO.Types;
@@ -16,37 +15,46 @@ namespace BeanIO.Annotation
         public FieldAttribute(string name)
         {
             Name = name;
+            At = int.MinValue;
+            Until = int.MinValue;
+            Ordinal = int.MinValue;
+            Length = int.MinValue;
+            Padding = int.MinValue;
+            MinLength = MaxLength = int.MinValue;
+            MinOccurs = MaxOccurs = int.MinValue;
+            XmlType = XmlNodeType.None;
         }
 
         /// <summary>
         /// Gets the field name.
         /// </summary>
+        [Field("Test", Padding = 'a')]
         public string Name { get; private set; }
 
         /// <summary>
         /// Gets or sets the absolute position of the field.
         /// </summary>
-        public int? At { get; set; }
+        public int At { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum position of a field that repeats for an indeterminate number of times.
         /// </summary>
-        public int? Until { get; set; }
+        public int Until { get; set; }
 
         /// <summary>
         /// Gets or sets the relative position of the field.
         /// </summary>
-        public int? Ordinal { get; set; }
+        public int Ordinal { get; set; }
 
         /// <summary>
         /// Gets or sets the padded length of the field.
         /// </summary>
-        public int? Length { get; set; }
+        public int Length { get; set; }
 
         /// <summary>
         /// Gets or sets the character used to pad the field.
         /// </summary>
-        public char? Padding { get; set; }
+        public int Padding { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to keep the field padding during unmarshalling.
@@ -68,6 +76,16 @@ namespace BeanIO.Annotation
         /// Gets or sets the alignment of a padded field.
         /// </summary>
         public Align Align { get; set; }
+
+        /// <summary>
+        /// Gets or sets the getter method.
+        /// </summary>
+        public string Getter { get; set; }
+
+        /// <summary>
+        /// Gets or sets the setter method.
+        /// </summary>
+        public string Setter { get; set; }
 
         /// <summary>
         /// Gets or sets the field type, if it can not be detected from the method or field declaration.
@@ -128,12 +146,12 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Gets or sets the minimum length of the field text (after trimming if enabled).
         /// </summary>
-        public int? MinLength { get; set; }
+        public int MinLength { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum length of the field text (after trimming if enabled).
         /// </summary>
-        public int? MaxLength { get; set; }
+        public int MaxLength { get; set; }
 
         /// <summary>
         /// Gets or sets the collection type for repeating fields, if it cannot be detected from the field or method declaration.
@@ -149,12 +167,12 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Gets or sets the minimum occurrences of the field.
         /// </summary>
-        public int? MinOccurs { get; set; }
+        public int MinOccurs { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum occurrences of the field if it repeats.
         /// </summary>
-        public int? MaxOccurs { get; set; }
+        public int MaxOccurs { get; set; }
 
         /// <summary>
         /// Gets or sets the name of a preceding field that governs the number of occurrences of this field.
@@ -167,7 +185,7 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Gets or sets the XML type of this field.
         /// </summary>
-        public XmlNodeType? XmlType { get; set; }
+        public XmlNodeType XmlType { get; set; }
 
         /// <summary>
         /// Gets or sets the XML attribute or element name.
