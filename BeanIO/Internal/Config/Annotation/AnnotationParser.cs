@@ -14,6 +14,12 @@ namespace BeanIO.Internal.Config.Annotation
     {
         private static readonly OrdinalComparer _ordinalComparer = new OrdinalComparer();
 
+        /// <summary>
+        /// Creates a <see cref="GroupConfig"/> from the given type, if the type is annotated
+        /// using <see cref="GroupAttribute"/>.
+        /// </summary>
+        /// <param name="typeName">The bean type name</param>
+        /// <returns>the <see cref="GroupConfig"/> or null if the class was not annotated</returns>
         public static GroupConfig CreateGroupConfig(string typeName)
         {
             var clazz = typeName.ToBeanType();
@@ -22,11 +28,23 @@ namespace BeanIO.Internal.Config.Annotation
             return CreateGroupConfig(clazz);
         }
 
+        /// <summary>
+        /// Creates a <see cref="GroupConfig"/> from the given type, if the type is annotated
+        /// using <see cref="GroupAttribute"/>.
+        /// </summary>
+        /// <typeparam name="T">The group type</typeparam>
+        /// <returns>the <see cref="GroupConfig"/> or null if the class was not annotated</returns>
         public static GroupConfig CreateGroupConfig<T>()
         {
             return CreateGroupConfig(typeof(T));
         }
 
+        /// <summary>
+        /// Creates a <see cref="GroupConfig"/> from the given type, if the type is annotated
+        /// using <see cref="GroupAttribute"/>.
+        /// </summary>
+        /// <param name="type">the group type</param>
+        /// <returns>the <see cref="GroupConfig"/> or null if the class was not annotated</returns>
         public static GroupConfig CreateGroupConfig(Type type)
         {
             var typeInfo = type.GetTypeInfo();
@@ -44,6 +62,56 @@ namespace BeanIO.Internal.Config.Annotation
                 };
 
             return CreateGroup(info, group);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="RecordConfig"/> from the given type, if the type is annotated
+        /// using <see cref="RecordAttribute"/>.
+        /// </summary>
+        /// <param name="typeName">The bean type name</param>
+        /// <returns>the <see cref="RecordConfig"/> or null if the class was not annotated</returns>
+        public static RecordConfig CreateRecordConfig(string typeName)
+        {
+            var clazz = typeName.ToBeanType();
+            if (clazz == null)
+                return null;
+            return CreateRecordConfig(clazz);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="RecordConfig"/> from the given type, if the type is annotated
+        /// using <see cref="RecordAttribute"/>.
+        /// </summary>
+        /// <typeparam name="T">The record type</typeparam>
+        /// <returns>the <see cref="RecordConfig"/> or null if the class was not annotated</returns>
+        public static RecordConfig CreateRecordConfig<T>()
+        {
+            return CreateRecordConfig(typeof(T));
+        }
+
+        /// <summary>
+        /// Creates a <see cref="RecordConfig"/> from the given type, if the type is annotated
+        /// using <see cref="RecordAttribute"/>.
+        /// </summary>
+        /// <param name="type">the record type</param>
+        /// <returns>the <see cref="RecordConfig"/> or null if the class was not annotated</returns>
+        public static RecordConfig CreateRecordConfig(Type type)
+        {
+            var typeInfo = type.GetTypeInfo();
+            var record = typeInfo.GetCustomAttribute<RecordAttribute>();
+            if (record == null)
+                return null;
+
+            var name = record.Name.ToValue()
+                       ?? Introspector.Decapitalize(type.Name);
+
+            var info = new TypeInfo()
+            {
+                Type = type,
+                Name = name,
+            };
+
+            return CreateRecord(info, record);
         }
 
         private static GroupConfig CreateGroup(TypeInfo info, GroupAttribute group)

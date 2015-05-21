@@ -38,5 +38,30 @@ namespace BeanIO.Builder
             Config.Add(gc);
             return Me;
         }
+
+        /// <summary>
+        /// Adds a record to this component.
+        /// </summary>
+        /// <param name="record">the record to add</param>
+        /// <returns>The value of <see cref="PropertyBuilderSupport{T,TConfig}.Me"/></returns>
+        public T AddRecord(RecordBuilder record)
+        {
+            Config.Add(record.Build());
+            return Me;
+        }
+
+        /// <summary>
+        /// Adds a group to this component by using the record annotation for the given type.
+        /// </summary>
+        /// <param name="record">The type that has record annotations</param>
+        /// <returns>The value of <see cref="PropertyBuilderSupport{T,TConfig}.Me"/></returns>
+        public T AddRecord(Type record)
+        {
+            var gc = AnnotationParser.CreateRecordConfig(record);
+            if (gc == null)
+                throw new BeanIOConfigurationException(string.Format("Record annotation not detected on class '{0}'", record));
+            Config.Add(gc);
+            return Me;
+        }
     }
 }
