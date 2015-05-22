@@ -65,6 +65,12 @@
     <Compile Include="Internal\Config\SimplePropertyConfig.cs" />
     <Compile Include="Internal\Config\StreamConfig.cs" />
     <Compile Include="Internal\Config\TypeHandlerConfig.cs" />
+    <Compile Include="Internal\Parser\Accessor\FieldReflectionAccessor.cs" />
+    <Compile Include="Internal\Parser\Accessor\MapAccessor.cs" />
+    <Compile Include="Internal\Parser\Accessor\PropertyReflectionAccessor.cs" />
+    <Compile Include="Internal\Parser\Accessor\MethodReflectionAccessor.cs" />
+    <Compile Include="Internal\Parser\Accessor\PropertyAccessorSupport.cs" />
+    <Compile Include="Internal\Parser\IPropertyAccessor.cs" />
     <Compile Include="Internal\Util\TreeNode.cs" />
     <Compile Include="Internal\Util\TypeUtil.cs" />
     <Compile Include="Introspector.cs" />
@@ -137,6 +143,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Internal\Parser\Format\" />
+    <Folder Include="Internal\Parser\Message\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
