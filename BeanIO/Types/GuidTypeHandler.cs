@@ -2,18 +2,35 @@
 
 namespace BeanIO.Types
 {
-    public class StringTypeHandler : ITypeHandler
+    /// <summary>
+    /// A type handler for <see cref="Guid"/> values.
+    /// </summary>
+    public class GuidTypeHandler : ITypeHandler
     {
-        public bool Trim { get; set; }
+        private readonly string _format = "D";
 
-        public bool NullIfEmpty { get; set; }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GuidTypeHandler"/> class.
+        /// </summary>
+        public GuidTypeHandler()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GuidTypeHandler"/> class.
+        /// </summary>
+        /// <param name="format">The <see cref="Guid"/> format to use</param>
+        public GuidTypeHandler(string format)
+        {
+            _format = format;
+        }
 
         /// <summary>
         /// Gets the class type supported by this handler.
         /// </summary>
         public Type TargetType
         {
-            get { return typeof(string); }
+            get { return typeof(Guid); }
         }
 
         /// <summary>
@@ -23,16 +40,9 @@ namespace BeanIO.Types
         /// <returns>The parsed object</returns>
         public object Parse(string text)
         {
-            if (text == null)
+            if (string.IsNullOrEmpty(text))
                 return null;
-
-            if (Trim)
-                text = text.Trim();
-
-            if (NullIfEmpty && text.Length == 0)
-                return null;
-
-            return text;
+            return Guid.Parse(text);
         }
 
         /// <summary>
@@ -44,7 +54,7 @@ namespace BeanIO.Types
         {
             if (value == null)
                 return null;
-            return value.ToString();
+            return ((Guid)value).ToString(_format);
         }
     }
 }

@@ -70,7 +70,7 @@ namespace BeanIO.Types
         /// <summary>
         /// Formats an object into field text.
         /// </summary>
-        /// <param name="value">The Java to format, which may be null</param>
+        /// <param name="value">The value to format, which may be null</param>
         /// <returns>The formatted field text, or <code>null</code> to indicate the value is not present</returns>
         public virtual string Format(object value)
         {

@@ -9,7 +9,7 @@ namespace BeanIO.Builder
         /// <summary>
         /// Initializes a new instance of the <see cref="GroupBuilder"/> class.
         /// </summary>
-        /// <param name="name">The segment name</param>
+        /// <param name="name">The group name</param>
         public GroupBuilder(string name)
         {
             _config = new GroupConfig()

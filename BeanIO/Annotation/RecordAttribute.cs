@@ -16,6 +16,11 @@ namespace BeanIO.Annotation
         public RecordAttribute(string name)
         {
             Name = name;
+            MinRecordIdentificationLength = MaxRecordIdentificationLength = int.MinValue;
+            MinLength = MaxLength = int.MinValue;
+            MinOccurs = MaxOccurs = int.MinValue;
+            Order = int.MinValue;
+            XmlType = XmlNodeType.None;
         }
 
         /// <summary>
@@ -37,37 +42,37 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Gets or sets the minimum length of this record used to identify it.
         /// </summary>
-        public int? MinRecordIdentificationLength { get; set; }
+        public int MinRecordIdentificationLength { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum length of this record used to identify it.
         /// </summary>
-        public int? MaxRecordIdentificationLength { get; set; }
+        public int MaxRecordIdentificationLength { get; set; }
 
         /// <summary>
         /// Gets or sets the validated minimum length of the record.
         /// </summary>
-        public int? MinLength { get; set; }
+        public int MinLength { get; set; }
 
         /// <summary>
         /// Gets or sets the validated maximum length of the record.
         /// </summary>
-        public int? MaxLength { get; set; }
+        public int MaxLength { get; set; }
 
         /// <summary>
         /// Gets or sets the minimum occurrences of the record.
         /// </summary>
-        public int? MinOccurs { get; set; }
+        public int MinOccurs { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum occurrences of the record.
         /// </summary>
-        public int? MaxOccurs { get; set; }
+        public int MaxOccurs { get; set; }
 
         /// <summary>
         /// Gets or sets the order of this record within its parent group.
         /// </summary>
-        public int? Order { get; set; }
+        public int Order { get; set; }
 
         /// <summary>
         /// Gets or sets the name of child component to use for the value of this record in
@@ -78,7 +83,7 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Gets or sets the XML type of this record.
         /// </summary>
-        public XmlNodeType? XmlType { get; set; }
+        public XmlNodeType XmlType { get; set; }
 
         /// <summary>
         /// Gets or sets the XML attribute or element name.

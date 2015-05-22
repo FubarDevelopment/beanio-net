@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Xml;
 
 using BeanIO.Annotation;
 using BeanIO.Internal.Util;
@@ -132,10 +133,10 @@ namespace BeanIO.Internal.Config.Annotation
                     MinOccurs = minOccurs,
                     MaxOccurs = maxOccurs,
 
-                    XmlType = group.XmlType,
-                    XmlName = group.XmlName,
-                    XmlNamespace = group.XmlNamespace,
-                    XmlPrefix = group.XmlPrefix,
+                    XmlType = group.XmlType.ToValue(),
+                    XmlName = group.XmlName.ToValue(),
+                    XmlNamespace = group.XmlNamespace.ToValue(),
+                    XmlPrefix = group.XmlPrefix.ToValue(),
                 };
 
             AddAllChildren(gc, info.PropertyType);
@@ -170,10 +171,10 @@ namespace BeanIO.Internal.Config.Annotation
                 MinMatchLength = record.MinRecordIdentificationLength.ToValue(),
                 MaxMatchLength = record.MaxRecordIdentificationLength.ToUnboundedValue(),
 
-                XmlType = record.XmlType,
-                XmlName = record.XmlName,
-                XmlNamespace = record.XmlNamespace,
-                XmlPrefix = record.XmlPrefix,
+                XmlType = record.XmlType.ToValue(),
+                XmlName = record.XmlName.ToValue(),
+                XmlNamespace = record.XmlNamespace.ToValue(),
+                XmlPrefix = record.XmlPrefix.ToValue(),
             };
 
             var fields = info.PropertyType.GetTypeInfo().GetCustomAttributes<FieldAttribute>();
@@ -263,17 +264,69 @@ namespace BeanIO.Internal.Config.Annotation
             if (handler != null && string.IsNullOrEmpty(fc.TypeHandler))
                 fc.TypeHandler = fa.HandlerType.GetFullName();
 
-            fc.XmlType = fa.XmlType;
-            fc.XmlName = fa.XmlName;
-            fc.XmlNamespace = fa.XmlNamespace;
-            fc.XmlPrefix = fa.XmlPrefix;
+            fc.XmlType = fa.XmlType.ToValue();
+            fc.XmlName = fa.XmlName.ToValue();
+            fc.XmlNamespace = fa.XmlNamespace.ToValue();
+            fc.XmlPrefix = fa.XmlPrefix.ToValue();
             fc.IsNillable = fa.IsNullable;
 
             return fc;
         }
 
-        private static SegmentConfig CreateSegment(TypeInfo info, SegmentAttribute segment, IReadOnlyCollection<FieldAttribute> fields)
+        private static SegmentConfig CreateSegment(TypeInfo info, SegmentAttribute sa, IReadOnlyCollection<FieldAttribute> fields)
         {
+            UpdateTypeInfo(info, sa.Type, sa.CollectionType);
+
+            if (info.PropertyType == typeof(string))
+                throw new BeanIOConfigurationException("type is undefined");
+
+            var target = sa.Value.ToValue();
+
+            var sc = new SegmentConfig()
+                {
+                    Name = info.Name,
+                    Label = sa.Name.ToValue(),
+                    Target = target,
+                    Type = target == null ? info.PropertyName : null,
+                    Collection = info.CollectionName,
+                    Getter = sa.Getter.ToValue() ?? info.Getter,
+                    Setter = sa.Setter.ToValue() ?? info.Setter,
+                    Position = sa.At.ToValue(),
+                    Until = sa.Until.ToValue(),
+                    Ordinal = sa.Ordinal.ToValue(),
+                    MinOccurs = sa.MinOccurs.ToValue() ?? 0,
+                    MaxOccurs = sa.MaxOccurs.ToUnboundedValue(),
+                    OccursRef = sa.OccursRef.ToValue(),
+                    IsLazy = sa.IsLazy,
+                    XmlType = sa.XmlType.ToValue(),
+                    XmlName = sa.XmlName.ToValue(),
+                    XmlNamespace = sa.XmlNamespace.ToValue(),
+                    XmlPrefix = sa.XmlPrefix.ToValue(),
+                };
+
+            sc.SetKey(sa.Key.ToValue());
+
+            if (string.IsNullOrEmpty(sc.Name))
+                throw new BeanIOConfigurationException("name is undefined");
+
+            if (fields != null)
+            {
+                foreach (var field in fields)
+                {
+                    sc.Add(CreateField(null, field));
+                }
+            }
+
+            fields = info.PropertyType.GetTypeInfo().GetCustomAttributes<FieldAttribute>().ToList();
+            foreach (var field in fields)
+            {
+                sc.Add(CreateField(null, field));
+            }
+
+            HandleConstructor(sc, info.PropertyType);
+            AddAllChildren(sc, info.PropertyType);
+
+            return sc;
         }
 
         private static void HandleConstructor(ComponentConfig config, Type clazz)
@@ -670,6 +723,11 @@ namespace BeanIO.Internal.Config.Annotation
         private static string ToValue([CanBeNull] this string s)
         {
             return string.IsNullOrEmpty(s) ? null : s;
+        }
+
+        private static XmlNodeType? ToValue(this XmlNodeType n)
+        {
+            return n == XmlNodeType.None ? (XmlNodeType?)null : n;
         }
 
         private static int? ToUnboundedValue(this int? n)

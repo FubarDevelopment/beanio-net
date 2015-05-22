@@ -2,6 +2,8 @@
   <GlobalSettings>
     <StringProperty Name="Culture">en-US</StringProperty>
     <CollectionProperty Name="RecognizedWords">
+      <Value>csv</Value>
+      <Value>fixedlength</Value>
       <Value>marshalled</Value>
       <Value>marshaller</Value>
       <Value>marshalling</Value>

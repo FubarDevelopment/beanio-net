@@ -34,7 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Annotation\AnnotationConstants.cs" />
     <Compile Include="Annotation\FieldAttribute.cs" />
     <Compile Include="Annotation\UnboundFieldAttribute.cs" />
     <Compile Include="Annotation\RecordAttribute.cs" />
@@ -42,6 +41,7 @@
     <Compile Include="Annotation\SegmentAttribute.cs" />
     <Compile Include="BeanReader.cs" />
     <Compile Include="BeanReaderErrorEventArgs.cs" />
+    <Compile Include="Builder\AccessMode.cs" />
     <Compile Include="Builder\Align.cs" />
     <Compile Include="Builder\FieldBuilder.cs" />
     <Compile Include="Builder\GroupBuilder.cs" />
@@ -51,6 +51,7 @@
     <Compile Include="Builder\SegmentBuilder.cs" />
     <Compile Include="Builder\GroupBuilderSupport.cs" />
     <Compile Include="Builder\SegmentBuilderSupport.cs" />
+    <Compile Include="Builder\StreamBuilder.cs" />
     <Compile Include="Internal\Config\Annotation\AnnotationParser.cs" />
     <Compile Include="Internal\Config\BeanConfig.cs" />
     <Compile Include="Internal\Config\ComponentConfig.cs" />
@@ -62,6 +63,8 @@
     <Compile Include="Internal\Config\RecordConfig.cs" />
     <Compile Include="Internal\Config\SegmentConfig.cs" />
     <Compile Include="Internal\Config\SimplePropertyConfig.cs" />
+    <Compile Include="Internal\Config\StreamConfig.cs" />
+    <Compile Include="Internal\Config\TypeHandlerConfig.cs" />
     <Compile Include="Internal\Util\TreeNode.cs" />
     <Compile Include="Internal\Util\TypeUtil.cs" />
     <Compile Include="Introspector.cs" />
@@ -77,15 +80,21 @@
     <Compile Include="Stream\IRecordUnmarshaller.cs" />
     <Compile Include="Stream\IRecordWriter.cs" />
     <Compile Include="Stream\RecordIOException.cs" />
+    <Compile Include="Types\BooleanTypeHandler.cs" />
     <Compile Include="Types\CharacterTypeHandler.cs" />
     <Compile Include="Types\BooleanCharacterTypeHandler.cs" />
     <Compile Include="Types\BooleanIntegerTypeHandler.cs" />
+    <Compile Include="Types\DateTimeHandler.cs" />
+    <Compile Include="Types\DateTypeHandlerSupport.cs" />
+    <Compile Include="Types\DecimalTypeHandler.cs" />
     <Compile Include="Types\DefaultTypeConfigurationProperties.cs" />
+    <Compile Include="Types\GuidTypeHandler.cs" />
     <Compile Include="Types\IConfigurableTypeHandler.cs" />
     <Compile Include="Types\ITypeHandler.cs" />
     <Compile Include="Types\CultureSupport.cs" />
     <Compile Include="Types\NumberTypeHandler.cs" />
     <Compile Include="Types\StringTypeHandler.cs" />
+    <Compile Include="Types\UrlTypeHandler.cs" />
     <Compile Include="UnidentifiedRecordException.cs" />
     <Compile Include="UnexpectedRecordException.cs" />
     <Compile Include="IMarshaller .cs" />
@@ -119,6 +128,10 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\portable-net45+wp80+win8+wpa81+aspnetcore50\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NodaTime, Version=1.3.0.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NodaTime.1.3.1\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1+XamariniOS1\NodaTime.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

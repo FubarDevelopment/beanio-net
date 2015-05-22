@@ -16,6 +16,9 @@ namespace BeanIO.Annotation
         public GroupAttribute(string name)
         {
             Name = name;
+            MinOccurs = MaxOccurs = int.MinValue;
+            Order = int.MinValue;
+            XmlType = XmlNodeType.None;
         }
 
         /// <summary>
@@ -37,17 +40,17 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Gets or sets the minimum occurrences of the record.
         /// </summary>
-        public int? MinOccurs { get; set; }
+        public int MinOccurs { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum occurrences of the record.
         /// </summary>
-        public int? MaxOccurs { get; set; }
+        public int MaxOccurs { get; set; }
 
         /// <summary>
         /// Gets or sets the order of this record within its parent group.
         /// </summary>
-        public int? Order { get; set; }
+        public int Order { get; set; }
 
         /// <summary>
         /// Gets or sets the name of child component to use for the value of this record in
@@ -58,7 +61,7 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Gets or sets the XML type of this record.
         /// </summary>
-        public XmlNodeType? XmlType { get; set; }
+        public XmlNodeType XmlType { get; set; }
 
         /// <summary>
         /// Gets or sets the XML attribute or element name.

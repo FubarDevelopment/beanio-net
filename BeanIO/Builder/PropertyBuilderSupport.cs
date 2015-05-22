@@ -76,7 +76,7 @@ namespace BeanIO.Builder
         /// </summary>
         /// <param name="type">Type name</param>
         /// <returns>The value of <see cref="Me"/></returns>
-        public T Type(Type type)
+        public virtual T Type(Type type)
         {
             Config.Type = type.GetFullName();
             return Me;
@@ -87,7 +87,7 @@ namespace BeanIO.Builder
         /// </summary>
         /// <param name="type">Collection or map type name</param>
         /// <returns>The value of <see cref="Me"/></returns>
-        public T Collection(Type type)
+        public virtual T Collection(Type type)
         {
             Config.Collection = type.GetFullName();
             return Me;

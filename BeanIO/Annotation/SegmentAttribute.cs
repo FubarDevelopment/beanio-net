@@ -14,6 +14,9 @@ namespace BeanIO.Annotation
         public SegmentAttribute(string name)
         {
             Name = name;
+            At = Until = Ordinal = int.MinValue;
+            MinOccurs = MaxOccurs = int.MinValue;
+            XmlType = XmlNodeType.None;
         }
 
         /// <summary>
@@ -24,17 +27,27 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Gets or sets the absolute position of the segment.
         /// </summary>
-        public int? At { get; set; }
+        public int At { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum position of a segment that repeats for an indeterminate number of times.
         /// </summary>
-        public int? Until { get; set; }
+        public int Until { get; set; }
 
         /// <summary>
         /// Gets or sets the relative position of the segment.
         /// </summary>
-        public int? Ordinal { get; set; }
+        public int Ordinal { get; set; }
+
+        /// <summary>
+        /// Gets or sets the getter method.
+        /// </summary>
+        public string Getter { get; set; }
+
+        /// <summary>
+        /// Gets or sets the setter method.
+        /// </summary>
+        public string Setter { get; set; }
 
         /// <summary>
         /// Gets or sets the class bound to this segment, if one cannot be derived from the annotated field or method.
@@ -59,12 +72,12 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Gets or sets the minimum occurrences.
         /// </summary>
-        public int? MinOccurs { get; set; }
+        public int MinOccurs { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum occurrences.
         /// </summary>
-        public int? MaxOccurs { get; set; }
+        public int MaxOccurs { get; set; }
 
         /// <summary>
         /// Gets or sets the name of a preceding field that governs the number of occurrences of this segment.
@@ -88,7 +101,7 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Gets or sets the XML type of this segment.
         /// </summary>
-        public XmlNodeType? XmlType { get; set; }
+        public XmlNodeType XmlType { get; set; }
 
         /// <summary>
         /// Gets or sets the XML attribute or element name.
