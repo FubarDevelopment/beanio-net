@@ -40,7 +40,7 @@ namespace BeanIO
         /// <summary>
         /// Gets a collection of record level error messages.
         /// </summary>
-        IEnumerable<string> RecordErrors { get; }
+        IReadOnlyList<string> RecordErrors { get; }
 
         /// <summary>
         /// Gets a value indicating whether there are one or more field level errors.
@@ -94,7 +94,7 @@ namespace BeanIO
         /// <returns>
         /// The collection of field errors, or null if no errors were reported for the field.
         /// </returns>
-        IReadOnlyCollection<string> GetFieldErrors(string fieldName);
+        IReadOnlyList<string> GetFieldErrors(string fieldName);
 
         /// <summary>
         /// Gets a <see cref="ILookup{TKey,TItem}"/> of all field errors.

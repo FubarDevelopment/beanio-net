@@ -6,6 +6,9 @@ using System.Text;
 
 namespace BeanIO.Internal.Util
 {
+    /// <summary>
+    /// Type utility functions
+    /// </summary>
     public static class TypeUtil
     {
         /// <summary>
@@ -18,6 +21,12 @@ namespace BeanIO.Internal.Util
             return Type.GetType(typeName, false);
         }
 
+        /// <summary>
+        /// Is the <paramref name="testType"/> an instance of <paramref name="refType"/>?
+        /// </summary>
+        /// <param name="testType">The type to test for being an instance of <paramref name="refType"/></param>
+        /// <param name="refType">The reference type to test against</param>
+        /// <returns>true, if <paramref name="testType"/> is an instance of <paramref name="refType"/></returns>
         public static bool IsInstanceOf(this Type testType, Type refType)
         {
             if (testType.IsConstructedGenericType)
@@ -25,27 +34,38 @@ namespace BeanIO.Internal.Util
                 testType = testType.GetGenericTypeDefinition();
             }
 
+            var refTypeInfo = refType.GetTypeInfo();
+            var testTypeInfo = testType.GetTypeInfo();
+            if (refTypeInfo.IsAssignableFrom(testTypeInfo))
+                return true;
+
             var comparer = new TypeComparer();
 
             if (comparer.Compare(refType, testType) == 0)
                 return true;
 
-            var typeInfo = testType.GetTypeInfo();
-            if (typeInfo.ImplementedInterfaces.Any(x => comparer.Compare(refType, x) == 0))
+            if (testTypeInfo.ImplementedInterfaces.Any(x => comparer.Compare(refType, x) == 0))
                 return true;
 
-            testType = typeInfo.BaseType;
+            testType = testTypeInfo.BaseType;
             while (testType != null)
             {
                 if (comparer.Compare(refType, testType) == 0)
                     return true;
-                typeInfo = testType.GetTypeInfo();
-                testType = typeInfo.BaseType;
+                testTypeInfo = testType.GetTypeInfo();
+                if (refTypeInfo.IsAssignableFrom(testTypeInfo))
+                    return true;
+                testType = testTypeInfo.BaseType;
             }
 
             return false;
         }
 
+        /// <summary>
+        /// Get the full name using the <see cref="Type.Namespace"/>, <see cref="Type.Name"/>, and <see cref="Assembly.FullName"/>
+        /// </summary>
+        /// <param name="t">The type to get the full name for</param>
+        /// <returns>The full type name</returns>
         public static string GetFullName(this Type t)
         {
             var result = new StringBuilder();
@@ -56,6 +76,9 @@ namespace BeanIO.Internal.Util
             return result.ToString();
         }
 
+        /// <summary>
+        /// The comparer that nullifies some .NET insanities where <see cref="Type.FullName"/> is null.
+        /// </summary>
         private class TypeComparer : IComparer<Type>
         {
             public int Compare(Type x, Type y)

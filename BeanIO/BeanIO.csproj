@@ -65,12 +65,30 @@
     <Compile Include="Internal\Config\SimplePropertyConfig.cs" />
     <Compile Include="Internal\Config\StreamConfig.cs" />
     <Compile Include="Internal\Config\TypeHandlerConfig.cs" />
+    <Compile Include="Internal\IParserLocal.cs" />
     <Compile Include="Internal\Parser\Accessor\FieldReflectionAccessor.cs" />
     <Compile Include="Internal\Parser\Accessor\MapAccessor.cs" />
     <Compile Include="Internal\Parser\Accessor\PropertyReflectionAccessor.cs" />
     <Compile Include="Internal\Parser\Accessor\MethodReflectionAccessor.cs" />
     <Compile Include="Internal\Parser\Accessor\PropertyAccessorSupport.cs" />
+    <Compile Include="Internal\Parser\Component.cs" />
+    <Compile Include="Internal\Parser\ErrorContext.cs" />
+    <Compile Include="Internal\Parser\Field.cs" />
+    <Compile Include="Internal\Parser\Format\FieldPadding.cs" />
+    <Compile Include="Internal\Parser\IFieldFormat.cs" />
+    <Compile Include="Internal\Parser\IIteration.cs" />
+    <Compile Include="Internal\Parser\IMessageFactory.cs" />
+    <Compile Include="Internal\Parser\IParser.cs" />
+    <Compile Include="Internal\Parser\IProperty.cs" />
     <Compile Include="Internal\Parser\IPropertyAccessor.cs" />
+    <Compile Include="Internal\Parser\MarshallingContext.cs" />
+    <Compile Include="Internal\Parser\ParserComponent.cs" />
+    <Compile Include="Internal\Parser\ParserLocal.cs" />
+    <Compile Include="Internal\Parser\ParsingContext.cs" />
+    <Compile Include="Internal\Parser\ParsingMode.cs" />
+    <Compile Include="Internal\Parser\PropertyType.cs" />
+    <Compile Include="Internal\Parser\UnmarshallingContext.cs" />
+    <Compile Include="Internal\Parser\Value.cs" />
     <Compile Include="Internal\Util\TreeNode.cs" />
     <Compile Include="Internal\Util\TypeUtil.cs" />
     <Compile Include="Introspector.cs" />
@@ -145,7 +163,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Internal\Parser\Format\" />
     <Folder Include="Internal\Parser\Message\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
