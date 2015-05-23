@@ -88,6 +88,8 @@
     <Compile Include="Internal\Parser\ParsingMode.cs" />
     <Compile Include="Internal\Parser\PropertyType.cs" />
     <Compile Include="Internal\Parser\UnmarshallingContext.cs" />
+    <Compile Include="Internal\Parser\OptionalValue.cs" />
+    <Compile Include="Internal\Parser\OptionalValueComparer.cs" />
     <Compile Include="Internal\Parser\Value.cs" />
     <Compile Include="Internal\Util\TreeNode.cs" />
     <Compile Include="Internal\Util\TypeUtil.cs" />
@@ -104,6 +106,7 @@
     <Compile Include="Stream\IRecordUnmarshaller.cs" />
     <Compile Include="Stream\IRecordWriter.cs" />
     <Compile Include="Stream\RecordIOException.cs" />
+    <Compile Include="Types\TypeConversionException.cs" />
     <Compile Include="Types\BooleanTypeHandler.cs" />
     <Compile Include="Types\CharacterTypeHandler.cs" />
     <Compile Include="Types\BooleanCharacterTypeHandler.cs" />
