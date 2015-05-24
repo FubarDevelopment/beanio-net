@@ -35,6 +35,7 @@ namespace BeanIO.Internal.Parser
 
         private OptionalValue(Status status)
         {
+            _value = null;
             _status = status;
         }
 
@@ -51,6 +52,11 @@ namespace BeanIO.Internal.Parser
             return new OptionalValue(text);
         }
 
+        public static implicit operator string(OptionalValue value)
+        {
+            return value.GetTextOrDefault();
+        }
+
         public static bool operator ==(OptionalValue value1, OptionalValue value2)
         {
             return OptionalValueComparer.Default.Equals(value1, value2);
@@ -59,16 +65,6 @@ namespace BeanIO.Internal.Parser
         public static bool operator !=(OptionalValue value1, OptionalValue value2)
         {
             return !OptionalValueComparer.Default.Equals(value1, value2);
-        }
-
-        public static bool operator ==(OptionalValue value1, object value2)
-        {
-            return ReferenceEquals(value1, value2);
-        }
-
-        public static bool operator !=(OptionalValue value1, object value2)
-        {
-            return !ReferenceEquals(value1, value2);
         }
 
         public static bool operator <(OptionalValue value1, OptionalValue value2)
@@ -97,16 +93,28 @@ namespace BeanIO.Internal.Parser
 
         public bool IsNil => _status == Status.Nil;
 
-        public bool HasValue => _status == Status.HasValue;
+        public bool HasText => _status == Status.HasValue;
 
         public string Text
         {
             get
             {
-                if (!HasValue)
+                if (!HasText)
                     throw new InvalidOperationException();
                 return _value;
             }
+        }
+
+        public string GetTextOrDefault()
+        {
+            return GetTextOrDefault(null);
+        }
+
+        public string GetTextOrDefault(string defaultValue)
+        {
+            if (HasText)
+                return Text;
+            return defaultValue;
         }
 
         /// <summary>

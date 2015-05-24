@@ -38,7 +38,7 @@ namespace BeanIO.Internal.Parser
             if (result != 0)
                 return result;
 
-            if (!x.HasValue)
+            if (!x.HasText)
                 return 0;
 
             return _stringComparer.Compare(x.Text ?? string.Empty, y.Text ?? string.Empty);
@@ -65,7 +65,7 @@ namespace BeanIO.Internal.Parser
         public int GetHashCode(OptionalValue obj)
         {
             var result = obj.StatusHashCode;
-            if (obj.HasValue)
+            if (obj.HasText)
                 result ^= (obj.Text ?? string.Empty).GetHashCode();
             return result;
         }
