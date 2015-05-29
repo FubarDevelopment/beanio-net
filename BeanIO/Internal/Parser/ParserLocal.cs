@@ -8,7 +8,7 @@ namespace BeanIO.Internal.Parser
     /// <typeparam name="T">the variable type</typeparam>
     public class ParserLocal<T> : IParserLocal
     {
-        private readonly T _defaultValue;
+        private readonly Func<T> _createFunc;
 
         private int _index = -1;
 
@@ -25,8 +25,17 @@ namespace BeanIO.Internal.Parser
         /// </summary>
         /// <param name="defaultValue">the default value</param>
         public ParserLocal(T defaultValue)
+            : this(() => defaultValue)
         {
-            _defaultValue = defaultValue;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParserLocal{T}"/> class.
+        /// </summary>
+        /// <param name="createFunc">the function to create a default value</param>
+        public ParserLocal(Func<T> createFunc)
+        {
+            _createFunc = createFunc;
         }
 
         /// <summary>
@@ -69,7 +78,7 @@ namespace BeanIO.Internal.Parser
         /// <returns>the default value</returns>
         protected virtual T CreateDefaultValue()
         {
-            return _defaultValue;
+            return _createFunc();
         }
     }
 }

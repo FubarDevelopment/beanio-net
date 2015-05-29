@@ -6,11 +6,14 @@
       <Value>fixedlength</Value>
       <Value>marshalled</Value>
       <Value>marshaller</Value>
+      <Value>marshallers</Value>
       <Value>marshalling</Value>
       <Value>nillable</Value>
       <Value>stateful</Value>
       <Value>unmarshal</Value>
       <Value>unmarshalled</Value>
+      <Value>unmarshaller</Value>
+      <Value>unmarshallers</Value>
       <Value>unmarshalling</Value>
       <Value>unmarshals</Value>
     </CollectionProperty>

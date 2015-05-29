@@ -20,7 +20,7 @@
         /// stream formats calculate size based on the number of fields.  Some stream formats,
         /// such as XML, may ignore size settings.
         /// </remarks>
-        int Size { get; }
+        int? Size { get; }
 
         /// <summary>
         /// Gets a value indicating whether this parser or any descendant of this parser is used to identify

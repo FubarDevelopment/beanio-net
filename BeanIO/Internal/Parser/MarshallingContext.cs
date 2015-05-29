@@ -5,6 +5,14 @@ using BeanIO.Stream;
 
 namespace BeanIO.Internal.Parser
 {
+    /// <summary>
+    /// Stores context information needed to marshal a bean object.
+    /// </summary>
+    /// <returns>
+    /// Subclasses must implement <see cref="ToRecordObject"/> which is invoked
+    /// when <see cref="WriteRecord"/> is called to write a record object to the
+    /// configured <see cref="IRecordWriter"/>.
+    /// </returns>
     public abstract class MarshallingContext : ParsingContext
     {
         /// <summary>
@@ -34,15 +42,9 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Gets the record object to pass to the <see cref="IRecordWriter"/>
-        /// when <see cref="MarshallingContext.WriteRecord"/> is called.
-        /// </summary>
-        protected abstract object RecordObject { get; }
-
-        /// <summary>
         /// Clear is invoked after each bean object (record or group) is marshalled
         /// </summary>
-        public void Clear()
+        public virtual void Clear()
         {
             ClearOffset();
             Bean = null;
@@ -53,11 +55,11 @@ namespace BeanIO.Internal.Parser
         /// Writes the current record object to the record writer.
         /// </summary>
         /// <remarks>
-        /// This method uses the <see cref="RecordObject"/>.
+        /// This method uses the <see cref="ToRecordObject"/>.
         /// </remarks>
         public void WriteRecord()
         {
-            RecordWriter.Write(RecordObject);
+            RecordWriter.Write(ToRecordObject());
             Clear();
         }
 
@@ -90,5 +92,14 @@ namespace BeanIO.Internal.Parser
         {
             return null;
         }
+
+        /// <summary>
+        /// Creates the record object to pass to the <see cref="IRecordWriter"/>
+        /// when <see cref="MarshallingContext.WriteRecord"/> is called.
+        /// </summary>
+        /// <returns>
+        /// The newly created record object.
+        /// </returns>
+        protected abstract object ToRecordObject();
     }
 }

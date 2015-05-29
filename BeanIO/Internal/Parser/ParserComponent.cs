@@ -33,7 +33,7 @@ namespace BeanIO.Internal.Parser
         /// stream formats calculate size based on the number of fields.  Some stream formats,
         /// such as XML, may ignore size settings.
         /// </remarks>
-        public abstract int Size { get; }
+        public abstract int? Size { get; }
 
         /// <summary>
         /// Gets a value indicating whether this parser or any descendant of this parser is used to identify
