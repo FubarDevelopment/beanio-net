@@ -6,15 +6,25 @@ namespace BeanIO.Internal.Parser
 {
     public sealed class OptionalValueComparer : IComparer<OptionalValue>, IEqualityComparer<OptionalValue>, IComparer, IEqualityComparer
     {
-        public static OptionalValueComparer Default { get; } = new OptionalValueComparer(StringComparer.Ordinal);
+        private static readonly OptionalValueComparer _default = new OptionalValueComparer(StringComparer.Ordinal);
 
-        public static OptionalValueComparer IgnoreCase { get; } = new OptionalValueComparer(StringComparer.OrdinalIgnoreCase);
+        private static readonly OptionalValueComparer _ignoreCase = new OptionalValueComparer(StringComparer.OrdinalIgnoreCase);
 
         private readonly StringComparer _stringComparer;
 
         private OptionalValueComparer(StringComparer comparer)
         {
             _stringComparer = comparer;
+        }
+
+        public static OptionalValueComparer Default
+        {
+            get { return _default; }
+        }
+
+        public static OptionalValueComparer IgnoreCase
+        {
+            get { return _ignoreCase; }
         }
 
         /// <summary>

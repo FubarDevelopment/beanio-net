@@ -31,12 +31,18 @@ namespace BeanIO.Internal.Parser
         /// stream formats calculate size based on the number of fields.  Some stream formats,
         /// such as XML, may ignore size settings.
         /// </remarks>
-        public override int Size => Format.Size;
+        public override int Size
+        {
+            get { return Format.Size; }
+        }
 
         /// <summary>
         /// Gets the <see cref="IProperty"/> implementation type
         /// </summary>
-        public PropertyType Type => Parser.PropertyType.Simple;
+        public PropertyType Type
+        {
+            get { return Parser.PropertyType.Simple; }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this property or any of its descendants are used to identify a bean object.
@@ -61,12 +67,18 @@ namespace BeanIO.Internal.Parser
         /// Gets a value indicating whether this parser or any descendant of this parser is used to identify
         /// a record during unmarshalling.
         /// </summary>
-        public override bool IsIdentifier => _isIdentifier;
+        public override bool IsIdentifier
+        {
+            get { return _isIdentifier; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether this node must exist during unmarshalling.
         /// </summary>
-        public override bool IsOptional => Format.IsLazy;
+        public override bool IsOptional
+        {
+            get { return Format.IsLazy; }
+        }
 
         public IFieldFormat Format { get; set; }
 
@@ -74,7 +86,7 @@ namespace BeanIO.Internal.Parser
 
         public string Regex
         {
-            get { return _regex?.ToString(); }
+            get { return _regex == null ? null : _regex.ToString(); }
             set { _regex = value == null ? null : new Regex(value); }
         }
 
@@ -100,7 +112,10 @@ namespace BeanIO.Internal.Parser
 
         public bool MarshalDefault { get; set; }
 
-        protected Regex RegexPattern => _regex;
+        protected Regex RegexPattern
+        {
+            get { return _regex; }
+        }
 
         /// <summary>
         /// Returns whether this parser and its children match a record being unmarshalled.
@@ -301,7 +316,7 @@ namespace BeanIO.Internal.Parser
                 }
                 catch (Exception ex)
                 {
-                    throw new BeanWriterException($"Type conversion failed for field '{Name}' while formatting value '{value}'", ex);
+                    throw new BeanWriterException(string.Format("Type conversion failed for field '{0}' while formatting value '{1}'", Name, value), ex);
                 }
             }
             else
@@ -424,7 +439,7 @@ namespace BeanIO.Internal.Parser
             }
             catch (Exception ex)
             {
-                throw new BeanReaderException($"Type conversion failed for field '{Name}' while parsing text '{fieldText}'", ex);
+                throw new BeanReaderException(string.Format("Type conversion failed for field '{0}' while parsing text '{1}'", Name, fieldText), ex);
             }
         }
     }

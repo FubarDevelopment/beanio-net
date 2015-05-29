@@ -47,6 +47,41 @@ namespace BeanIO.Internal.Parser
             HasValue
         }
 
+        public bool IsInvalid
+        {
+            get { return _status == Status.Invalid; }
+        }
+
+        public bool IsMissing
+        {
+            get { return _status == Status.Missing; }
+        }
+
+        public bool IsNil
+        {
+            get { return _status == Status.Nil; }
+        }
+
+        public bool HasText
+        {
+            get { return _status == Status.HasValue; }
+        }
+
+        public string Text
+        {
+            get
+            {
+                if (!HasText)
+                    throw new InvalidOperationException();
+                return _value;
+            }
+        }
+
+        internal int StatusHashCode
+        {
+            get { return _status.GetHashCode(); }
+        }
+
         public static implicit operator OptionalValue(string text)
         {
             return new OptionalValue(text);
@@ -85,24 +120,6 @@ namespace BeanIO.Internal.Parser
         public static bool operator >=(OptionalValue value1, OptionalValue value2)
         {
             return OptionalValueComparer.Default.Compare(value1, value2) >= 0;
-        }
-
-        public bool IsInvalid => _status == Status.Invalid;
-
-        public bool IsMissing => _status == Status.Missing;
-
-        public bool IsNil => _status == Status.Nil;
-
-        public bool HasText => _status == Status.HasValue;
-
-        public string Text
-        {
-            get
-            {
-                if (!HasText)
-                    throw new InvalidOperationException();
-                return _value;
-            }
         }
 
         public string GetTextOrDefault()
@@ -161,9 +178,12 @@ namespace BeanIO.Internal.Parser
         /// Returns the hash code.
         /// </summary>
         /// <returns>
-        /// Ein Hashcode für das aktuelle Objekt.
+        /// The hash code for the current object.
         /// </returns>
-        public override int GetHashCode() => OptionalValueComparer.Default.GetHashCode(this);
+        public override int GetHashCode()
+        {
+            return OptionalValueComparer.Default.GetHashCode(this);
+        }
 
         /// <summary>
         /// Returns the status and value of the <see cref="OptionalValue"/>.
@@ -180,11 +200,13 @@ namespace BeanIO.Internal.Parser
                 case Status.Nil:
                     return "-nil-";
             }
+
             return _value ?? string.Empty;
         }
 
-        internal int CompareStatus(OptionalValue other) => ((int)_status).CompareTo((int)other._status);
-
-        internal int StatusHashCode => _status.GetHashCode();
+        internal int CompareStatus(OptionalValue other)
+        {
+            return ((int)_status).CompareTo((int)other._status);
+        }
     }
 }
