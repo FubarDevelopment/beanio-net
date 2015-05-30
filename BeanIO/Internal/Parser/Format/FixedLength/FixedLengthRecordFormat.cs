@@ -2,16 +2,16 @@
 
 using BeanIO.Internal.Util;
 
-namespace BeanIO.Internal.Parser.Format.Delimited
+namespace BeanIO.Internal.Parser.Format.FixedLength
 {
     /// <summary>
-    /// A <see cref="IRecordFormat"/> for delimited records.
+    ///  A <see cref="IRecordFormat"/> implementation for a fixed length formatted record.
     /// </summary>
     /// <remarks>
-    /// A delimited record may be configured to validate a record field count by
+    /// A fixed length record may be configured to validate record length by
     /// setting a minimum and maximum length.
     /// </remarks>
-    public class DelimitedRecordFormat : IRecordFormat
+    public class FixedLengthRecordFormat : IRecordFormat
     {
         /// <summary>
         /// Gets or sets the minimum number of fields in the record
@@ -40,7 +40,7 @@ namespace BeanIO.Internal.Parser.Format.Delimited
         /// <returns>true if the record meets all matching criteria, false otherwise</returns>
         public bool Matches(UnmarshallingContext context)
         {
-            var length = ((DelimitedUnmarshallingContext)context).FieldCount;
+            var length = ((FixedLengthUnmarshallingContext)context).RecordLength;
             return length >= MinMatchLength && (MaxMatchLength == null || length <= MaxMatchLength);
         }
 
@@ -50,18 +50,17 @@ namespace BeanIO.Internal.Parser.Format.Delimited
         /// <param name="context">the <see cref="UnmarshallingContext"/></param>
         public void Validate(UnmarshallingContext context)
         {
-            var length = ((DelimitedUnmarshallingContext)context).FieldCount;
+            var length = ((FixedLengthUnmarshallingContext)context).RecordLength;
             if (length < MinLength)
                 context.AddRecordError("minLength", MinLength, MaxLength ?? int.MaxValue);
             if (MaxLength != null && length > MaxLength)
                 context.AddRecordError("maxLength", MinLength, MaxLength);
         }
-
         public override string ToString()
         {
             var s = new StringBuilder()
                 .AppendFormat(
-                    "{0}[length={1}, ridLength={2}]",
+                    "{0}[recordLength={1}, ridLength={2}]",
                     GetType().Name,
                     DebugUtil.FormatRange(MinLength, MaxLength),
                     DebugUtil.FormatRange(MinMatchLength, MaxMatchLength));

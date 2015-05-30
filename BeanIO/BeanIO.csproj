@@ -75,12 +75,19 @@
     <Compile Include="Internal\Parser\DefaultSelectorStateKeys.cs" />
     <Compile Include="Internal\Parser\ErrorContext.cs" />
     <Compile Include="Internal\Parser\Field.cs" />
+    <Compile Include="Internal\Parser\Format\Csv\CsvStreamFormat.cs" />
     <Compile Include="Internal\Parser\Format\Delimited\DelimitedFieldFormat.cs" />
     <Compile Include="Internal\Parser\Format\Delimited\DelimitedMarshallingContext.cs" />
     <Compile Include="Internal\Parser\Format\Delimited\DelimitedRecordFormat.cs" />
     <Compile Include="Internal\Parser\Format\Delimited\DelimitedStreamFormat.cs" />
     <Compile Include="Internal\Parser\Format\Delimited\DelimitedUnmarshallingContext.cs" />
     <Compile Include="Internal\Parser\Format\FieldPadding.cs" />
+    <Compile Include="Internal\Parser\Format\FixedLength\FixedLengthFieldFormat.cs" />
+    <Compile Include="Internal\Parser\Format\FixedLength\FixedLengthFieldPadding.cs" />
+    <Compile Include="Internal\Parser\Format\FixedLength\FixedLengthMarshallingContext.cs" />
+    <Compile Include="Internal\Parser\Format\FixedLength\FixedLengthRecordFormat.cs" />
+    <Compile Include="Internal\Parser\Format\FixedLength\FixedLengthStreamFormat.cs" />
+    <Compile Include="Internal\Parser\Format\FixedLength\FixedLengthUnmarshallingContext.cs" />
     <Compile Include="Internal\Parser\Format\Flat\FlatFieldFormatSupport.cs" />
     <Compile Include="Internal\Parser\Format\Flat\IFlatFieldFormat.cs" />
     <Compile Include="Internal\Parser\IFieldFormat.cs" />
@@ -107,6 +114,7 @@
     <Compile Include="Internal\Parser\Value.cs" />
     <Compile Include="Internal\Util\DebugUtil.cs" />
     <Compile Include="Internal\Util\IDebuggable.cs" />
+    <Compile Include="Internal\Util\MarkableTextReader.cs" />
     <Compile Include="Internal\Util\TreeNode.cs" />
     <Compile Include="Internal\Util\TypeUtil.cs" />
     <Compile Include="Introspector.cs" />
@@ -115,6 +123,9 @@
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="StreamFactory.cs" />
+    <Compile Include="Stream\FixedLength\FixedLengthParserConfiguration.cs" />
+    <Compile Include="Stream\FixedLength\FixedLengthReader.cs" />
+    <Compile Include="Stream\FixedLength\FixedLengthWriter.cs" />
     <Compile Include="Stream\IRecordMarshaller.cs" />
     <Compile Include="Stream\IRecordParserFactory.cs" />
     <Compile Include="Stream\RecordParserFactorySupport.cs" />
@@ -122,6 +133,7 @@
     <Compile Include="Stream\IRecordUnmarshaller.cs" />
     <Compile Include="Stream\IRecordWriter.cs" />
     <Compile Include="Stream\RecordIOException.cs" />
+    <Compile Include="Stream\Util\CommentReader.cs" />
     <Compile Include="Types\TypeConversionException.cs" />
     <Compile Include="Types\BooleanTypeHandler.cs" />
     <Compile Include="Types\CharacterTypeHandler.cs" />

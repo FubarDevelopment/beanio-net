@@ -31,7 +31,7 @@ namespace BeanIO.Internal.Parser
         /// stream formats calculate size based on the number of fields.  Some stream formats,
         /// such as XML, may ignore size settings.
         /// </remarks>
-        public override int Size
+        public override int? Size
         {
             get { return Format.Size; }
         }

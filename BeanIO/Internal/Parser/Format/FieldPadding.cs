@@ -7,8 +7,21 @@ using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser.Format
 {
+    /// <summary>
+    /// Provides field padding functionality. By default, padded fields are
+    /// left justified and padded using a space.
+    /// </summary>
+    /// <remarks>
+    /// <para>The method <see cref="Init"/> must be called after all properties are set.</para>
+    /// <para>If <see cref="IsOptional"/> is set to true, the field text may be padded with spaces
+    /// regardless of the configured <see cref="Filler"/> when a value does not exist.</para>
+    /// <para>Once configured, a <see cref="FieldPadding"/> object is thread-safe.</para>
+    /// </remarks>
     public class FieldPadding
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FieldPadding"/> class.
+        /// </summary>
         public FieldPadding()
         {
             Filler = ' ';
@@ -51,7 +64,13 @@ namespace BeanIO.Internal.Parser.Format
         /// </summary>
         public Type PropertyType { get; set; }
 
-        public void Init()
+        /// <summary>
+        /// Initializes padding settings
+        /// </summary>
+        /// <remarks>
+        /// This method must be invoked before <see cref="Pad"/> or <see cref="Unpad"/> is called.
+        /// </remarks>
+        public virtual void Init()
         {
             if (PropertyType == null)
             {
@@ -75,7 +94,15 @@ namespace BeanIO.Internal.Parser.Format
             }
         }
 
-        public string Pad(string text)
+        /// <summary>
+        /// Formats field text
+        /// </summary>
+        /// <remarks>If the length of <paramref name="text"/> exceeds the padding length,
+        /// the text will be truncated, otherwise it will be padded with <see cref="Filler"/>.
+        /// </remarks>
+        /// <param name="text">the field text to format</param>
+        /// <returns>the formatted field text</returns>
+        public virtual string Pad(string text)
         {
             int currentLength;
             if (string.IsNullOrEmpty(text))
@@ -114,7 +141,12 @@ namespace BeanIO.Internal.Parser.Format
             return s.ToString();
         }
 
-        public string Unpad(string fieldText)
+        /// <summary>
+        /// Removes padding from the field text
+        /// </summary>
+        /// <param name="fieldText">the field text to remove padding</param>
+        /// <returns>the unpadded field text</returns>
+        public virtual string Unpad(string fieldText)
         {
             if (Justify == Align.Left)
             {
