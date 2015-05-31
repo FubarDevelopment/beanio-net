@@ -56,6 +56,7 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
             if (MaxLength != null && length > MaxLength)
                 context.AddRecordError("maxLength", MinLength, MaxLength);
         }
+
         public override string ToString()
         {
             var s = new StringBuilder()

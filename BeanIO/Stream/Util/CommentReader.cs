@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 
 using BeanIO.Internal.Util;
@@ -141,6 +140,7 @@ namespace BeanIO.Stream.Util
                         break;
                     }
                 }
+
                 if (n == -1)
                 {
                     IsEof = true;

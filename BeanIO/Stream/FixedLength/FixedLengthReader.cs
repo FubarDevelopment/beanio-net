@@ -63,7 +63,7 @@ namespace BeanIO.Stream.FixedLength
                 }
                 else
                 {
-                    throw new ArgumentOutOfRangeException("Record terminator must be a single character");
+                    throw new ArgumentOutOfRangeException("config", "Record terminator must be a single character");
                 }
             }
 
@@ -113,10 +113,7 @@ namespace BeanIO.Stream.FixedLength
         /// </returns>
         public string RecordText
         {
-            get
-            {
-                return _recordText;
-            }
+            get { return _recordText; }
         }
 
         /// <summary>
@@ -209,7 +206,7 @@ namespace BeanIO.Stream.FixedLength
             _recordLineNumber = _lineNumber - lineOffset;
             _recordText = text.ToString();
 
-            // if eol is true, we're done; if not, then the end of file was reached 
+            // if eol is true, we're done; if not, then the end of file was reached
             // and further validation is needed
             if (eol)
             {
@@ -231,7 +228,7 @@ namespace BeanIO.Stream.FixedLength
                 _recordLineNumber = -1;
                 return null;
             }
-            
+
             return record.ToString();
         }
 

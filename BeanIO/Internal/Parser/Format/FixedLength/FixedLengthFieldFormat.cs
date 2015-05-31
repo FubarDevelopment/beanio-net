@@ -53,7 +53,7 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
                     context.AddFieldError(Name, text, "length", padding.Length);
                 return Value.Invalid;
             }
-            
+
             if (KeepPadding)
             {
                 // return empty string for required fields to trigger the field validation

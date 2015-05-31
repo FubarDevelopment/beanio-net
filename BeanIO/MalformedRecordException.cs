@@ -1,7 +1,4 @@
 ﻿using System;
-using System.IO;
-
-using BeanIO;
 
 namespace BeanIO
 {

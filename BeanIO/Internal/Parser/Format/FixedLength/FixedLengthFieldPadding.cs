@@ -36,7 +36,7 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
         /// <returns>the unpadded field text</returns>
         public override string Unpad(string fieldText)
         {
-            // return empty string if the field is all spaces, to allow for optional 
+            // return empty string if the field is all spaces, to allow for optional
             // zero padded fields
             if (IsOptional && IsBlank(fieldText))
                 return string.Empty;

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-using BeanIO.Internal.Config;
 using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser

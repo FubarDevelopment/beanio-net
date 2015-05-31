@@ -7,7 +7,7 @@ namespace BeanIO.Stream.FixedLength
     /// A <see cref="FixedLengthWriter"/> is used to write records to fixed length flat file or output stream.
     /// </summary>
     /// <remarks>
-    /// A fixed length record is represented using the <see cref="string"/> class. 
+    /// A fixed length record is represented using the <see cref="string"/> class.
     /// </remarks>
     public class FixedLengthWriter : IRecordWriter
     {
