@@ -45,7 +45,7 @@ namespace BeanIO.Internal.Config
         /// Gets or sets the XML element or attribute name of this component
         /// </summary>
         /// <remarks>
-        /// If set to <tt>null</tt> (default), the XML name defaults to the component name
+        /// If set to <code>null</code> (default), the XML name defaults to the component name
         /// </remarks>
         public string XmlName { get; set; }
 
@@ -53,7 +53,7 @@ namespace BeanIO.Internal.Config
         /// Gets or sets the XML namespace of this component
         /// </summary>
         /// <remarks>
-        /// If set to <tt>null</tt> (default), the namespace is inherited from its parent.
+        /// If set to <code>null</code> (default), the namespace is inherited from its parent.
         /// </remarks>
         public string XmlNamespace { get; set; }
 
@@ -61,7 +61,7 @@ namespace BeanIO.Internal.Config
         /// Gets or sets the XML prefix for the namespace assigned to this component
         /// </summary>
         /// <remarks>
-        /// If set to <tt>null</tt> and a namespace is set, the namespace will replace the
+        /// If set to <code>null</code> and a namespace is set, the namespace will replace the
         /// default namespace during marshaling.
         /// A prefix should not be set if a namespace is not set.
         /// </remarks>

@@ -8,7 +8,7 @@ namespace BeanIO
     /// </summary>
     /// <remarks>
     /// <para>An <see cref="IUnmarshaller"/> can be used to unmarshal a bean object bound to
-    /// a <tt>record</tt> in a mapping file.  Unmarshalling bean objects that span multiple
+    /// a <code>record</code> in a mapping file.  Unmarshalling bean objects that span multiple
     /// records is not supported and will cause a <see cref="BeanReaderException"/>.</para>
     /// <para>An <see cref="IUnmarshaller"/> instance is stateful.  If a BeanIO mapping file declares
     /// record ordering and expected occurrences, a <see cref="BeanWriterException"/> may be thrown for

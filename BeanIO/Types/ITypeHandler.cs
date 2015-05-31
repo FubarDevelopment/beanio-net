@@ -3,7 +3,7 @@
 namespace BeanIO.Types
 {
     /// <summary>
-    /// A <tt>TypeHandler</tt> is used to convert field text into a Java object and vice versa.
+    /// A <code>TypeHandler</code> is used to convert field text into a Java object and vice versa.
     /// </summary>
     /// <remarks>
     /// Implementations should be thread-safe if multiple threads may concurrently process the

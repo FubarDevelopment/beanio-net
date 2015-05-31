@@ -15,11 +15,11 @@ namespace BeanIO.Stream
     /// </tr>
     ///  <tr>
     ///   <td>Fixed Length</td>
-    ///   <td><tt>String</tt></td>
+    ///   <td><code>String</code></td>
     /// </tr>
     /// <tr>
     ///   <td>CSV, Delimited</td>
-    ///   <td><tt>String[]</tt></td>
+    ///   <td><code>String[]</code></td>
     /// </tr>
     /// <tr>
     ///   <td>XML</td>
@@ -49,7 +49,7 @@ namespace BeanIO.Stream
     ///   <td><see cref="CreateMarshaller()"/></td>
     /// </tr>
     /// </table>
-    /// <p>A <tt>RecordParserFactory</tt> implementation must be thread safe (after all of its properties have been set).</p>
+    /// <p>A <code>RecordParserFactory</code> implementation must be thread safe (after all of its properties have been set).</p>
     /// </remarks>
     public interface IRecordParserFactory
     {

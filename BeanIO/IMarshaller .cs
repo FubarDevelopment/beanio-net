@@ -12,7 +12,7 @@ namespace BeanIO
     /// a record in a mapping file.  Marshalling bean objects that span multiple
     /// records is not supported and will cause a <see cref="BeanWriterException"/>.</para>
     /// <para>Depending on the stream format, a bean object can be marshalled to one or more
-    /// formats.  All stream formats support marshalling to a <tt>String</tt> value,
+    /// formats.  All stream formats support marshalling to a <code>String</code> value,
     /// as shown in the following example:</para>
     /// <code>
     /// marshaller.Marshal(bean).ToString();

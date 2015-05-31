@@ -21,7 +21,7 @@ namespace BeanIO.Internal.Config
         /// Gets or sets the fully qualified class name or type alias of this property
         /// </summary>
         /// <remarks>
-        /// By default, <tt>null</tt> is returned and the property value type
+        /// By default, <code>null</code> is returned and the property value type
         /// is detected through bean introspection.
         /// </remarks>
         public string Type { get; set; }
@@ -74,7 +74,7 @@ namespace BeanIO.Internal.Config
         public int? Until { get; set; }
 
         /// <summary>
-        /// Gets or sets the collection type, or <tt>null</tt> if this component
+        /// Gets or sets the collection type, or <code>null</code> if this component
         /// is not bound to a collection or array.
         /// </summary>
         public string Collection { get; set; }
@@ -88,9 +88,9 @@ namespace BeanIO.Internal.Config
         /// Gets or sets the maximum number of times this component may consecutively appear in a stream.
         /// </summary>
         /// <remarks>
-        /// <para>If set to <tt>null</tt>, one occurrence is assumed.</para>
+        /// <para>If set to <code>null</code>, one occurrence is assumed.</para>
         /// <para>If set to any value greater than one, a collection type is expected.</para>
-        /// <para>Must be greater than the minimum occurrences, or set to <tt>-1</tt> to indicate the limit is unbounded.</para>
+        /// <para>Must be greater than the minimum occurrences, or set to <code>-1</code> to indicate the limit is unbounded.</para>
         /// </remarks>
         public int? MaxOccurs { get; set; }
 

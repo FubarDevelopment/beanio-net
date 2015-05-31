@@ -6,7 +6,7 @@
     /// <returns>
     /// The class used to represent a <i>record</i> is specific to the
     /// format of a record.  For example, a delimited record marshaller may use
-    /// <tt>Stringp[]</tt>.
+    /// <code>Stringp[]</code>.
     /// </returns>
     public interface IRecordUnmarshaller
     {

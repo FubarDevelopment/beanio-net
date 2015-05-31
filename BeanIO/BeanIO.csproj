@@ -115,7 +115,9 @@
     <Compile Include="Internal\Util\DebugUtil.cs" />
     <Compile Include="Internal\Util\IDebuggable.cs" />
     <Compile Include="Internal\Util\MarkableTextReader.cs" />
+    <Compile Include="Internal\Util\Settings.cs" />
     <Compile Include="Internal\Util\TreeNode.cs" />
+    <Compile Include="Internal\Util\TypeHandlerFactory.cs" />
     <Compile Include="Internal\Util\TypeUtil.cs" />
     <Compile Include="Introspector.cs" />
     <Compile Include="IUnmarshaller.cs" />

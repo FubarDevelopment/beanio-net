@@ -11,7 +11,7 @@ namespace BeanIO.Internal.Config
     {
         /// <summary>
         /// Gets or sets the name of the custom type handler used for type
-        /// conversion by this component, or <tt>null</tt> if the default
+        /// conversion by this component, or <code>null</code> if the default
         /// type handler is sufficient.
         /// </summary>
         public string TypeHandler { get; set; }
