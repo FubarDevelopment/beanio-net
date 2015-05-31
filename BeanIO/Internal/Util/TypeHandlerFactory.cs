@@ -44,6 +44,8 @@ namespace BeanIO.Internal.Util
             _defaultFactory.RegisterHandlerFor(typeof(bool), new BooleanTypeHandler());
             _defaultFactory.RegisterHandlerFor(typeof(Guid), new GuidTypeHandler());
             _defaultFactory.RegisterHandlerFor(typeof(Uri), new UrlTypeHandler());
+
+            // TODO: Incomplete
         }
 
         public void RegisterHandler([NotNull] string name, [NotNull] ITypeHandler handler)
