@@ -39,7 +39,7 @@ namespace BeanIO.Test
         {
             var reader = new MarkableTextReader(new StringReader("ab"));
             reader.Mark(2);
-            
+
             var ch = reader.Read();
             Assert.NotEqual(-1, ch);
             Assert.Equal("a", char.ConvertFromUtf32(ch));
