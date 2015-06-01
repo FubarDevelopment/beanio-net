@@ -43,6 +43,7 @@
     <Compile Include="BeanReaderErrorEventArgs.cs" />
     <Compile Include="Builder\AccessMode.cs" />
     <Compile Include="Builder\Align.cs" />
+    <Compile Include="Builder\CsvParserBuilder.cs" />
     <Compile Include="Builder\FieldBuilder.cs" />
     <Compile Include="Builder\GroupBuilder.cs" />
     <Compile Include="Builder\IParserBuilder.cs" />
@@ -135,6 +136,9 @@
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="StreamFactory.cs" />
+    <Compile Include="Stream\Csv\CsvParserConfiguration.cs" />
+    <Compile Include="Stream\Csv\CsvReader.cs" />
+    <Compile Include="Stream\Csv\CsvRecordParserFactory.cs" />
     <Compile Include="Stream\FixedLength\FixedLengthParserConfiguration.cs" />
     <Compile Include="Stream\FixedLength\FixedLengthReader.cs" />
     <Compile Include="Stream\FixedLength\FixedLengthWriter.cs" />
