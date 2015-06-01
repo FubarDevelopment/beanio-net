@@ -1,31 +1,13 @@
-﻿using BeanIO.Internal.Util;
+﻿using System;
 
 namespace BeanIO.Internal.Parser
 {
-    /// <summary>
-    /// Base class for all parser components in that implement <see cref="IParser"/>.
-    /// </summary>
-    public abstract class ParserComponent : Component, IParser
+    public abstract class DelegatingParser : ParserComponent
     {
-        /// <summary>
-        /// map key used to store the state of the 'count' attribute
-        /// </summary>
-        public const string COUNT_KEY = "count";
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ParserComponent"/> class.
-        /// </summary>
-        protected ParserComponent()
+        protected DelegatingParser()
+            : base(1)
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ParserComponent"/> class.
-        /// </summary>
-        /// <param name="size">the initial child capacity</param>
-        protected ParserComponent(int size)
-            : base(size)
-        {
+            
         }
 
         /// <summary>
@@ -38,78 +20,104 @@ namespace BeanIO.Internal.Parser
         /// stream formats calculate size based on the number of fields.  Some stream formats,
         /// such as XML, may ignore size settings.
         /// </remarks>
-        public abstract int? Size { get; }
+        public override int? Size
+        {
+            get { return Parser.Size; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this node must exist during unmarshalling.
+        /// </summary>
+        public override bool IsOptional
+        {
+            get { return Parser.IsOptional; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether this parser or any descendant of this parser is used to identify
         /// a record during unmarshalling.
         /// </summary>
-        public abstract bool IsIdentifier { get; set; }
+        public override bool IsIdentifier
+        {
+            get { return Parser.IsIdentifier; }
+            set { throw new NotSupportedException(); }
+        }
 
         /// <summary>
-        /// Gets a value indicating whether this node must exist during unmarshalling.
+        /// Gets the <see cref="IParser"/>
         /// </summary>
-        public abstract bool IsOptional { get; }
+        protected IParser Parser
+        {
+            get { return (IParser)First; }
+        }
 
         /// <summary>
         /// Returns whether this parser and its children match a record being unmarshalled.
         /// </summary>
         /// <param name="context">The <see cref="UnmarshallingContext"/></param>
         /// <returns>true if matched, false otherwise</returns>
-        public abstract bool Matches(UnmarshallingContext context);
+        public override bool Matches(UnmarshallingContext context)
+        {
+            return Parser.Matches(context);
+        }
 
         /// <summary>
         /// Unmarshals a record
         /// </summary>
         /// <param name="context">The <see cref="UnmarshallingContext"/></param>
         /// <returns>true if this component was present in the unmarshalled record, or false otherwise</returns>
-        public abstract bool Unmarshal(UnmarshallingContext context);
+        public override bool Unmarshal(UnmarshallingContext context)
+        {
+            return Parser.Unmarshal(context);
+        }
 
         /// <summary>
         /// Marshals a record
         /// </summary>
         /// <param name="context">The <see cref="MarshallingContext"/></param>
         /// <returns>whether a value was marshalled</returns>
-        public abstract bool Marshal(MarshallingContext context);
-
-        /// <summary>
-        /// Returns whether this parser or any of its descendant have content for marshalling.
-        /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <returns>true if there is content for marshalling, false otherwise</returns>
-        public abstract bool HasContent(ParsingContext context);
+        public override bool Marshal(MarshallingContext context)
+        {
+            return Parser.Marshal(context);
+        }
 
         /// <summary>
         /// Clears the current property value.
         /// </summary>
         /// <param name="context">The <see cref="ParsingContext"/></param>
-        public abstract void ClearValue(ParsingContext context);
+        public override void ClearValue(ParsingContext context)
+        {
+            Parser.ClearValue(context);
+        }
 
         /// <summary>
         /// Sets the property value for marshaling.
         /// </summary>
         /// <param name="context">The <see cref="ParsingContext"/></param>
         /// <param name="value">the property value</param>
-        public abstract void SetValue(ParsingContext context, object value);
+        public override void SetValue(ParsingContext context, object value)
+        {
+            Parser.SetValue(context, value);
+        }
 
         /// <summary>
         /// Returns the unmarshalled property value.
         /// </summary>
         /// <param name="context">The <see cref="ParsingContext"/></param>
         /// <returns>the property value</returns>
-        public abstract object GetValue(ParsingContext context);
+        public override object GetValue(ParsingContext context)
+        {
+            return Parser.GetValue(context);
+        }
 
         /// <summary>
-        /// Returns whether a node is a supported child of this node.
+        /// Returns whether this parser or any of its descendant have content for marshalling.
         /// </summary>
-        /// <remarks>
-        /// Called by <see cref="TreeNode{T}.Add"/>.
-        /// </remarks>
-        /// <param name="child">the node to test</param>
-        /// <returns>true if the child is allowed</returns>
-        public override bool IsSupportedChild(Component child)
+        /// <param name="context">The <see cref="ParsingContext"/></param>
+        /// <returns>true if there is content for marshalling, false otherwise</returns>
+        public override bool HasContent(ParsingContext context)
         {
-            return child is IParser;
+            return Parser.HasContent(context);
         }
     }
 }

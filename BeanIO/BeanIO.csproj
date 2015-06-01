@@ -74,10 +74,13 @@
     <Compile Include="Internal\Parser\Accessor\PropertyReflectionAccessor.cs" />
     <Compile Include="Internal\Parser\Accessor\MethodReflectionAccessor.cs" />
     <Compile Include="Internal\Parser\Accessor\PropertyAccessorSupport.cs" />
+    <Compile Include="Internal\Parser\Aggregation.cs" />
     <Compile Include="Internal\Parser\BeanReaderImpl.cs" />
     <Compile Include="Internal\Parser\BeanWriterImpl.cs" />
+    <Compile Include="Internal\Parser\CollectionParser.cs" />
     <Compile Include="Internal\Parser\Component.cs" />
     <Compile Include="Internal\Parser\DefaultSelectorStateKeys.cs" />
+    <Compile Include="Internal\Parser\DelegatingParser.cs" />
     <Compile Include="Internal\Parser\ErrorContext.cs" />
     <Compile Include="Internal\Parser\Field.cs" />
     <Compile Include="Internal\Parser\Format\Csv\CsvStreamFormat.cs" />
