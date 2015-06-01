@@ -38,7 +38,7 @@ namespace BeanIO.Stream.Csv
         /// <returns>The new <see cref="IRecordWriter"/></returns>
         public IRecordWriter CreateWriter(TextWriter writer)
         {
-            throw new System.NotImplementedException();
+            return new CsvWriter(writer);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace BeanIO.Stream.Csv
         /// <returns>The created <see cref="IRecordMarshaller"/></returns>
         public IRecordMarshaller CreateMarshaller()
         {
-            throw new System.NotImplementedException();
+            return new CsvRecordParser();
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace BeanIO.Stream.Csv
         /// <returns>The created <see cref="IRecordUnmarshaller"/></returns>
         public IRecordUnmarshaller CreateUnmarshaller()
         {
-            throw new System.NotImplementedException();
+            return new CsvRecordParser();
         }
     }
 }

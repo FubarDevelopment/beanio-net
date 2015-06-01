@@ -138,7 +138,10 @@
     <Compile Include="StreamFactory.cs" />
     <Compile Include="Stream\Csv\CsvParserConfiguration.cs" />
     <Compile Include="Stream\Csv\CsvReader.cs" />
+    <Compile Include="Stream\Csv\CsvRecordParser.cs" />
     <Compile Include="Stream\Csv\CsvRecordParserFactory.cs" />
+    <Compile Include="Stream\Csv\CsvUtils.cs" />
+    <Compile Include="Stream\Csv\CsvWriter.cs" />
     <Compile Include="Stream\FixedLength\FixedLengthParserConfiguration.cs" />
     <Compile Include="Stream\FixedLength\FixedLengthReader.cs" />
     <Compile Include="Stream\FixedLength\FixedLengthWriter.cs" />

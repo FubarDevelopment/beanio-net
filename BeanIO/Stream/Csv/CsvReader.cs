@@ -203,7 +203,7 @@ namespace BeanIO.Stream.Csv
                     case 0: // initial state (beginning of line, or next value)
                         if (c == _delim)
                         {
-                            _fieldList.Add(CreateWhitespace(whitespace));
+                            _fieldList.Add(whitespace.ToWhitespace());
                             whitespace = 0;
                         }
                         else if (c == _quote)
@@ -236,7 +236,7 @@ namespace BeanIO.Stream.Csv
                         }
                         else
                         {
-                            field.Append(CreateWhitespace(whitespace));
+                            field.Append(whitespace.ToWhitespace());
                             whitespace = 0;
                             field.Append(c);
                             state = 2; // look for next delimiter
@@ -360,7 +360,7 @@ namespace BeanIO.Stream.Csv
                     // do not create an empty field if we've reached the end of the file and no
                     // characters were read on the last line
                     if (whitespace > 0 || _fieldList.Count > 0)
-                        _fieldList.Add(CreateWhitespace(whitespace));
+                        _fieldList.Add(whitespace.ToWhitespace());
                     break;
                 case 1:
                     _fieldList = null;
@@ -427,13 +427,6 @@ namespace BeanIO.Stream.Csv
             // end of file reached...
             RecordText = text.ToString();
             _fieldList = null;
-        }
-
-        private string CreateWhitespace(int size)
-        {
-            if (size == 0)
-                return string.Empty;
-            return new string(' ', size);
         }
     }
 }
