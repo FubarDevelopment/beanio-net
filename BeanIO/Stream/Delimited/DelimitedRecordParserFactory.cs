@@ -1,8 +1,8 @@
 ﻿using System.IO;
 
-namespace BeanIO.Stream.Csv
+namespace BeanIO.Stream.Delimited
 {
-    public class CsvRecordParserFactory : CsvParserConfiguration, IRecordParserFactory
+    public class DelimitedRecordParserFactory : DelimitedParserConfiguration, IRecordParserFactory
     {
         /// <summary>
         /// Initializes the factory.
@@ -14,11 +14,11 @@ namespace BeanIO.Stream.Csv
         /// </remarks>
         public void Init()
         {
-            if (Quote == Delimiter)
-                throw new BeanIOConfigurationException("The CSV field delimiter cannot match the character used for the quotation mark.");
-
             if (Escape != null && Escape == Delimiter)
-                throw new BeanIOConfigurationException("The CSV field delimiter cannot match the escape character.");
+                throw new BeanIOConfigurationException("The field delimiter cannot match the escape character");
+
+            if (LineContinuationCharacter != null && LineContinuationCharacter == Delimiter)
+                throw new BeanIOConfigurationException("The field delimiter cannot match the line continuation character");
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace BeanIO.Stream.Csv
         /// <returns>The created <see cref="IRecordReader"/></returns>
         public IRecordReader CreateReader(TextReader reader)
         {
-            return new CsvReader(reader, this);
+            return new DelimitedReader(reader, this);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace BeanIO.Stream.Csv
         /// <returns>The new <see cref="IRecordWriter"/></returns>
         public IRecordWriter CreateWriter(TextWriter writer)
         {
-            return new CsvWriter(writer, this);
+            return new DelimitedWriter(writer, this);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace BeanIO.Stream.Csv
         /// <returns>The created <see cref="IRecordMarshaller"/></returns>
         public IRecordMarshaller CreateMarshaller()
         {
-            return new CsvRecordParser(this);
+            return new DelimitedRecordParser(this);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace BeanIO.Stream.Csv
         /// <returns>The created <see cref="IRecordUnmarshaller"/></returns>
         public IRecordUnmarshaller CreateUnmarshaller()
         {
-            return new CsvRecordParser(this);
+            return new DelimitedRecordParser(this);
         }
     }
 }
