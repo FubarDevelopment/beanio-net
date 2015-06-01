@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-using NodaTime;
+//// using NodaTime;
 
 namespace BeanIO.Internal.Util
 {
@@ -53,15 +53,26 @@ namespace BeanIO.Internal.Util
                 { "datetimeoffset", typeof(DateTimeOffset) },
                 { "dto", typeof(DateTimeOffset) },
                 { "timespan", typeof(TimeSpan) },
-                { "ndate", typeof(LocalDate) },
-                { "ntime", typeof(LocalTime) },
-                { "ndatetime", typeof(LocalDateTime) },
-                { "ndt", typeof(LocalDateTime) },
-                { "ndatetimeoffset", typeof(OffsetDateTime) },
-                { "ndto", typeof(OffsetDateTime) },
-                { "zdatetime", typeof(ZonedDateTime) },
-                { "zdt", typeof(ZonedDateTime) },
+                //// { "ndate", typeof(LocalDate) },
+                //// { "ntime", typeof(LocalTime) },
+                //// { "ndatetime", typeof(LocalDateTime) },
+                //// { "ndt", typeof(LocalDateTime) },
+                //// { "ndatetimeoffset", typeof(OffsetDateTime) },
+                //// { "ndto", typeof(OffsetDateTime) },
+                //// { "zdatetime", typeof(ZonedDateTime) },
+                //// { "zdt", typeof(ZonedDateTime) },
             };
+
+        /// <summary>
+        /// Get all the well known names for a given type.
+        /// </summary>
+        /// <param name="type">The type to return the well known names for</param>
+        /// <returns>The well known names of the given <paramref name="type"/></returns>
+        public static IEnumerable<string> GetWellKnownNamesFor(this Type type)
+        {
+            var fullName = type.GetFullName();
+            return _wellKnownTypes.Where(x => x.Value.GetFullName() == fullName).Select(x => x.Key);
+        }
 
         /// <summary>
         /// Returns the type object for a class name or type alias.  A type alias is not case sensitive.

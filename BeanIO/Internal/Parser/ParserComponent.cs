@@ -8,6 +8,11 @@ namespace BeanIO.Internal.Parser
     public abstract class ParserComponent : Component, IParser
     {
         /// <summary>
+        /// map key used to store the state of the 'count' attribute
+        /// </summary>
+        public const string COUNT_KEY = "count";
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ParserComponent"/> class.
         /// </summary>
         protected ParserComponent()

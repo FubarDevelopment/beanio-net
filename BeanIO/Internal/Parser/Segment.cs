@@ -153,7 +153,7 @@ namespace BeanIO.Internal.Parser
         public override bool HasContent(ParsingContext context)
         {
             if (Property != null)
-                return (Property.GetValue(context) as string) != Value.Missing;
+                return !ReferenceEquals(Property.GetValue(context), Value.Missing);
 
             return Children.Cast<IParser>().Any(x => x.HasContent(context));
         }

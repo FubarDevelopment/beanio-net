@@ -40,14 +40,24 @@ namespace BeanIO
         object Unmarshal(string record);
 
         /// <summary>
-        /// Unmarshals a bean object from the given enumeration of fields.
+        /// Unmarshals a bean object from the given list of fields.
         /// </summary>
         /// <remarks>
         /// This method is supported by CSV and delimited formatted streams only.
         /// </remarks>
         /// <param name="fields">The fields to unmarshal</param>
         /// <returns>The unmarshalled bean object</returns>
-        object Unmarshal(IEnumerable<string> fields);
+        object Unmarshal(IList<string> fields);
+
+        /// <summary>
+        /// Unmarshals a bean object from the given array of fields.
+        /// </summary>
+        /// <remarks>
+        /// This method is supported by CSV and delimited formatted streams only.
+        /// </remarks>
+        /// <param name="fields">The fields to unmarshal</param>
+        /// <returns>The unmarshalled bean object</returns>
+        object Unmarshal(string[] fields);
 
         /// <summary>
         /// Unmarshals a bean object from the given element.

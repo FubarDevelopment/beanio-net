@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 
 namespace BeanIO
 {
@@ -10,12 +10,9 @@ namespace BeanIO
 
         public int LineNumber { get; protected set; }
 
-        public int RecordCount
-        {
-            get { return RecordContexts.Count; }
-        }
+        public abstract int RecordCount { get; }
 
-        public abstract IReadOnlyList<IRecordContext> RecordContexts { get; }
+        public abstract IRecordContext GetRecordContext(int index);
 
         public abstract object Read();
 
@@ -35,12 +32,25 @@ namespace BeanIO
         /// Triggers the <see cref="Error" /> event or throws the exception when no event handler was given.
         /// </summary>
         /// <param name="exception">The exception to be passed to the event.</param>
-        protected void OnError(BeanReaderException exception)
+        protected virtual void OnError(BeanReaderException exception)
         {
-            if (Error == null)
+            var tmp = Error;
+
+            if (tmp == null)
                 throw exception;
 
-            Error(new BeanReaderErrorEventArgs(exception));
+            try
+            {
+                tmp(new BeanReaderErrorEventArgs(exception));
+            }
+            catch (BeanReaderException)
+            {
+                throw;
+            }
+            catch (Exception e)
+            {
+                throw new BeanReaderException("Exception thrown by error handler", e);
+            }
         }
     }
 }

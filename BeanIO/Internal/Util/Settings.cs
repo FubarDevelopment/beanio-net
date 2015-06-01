@@ -1,11 +1,13 @@
 ﻿using System;
-
-using AutoMapper.Internal;
+using System.Collections.Generic;
 
 using NodaTime;
 
 namespace BeanIO.Internal.Util
 {
+    /// <summary>
+    /// <see cref="Settings"/> is used to load and store BeanIO configuration settings.
+    /// </summary>
     public class Settings
     {
         /// <summary>
@@ -136,19 +138,43 @@ namespace BeanIO.Internal.Util
         /// </summary>
         public static readonly string ALLOW_PROTECTED_PROPERTY_ACCESS = "org.beanio.allowProtectedAccess";
 
-        private static readonly string DEFAULT_CONFIGURATION_PATH = "org/beanio/internal/config/beanio.properties";
+        private static readonly object _syncRoot = new object();
 
-        private static readonly string DEFAULT_CONFIGURATION_FILENAME = "beanio.properties";
-
-        private static readonly string CONFIGURATION_PROPERTY = "org.beanio.configuration";
+        private static Settings _instance;
 
         private readonly IDictionary<string, string> _properties;
 
-        private Settings(IDictionary<string, string> properties)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Settings"/> class.
+        /// </summary>
+        /// <param name="properties">The properties to use for this settings object.</param>
+        public Settings(IDictionary<string, string> properties)
         {
             _properties = properties;
         }
 
+        /// <summary>
+        /// Gets or sets the global <see cref="Settings"/> instance.
+        /// </summary>
+        public static Settings Instance
+        {
+            get
+            {
+                lock (_syncRoot)
+                    return _instance ?? (_instance = new Settings(new Dictionary<string, string>()));
+            }
+            set
+            {
+                lock (_syncRoot)
+                    _instance = value;
+            }
+        }
+
+        /// <summary>
+        /// Returns a BeanIO configuration setting
+        /// </summary>
+        /// <param name="key">the name of the setting</param>
+        /// <returns>the value of the setting, or null if the name is invalid</returns>
         public string this[string key]
         {
             get
@@ -160,11 +186,22 @@ namespace BeanIO.Internal.Util
             }
         }
 
+        /// <summary>
+        /// Returns a BeanIO configuration setting
+        /// </summary>
+        /// <param name="key">the name of the setting</param>
+        /// <returns>the value of the setting, or null if the name is invalid</returns>
         public string GetProperty(string key)
         {
             return this[key];
         }
 
+        /// <summary>
+        /// Returns the boolean value of a BeanIO configuration setting
+        /// </summary>
+        /// <param name="key">the property key</param>
+        /// <returns>true if the property value is "1" or "true" (case insensitive),
+        /// or false if the property is any other value</returns>
         public bool GetBoolean(string key)
         {
             var temp = this[key];
@@ -176,6 +213,21 @@ namespace BeanIO.Internal.Util
             return temp == "1";
         }
 
-        // TODO: Incomplete!
+        /// <summary>
+        /// Returns a BeanIO configuration setting as an integer
+        /// </summary>
+        /// <param name="key">the property key</param>
+        /// <param name="defaultValue">the default value if the setting wasn't configured or invalid</param>
+        /// <returns>the <code>int</code> property value or <paramref name="defaultValue"/></returns>
+        public int GetInt(string key, int defaultValue)
+        {
+            var temp = this[key];
+            if (string.IsNullOrWhiteSpace(temp))
+                return defaultValue;
+            int result;
+            if (int.TryParse(temp, out result))
+                return result;
+            return defaultValue;
+        }
     }
 }

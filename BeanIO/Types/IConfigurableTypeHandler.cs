@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using BeanIO.Internal.Util;
+
 namespace BeanIO.Types
 {
     /// <summary>

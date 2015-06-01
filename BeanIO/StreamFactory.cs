@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+
+using BeanIO.Builder;
+using BeanIO.Internal.Util;
 
 namespace BeanIO
 {
@@ -11,6 +16,25 @@ namespace BeanIO
     /// </summary>
     public abstract class StreamFactory
     {
+        public static StreamFactory NewInstance()
+        {
+            var className = Settings.Instance[Settings.STREAM_FACTORY_CLASS];
+            if (string.IsNullOrEmpty(className))
+                throw new BeanIOConfigurationException(string.Format("Property '{0}' not set", Settings.STREAM_FACTORY_CLASS));
+
+            try
+            {
+                var factoryTypeInfo = Type.GetType(className).GetTypeInfo();
+                var factory = (StreamFactory)factoryTypeInfo.DeclaredConstructors.Single(x => x.GetParameters().Length == 0).Invoke(null);
+                factory.Init();
+                return factory;
+            }
+            catch (Exception ex)
+            {
+                throw new BeanIOConfigurationException(string.Format("Failed to load stream factory implementation class '{0}'", className), ex);
+            }
+        }
+
         /// <summary>
         /// Creates a new <see cref="IBeanReader"/> for reading from the given input stream.
         /// </summary>
@@ -64,13 +88,11 @@ namespace BeanIO
         /// <returns>The new <see cref="IMarshaller"/></returns>
         public abstract IMarshaller CreateMarshaller(string name);
 
-#if FALSE
         /// <summary>
         /// Defines a new stream mapping.
         /// </summary>
         /// <param name="builder">The <see cref="StreamBuilder"/>.</param>
         public abstract void Define(StreamBuilder builder);
-#endif
 
         /// <summary>
         /// Loads a BeanIO mapping file, and adds the configured streams to this factory.

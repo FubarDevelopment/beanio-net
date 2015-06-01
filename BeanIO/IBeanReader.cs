@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace BeanIO
 {
@@ -36,7 +35,9 @@ namespace BeanIO
         /// If a bean object can span multiple records, <see cref="RecordCount"/> can be used
         /// to determine how many records were read from the stream.
         /// </summary>
-        IReadOnlyList<IRecordContext> RecordContexts { get; }
+        /// <param name="index">the index of the record, starting at 0</param>
+        /// <returns>the <see cref="IRecordContext"/></returns>
+        IRecordContext GetRecordContext(int index);
 
         /// <summary>
         /// Reads a single bean from the input stream.

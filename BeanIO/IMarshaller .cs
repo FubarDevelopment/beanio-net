@@ -42,11 +42,18 @@ namespace BeanIO
         IMarshaller Marshal(string recordName, object bean);
 
         /// <summary>
-        /// Returns the most recent marshalled bean object as an <see cref="IEnumerable{T}"/> for CSV
+        /// Returns the most recent marshalled bean object as an array for CSV
         /// and delimited formatted streams.
         /// </summary>
-        /// <returns>The <see cref="String"/> enumeration of fields</returns>
-        IEnumerable<string> AsEnumerable();
+        /// <returns>The <see cref="String"/> array of fields</returns>
+        string[] AsArray();
+
+        /// <summary>
+        /// Returns the most recent marshalled bean object as an <see cref="IList{T}"/> for CSV
+        /// and delimited formatted streams.
+        /// </summary>
+        /// <returns>The <see cref="String"/> list of fields</returns>
+        IList<string> AsList();
 
         /// <summary>
         /// Returns the most recent marshalled bean object as an <see cref="XDocument"/> for XML

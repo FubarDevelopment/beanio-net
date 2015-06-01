@@ -19,6 +19,9 @@ namespace BeanIO.Internal.Parser
         public Field()
             : base(0)
         {
+            ErrorIfNullPrimitive = Settings.Instance.GetBoolean(Settings.ERROR_IF_NULL_PRIMITIVE);
+            UseDefaultIfMissing = Settings.Instance.GetBoolean(Settings.USE_DEFAULT_IF_MISSING);
+            MarshalDefault = Settings.Instance.GetBoolean(Settings.DEFAULT_MARSHALLING_ENABLED);
         }
 
         /// <summary>
@@ -146,7 +149,7 @@ namespace BeanIO.Internal.Parser
                 return false;
             }
 
-            if (text == Value.Invalid)
+            if (ReferenceEquals(text, Value.Invalid))
                 _value.Set(context, text);
             else
                 _value.Set(context, ParseValue(context, text));
@@ -173,13 +176,13 @@ namespace BeanIO.Internal.Parser
 
                 // the default value may be used to override null property values
                 // if enabled (since 1.2.2)
-                if (MarshalDefault && value as string == Value.Missing)
+                if (MarshalDefault && ReferenceEquals(value, Value.Missing))
                 {
                     value = DefaultValue;
                     SetValue(context, DefaultValue);
                 }
 
-                if (value as string == Value.Missing)
+                if (ReferenceEquals(value, Value.Missing))
                 {
                     value = null;
                     SetValue(context, null);
@@ -205,7 +208,7 @@ namespace BeanIO.Internal.Parser
         {
             if (!IsBound)
                 return true;
-            return GetValue(context) as string != Value.Missing;
+            return !ReferenceEquals(GetValue(context), Value.Missing);
         }
 
         /// <summary>
@@ -289,7 +292,7 @@ namespace BeanIO.Internal.Parser
 
         protected virtual bool IsMatch(string text)
         {
-            if (text == null || text == Value.Invalid | text == Value.Nil)
+            if (text == null || ReferenceEquals(text, Value.Invalid) || ReferenceEquals(text, Value.Nil))
                 return false;
             if (Literal != null && !string.Equals(Literal, text, StringComparison.Ordinal))
                 return false;
@@ -332,7 +335,7 @@ namespace BeanIO.Internal.Parser
             var valid = true;
             var text = fieldText;
 
-            if (text == Value.Nil)
+            if (ReferenceEquals(text, Value.Nil))
             {
                 // validate field is nillable
                 if (!Format.IsNillable)

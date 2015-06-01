@@ -28,6 +28,7 @@
         <StringProperty Name="AdvancedNaming_InternalConst">$(AaBb):$(AABB):$(AA_BB)</StringProperty>
         <StringProperty Name="AdvancedNaming_EnumItem">$(AaBb):$(AABB):$(AA_BB)</StringProperty>
         <StringProperty Name="AdvancedNaming_Enum">$(AaBb):$(AABB):$(AA_BB)</StringProperty>
+        <StringProperty Name="AdvancedNaming_PublicStaticField">$(AaBb):$(AA_BB)</StringProperty>
       </AnalyzerSettings>
     </Analyzer>
   </Analyzers>

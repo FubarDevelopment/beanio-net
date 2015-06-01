@@ -65,12 +65,16 @@
     <Compile Include="Internal\Config\SimplePropertyConfig.cs" />
     <Compile Include="Internal\Config\StreamConfig.cs" />
     <Compile Include="Internal\Config\TypeHandlerConfig.cs" />
+    <Compile Include="Internal\DictionaryExtensions.cs" />
     <Compile Include="Internal\IParserLocal.cs" />
+    <Compile Include="Internal\Parser\AbortRecordUnmarshalligException.cs" />
     <Compile Include="Internal\Parser\Accessor\FieldReflectionAccessor.cs" />
     <Compile Include="Internal\Parser\Accessor\MapAccessor.cs" />
     <Compile Include="Internal\Parser\Accessor\PropertyReflectionAccessor.cs" />
     <Compile Include="Internal\Parser\Accessor\MethodReflectionAccessor.cs" />
     <Compile Include="Internal\Parser\Accessor\PropertyAccessorSupport.cs" />
+    <Compile Include="Internal\Parser\BeanReaderImpl.cs" />
+    <Compile Include="Internal\Parser\BeanWriterImpl.cs" />
     <Compile Include="Internal\Parser\Component.cs" />
     <Compile Include="Internal\Parser\DefaultSelectorStateKeys.cs" />
     <Compile Include="Internal\Parser\ErrorContext.cs" />
@@ -90,6 +94,7 @@
     <Compile Include="Internal\Parser\Format\FixedLength\FixedLengthUnmarshallingContext.cs" />
     <Compile Include="Internal\Parser\Format\Flat\FlatFieldFormatSupport.cs" />
     <Compile Include="Internal\Parser\Format\Flat\IFlatFieldFormat.cs" />
+    <Compile Include="Internal\Parser\Group.cs" />
     <Compile Include="Internal\Parser\IFieldFormat.cs" />
     <Compile Include="Internal\Parser\IIteration.cs" />
     <Compile Include="Internal\Parser\IMessageFactory.cs" />
@@ -99,6 +104,7 @@
     <Compile Include="Internal\Parser\IRecordFormat.cs" />
     <Compile Include="Internal\Parser\ISelector.cs" />
     <Compile Include="Internal\Parser\IStreamFormat.cs" />
+    <Compile Include="Internal\Parser\MarshallerImpl.cs" />
     <Compile Include="Internal\Parser\MarshallingContext.cs" />
     <Compile Include="Internal\Parser\ParserComponent.cs" />
     <Compile Include="Internal\Parser\ParserLocal.cs" />
@@ -107,13 +113,17 @@
     <Compile Include="Internal\Parser\PropertyType.cs" />
     <Compile Include="Internal\Parser\Record.cs" />
     <Compile Include="Internal\Parser\Segment.cs" />
+    <Compile Include="Internal\Parser\Stream.cs" />
     <Compile Include="Internal\Parser\StreamFormatSupport.cs" />
+    <Compile Include="Internal\Parser\UnmarshallerImpl.cs" />
     <Compile Include="Internal\Parser\UnmarshallingContext.cs" />
     <Compile Include="Internal\Parser\OptionalValue.cs" />
     <Compile Include="Internal\Parser\OptionalValueComparer.cs" />
     <Compile Include="Internal\Parser\Value.cs" />
     <Compile Include="Internal\Util\DebugUtil.cs" />
+    <Compile Include="Internal\Util\EnumTypeHandler.cs" />
     <Compile Include="Internal\Util\IDebuggable.cs" />
+    <Compile Include="Internal\Util\IStatefulWriter.cs" />
     <Compile Include="Internal\Util\MarkableTextReader.cs" />
     <Compile Include="Internal\Util\Settings.cs" />
     <Compile Include="Internal\Util\TreeNode.cs" />
@@ -136,6 +146,7 @@
     <Compile Include="Stream\IRecordWriter.cs" />
     <Compile Include="Stream\RecordIOException.cs" />
     <Compile Include="Stream\Util\CommentReader.cs" />
+    <Compile Include="Types\DateTimeOffsetHandler.cs" />
     <Compile Include="Types\TypeConversionException.cs" />
     <Compile Include="Types\BooleanTypeHandler.cs" />
     <Compile Include="Types\CharacterTypeHandler.cs" />
@@ -152,6 +163,7 @@
     <Compile Include="Types\NumberTypeHandler.cs" />
     <Compile Include="Types\StringTypeHandler.cs" />
     <Compile Include="Types\UrlTypeHandler.cs" />
+    <Compile Include="Types\XmlConvertTypeHandler.cs" />
     <Compile Include="UnidentifiedRecordException.cs" />
     <Compile Include="UnexpectedRecordException.cs" />
     <Compile Include="IMarshaller .cs" />
