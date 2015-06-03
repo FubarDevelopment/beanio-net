@@ -56,6 +56,11 @@ namespace BeanIO.Internal.Parser
         public override bool IsIdentifier
         {
             get { return false; }
+            set
+            {
+                if (value)
+                    throw new NotSupportedException();
+            }
         }
 
         /// <summary>

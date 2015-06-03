@@ -54,7 +54,8 @@ namespace BeanIO.Internal.Parser
         /// <returns></returns>
         public override int Length(object value)
         {
-            throw new System.NotImplementedException();
+            var collection = (ICollection)value;
+            return collection != null ? collection.Count : 0;
         }
 
         /// <summary>
@@ -64,7 +65,15 @@ namespace BeanIO.Internal.Parser
         /// <returns>the property value</returns>
         public override object CreateValue(ParsingContext context)
         {
-            throw new System.NotImplementedException();
+            var value = _value.Get(context);
+            
+            if (value == null)
+            {
+                value = CreateCollection();
+                _value.Set(context, value);
+            }
+
+            return GetValue(context);
         }
 
         public override bool Defines(object value)
@@ -139,20 +148,83 @@ namespace BeanIO.Internal.Parser
         protected override bool Unmarshal(UnmarshallingContext context, IParser parser, int minOccurs, int? maxOccurs)
         {
             var collection = IsLazy ? null : CreateCollection();
-            throw new System.NotImplementedException();
+
+            var invalid = false;
+            var count = 0;
+            try
+            {
+                context.PushIteration(this);
+
+                for (int i = 0; (maxOccurs == null || i != maxOccurs); ++i)
+                {
+                    SetIterationIndex(context, i);
+
+                    // unmarshal the field
+                    var found = parser.Unmarshal(context);
+                    if (!found)
+                    {
+                        parser.ClearValue(context);
+                        break;
+                    }
+
+                    // collect the field value and add it to our buffered list
+                    object fieldValue = parser.GetValue(context);
+                    if (ReferenceEquals(fieldValue, Value.Invalid))
+                    {
+                        invalid = true;
+                    }
+                    else if (!ReferenceEquals(fieldValue, Value.Missing))
+                    {
+                        // the field value may still be missing if 'optional' is true on a child segment
+                        if (!IsLazy || StringUtil.HasValue(fieldValue))
+                        {
+                            if (collection == null)
+                                collection = CreateCollection();
+                            collection.Add(fieldValue);
+                        }
+                    }
+
+                    parser.ClearValue(context);
+                    ++count;
+                }
+            }
+            finally
+            {
+                context.PopIteration();
+            }
+
+            object value;
+
+            if (count < minOccurs)
+            {
+                context.AddFieldError(Name, null, "minOccurs", minOccurs, maxOccurs);
+                value = Value.Invalid;
+            }
+            else if (invalid)
+            {
+                value = Value.Invalid;
+            }
+            else
+            {
+                value = collection;
+            }
+
+            _value.Set(context, value);
+
+            return ReferenceEquals(value, Value.Invalid) || count > 0;
         }
 
-        protected ICollection GetCollection(ParsingContext context)
+        protected IList GetCollection(ParsingContext context)
         {
             var value = _value.Get(context);
             if (ReferenceEquals(value, Value.Invalid))
                 return null;
-            return (ICollection)value;
+            return (IList)value;
         }
 
-        protected ICollection CreateCollection()
+        protected IList CreateCollection()
         {
-            return ObjectUtils.NewInstance(PropertyType);
+            return (IList)ObjectUtils.NewInstance(PropertyType);
         }
     }
 }

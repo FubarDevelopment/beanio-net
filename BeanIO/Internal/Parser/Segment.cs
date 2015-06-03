@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -11,8 +12,6 @@ namespace BeanIO.Internal.Parser
         private readonly ParserLocal<IList<IParser>> _missing = new ParserLocal<IList<IParser>>(() => new List<IParser>());
 
         private bool _optional;
-
-        private bool _identifier;
 
         private int _size;
 
@@ -47,13 +46,10 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Gets a value indicating whether this parser or any descendant of this parser is used to identify
+        /// Gets or sets a value indicating whether this parser or any descendant of this parser is used to identify
         /// a record during unmarshalling.
         /// </summary>
-        public override bool IsIdentifier
-        {
-            get { return _identifier; }
-        }
+        public override bool IsIdentifier { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this node must exist during unmarshalling.
@@ -225,17 +221,6 @@ namespace BeanIO.Internal.Parser
         public void SetOptional(bool optional)
         {
             _optional = optional;
-        }
-
-        /// <summary>
-        /// Sets a value indicating whether this parser or any descendant of this parser is used to identify
-        /// a record during unmarshalling
-        /// </summary>
-        /// <param name="identifier">a value indicating whether this parser or any descendant of this parser is used to identify
-        /// a record during unmarshalling</param>
-        public void SetIdentifier(bool identifier)
-        {
-            _identifier = identifier;
         }
 
         /// <summary>

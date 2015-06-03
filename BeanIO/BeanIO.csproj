@@ -110,6 +110,7 @@
     <Compile Include="Internal\Parser\IStreamFormat.cs" />
     <Compile Include="Internal\Parser\MarshallerImpl.cs" />
     <Compile Include="Internal\Parser\MarshallingContext.cs" />
+    <Compile Include="Internal\Parser\ObjectUtils.cs" />
     <Compile Include="Internal\Parser\ParserComponent.cs" />
     <Compile Include="Internal\Parser\ParserLocal.cs" />
     <Compile Include="Internal\Parser\ParsingContext.cs" />
@@ -127,9 +128,11 @@
     <Compile Include="Internal\Util\DebugUtil.cs" />
     <Compile Include="Internal\Util\EnumTypeHandler.cs" />
     <Compile Include="Internal\Util\IDebuggable.cs" />
+    <Compile Include="Internal\Util\IPropertySource.cs" />
     <Compile Include="Internal\Util\IStatefulWriter.cs" />
     <Compile Include="Internal\Util\MarkableTextReader.cs" />
     <Compile Include="Internal\Util\Settings.cs" />
+    <Compile Include="Internal\Util\StringUtil.cs" />
     <Compile Include="Internal\Util\TreeNode.cs" />
     <Compile Include="Internal\Util\TypeHandlerFactory.cs" />
     <Compile Include="Internal\Util\TypeUtil.cs" />

@@ -12,8 +12,6 @@ namespace BeanIO.Internal.Parser
     {
         private readonly ParserLocal<object> _value = new ParserLocal<object>(Value.Missing);
 
-        private bool _isIdentifier;
-
         private Regex _regex;
 
         public Field()
@@ -48,15 +46,6 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this property or any of its descendants are used to identify a bean object.
-        /// </summary>
-        bool IProperty.IsIdentifier
-        {
-            get { return _isIdentifier; }
-            set { _isIdentifier = value; }
-        }
-
-        /// <summary>
         /// Gets or sets the property accessor
         /// </summary>
         public IPropertyAccessor Accessor { get; set; }
@@ -70,10 +59,7 @@ namespace BeanIO.Internal.Parser
         /// Gets a value indicating whether this parser or any descendant of this parser is used to identify
         /// a record during unmarshalling.
         /// </summary>
-        public override bool IsIdentifier
-        {
-            get { return _isIdentifier; }
-        }
+        public override bool IsIdentifier { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this node must exist during unmarshalling.
