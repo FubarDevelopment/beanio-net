@@ -222,9 +222,19 @@ namespace BeanIO.Internal.Parser
             return (IList)value;
         }
 
-        protected IList CreateCollection()
+        protected virtual IList CreateCollection()
         {
             return (IList)ObjectUtils.NewInstance(PropertyType);
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether this iteration contained invalid values when last unmarshalled
+        /// </summary>
+        /// <param name="context">the <see cref="ParsingContext"/></param>
+        /// <returns>true if this iteration contained invalid values</returns>
+        protected virtual bool IsInvalid(ParsingContext context)
+        {
+            return ReferenceEquals(_value.Get(context), Value.Invalid);
         }
     }
 }
