@@ -6,7 +6,7 @@ namespace BeanIO.Internal.Util
 {
     public static class StringUtil
     {
-        private static bool LAZY_IF_EMPTY = Settings.Instance.GetBoolean(Settings.LAZY_IF_EMPTY);
+        private static readonly bool LAZY_IF_EMPTY = Settings.Instance.GetBoolean(Settings.LAZY_IF_EMPTY);
 
         /// <summary>
         /// Returns whether the given object has a value

@@ -1,6 +1,4 @@
-﻿using BeanIO.Internal.Parser;
-
-namespace BeanIO.Internal
+﻿namespace BeanIO.Internal.Parser
 {
     public interface IParserLocal
     {

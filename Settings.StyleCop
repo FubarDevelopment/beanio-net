@@ -20,6 +20,13 @@
   </GlobalSettings>
   <Analyzers>
     <Analyzer AnalyzerId="StyleCopPlus.StyleCopPlusRules">
+      <Rules>
+        <Rule Name="ClosingCurlyBracketMustBeFollowedByBlankLine">
+          <RuleSettings>
+            <BooleanProperty Name="Enabled">False</BooleanProperty>
+          </RuleSettings>
+        </Rule>
+      </Rules>
       <AnalyzerSettings>
         <StringProperty Name="AdvancedNaming_Words">3D A B C DE EN FxCop ID IDs IO OK StyleCop US X</StringProperty>
         <StringProperty Name="AdvancedNaming_PublicConst">$(AaBb):$(AABB):$(AA_BB)</StringProperty>
@@ -29,6 +36,9 @@
         <StringProperty Name="AdvancedNaming_EnumItem">$(AaBb):$(AABB):$(AA_BB)</StringProperty>
         <StringProperty Name="AdvancedNaming_Enum">$(AaBb):$(AABB):$(AA_BB)</StringProperty>
         <StringProperty Name="AdvancedNaming_PublicStaticField">$(AaBb):$(AA_BB)</StringProperty>
+        <StringProperty Name="AdvancedNaming_ProtectedStaticField">$(AaBb):_$(aaBb):s_$(aaBb):$(AA_BB)</StringProperty>
+        <StringProperty Name="AdvancedNaming_PrivateStaticField">_$(aaBb):s_$(aaBb):$(AA_BB)</StringProperty>
+        <StringProperty Name="AdvancedNaming_InternalStaticField">$(AaBb):$(AA_BB)</StringProperty>
       </AnalyzerSettings>
     </Analyzer>
   </Analyzers>

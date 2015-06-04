@@ -53,13 +53,17 @@
     <Compile Include="Builder\GroupBuilderSupport.cs" />
     <Compile Include="Builder\SegmentBuilderSupport.cs" />
     <Compile Include="Builder\StreamBuilder.cs" />
+    <Compile Include="Config\DictionaryPropertiesProvider.cs" />
+    <Compile Include="Config\MergedPropertiesProvider.cs" />
     <Compile Include="Internal\Config\Annotation\AnnotationParser.cs" />
     <Compile Include="Internal\Config\BeanConfig.cs" />
     <Compile Include="Internal\Config\ComponentConfig.cs" />
     <Compile Include="Internal\Config\ComponentType.cs" />
     <Compile Include="Internal\Config\FieldConfig.cs" />
     <Compile Include="Internal\Config\GroupConfig.cs" />
+    <Compile Include="Config\IPropertiesProvider.cs" />
     <Compile Include="Internal\Config\ISelectorConfig.cs" />
+    <Compile Include="Config\PropertiesStreamProvider.cs" />
     <Compile Include="Internal\Config\PropertyConfig.cs" />
     <Compile Include="Internal\Config\RecordConfig.cs" />
     <Compile Include="Internal\Config\SegmentConfig.cs" />
@@ -67,7 +71,7 @@
     <Compile Include="Internal\Config\StreamConfig.cs" />
     <Compile Include="Internal\Config\TypeHandlerConfig.cs" />
     <Compile Include="Internal\DictionaryExtensions.cs" />
-    <Compile Include="Internal\IParserLocal.cs" />
+    <Compile Include="Internal\Parser\IParserLocal.cs" />
     <Compile Include="Internal\Parser\AbortRecordUnmarshalligException.cs" />
     <Compile Include="Internal\Parser\Accessor\FieldReflectionAccessor.cs" />
     <Compile Include="Internal\Parser\Accessor\MapAccessor.cs" />
@@ -168,6 +172,7 @@
     <Compile Include="Stream\RecordIOException.cs" />
     <Compile Include="Stream\Util\CommentReader.cs" />
     <Compile Include="Types\DateTimeOffsetHandler.cs" />
+    <Compile Include="Types\IntegerTypeHandler.cs" />
     <Compile Include="Types\TypeConversionException.cs" />
     <Compile Include="Types\BooleanTypeHandler.cs" />
     <Compile Include="Types\CharacterTypeHandler.cs" />
@@ -226,6 +231,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Internal\Config\beanio.properties" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

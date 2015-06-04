@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+
+using BeanIO.Config;
 
 using NodaTime;
 
@@ -138,17 +141,19 @@ namespace BeanIO.Internal.Util
         /// </summary>
         public static readonly string ALLOW_PROTECTED_PROPERTY_ACCESS = "org.beanio.allowProtectedAccess";
 
+        private const string DEFAULT_CONFIGURATION_PATH = "BeanIO.Internal.Config.beanio.properties";
+
         private static readonly object _syncRoot = new object();
 
         private static Settings _instance;
 
-        private readonly IDictionary<string, string> _properties;
+        private readonly IReadOnlyDictionary<string, string> _properties;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Settings"/> class.
         /// </summary>
         /// <param name="properties">The properties to use for this settings object.</param>
-        public Settings(IDictionary<string, string> properties)
+        public Settings(IReadOnlyDictionary<string, string> properties)
         {
             _properties = properties;
         }
@@ -161,7 +166,7 @@ namespace BeanIO.Internal.Util
             get
             {
                 lock (_syncRoot)
-                    return _instance ?? (_instance = new Settings(new Dictionary<string, string>()));
+                    return _instance ?? (_instance = new Settings(CreateDefaultProvider().Read()));
             }
             set
             {
@@ -227,7 +232,14 @@ namespace BeanIO.Internal.Util
             int result;
             if (int.TryParse(temp, out result))
                 return result;
+
             return defaultValue;
+        }
+
+        private static IPropertiesProvider CreateDefaultProvider()
+        {
+            var defaultProvider = new PropertiesStreamProvider(typeof(Settings).GetTypeInfo().Assembly.GetManifestResourceStream(DEFAULT_CONFIGURATION_PATH));
+            return defaultProvider;
         }
     }
 }
