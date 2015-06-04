@@ -26,7 +26,7 @@ namespace BeanIO.Config
         /// Reads all properties
         /// </summary>
         /// <returns>A dictionary with all properties read</returns>
-        public IReadOnlyDictionary<string, string> Read()
+        public Properties Read()
         {
             var content = _content;
             var lines = content.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
@@ -37,7 +37,7 @@ namespace BeanIO.Config
                           where equalSignIndex != -1
                           select new KeyValuePair<string, string>(l.Substring(0, equalSignIndex), l.Substring(equalSignIndex + 1)))
                 .ToDictionary(x => x.Key.Trim(), x => x.Value.TrimStart());
-            return result;
+            return new Properties(result);
         }
     }
 }

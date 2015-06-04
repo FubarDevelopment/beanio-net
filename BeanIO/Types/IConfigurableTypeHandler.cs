@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using BeanIO.Config;
 using BeanIO.Internal.Util;
 
 namespace BeanIO.Types
@@ -19,6 +20,6 @@ namespace BeanIO.Types
         /// Configures this type handler.
         /// </summary>
         /// <param name="properties">The properties for customizing the instance</param>
-        void Configure(IDictionary<string, string> properties);
+        void Configure(Properties properties);
     }
 }

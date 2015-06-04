@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 
+using BeanIO.Config;
+
 namespace BeanIO.Types
 {
     /// <summary>
@@ -88,7 +90,7 @@ namespace BeanIO.Types
         /// Configures this type handler.
         /// </summary>
         /// <param name="properties">The properties for customizing the instance</param>
-        public virtual void Configure(IDictionary<string, string> properties)
+        public virtual void Configure(Properties properties)
         {
             string formatSetting;
             if (properties.TryGetValue(DefaultTypeConfigurationProperties.FORMAT_SETTING, out formatSetting))

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 
 using BeanIO.Config;
+using BeanIO.Config.SchemeHandlers;
 
 using NodaTime;
 
@@ -147,15 +148,18 @@ namespace BeanIO.Internal.Util
 
         private static Settings _instance;
 
-        private readonly IReadOnlyDictionary<string, string> _properties;
+        private readonly Properties _properties;
+
+        private readonly Dictionary<string, ISchemeHandler> _schemeHandlers = new Dictionary<string, ISchemeHandler>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Settings"/> class.
         /// </summary>
         /// <param name="properties">The properties to use for this settings object.</param>
-        public Settings(IReadOnlyDictionary<string, string> properties)
+        public Settings(Properties properties)
         {
             _properties = properties;
+            Add(new ResourceSchemeHandler());
         }
 
         /// <summary>
@@ -173,6 +177,14 @@ namespace BeanIO.Internal.Util
                 lock (_syncRoot)
                     _instance = value;
             }
+        }
+
+        /// <summary>
+        /// Gets all registered scheme handlers
+        /// </summary>
+        public IReadOnlyDictionary<string, ISchemeHandler> SchemeHandlers
+        {
+            get { return _schemeHandlers; }
         }
 
         /// <summary>
@@ -234,6 +246,15 @@ namespace BeanIO.Internal.Util
                 return result;
 
             return defaultValue;
+        }
+
+        /// <summary>
+        /// Adds a new <see cref="ISchemeHandler"/>
+        /// </summary>
+        /// <param name="handler">the handler to add</param>
+        public void Add(ISchemeHandler handler)
+        {
+            _schemeHandlers[handler.Scheme] = handler;
         }
 
         private static IPropertiesProvider CreateDefaultProvider()

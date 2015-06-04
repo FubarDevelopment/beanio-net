@@ -22,9 +22,9 @@ namespace BeanIO.Config
         /// Reads all properties
         /// </summary>
         /// <returns>A dictionary with all properties read</returns>
-        public IReadOnlyDictionary<string, string> Read()
+        public Properties Read()
         {
-            return _dictionary;
+            return new Properties(_dictionary);
         }
     }
 }

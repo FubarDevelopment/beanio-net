@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 
+using BeanIO.Config;
 using BeanIO.Types;
 
 using JetBrains.Annotations;
@@ -143,7 +144,7 @@ namespace BeanIO.Internal.Util
         /// <param name="properties">the custom properties for configuring the type handler</param>
         /// <returns>the type handler, or <code>null</code> if there is no configured type handler
         /// registered for the name</returns>
-        public ITypeHandler GetTypeHandler([NotNull] string name, IDictionary<string, string> properties)
+        public ITypeHandler GetTypeHandler([NotNull] string name, Properties properties)
         {
             if (name == null)
                 throw new ArgumentNullException("name");
@@ -184,7 +185,7 @@ namespace BeanIO.Internal.Util
         /// <param name="properties">the custom properties for configuring the type handler</param>
         /// <returns>the type handler, or <code>null</code> if there is no configured type handler
         /// registered for the type</returns>
-        public ITypeHandler GetTypeHandlerFor([NotNull] string typeName, string format, IDictionary<string, string> properties)
+        public ITypeHandler GetTypeHandlerFor([NotNull] string typeName, string format, Properties properties)
         {
             if (typeName == null)
                 throw new ArgumentNullException("typeName");
@@ -217,10 +218,13 @@ namespace BeanIO.Internal.Util
         /// <param name="format">the stream format, or if null, format specific handlers will not be returned</param>
         /// <param name="properties">the custom properties for configuring the type handler</param>
         /// <returns>the type handler, or null if the class is not supported</returns>
-        public ITypeHandler GetTypeHandlerFor([NotNull] Type type, string format, IDictionary<string, string> properties)
+        public ITypeHandler GetTypeHandlerFor([NotNull] Type type, string format, Properties properties)
         {
             if (type == null)
                 throw new ArgumentNullException("type");
+
+            // Ensure that we "unbox" a nullable type
+            type = Nullable.GetUnderlyingType(type) ?? type;
 
             var handler = GetHandler(TypeKey + type.Name, format, properties);
             if (handler == null && typeof(Enum).IsAssignableFrom(type))
@@ -318,7 +322,7 @@ namespace BeanIO.Internal.Util
             }
         }
 
-        private ITypeHandler GetEnumHandler([NotNull] Type enumType, IDictionary<string, string> properties)
+        private ITypeHandler GetEnumHandler([NotNull] Type enumType, Properties properties)
         {
             var handler = new EnumTypeHandler(enumType);
             if (properties != null)
@@ -326,7 +330,7 @@ namespace BeanIO.Internal.Util
             return handler;
         }
 
-        private ITypeHandler GetHandler([NotNull] string key, string format, IDictionary<string, string> properties)
+        private ITypeHandler GetHandler([NotNull] string key, string format, Properties properties)
         {
             var factory = this;
             while (factory != null)
@@ -344,7 +348,7 @@ namespace BeanIO.Internal.Util
             return null;
         }
 
-        private ITypeHandler GetHandler([NotNull] Func<ITypeHandler> createHandler, IDictionary<string, string> properties)
+        private ITypeHandler GetHandler([NotNull] Func<ITypeHandler> createHandler, Properties properties)
         {
             var handler = createHandler();
             if (properties != null && properties.Count != 0)

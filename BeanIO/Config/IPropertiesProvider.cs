@@ -11,6 +11,6 @@ namespace BeanIO.Config
         /// Reads all properties
         /// </summary>
         /// <returns>A dictionary with all properties read</returns>
-        IReadOnlyDictionary<string, string> Read();
+        Properties Read();
     }
 }

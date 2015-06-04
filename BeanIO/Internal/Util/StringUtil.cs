@@ -1,6 +1,7 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 
-using AutoMapper.Internal;
+using BeanIO.Config;
 
 namespace BeanIO.Internal.Util
 {
@@ -30,7 +31,7 @@ namespace BeanIO.Internal.Util
         /// <param name="text">the template text</param>
         /// <param name="properties">the user provided property values</param>
         /// <returns>the text after property substitution</returns>
-        public static string DoPropertySubstitution(string text, IDictionary<string, string> properties)
+        public static string DoPropertySubstitution(string text, Properties properties)
         {
             return DoPropertySubstitution(text, new DictionaryProperties(properties));
         }
@@ -130,9 +131,9 @@ namespace BeanIO.Internal.Util
 
         private class DictionaryProperties : IPropertySource
         {
-            private readonly IDictionary<string, string> _properties;
+            private readonly Properties _properties;
 
-            public DictionaryProperties(IDictionary<string, string> properties)
+            public DictionaryProperties(Properties properties)
             {
                 _properties = properties;
             }

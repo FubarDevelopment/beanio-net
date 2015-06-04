@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
+using BeanIO.Internal.Util;
+
 namespace BeanIO.Internal.Parser
 {
     /// <summary>
@@ -93,7 +95,7 @@ namespace BeanIO.Internal.Parser
 
         protected override IList CreateCollection()
         {
-            var newList = typeof(List<>).MakeGenericType(ElementType).GetTypeInfo().DeclaredConstructors.Single(x => x.GetParameters().Length == 0).Invoke(null);
+            var newList = typeof(List<>).MakeGenericType(ElementType).NewInstance();
             return (IList)newList;
         }
     }

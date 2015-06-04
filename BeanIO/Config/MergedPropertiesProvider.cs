@@ -27,7 +27,7 @@ namespace BeanIO.Config
         /// Reads all properties
         /// </summary>
         /// <returns>A dictionary with all properties read</returns>
-        public IReadOnlyDictionary<string, string> Read()
+        public Properties Read()
         {
             var result = _basePropertiesReader.Read()
                 .ToDictionary(x => x.Key, x => x.Value);
@@ -36,7 +36,7 @@ namespace BeanIO.Config
                 result[keyValuePair.Key] = keyValuePair.Value;
             }
 
-            return result;
+            return new Properties(result);
         }
     }
 }

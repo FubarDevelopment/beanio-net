@@ -7,7 +7,7 @@ namespace BeanIO
 {
     public static class ConfigUtil
     {
-        public static IDictionary<string, string> ToDictionary(this NameValueCollection collection)
+        public static Dictionary<string, string> ToDictionary(this NameValueCollection collection)
         {
             return collection
                 .AllKeys.Select(x => new KeyValuePair<string, string>(x, collection[x]))

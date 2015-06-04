@@ -13,7 +13,7 @@
     <DefaultLanguage>de-DE</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -55,21 +55,35 @@
     <Compile Include="Builder\StreamBuilder.cs" />
     <Compile Include="Config\DictionaryPropertiesProvider.cs" />
     <Compile Include="Config\MergedPropertiesProvider.cs" />
+    <Compile Include="Config\Properties.cs" />
+    <Compile Include="Internal\Compiler\IParserFactory.cs" />
+    <Compile Include="Internal\Compiler\StreamCompiler.cs" />
     <Compile Include="Internal\Config\Annotation\AnnotationParser.cs" />
     <Compile Include="Internal\Config\BeanConfig.cs" />
+    <Compile Include="Internal\Config\BeanIOConfig.cs" />
     <Compile Include="Internal\Config\ComponentConfig.cs" />
     <Compile Include="Internal\Config\ComponentType.cs" />
+    <Compile Include="Internal\Config\ConstantConfig.cs" />
     <Compile Include="Internal\Config\FieldConfig.cs" />
     <Compile Include="Internal\Config\GroupConfig.cs" />
     <Compile Include="Config\IPropertiesProvider.cs" />
+    <Compile Include="Internal\Config\IBeanConfig.cs" />
+    <Compile Include="Internal\Config\IConfigurationLoader.cs" />
     <Compile Include="Internal\Config\ISelectorConfig.cs" />
     <Compile Include="Config\PropertiesStreamProvider.cs" />
     <Compile Include="Internal\Config\PropertyConfig.cs" />
     <Compile Include="Internal\Config\RecordConfig.cs" />
+    <Compile Include="Config\SchemeHandlers\ResourceSchemeHandler.cs" />
     <Compile Include="Internal\Config\SegmentConfig.cs" />
     <Compile Include="Internal\Config\SimplePropertyConfig.cs" />
     <Compile Include="Internal\Config\StreamConfig.cs" />
     <Compile Include="Internal\Config\TypeHandlerConfig.cs" />
+    <Compile Include="Config\ISchemeHandler.cs" />
+    <Compile Include="Internal\Config\Xml\XmlConfigurationLoader.cs" />
+    <Compile Include="Internal\Config\Xml\XmlMapping.cs" />
+    <Compile Include="Internal\Config\Xml\XmlMappingParser.cs" />
+    <Compile Include="Internal\Config\Xml\XmlMappingReader.cs" />
+    <Compile Include="Internal\DefaultStreamFactory.cs" />
     <Compile Include="Internal\DictionaryExtensions.cs" />
     <Compile Include="Internal\Parser\IParserLocal.cs" />
     <Compile Include="Internal\Parser\AbortRecordUnmarshalligException.cs" />
@@ -115,7 +129,7 @@
     <Compile Include="Internal\Parser\IStreamFormat.cs" />
     <Compile Include="Internal\Parser\MarshallerImpl.cs" />
     <Compile Include="Internal\Parser\MarshallingContext.cs" />
-    <Compile Include="Internal\Parser\ObjectUtils.cs" />
+    <Compile Include="Internal\Util\ObjectUtils.cs" />
     <Compile Include="Internal\Parser\ParserComponent.cs" />
     <Compile Include="Internal\Parser\ParserLocal.cs" />
     <Compile Include="Internal\Parser\ParsingContext.cs" />
@@ -130,6 +144,7 @@
     <Compile Include="Internal\Parser\OptionalValue.cs" />
     <Compile Include="Internal\Parser\OptionalValueComparer.cs" />
     <Compile Include="Internal\Parser\Value.cs" />
+    <Compile Include="Internal\Util\BeanUtil.cs" />
     <Compile Include="Internal\Util\DebugUtil.cs" />
     <Compile Include="Internal\Util\EnumTypeHandler.cs" />
     <Compile Include="Internal\Util\IDebuggable.cs" />
@@ -217,10 +232,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.3.3.1\lib\portable-windows8+net40+wp8+wpa81+sl5+MonoAndroid+MonoTouch\AutoMapper.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\portable-net45+wp80+win8+wpa81+aspnetcore50\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>

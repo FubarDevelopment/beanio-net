@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 
 using BeanIO.Builder;
+using BeanIO.Config;
 using BeanIO.Internal.Util;
 
 namespace BeanIO
@@ -24,8 +25,7 @@ namespace BeanIO
 
             try
             {
-                var factoryTypeInfo = Type.GetType(className).GetTypeInfo();
-                var factory = (StreamFactory)factoryTypeInfo.DeclaredConstructors.Single(x => x.GetParameters().Length == 0).Invoke(null);
+                var factory = (StreamFactory)Type.GetType(className).NewInstance();
                 factory.Init();
                 return factory;
             }
@@ -98,7 +98,17 @@ namespace BeanIO
         /// Loads a BeanIO mapping file, and adds the configured streams to this factory.
         /// </summary>
         /// <param name="input">The input stream to read the mapping file from</param>
-        public abstract void Load(System.IO.Stream input);
+        public virtual void Load(System.IO.Stream input)
+        {
+            Load(input, null);
+        }
+
+        /// <summary>
+        /// Loads a BeanIO mapping file, and adds the configured streams to this factory.
+        /// </summary>
+        /// <param name="input">The input stream to read the mapping file from</param>
+        /// <param name="properties">user <see cref="Properties"/> for property substitution</param>
+        public abstract void Load(System.IO.Stream input, Properties properties);
 
         /// <summary>
         /// Test whether a mapping configuration exists for a named stream.

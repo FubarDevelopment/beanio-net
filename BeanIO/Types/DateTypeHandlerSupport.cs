@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using BeanIO.Config;
+
 using NodaTime;
 using NodaTime.Text;
 
@@ -109,7 +111,7 @@ namespace BeanIO.Types
         /// Configures this type handler.
         /// </summary>
         /// <param name="properties">The properties for customizing the instance</param>
-        public virtual void Configure(IDictionary<string, string> properties)
+        public virtual void Configure(Properties properties)
         {
             var pattern = properties["format"];
             if (string.IsNullOrEmpty(pattern))

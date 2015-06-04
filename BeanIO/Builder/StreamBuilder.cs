@@ -65,7 +65,7 @@ namespace BeanIO.Builder
         {
             var bc = new BeanConfig<IRecordParserFactory>()
                 {
-                    Instance = parser,
+                    CreateFunc = () => parser,
                 };
             Config.ParserFactory = bc;
             return Me;
@@ -86,14 +86,14 @@ namespace BeanIO.Builder
         /// Adds a type handler
         /// </summary>
         /// <param name="name">the name of the type handler</param>
-        /// <param name="handler">the type handler</param>
+        /// <param name="createFunc">the type handler creation function</param>
         /// <returns>The value of <see cref="Me"/></returns>
-        public StreamBuilder AddTypeHandler([CanBeNull] string name, [NotNull] ITypeHandler handler)
+        public StreamBuilder AddTypeHandler([CanBeNull] string name, [NotNull] Func<ITypeHandler> createFunc)
         {
             var thc = new TypeHandlerConfig()
             {
-                Name = name ?? handler.TargetType.GetFullName(),
-                Instance = handler,
+                Name = name ?? createFunc().TargetType.GetFullName(),
+                CreateFunc = createFunc,
             };
             Config.AddHandler(thc);
             return Me;
@@ -102,11 +102,11 @@ namespace BeanIO.Builder
         /// <summary>
         /// Adds a type handler
         /// </summary>
-        /// <param name="handler">the type handler</param>
+        /// <param name="createFunc">the type handler creation function</param>
         /// <returns>The value of <see cref="Me"/></returns>
-        public StreamBuilder AddTypeHandler(ITypeHandler handler)
+        public StreamBuilder AddTypeHandler(Func<ITypeHandler> createFunc)
         {
-            return AddTypeHandler(null, handler);
+            return AddTypeHandler(null, createFunc);
         }
 
         /// <summary>
