@@ -102,7 +102,7 @@ namespace BeanIO.Internal.Util
         public static readonly string DEFAULT_FIELD_MIN_OCCURS = "org.beanio.field.minOccurs";
 
         /// <summary>
-        /// The method of property access to use, 'reflection' (default) or 'asm' is supported
+        /// The method of property access to use, <code>reflection</code> (default) or <code>asm</code> is supported
         /// </summary>
         public static readonly string PROPERTY_ACCESSOR_METHOD = "org.beanio.propertyAccessorFactory";
 

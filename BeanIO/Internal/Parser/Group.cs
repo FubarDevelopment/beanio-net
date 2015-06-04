@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using BeanIO.Internal.Config;
 using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser
@@ -11,7 +12,7 @@ namespace BeanIO.Internal.Parser
     /// A Group holds child nodes including records and other groups
     /// </summary>
     /// <remarks>
-    /// This class is the dynamic counterpart to the <see cref="GroupDefinition"/> and
+    /// This class is the dynamic counterpart to the <see cref="GroupConfig"/> and
     /// holds the current state of a group node during stream processing.
     /// </remarks>
     public class Group : ParserComponent, ISelector
@@ -55,6 +56,11 @@ namespace BeanIO.Internal.Parser
         public override bool IsIdentifier
         {
             get { return false; }
+            set
+            {
+                if (value)
+                    throw new NotSupportedException();
+            }
         }
 
         /// <summary>
