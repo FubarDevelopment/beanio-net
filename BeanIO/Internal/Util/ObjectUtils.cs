@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -33,6 +34,18 @@ namespace BeanIO.Internal.Util
         public static T GetDefaultGeneric<T>()
         {
             return default(T);
+        }
+
+        public static T[] Empty<T>()
+        {
+            // Note that the static type is only instantiated when
+            // it is needed, and only then is the T[0] object created, once.
+            return EmptyArray<T>.Instance;
+        }
+
+        private static class EmptyArray<T>
+        {
+            public static readonly T[] Instance = new T[0];
         }
     }
 }

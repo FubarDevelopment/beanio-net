@@ -56,7 +56,12 @@
     <Compile Include="Config\DictionaryPropertiesProvider.cs" />
     <Compile Include="Config\MergedPropertiesProvider.cs" />
     <Compile Include="Config\Properties.cs" />
+    <Compile Include="Internal\Compiler\Accessor\ReflectionAccessorFactory.cs" />
     <Compile Include="Internal\Compiler\IParserFactory.cs" />
+    <Compile Include="Internal\Compiler\IPropertyAccessorFactory.cs" />
+    <Compile Include="Internal\Compiler\ParserFactorySupport.cs" />
+    <Compile Include="Internal\Compiler\Preprocessor.cs" />
+    <Compile Include="Internal\Compiler\ProcessorSupport.cs" />
     <Compile Include="Internal\Compiler\StreamCompiler.cs" />
     <Compile Include="Internal\Config\Annotation\AnnotationParser.cs" />
     <Compile Include="Internal\Config\BeanConfig.cs" />
@@ -129,6 +134,7 @@
     <Compile Include="Internal\Parser\IStreamFormat.cs" />
     <Compile Include="Internal\Parser\MarshallerImpl.cs" />
     <Compile Include="Internal\Parser\MarshallingContext.cs" />
+    <Compile Include="Internal\Parser\PropertyComponent.cs" />
     <Compile Include="Internal\Util\ObjectUtils.cs" />
     <Compile Include="Internal\Parser\ParserComponent.cs" />
     <Compile Include="Internal\Parser\ParserLocal.cs" />
@@ -246,6 +252,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Internal\Compiler\Csv\" />
+    <Folder Include="Internal\Compiler\Delimited\" />
+    <Folder Include="Internal\Compiler\Flat\" />
     <Folder Include="Internal\Parser\Message\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

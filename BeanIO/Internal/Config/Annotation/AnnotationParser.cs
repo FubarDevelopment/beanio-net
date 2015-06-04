@@ -119,7 +119,7 @@ namespace BeanIO.Internal.Config.Annotation
         {
             UpdateTypeInfo(info, group.Type, group.CollectionType);
 
-            var minOccurs = group.MinOccurs.ToValue().GetValueOrDefault();
+            var minOccurs = group.MinOccurs.ToValue();
             var maxOccurs = group.MaxOccurs.ToUnboundedValue();
             if (maxOccurs == null && info.CollectionName == null && info.IsBound)
                 maxOccurs = 1;
@@ -148,7 +148,7 @@ namespace BeanIO.Internal.Config.Annotation
         {
             UpdateTypeInfo(info, record.Type, record.CollectionType);
 
-            var minOccurs = record.MinOccurs.ToValue().GetValueOrDefault();
+            var minOccurs = record.MinOccurs.ToValue();
             var maxOccurs = record.MaxOccurs.ToUnboundedValue();
             if (maxOccurs == null && info.CollectionName == null && info.IsBound)
                 maxOccurs = 1;
@@ -249,7 +249,7 @@ namespace BeanIO.Internal.Config.Annotation
             fc.IsLazy = fa.IsLazy;
             fc.MinLength = fa.MinLength.ToValue();
             fc.MaxLength = fa.MaxLength.ToUnboundedValue();
-            fc.MinOccurs = fa.MinOccurs.ToValue().GetValueOrDefault();
+            fc.MinOccurs = fa.MinOccurs.ToValue();
             fc.MaxOccurs = fa.MaxOccurs.ToUnboundedValue();
             fc.OccursRef = fa.OccursRef.ToValue();
 
@@ -294,7 +294,7 @@ namespace BeanIO.Internal.Config.Annotation
                     Position = sa.At.ToValue(),
                     Until = sa.Until.ToValue(),
                     Ordinal = sa.Ordinal.ToValue(),
-                    MinOccurs = sa.MinOccurs.ToValue() ?? 0,
+                    MinOccurs = sa.MinOccurs.ToValue(),
                     MaxOccurs = sa.MaxOccurs.ToUnboundedValue(),
                     OccursRef = sa.OccursRef.ToValue(),
                     IsLazy = sa.IsLazy,

@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Linq;
 
 using BeanIO.Config;
 using BeanIO.Internal.Config;
 using BeanIO.Internal.Config.Xml;
 using BeanIO.Internal.Util;
 using BeanIO.Types;
+
+using JetBrains.Annotations;
 
 namespace BeanIO.Internal.Compiler
 {
@@ -46,13 +50,72 @@ namespace BeanIO.Internal.Compiler
             return factory.CreateStream(config);
         }
 
+        /// <summary>
+        /// Loads a mapping file
+        /// </summary>
+        /// <param name="input">the <see cref="System.IO.Stream"/> to load the mapping file from</param>
+        /// <param name="properties">the <see cref="Properties"/></param>
+        /// <returns>the <see cref="Parser.Stream"/> parsers configured in the loaded mapping file</returns>
         public IReadOnlyCollection<Parser.Stream> LoadMapping(System.IO.Stream input, Properties properties)
         {
             var loader = ConfigurationLoader ?? DefaultConfigurationLoader;
 
             var configurations = loader.LoadConfiguration(input, properties);
             if (configurations.Count == 0)
-                return new Parser.Stream[0];
+                return ObjectUtils.Empty<Parser.Stream>();
+
+            // check for duplicate stream names...
+            {
+                var set = new HashSet<string>();
+                foreach (var streamConfig in configurations.SelectMany(x => x.StreamConfigurations))
+                {
+                    if (!set.Add(streamConfig.Name))
+                        throw new BeanIOConfigurationException(string.Format("Duplicate stream name '{0}'", streamConfig.Name));
+                }
+            }
+
+            if (configurations.Count == 1)
+                return CreateStreamDefinitions(configurations.Single()).ToList();
+
+            var list = configurations.SelectMany(CreateStreamDefinitions).ToList();
+            return list;
+        }
+
+        /// <summary>
+        /// Creates stream definitions from a BeanIO stream mapping configuration
+        /// </summary>
+        /// <param name="config">the BeanIO stream mapping configuration</param>
+        /// <returns>the collection of stream definitions</returns>
+        protected IEnumerable<Parser.Stream> CreateStreamDefinitions([NotNull] BeanIOConfig config)
+        {
+            if (config == null)
+                throw new ArgumentNullException("config");
+            Contract.EndContractBlock();
+
+            var parent = CreateTypeHandlerFactory(TypeHandlerFactory.Default, config.TypeHandlerConfigurations);
+            var streamDefinitions = new List<Parser.Stream>(config.StreamConfigurations.Count);
+
+            foreach (var streamConfiguration in config.StreamConfigurations)
+            {
+                var typeHandlerFactory = CreateTypeHandlerFactory(parent, streamConfiguration.Handlers);
+
+                var factory = CreateParserFactory(streamConfiguration.Format);
+                factory.TypeHandlerFactory = typeHandlerFactory;
+
+                try
+                {
+                    streamDefinitions.Add(factory.CreateStream(streamConfiguration));
+                }
+                catch (BeanIOConfigurationException ex)
+                {
+                    // TODO: Use C# 6 exception filter
+                    if (config.Source != null)
+                        throw new BeanIOConfigurationException(string.Format("Invalid mapping file '{0}': {1}", config.Source, ex.Message), ex);
+                    throw;
+                }
+            }
+
+            return streamDefinitions;
         }
 
         /// <summary>

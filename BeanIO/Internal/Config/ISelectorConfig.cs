@@ -21,7 +21,7 @@
         /// <summary>
         /// Gets the minimum occurrences of this component.
         /// </summary>
-        int MinOccurs { get; }
+        int? MinOccurs { get; }
 
         /// <summary>
         /// Gets the maximum occurrences of this component.

@@ -82,7 +82,7 @@ namespace BeanIO.Internal.Config
         /// <summary>
         /// Gets or sets the minimum number of times this component must appear in the stream.
         /// </summary>
-        public int MinOccurs { get; set; }
+        public int? MinOccurs { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum number of times this component may consecutively appear in a stream.

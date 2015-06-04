@@ -366,7 +366,7 @@ namespace BeanIO.Internal.Config.Xml
         {
             var config = new FieldConfig()
                 {
-                    MinLength = GetIntAttribute(element, "minLength") ?? 0,
+                    MinLength = GetIntAttribute(element, "minLength"),
                     MaxLength = GetUnboundedIntAttribute(element, "maxLength"),
                     RegEx = GetAttribute(element, "regex"),
                     Literal = GetAttribute(element, "literal"),
@@ -555,7 +555,7 @@ namespace BeanIO.Internal.Config.Xml
                 {
                     Type = typeName,
                     Order = GetIntAttribute(element, "order"),
-                    MinLength = GetIntAttribute(element, "minLength") ?? 0,
+                    MinLength = GetIntAttribute(element, "minLength"),
                     MaxLength = GetUnboundedIntAttribute(element, "maxLength"),
                     XmlName = GetAttribute(element, "xmlName"),
                     XmlNamespace = GetOptionalAttribute(element, "xmlNamespace"),
@@ -872,13 +872,13 @@ namespace BeanIO.Internal.Config.Xml
                 var range = GetRangeAttribute(element, "occurs");
                 if (range != null)
                 {
-                    config.MinOccurs = range.Min ?? 0;
+                    config.MinOccurs = range.Min;
                     config.MaxOccurs = range.Max;
                 }
             }
             else
             {
-                config.MinOccurs = GetIntAttribute(element, "minOccurs") ?? 0;
+                config.MinOccurs = GetIntAttribute(element, "minOccurs");
                 config.MaxOccurs = GetUnboundedIntAttribute(element, "maxOccurs");
             }
         }

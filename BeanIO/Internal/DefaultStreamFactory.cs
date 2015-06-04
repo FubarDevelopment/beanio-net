@@ -54,7 +54,18 @@ namespace BeanIO.Internal
         /// <returns>The new <see cref="IBeanReader"/></returns>
         public override IBeanReader CreateReader(string name, TextReader input, CultureInfo culture)
         {
-            throw new System.NotImplementedException();
+            if (culture == null)
+                culture = CultureInfo.CurrentCulture;
+
+            var stream = GetStream(name);
+            switch (stream.Mode)
+            {
+                case AccessMode.ReadWrite:
+                case AccessMode.Read:
+                    return stream.CreateBeanReader(input, culture);
+                default:
+                    throw new BeanIOConfigurationException(string.Format("Write mode not supported for stream mapping '{0}'", name));
+            }
         }
 
         /// <summary>
@@ -65,7 +76,18 @@ namespace BeanIO.Internal
         /// <returns>The new <see cref="IUnmarshaller"/></returns>
         public override IUnmarshaller CreateUnmarshaller(string name, CultureInfo culture)
         {
-            throw new System.NotImplementedException();
+            if (culture == null)
+                culture = CultureInfo.CurrentCulture;
+
+            var stream = GetStream(name);
+            switch (stream.Mode)
+            {
+                case AccessMode.ReadWrite:
+                case AccessMode.Read:
+                    return stream.CreateUnmarshaller(culture);
+                default:
+                    throw new BeanIOConfigurationException(string.Format("Write mode not supported for stream mapping '{0}'", name));
+            }
         }
 
         /// <summary>
@@ -76,7 +98,15 @@ namespace BeanIO.Internal
         /// <returns>The new <see cref="IBeanWriter"/></returns>
         public override IBeanWriter CreateWriter(string name, TextWriter output)
         {
-            throw new System.NotImplementedException();
+            var stream = GetStream(name);
+            switch (stream.Mode)
+            {
+                case AccessMode.ReadWrite:
+                case AccessMode.Write:
+                    return stream.CreateBeanWriter(output);
+                default:
+                    throw new BeanIOConfigurationException(string.Format("Read mode not supported for stream mapping '{0}'", name));
+            }
         }
 
         /// <summary>
@@ -86,7 +116,15 @@ namespace BeanIO.Internal
         /// <returns>The new <see cref="IMarshaller"/></returns>
         public override IMarshaller CreateMarshaller(string name)
         {
-            throw new System.NotImplementedException();
+            var stream = GetStream(name);
+            switch (stream.Mode)
+            {
+                case AccessMode.ReadWrite:
+                case AccessMode.Write:
+                    return stream.CreateMarshaller();
+                default:
+                    throw new BeanIOConfigurationException(string.Format("Read mode not supported for stream mapping '{0}'", name));
+            }
         }
 
         /// <summary>
@@ -106,6 +144,8 @@ namespace BeanIO.Internal
         public override void Load(System.IO.Stream input, Properties properties)
         {
             var streams = Compiler.LoadMapping(input, properties);
+            foreach (var stream in streams)
+                AddStream(stream);
         }
 
         /// <summary>
@@ -115,7 +155,7 @@ namespace BeanIO.Internal
         /// <returns>true if a mapping configuration is found for the named stream</returns>
         public override bool IsMapped(string name)
         {
-            throw new System.NotImplementedException();
+            return _contextMap.ContainsKey(name);
         }
 
         /// <summary>
@@ -125,6 +165,19 @@ namespace BeanIO.Internal
         {
             base.Init();
             Compiler = new StreamCompiler();
+        }
+
+        /// <summary>
+        /// Returns the named stream
+        /// </summary>
+        /// <param name="name">the name of the stream</param>
+        /// <returns>the <see cref="Parser.Stream"/></returns>
+        protected Parser.Stream GetStream(string name)
+        {
+            Parser.Stream stream;
+            if (!_contextMap.TryGetValue(name, out stream))
+                throw new BeanIOConfigurationException(string.Format("No stream mapping configured for name '{0}'", name));
+            return stream;
         }
     }
 }

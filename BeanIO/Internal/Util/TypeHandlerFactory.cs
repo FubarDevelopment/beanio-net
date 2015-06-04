@@ -84,7 +84,7 @@ namespace BeanIO.Internal.Util
                 _defaultFactory.RegisterHandlerFor(
                     name,
                     () => new XmlConvertTypeHandler(
-                              typeof(bool),
+                              typeof(DateTime),
                               v => XmlConvert.ToString((DateTime)v),
                               t => XmlConvert.ToDateTimeOffset(t).DateTime),
                     "xml");
@@ -93,7 +93,7 @@ namespace BeanIO.Internal.Util
                 _defaultFactory.RegisterHandlerFor(
                     name,
                     () => new XmlConvertTypeHandler(
-                              typeof(bool),
+                              typeof(DateTimeOffset),
                               v => XmlConvert.ToString((DateTimeOffset)v),
                               t => XmlConvert.ToDateTimeOffset(t)),
                     "xml");

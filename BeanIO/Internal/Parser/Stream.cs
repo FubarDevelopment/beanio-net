@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 
 using BeanIO.Builder;
@@ -72,8 +73,9 @@ namespace BeanIO.Internal.Parser
         /// Creates a new <see cref="IBeanReader"/> for reading from the given input stream
         /// </summary>
         /// <param name="textReader">the input stream to read from</param>
+        /// <param name="culture">the locale to use for rendering error messages</param>
         /// <returns>the new <see cref="IBeanReader"/></returns>
-        public IBeanReader CreateBeanReader([NotNull] TextReader textReader)
+        public IBeanReader CreateBeanReader([NotNull] TextReader textReader, CultureInfo culture)
         {
             if (textReader == null)
                 throw new ArgumentNullException("textReader");
@@ -81,6 +83,7 @@ namespace BeanIO.Internal.Parser
             var context = Format.CreateUnmarshallingContext();
             InitContext(context);
             context.MessageFactory = MessageFactory;
+            context.Culture = culture;
             context.RecordReader = Format.CreateRecordReader(textReader);
 
             var reader = new BeanReaderImpl(context, Layout)
@@ -111,8 +114,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Creates a new <see cref="IUnmarshaller"/>.
         /// </summary>
+        /// <param name="culture">the locale to use for rendering error messages</param>
         /// <returns>the new <see cref="IUnmarshaller"/></returns>
-        public IUnmarshaller CreateUnmarshaller()
+        public IUnmarshaller CreateUnmarshaller(CultureInfo culture)
         {
             var recordUnmarshaller = Format.CreateRecordUnmarshaller();
             if (recordUnmarshaller == null)
@@ -121,6 +125,7 @@ namespace BeanIO.Internal.Parser
             var context = Format.CreateUnmarshallingContext();
             InitContext(context);
             context.MessageFactory = MessageFactory;
+            context.Culture = culture;
 
             return new UnmarshallerImpl(context, Layout, recordUnmarshaller);
         }

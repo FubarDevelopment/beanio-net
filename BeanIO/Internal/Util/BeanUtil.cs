@@ -45,7 +45,7 @@ namespace BeanIO.Internal.Util
             try
             {
                 // load the class
-                type = Type.GetType(className);
+                type = Type.GetType(className, true);
             }
             catch (Exception ex)
             {
