@@ -1,11 +1,9 @@
 ﻿using System;
 using System.IO;
 
-using BeanIO.Internal.Util;
-
 using Xunit;
 
-namespace BeanIO.Test
+namespace BeanIO.Internal.Util
 {
     public class MarkableTextReaderTests
     {

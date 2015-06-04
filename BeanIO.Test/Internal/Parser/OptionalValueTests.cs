@@ -1,10 +1,8 @@
 ﻿using System;
 
-using BeanIO.Internal.Parser;
-
 using Xunit;
 
-namespace BeanIO.Test
+namespace BeanIO.Internal.Parser
 {
     public class OptionalValueTests
     {

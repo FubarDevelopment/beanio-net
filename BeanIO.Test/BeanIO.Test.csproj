@@ -9,7 +9,7 @@
     <ProjectGuid>{F3C4A4F6-9A91-430E-8E03-63F0D60052CD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BeanIO.Test</RootNamespace>
+    <RootNamespace>BeanIO</RootNamespace>
     <AssemblyName>BeanIO.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -57,8 +57,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MarkableTextReaderTests.cs" />
-    <Compile Include="OptionalValueTests.cs" />
+    <Compile Include="Internal\Util\MarkableTextReaderTests.cs" />
+    <Compile Include="Internal\Parser\OptionalValueTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
