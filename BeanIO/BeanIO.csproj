@@ -15,6 +15,7 @@
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <SupportedCultures>qps-ploc</SupportedCultures>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -90,6 +91,27 @@
     <Compile Include="Internal\Config\Xml\XmlMappingReader.cs" />
     <Compile Include="Internal\DefaultStreamFactory.cs" />
     <Compile Include="Internal\DictionaryExtensions.cs" />
+    <Compile Include="Internal\Parser\Bean.cs" />
+    <Compile Include="Internal\Parser\Format\Delimited\DefaultMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DefaultMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Internal\Parser\Format\FixedLength\DefaultMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DefaultMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Internal\Parser\Format\Json\DefaultMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DefaultMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Internal\Parser\Format\Xml\DefaultMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DefaultMessages.resx</DependentUpon>
+    </Compile>
     <Compile Include="Internal\Parser\IParserLocal.cs" />
     <Compile Include="Internal\Parser\AbortRecordUnmarshalligException.cs" />
     <Compile Include="Internal\Parser\Accessor\FieldReflectionAccessor.cs" />
@@ -134,6 +156,7 @@
     <Compile Include="Internal\Parser\IStreamFormat.cs" />
     <Compile Include="Internal\Parser\MarshallerImpl.cs" />
     <Compile Include="Internal\Parser\MarshallingContext.cs" />
+    <Compile Include="Internal\Parser\Message\ResourceBundleMessageFactory.cs" />
     <Compile Include="Internal\Parser\PropertyComponent.cs" />
     <Compile Include="Internal\Util\ObjectUtils.cs" />
     <Compile Include="Internal\Parser\ParserComponent.cs" />
@@ -230,6 +253,22 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Internal\Parser\Format\Delimited\DefaultMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DefaultMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Internal\Parser\Format\FixedLength\DefaultMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DefaultMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Internal\Parser\Format\Json\DefaultMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DefaultMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Internal\Parser\Format\Xml\DefaultMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DefaultMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Xsd\2011\01\mapping.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -255,7 +294,6 @@
     <Folder Include="Internal\Compiler\Csv\" />
     <Folder Include="Internal\Compiler\Delimited\" />
     <Folder Include="Internal\Compiler\Flat\" />
-    <Folder Include="Internal\Parser\Message\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

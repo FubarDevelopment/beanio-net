@@ -7,7 +7,7 @@ namespace BeanIO.Internal.Parser
 {
     public abstract class PropertyComponent : Component, IProperty
     {
-        protected static readonly bool _createMissingBeans = Settings.Instance.GetBoolean(Settings.CREATE_MISSING_BEANS);
+        protected static readonly bool CreateMissingBeans = Settings.Instance.GetBoolean(Settings.CREATE_MISSING_BEANS);
 
         /// <summary>
         /// Gets or sets a value indicating whether this property should always be instantiated when

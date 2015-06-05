@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
+using BeanIO.Builder;
 using BeanIO.Internal.Compiler.Accessor;
 using BeanIO.Internal.Config;
 using BeanIO.Internal.Parser;
@@ -27,7 +29,7 @@ namespace BeanIO.Internal.Compiler
     {
         private static readonly string CONSTRUCTOR_PREFIX = "#";
 
-        private static readonly bool _allowProtectedPropertyAccess = Settings.Instance.GetBoolean(Settings.ALLOW_PROTECTED_PROPERTY_ACCESS);
+        private static readonly bool AllowProtectedPropertyAccess = Settings.Instance.GetBoolean(Settings.ALLOW_PROTECTED_PROPERTY_ACCESS);
 
         private static readonly Component _unbound = new UnboundComponent();
 
@@ -38,6 +40,12 @@ namespace BeanIO.Internal.Compiler
         private IPropertyAccessorFactory _accessorFactory;
 
         private Parser.Stream _stream;
+
+        private string _streamFormat;
+
+        private bool _readEnabled = true;
+
+        private bool _writeEnabled = true;
 
         /// <summary>
         /// Gets or sets the type handler factory to use for resolving type handlers
@@ -160,7 +168,76 @@ namespace BeanIO.Internal.Compiler
             return last;
         }
 
-        protected virtual void UpdateConstructor
+        /// <summary>
+        /// Updates a <see cref="Bean"/>'s constructor if one or more of its properties are
+        /// constructor arguments.
+        /// </summary>
+        /// <param name="bean">the <see cref="Bean"/> to check</param>
+        protected virtual void UpdateConstructor(Bean bean)
+        {
+            var args = bean.Children.Cast<IProperty>().Where(x => x.Accessor.IsConstructorArgument).OrderBy(x => x.Accessor.ConstructorArgumentIndex).ToList();
+
+            // return if no constructor arguments were found
+            if (args.Count == 0)
+                return;
+
+            var count = args.Count;
+
+            // verify the number of constructor arguments matches the provided constructor index
+            if (count != args[count - 1].Accessor.ConstructorArgumentIndex + 1)
+                throw new BeanIOConfigurationException(string.Format("Missing constructor argument for bean class '{0}'", bean.GetType().GetFullName()));
+
+            // find a suitable constructor
+            ConstructorInfo constructor = null;
+            foreach (var testConstructor in bean.GetType().GetTypeInfo().DeclaredConstructors.Where(x => x.GetParameters().Length == count))
+            {
+                var argsMatching = testConstructor.GetParameters().Select((p, i) => p.ParameterType.IsAssignableFrom(args[i].PropertyType)).All(x => x);
+                if (argsMatching && (testConstructor.IsPublic || AllowProtectedPropertyAccess))
+                {
+                    constructor = testConstructor;
+                    break;
+                }
+            }
+
+            // verify a constructor was found
+            if (constructor == null)
+                throw new BeanIOConfigurationException(string.Format("No suitable constructor found for bean class '{0}'", bean.PropertyType.GetFullName()));
+
+            bean.Constructor = constructor;
+        }
+
+        /// <summary>
+        /// Initializes a stream configuration before its children have been processed
+        /// </summary>
+        /// <param name="config">the stream configuration to process</param>
+        protected override void InitializeStream(StreamConfig config)
+        {
+            _streamFormat = config.Format;
+            var format = CreateStreamFormat(config);
+            _stream = new Parser.Stream(format);
+
+            // set the stream mode, defaults to read/write, the stream mode may be used
+            // to enforce or relax validation rules specific to marshalling or unmarshalling
+            var mode = config.Mode;
+            if (mode == null || mode == AccessMode.ReadWrite)
+            {
+                _stream.Mode = AccessMode.ReadWrite;
+            }
+            else if (mode == AccessMode.Read)
+            {
+                _stream.Mode = AccessMode.Read;
+                _writeEnabled = false;
+            }
+            else if (mode == AccessMode.Write)
+            {
+                _stream.Mode = AccessMode.Write;
+                _readEnabled = false;
+            }
+            else
+            {
+                throw new BeanIOConfigurationException(string.Format("Invalid mode '{0}'", mode));
+            }
+        }
 
         private class UnboundComponent : Component
         {
