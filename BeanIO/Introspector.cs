@@ -27,5 +27,16 @@ namespace BeanIO
 
             return string.Format("{0}{1}", char.ToLowerInvariant(name[0]), name.Substring(1));
         }
+
+        public static string Capitalize(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                return name;
+
+            if (char.IsUpper(name, 0))
+                return name;
+
+            return string.Format("{0}{1}", char.ToUpperInvariant(name[0]), name.Substring(1));
+        }
     }
 }

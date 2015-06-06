@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Resources;
 
 namespace BeanIO.Internal.Parser.Message
@@ -32,23 +34,28 @@ namespace BeanIO.Internal.Parser.Message
         private readonly ConcurrentDictionary<string, string> _messageCache = new ConcurrentDictionary<string, string>();
 
         /// <summary>
-        /// configured resource bundle for messages
+        /// Gets or sets the configured resource bundle for messages
         /// </summary>
-        private ResourceManager _resourceBundle;
+        public ResourceManager ResourceBundle { get; set; }
 
         /// <summary>
-        /// default resource bundle for messages based on the stream format
+        /// Gets or sets the default resource bundle for messages based on the stream format
         /// </summary>
-        private ResourceManager _defaultResourceBundle;
+        public ResourceManager DefaultResourceBundle { get; set; }
 
         /// <summary>
         /// Returns the localized label for a record.
         /// </summary>
         /// <param name="recordName">the name of the record</param>
         /// <returns>the record label, or null if no label was found</returns>
-        public string GetRecordLabel(string recordName)
+        public virtual string GetRecordLabel(string recordName)
         {
-            return GetLabel(string.Format("{0}.{1}", LABEL_MESSAGE_PREFIX, recordName));
+            return GetMessage(
+                new[]
+                    {
+                        string.Format("{0}.{1}", LABEL_MESSAGE_PREFIX, recordName)
+                    },
+                false);
         }
 
         /// <summary>
@@ -57,9 +64,15 @@ namespace BeanIO.Internal.Parser.Message
         /// <param name="recordName">the name of the record</param>
         /// <param name="rule">the name of the validation rule</param>
         /// <returns>the error message, or null if no message was configured</returns>
-        public string GetRecordErrorMessage(string recordName, string rule)
+        public virtual string GetRecordErrorMessage(string recordName, string rule)
         {
-            throw new System.NotImplementedException();
+            return GetMessage(
+                new[]
+                    {
+                        string.Format("{0}.{1}.{2}", RECORD_ERROR_MESSAGE_PREFIX, recordName, rule),
+                        string.Format("{0}.{1}", RECORD_ERROR_MESSAGE_PREFIX, rule)
+                    },
+                true);
         }
 
         /// <summary>
@@ -68,9 +81,14 @@ namespace BeanIO.Internal.Parser.Message
         /// <param name="recordName">the name of the record the field belongs to</param>
         /// <param name="fieldName">the name of the field</param>
         /// <returns>the field label, or null if no label was found</returns>
-        public string GetFieldLabel(string recordName, string fieldName)
+        public virtual string GetFieldLabel(string recordName, string fieldName)
         {
-            throw new System.NotImplementedException();
+            return GetMessage(
+                new[]
+                    {
+                        string.Format("{0}.{1}.{2}", LABEL_MESSAGE_PREFIX, recordName, fieldName)
+                    },
+                false);
         }
 
         /// <summary>
@@ -80,9 +98,47 @@ namespace BeanIO.Internal.Parser.Message
         /// <param name="fieldName">the name of the field</param>
         /// <param name="rule">the name of the validation rule</param>
         /// <returns>the error message, or null if no message was configured</returns>
-        public string GetFieldErrorMessage(string recordName, string fieldName, string rule)
+        public virtual string GetFieldErrorMessage(string recordName, string fieldName, string rule)
         {
-            throw new System.NotImplementedException();
+            return GetMessage(
+                new[]
+                    {
+                        string.Format("{0}.{1}.{2}.{3}", FIELD_ERROR_MESSAGE_PREFIX, recordName, fieldName, rule),
+                        string.Format("{0}.{1}.{2}", FIELD_ERROR_MESSAGE_PREFIX, recordName, rule),
+                        string.Format("{0}.{1}", FIELD_ERROR_MESSAGE_PREFIX, rule)
+                    },
+                true);
+        }
+
+        protected virtual string GetMessage(IReadOnlyList<string> keys, bool returnKeyWhenNotFound)
+        {
+            var key = keys[0];
+            var message = _messageCache.GetOrAdd(
+                key,
+                k =>
+                {
+                    string msg = null;
+                    if (ResourceBundle != null)
+                        msg = keys.Select(x => GetMessage(ResourceBundle, x)).FirstOrDefault(x => x != null);
+                    if (msg == null && DefaultResourceBundle != null)
+                        msg = keys.Select(x => GetMessage(DefaultResourceBundle, x)).FirstOrDefault(x => x != null);
+                    return msg ?? NOT_FOUND;
+                });
+            if (ReferenceEquals(message, NOT_FOUND))
+                return returnKeyWhenNotFound ? key : null;
+            return message;
+        }
+
+        /// <summary>
+        /// Returns a message from a resource bundle
+        /// </summary>
+        /// <param name="bundle">the resource bundle to check</param>
+        /// <param name="key">the resource bundle key for the message</param>
+        /// <returns>the message or <code>null</code> if not found</returns>
+        private string GetMessage(ResourceManager bundle, string key)
+        {
+            // returns null if the key couldn't be found
+            return bundle.GetString(key);
         }
     }
 }

@@ -666,7 +666,7 @@ namespace BeanIO.Internal.Config.Annotation
 
                 collectionName = collectionType.GetFullName();
             }
-            else if (propertyType.IsInstanceOf(typeof(ICollection<>)))
+            else if (propertyType.IsInstanceOf(typeof(IList<>)))
             {
                 var collectionType = annotatedCollection.ToValue();
                 if (collectionType == null)

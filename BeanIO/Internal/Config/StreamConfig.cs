@@ -41,6 +41,11 @@ namespace BeanIO.Internal.Config
         public AccessMode? Mode { get; set; }
 
         /// <summary>
+        /// Get or set the full class name of the resource bundle containing customized error messages for this stream
+        /// </summary>
+        public string ResourceBundle { get; set; }
+
+        /// <summary>
         /// Gets a list of customized type handlers configured for this stream.
         /// </summary>
         public IReadOnlyList<TypeHandlerConfig> Handlers

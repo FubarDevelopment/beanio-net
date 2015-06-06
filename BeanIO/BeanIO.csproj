@@ -92,6 +92,7 @@
     <Compile Include="Internal\DefaultStreamFactory.cs" />
     <Compile Include="Internal\DictionaryExtensions.cs" />
     <Compile Include="Internal\Parser\Bean.cs" />
+    <Compile Include="Internal\Parser\CollectionBean.cs" />
     <Compile Include="Internal\Parser\Format\Delimited\DefaultMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -158,6 +159,10 @@
     <Compile Include="Internal\Parser\MarshallingContext.cs" />
     <Compile Include="Internal\Parser\Message\ResourceBundleMessageFactory.cs" />
     <Compile Include="Internal\Parser\PropertyComponent.cs" />
+    <Compile Include="Internal\Parser\RecordAggregation.cs" />
+    <Compile Include="Internal\Parser\RecordArray.cs" />
+    <Compile Include="Internal\Parser\RecordCollection.cs" />
+    <Compile Include="Internal\Parser\RecordMap.cs" />
     <Compile Include="Internal\Util\ObjectUtils.cs" />
     <Compile Include="Internal\Parser\ParserComponent.cs" />
     <Compile Include="Internal\Parser\ParserLocal.cs" />

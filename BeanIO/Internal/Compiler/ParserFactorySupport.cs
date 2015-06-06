@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Resources;
 
 using BeanIO.Builder;
 using BeanIO.Internal.Compiler.Accessor;
 using BeanIO.Internal.Config;
 using BeanIO.Internal.Parser;
+using BeanIO.Internal.Parser.Message;
 using BeanIO.Internal.Util;
 
 using JetBrains.Annotations;
@@ -51,6 +54,22 @@ namespace BeanIO.Internal.Compiler
         /// Gets or sets the type handler factory to use for resolving type handlers
         /// </summary>
         public TypeHandlerFactory TypeHandlerFactory { get; set; }
+
+        /// <summary>
+        /// Returns a value indicating whether the stream definition must support reading an input stream.
+        /// </summary>
+        public bool IsReadEnabled
+        {
+            get { return _readEnabled; }
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether the stream definition must support writing to an output stream.
+        /// </summary>
+        public bool IsWriteEnabled
+        {
+            get { return _writeEnabled; }
+        }
 
         /// <summary>
         /// Gets a value indicating whether a property has been pushed onto the property stack, indicating
@@ -237,6 +256,237 @@ namespace BeanIO.Internal.Compiler
             {
                 throw new BeanIOConfigurationException(string.Format("Invalid mode '{0}'", mode));
             }
+
+            var messageFactory = new ResourceBundleMessageFactory();
+            var bundleName = Settings.Instance.GetProperty(string.Format("org.beanio.{0}.messages", config.Format));
+            if (bundleName != null)
+            {
+                try
+                {
+                    var resType = Type.GetType(bundleName, true);
+                    var resMgr = new ResourceManager(bundleName, resType.GetTypeInfo().Assembly);
+                    resMgr.GetString("ignore");
+                    messageFactory.DefaultResourceBundle = resMgr;
+                }
+                catch (MissingManifestResourceException ex)
+                {
+                    // TODO: Use C# 6 exception filtering
+                    throw new BeanIOConfigurationException(string.Format("Missing default resource bundle '{0}' for stream format '{1}'", bundleName, config.Format), ex);
+                }
+                catch (TypeLoadException ex)
+                {
+                    throw new BeanIOConfigurationException(string.Format("Missing default resource bundle '{0}' for stream format '{1}'", bundleName, config.Format), ex);
+                }
+            }
+
+            // load the stream resource bundle
+            bundleName = config.ResourceBundle;
+            if (bundleName != null)
+            {
+                try
+                {
+                    var resType = Type.GetType(bundleName, true);
+                    var resMgr = new ResourceManager(bundleName, resType.GetTypeInfo().Assembly);
+                    resMgr.GetString("ignore");
+                    messageFactory.ResourceBundle = resMgr;
+                }
+                catch (MissingManifestResourceException ex)
+                {
+                    // TODO: Use C# 6 exception filtering
+                    throw new BeanIOConfigurationException(string.Format("Missing default resource bundle '{0}'", bundleName), ex);
+                }
+                catch (TypeLoadException ex)
+                {
+                    throw new BeanIOConfigurationException(string.Format("Missing default resource bundle '{0}'", bundleName), ex);
+                }
+            }
+
+            _stream.MessageFactory = messageFactory;
+            _stream.IgnoreUnidentifiedRecords = config.IgnoreUnidentifiedRecords;
+            InitializeGroup(config);
+        }
+
+        /// <summary>
+        /// Finalizes a stream configuration after its children have been processed
+        /// </summary>
+        /// <param name="config">the stream configuration to finalize</param>
+        protected override void FinalizeStream(StreamConfig config)
+        {
+            _stream.Layout = (ISelector)_parserStack.Peek();
+            FinalizeGroup(config);
+        }
+
+        /// <summary>
+        /// Initializes a group configuration before its children have been processed
+        /// </summary>
+        /// <param name="config">the group configuration to process</param>
+        protected override void InitializeGroup(GroupConfig config)
+        {
+            if (config.Children.Count == 0)
+                throw new BeanIOConfigurationException("At least one record or group is required.");
+
+            // determine and validate the bean class
+            var bean = CreateProperty(config);
+
+            // handle bound repeating groups
+            if (config.IsBound && config.IsRepeating)
+                InitializeGroupIteration(config, bean);
+
+            InitializeGroupMain(config, bean);
+        }
+
+        protected virtual void InitializeGroupIteration(GroupConfig config, IProperty property)
+        {
+            // wrap the segment in an iteration
+            var aggregation = CreateRecordAggregation(config, property);
+            PushParser(aggregation);
+            if (property != null || config.Target != null)
+                PushProperty(aggregation);
+        }
+
+        protected virtual void InitializeGroupMain(GroupConfig config, IProperty property)
+        {
+            var group = new Group()
+                {
+                    Name = config.Name,
+                    MinOccurs = config.MinOccurs ?? 0,
+                    MaxOccurs = config.MaxOccurs,
+                    Order = config.Order.GetValueOrDefault(),
+                    Property = property,
+                };
+            PushParser(group);
+            if (property != null)
+                PushProperty((Component)property);
+        }
+
+        protected virtual RecordAggregation CreateRecordAggregation(PropertyConfig config, IProperty property)
+        {
+            var isMap = false;
+            var collection = config.Collection;
+
+            // determine the collection type
+            Type collectionType = null;
+            if (collection != null)
+            {
+                collectionType = TypeUtil.ToAggregationType(collection);
+                if (collectionType == null)
+                    throw new BeanIOConfigurationException(string.Format("Invalid collection type or type alias '{0}'", collection));
+
+                isMap = typeof(IDictionary).IsAssignableFrom(collectionType);
+                if (isMap && config.Key == null)
+                    throw new BeanIOConfigurationException("Key required for Map type collection");
+
+                collectionType = GetConcreteAggregationType(collectionType);
+            }
+
+            // create the appropriate iteration type
+            RecordAggregation aggregation;
+            if (collectionType == typeof(Array))
+            {
+                aggregation = new RecordArray();
+            }
+            else if (isMap)
+            {
+                aggregation = new RecordMap();
+            }
+            else
+            {
+                aggregation = new RecordCollection();
+            }
+            aggregation.Name = config.Name;
+            aggregation.PropertyType = collectionType;
+            aggregation.IsLazy = config.IsLazy;
+            return aggregation;
+        }
+
+        /// <summary>
+        /// Creates a property for holding other properties
+        /// </summary>
+        /// <param name="config">the <see cref="PropertyConfig"/></param>
+        /// <returns>the created <see cref="IProperty"/> or null if the
+        /// <see cref="PropertyConfig"/> was not bound to a bean class</returns>
+        protected virtual IProperty CreateProperty(PropertyConfig config)
+        {
+            var beanClass = GetBeanClass(config);
+            if (beanClass == null)
+                return null;
+
+            IProperty property;
+            if (typeof(IList).IsAssignableFrom(beanClass))
+            {
+                var required = _propertyStack.Count == 0;
+                if (config.ComponentType == ComponentType.Segment)
+                    required = config.MinOccurs.GetValueOrDefault() > 0 && !config.IsNillable;
+                var matchNull = !required && config.MinOccurs.GetValueOrDefault() == 0;
+
+                var collection = new CollectionBean()
+                    {
+                        Name = config.Name,
+                        PropertyType = beanClass,
+                        IsRequired = required,
+                        IsMatchNull = matchNull,
+                    };
+                property = collection;
+            }
+            else
+            {
+                var required = _propertyStack.Count == 0;
+                var matchNull = !required && config.MinOccurs.GetValueOrDefault() == 0;
+
+                var bean = new Bean()
+                    {
+                        Name = config.Name,
+                        PropertyType = beanClass,
+                        IsLazy = config.IsLazy,
+                        IsRequired = required,
+                        IsMatchNull = matchNull,
+                    };
+
+                property = bean;
+            }
+
+            return property;
+        }
+
+        /// <summary>
+        /// Returns the bean class for a segment configuration
+        /// </summary>
+        /// <param name="config">the property configuration</param>
+        /// <returns>the bean class</returns>
+        protected virtual Type GetBeanClass(PropertyConfig config)
+        {
+            // determine the bean class associated with this record
+            Type beanClass = null;
+            if (config.Type != null)
+            {
+                beanClass = config.Type.ToBeanType();
+                if (beanClass == null)
+                    throw new BeanIOConfigurationException(string.Format("Invalid bean class '{0}'", config.Type));
+                var beanTypeInfo = beanClass.GetTypeInfo();
+                if (IsReadEnabled && (beanTypeInfo.IsInterface || beanTypeInfo.IsAbstract))
+                    throw new BeanIOConfigurationException(string.Format("Class must be concrete unless stream mode is set to '{0}'", AccessMode.Write));
+            }
+            return beanClass;
+        }
+
+        /// <summary>
+        /// Returns a concrete <see cref="Type"/> implementation for an aggregation type
+        /// </summary>
+        /// <param name="type">the configured <see cref="IDictionary"/> or <see cref="ICollection"/> type</param>
+        /// <returns>the concrete aggregation Class type</returns>
+        private Type GetConcreteAggregationType(Type type)
+        {
+            if (type == null)
+                return null;
+            if (type != typeof(Array) && (type.GetTypeInfo().IsInterface || type.GetTypeInfo().IsAbstract))
+            {
+                if (typeof(ISet<>).IsAssignableFrom(type))
+                    return typeof(HashSet<>);
+                if (typeof(IDictionary).IsAssignableFrom(type))
+                    return typeof(Dictionary<,>);
+                return typeof(List<>);
+            }
+            return type;
         }
 
         private class UnboundComponent : Component

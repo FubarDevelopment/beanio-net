@@ -326,9 +326,9 @@ namespace BeanIO.Internal.Parser
 
         private class BeanParserLocal : ParserLocal<object>
         {
-            private readonly Bean _owner;
+            private readonly PropertyComponent _owner;
 
-            public BeanParserLocal(Bean owner)
+            public BeanParserLocal(PropertyComponent owner)
             {
                 _owner = owner;
             }

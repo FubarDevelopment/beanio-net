@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -104,11 +105,60 @@ namespace BeanIO.Internal.Util
         }
 
         /// <summary>
+        /// Returns the collection <see cref="Type"/> object for a collection class name or type alias
+        /// </summary>
+        /// <param name="type">the fully qualified class name or type alias of the collection</param>
+        /// <returns>the collection class, or <see cref="Array"/> for array,
+        /// or <code>null</code> if the type name is invalid</returns>
+        public static Type ToCollectionType(this string type)
+        {
+            switch (type.ToLowerInvariant())
+            {
+                case "array":
+                    return typeof(Array);
+                case "collection":
+                case "list":
+                    return typeof(List<>);
+                case "set":
+                    return typeof(HashSet<>);
+            }
+
+            var clazz = Type.GetType(type);
+            if (!typeof(IList).IsAssignableFrom(clazz))
+                return null;
+            return clazz;
+        }
+
+        public static Type ToAggregationType(string type)
+        {
+            switch (type.ToLowerInvariant())
+            {
+                case "array":
+                    return typeof(Array);
+                case "collection":
+                case "list":
+                    return typeof(List<>);
+                case "set":
+                    return typeof(HashSet<>);
+                case "map":
+                    return typeof(Dictionary<,>);
+            }
+
+            var clazz = Type.GetType(type);
+            if (typeof(IList).IsAssignableFrom(clazz))
+                return clazz;
+            if (typeof(IDictionary).IsAssignableFrom(clazz))
+                return clazz;
+            return null;
+        }
+
+        /// <summary>
         /// Gets type <see cref="Type"/> for a given type name.
         /// </summary>
         /// <param name="typeName">The type name (<see cref="Type.AssemblyQualifiedName"/>).</param>
+        /// <param name="returnInterface">Return interface instead of concrete class</param>
         /// <returns>The type for the given type name or null if it wasn't found.</returns>
-        public static Type ToBeanType(this string typeName)
+        public static Type ToBeanType(this string typeName, bool returnInterface = false)
         {
             if (typeName == null)
                 return null;
@@ -116,12 +166,18 @@ namespace BeanIO.Internal.Util
             {
                 case "map":
                 case "dictionary":
-                    return typeof(IDictionary<,>);
+                    if (returnInterface)
+                        return typeof(IDictionary<,>);
+                    return typeof(Dictionary<,>);
                 case "list":
                 case "collection":
-                    return typeof(IList<>);
+                    if (returnInterface)
+                        return typeof(IList<>);
+                    return typeof(List<>);
                 case "set":
-                    return typeof(ISet<>);
+                    if (returnInterface)
+                        return typeof(ISet<>);
+                    return typeof(HashSet<>);
             }
 
             return Type.GetType(typeName, false);
