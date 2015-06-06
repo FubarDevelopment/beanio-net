@@ -93,6 +93,7 @@
     <Compile Include="Internal\DictionaryExtensions.cs" />
     <Compile Include="Internal\Parser\Bean.cs" />
     <Compile Include="Internal\Parser\CollectionBean.cs" />
+    <Compile Include="Internal\Parser\Constant.cs" />
     <Compile Include="Internal\Parser\Format\Delimited\DefaultMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -155,6 +156,7 @@
     <Compile Include="Internal\Parser\IRecordFormat.cs" />
     <Compile Include="Internal\Parser\ISelector.cs" />
     <Compile Include="Internal\Parser\IStreamFormat.cs" />
+    <Compile Include="Internal\Parser\MapParser.cs" />
     <Compile Include="Internal\Parser\MarshallerImpl.cs" />
     <Compile Include="Internal\Parser\MarshallingContext.cs" />
     <Compile Include="Internal\Parser\Message\ResourceBundleMessageFactory.cs" />

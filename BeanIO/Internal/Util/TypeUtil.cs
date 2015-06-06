@@ -250,6 +250,16 @@ namespace BeanIO.Internal.Util
         }
 
         /// <summary>
+        /// Returns <code>true</code>, when the type is a numeric type
+        /// </summary>
+        /// <param name="type">The <see cref="Type"/> to test</param>
+        /// <returns><code>true</code>, when the type is a numeric type</returns>
+        public static bool IsNumber(this Type type)
+        {
+            return type.GetTypeInfo().IsPrimitive || Nullable.GetUnderlyingType(type) != null;
+        }
+
+        /// <summary>
         /// The comparer that nullifies some .NET insanities where <see cref="Type.FullName"/> is null.
         /// </summary>
         private class TypeComparer : IComparer<Type>
