@@ -10,6 +10,7 @@ using BeanIO.Builder;
 using BeanIO.Internal.Compiler.Accessor;
 using BeanIO.Internal.Config;
 using BeanIO.Internal.Parser;
+using BeanIO.Internal.Parser.Accessor;
 using BeanIO.Internal.Parser.Message;
 using BeanIO.Internal.Util;
 using BeanIO.Types;
@@ -861,7 +862,95 @@ namespace BeanIO.Internal.Compiler
         /// <returns>the iteration component</returns>
         protected virtual Aggregation CreateAggregation(PropertyConfig config, IProperty property)
         {
-            
+            var isMap = false;
+
+            var collection = config.Collection;
+
+            // determine the collection type
+            Type collectionType = null;
+            if (collection != null)
+            {
+                collectionType = TypeUtil.ToAggregationType(collection);
+                if (collectionType == null)
+                {
+                    throw new BeanIOConfigurationException(string.Format("Invalid collection type or type alias '{0}'", collection));
+                }
+
+                isMap = typeof(IDictionary).IsAssignableFrom(collectionType);
+                if (isMap && config.ComponentType == ComponentType.Field)
+                {
+                    throw new BeanIOConfigurationException("Map type collections are not supported for fields");
+                }
+                if (isMap && ((SegmentConfig)config).Key == null)
+                {
+                    throw new BeanIOConfigurationException("Key required for Map type collection");
+                }
+
+                collectionType = GetConcreteAggregationType(collectionType);
+            }
+
+            // create the appropriate iteration type
+            Aggregation aggregation = null;
+            if (collectionType.IsArray)
+            {
+                aggregation = new ArrayParser();
+            }
+            else if (isMap)
+            {
+                aggregation = new MapParser();
+            }
+            else
+            {
+                aggregation = new CollectionParser();
+            }
+            aggregation.Name = config.Label;
+            if (config.OccursRef != null)
+            {
+                aggregation.MinOccurs = config.MinOccursRef ?? 0;
+                aggregation.MaxOccurs = config.MaxOccursRef;
+            }
+            else
+            {
+                aggregation.MinOccurs = config.MinOccurs ?? 0;
+                aggregation.MaxOccurs = config.MaxOccurs;
+            }
+            aggregation.IsLazy = config.IsLazy;
+            aggregation.PropertyType = collectionType;
+            return aggregation;
+        }
+
+        protected virtual void ReflectAggregationType(PropertyConfig config, Aggregation aggregation, IProperty property)
+        {
+            var collectionType = aggregation.PropertyType;
+
+            // if collection was set, then this is a property of its parent
+            if (collectionType != null)
+            {
+                var reflectedType = ReflectCollectionType(aggregation, property, config.Getter, config.Setter);
+
+                // descriptor may be null if the parent was Map or Collection
+                if (collectionType.IsArray)
+                {
+                    var arrayType = property.PropertyType;
+
+                    // reflectedType may be null if our parent is a Map
+                    if (reflectedType != null)
+                    {
+                        // use the reflected component type for an array
+                        arrayType = reflectedType.getComponentType();
+
+                        // override target type if we were able to reflect its value
+                        property.PropertyType = arrayType;
+                    }
+                    else if (arrayType == null)
+                    {
+                        // default to String
+                        arrayType = typeof(string);
+                    }
+
+                    ((ArrayParser)aggregation).ElementType = arrayType;
+                }
+            }
         }
 
         protected virtual RecordAggregation CreateRecordAggregation(PropertyConfig config, IProperty property)
@@ -886,7 +975,7 @@ namespace BeanIO.Internal.Compiler
 
             // create the appropriate iteration type
             RecordAggregation aggregation;
-            if (collectionType == typeof(Array))
+            if (collectionType.IsArray)
             {
                 aggregation = new RecordArray();
             }
@@ -902,6 +991,239 @@ namespace BeanIO.Internal.Compiler
             aggregation.PropertyType = collectionType;
             aggregation.IsLazy = config.IsLazy;
             return aggregation;
+        }
+
+        protected virtual void ReflectRecordAggregationType(PropertyConfig config, RecordAggregation aggregation, IProperty property)
+        {
+            var collectionType = aggregation.PropertyType;
+            if (collectionType == null)
+                return;
+            // if collection was set, then this is a property of its parent
+            var reflectedType = ReflectCollectionType(aggregation, property, config.Getter, config.Setter);
+
+            // descriptor may be null if the parent was Map or Collection
+            if (collectionType.IsArray)
+            {
+                var arrayType = property.PropertyType;
+
+                // reflected type may be null if the parent bean is a Map
+                if (reflectedType != null)
+                {
+                    // use the reflected component type for an array
+                    arrayType = reflectedType.getComponentType();
+
+                    // override target type if we were able to reflect its value
+                    property.PropertyType = arrayType;
+                }
+                else if (arrayType == null)
+                {
+                    // default to String
+                    arrayType = typeof(string);
+                }
+
+                ((RecordArray)aggregation).ElementType = arrayType;
+            }
+        }
+
+        protected virtual Type ReflectCollectionType(IProperty iteration, IProperty property, string getter, string setter)
+        {
+            if (!IsBound)
+                return null;
+
+            var parent = (IProperty)_propertyStack.Peek();
+            switch (parent.Type)
+            {
+                case PropertyType.Simple:
+                    throw new BeanIOConfigurationException("Cannot add property to attribute");
+                case PropertyType.Collection:
+                case PropertyType.AggregationArray:
+                case PropertyType.AggregationCollection:
+                case PropertyType.AggregationMap:
+                    return null;
+                case PropertyType.Map:
+                    iteration.Accessor = new MapAccessor(iteration.Name);
+                    return null;
+            }
+
+            // parse the constructor argument index from the 'setter'
+            var construtorArgumentIndex = -1;
+            if (setter != null && setter.StartsWith(CONSTRUCTOR_PREFIX))
+            {
+                try
+                {
+                    construtorArgumentIndex = int.Parse(setter.Substring(1));
+                    if (construtorArgumentIndex <= 0)
+                        throw new BeanIOConfigurationException("Invalid setter method");
+                    construtorArgumentIndex--;
+                }
+                catch (FormatException ex)
+                {
+                    throw new BeanIOConfigurationException("Invalid setter method", ex);
+                }
+                setter = null;
+            }
+
+            Type reflectedType;
+            try
+            {
+                // set the property descriptor on the field
+                PropertyInfo descriptor = GetPropertyDescriptor(iteration.Name, getter, setter, construtorArgumentIndex >= 0);
+                reflectedType = descriptor.PropertyType;
+
+                iteration.Accessor = _accessorFactory.CreatePropertyAccessor(parent.PropertyType, descriptor, construtorArgumentIndex);
+            }
+            catch (BeanIOConfigurationException ex)
+            {
+                // if a method accessor is not found, attempt to find a field declaration
+                FieldInfo field = GetField(iteration.Name);
+                if (field == null)
+                {
+                    // give up and rethrow the exception
+                    throw;
+                }
+
+                reflectedType = field.FieldType;
+
+                iteration.Accessor = _accessorFactory.CreatePropertyAccessor(parent.PropertyType, field, construtorArgumentIndex);
+            }
+
+            // reflectedType may be null for read-only streams using a constructor argument
+            if (reflectedType == null)
+                return null;
+
+            var type = property.PropertyType;
+            if (iteration.PropertyType.IsArray)
+            {
+                if (!reflectedType.IsArray)
+                    throw new BeanIOConfigurationException(string.Format("Collection type 'array' does not match bean property type '{0}'", reflectedType.GetFullName()));
+
+                var arrayType = reflectedType.GetElementType();
+                if (type == null)
+                {
+                    property.PropertyType = arrayType;
+                }
+                else if (arrayType.IsAssignableFrom(type))
+                {
+                    throw new BeanIOConfigurationException(
+                        string.Format(
+                            "Configured field array of type '{0}' is not assignable to bean property array of type '{1}'",
+                            type,
+                            arrayType.GetFullName()));
+                }
+            }
+            else
+            {
+                if (!reflectedType.IsAssignableFrom(iteration.PropertyType))
+                {
+                    String beanPropertyTypeName;
+                    if (reflectedType.IsArray)
+                    {
+                        beanPropertyTypeName = reflectedType.GetElementType().GetFullName() + "[]";
+                    }
+                    else
+                    {
+                        beanPropertyTypeName = reflectedType.GetFullName();
+                    }
+
+                    throw new BeanIOConfigurationException(
+                        string.Format(
+                            "Configured collection type '{0}' is not assignable to bean property type '{1}'",
+                            iteration.PropertyType.GetFullName(),
+                            beanPropertyTypeName));
+                }
+            }
+
+            return reflectedType;
+        }
+
+        /// <summary>
+        /// Sets the property type and accessor using bean introspection.
+        /// </summary>
+        /// <param name="config">the property configuration</param>
+        /// <param name="property">the property</param>
+        protected virtual void ReflectPropertyType(PropertyConfig config, IProperty property)
+        {
+            // check for constructor arguments
+            if (property.Type == PropertyType.Complex)
+                UpdateConstructor((Bean)property);
+
+            if (!IsBound)
+                return;
+
+            var parent = (IProperty)_propertyStack.Peek();
+            switch (parent.Type)
+            {
+                case PropertyType.Simple:
+                    throw new BeanIOConfigurationException("Cannot add a property to a simple property");
+                case PropertyType.Collection:
+                case PropertyType.AggregationArray:
+                case PropertyType.AggregationCollection:
+                case PropertyType.AggregationMap:
+                    return;
+                case PropertyType.Map:
+                    property.Accessor = new MapAccessor(config.Name);
+                    return;
+            }
+
+            var setter = config.Setter;
+            var getter = config.Getter;
+
+            // parse the constructor argument index from the 'setter'
+            var construtorArgumentIndex = -1;
+            if (setter != null && setter.StartsWith(CONSTRUCTOR_PREFIX))
+            {
+                try
+                {
+                    construtorArgumentIndex = int.Parse(setter.Substring(1));
+                    if (construtorArgumentIndex <= 0)
+                        throw new BeanIOConfigurationException("Invalid setter method");
+                    construtorArgumentIndex--;
+                }
+                catch (FormatException ex)
+                {
+                    throw new BeanIOConfigurationException("Invalid setter method", ex);
+                }
+                setter = null;
+            }
+
+            Type reflectedType;
+            try
+            {
+                // set the property descriptor on the field
+                PropertyInfo descriptor = GetPropertyDescriptor(config.Name, getter, setter, construtorArgumentIndex >= 0);
+                reflectedType = descriptor.PropertyType;
+
+                property.Accessor = _accessorFactory.CreatePropertyAccessor(parent.PropertyType, descriptor, construtorArgumentIndex);
+            }
+            catch (BeanIOConfigurationException ex)
+            {
+                // if a method accessor is not found, attempt to find a field
+                FieldInfo field = GetField(config.Name);
+                if (field == null)
+                {
+                    // give up and rethrow the exception
+                    throw;
+                }
+                reflectedType = field.FieldType;
+
+                property.Accessor = _accessorFactory.CreatePropertyAccessor(parent.PropertyType, field, construtorArgumentIndex);
+            }
+
+            // validate the reflected type
+            var type = property.PropertyType;
+            if (type == null)
+            {
+                property.PropertyType = reflectedType;
+            }
+            // reflectedType may be null if for read-only streams using a constructor argument
+            else if (reflectedType != null && !reflectedType.IsAssignableFrom(type))
+            {
+                throw new BeanIOConfigurationException(string.Format("Property type '{0}' is not assignable to bean property type '{1}'", config.Type, reflectedType.GetFullName()));
+            }
+            else if (reflectedType.GetTypeInfo().IsPrimitive)
+            {
+                property.PropertyType = reflectedType;
+            }
         }
 
         /// <summary>
@@ -1026,7 +1348,7 @@ namespace BeanIO.Internal.Compiler
         {
             if (type == null)
                 return null;
-            if (type != typeof(Array) && (type.GetTypeInfo().IsInterface || type.GetTypeInfo().IsAbstract))
+            if (!type.IsArray && (type.GetTypeInfo().IsInterface || type.GetTypeInfo().IsAbstract))
             {
                 if (typeof(ISet<>).IsAssignableFrom(type))
                     return typeof(HashSet<>);
@@ -1035,6 +1357,37 @@ namespace BeanIO.Internal.Compiler
                 return typeof(List<>);
             }
             return type;
+        }
+
+        /// <summary>
+        /// Returns the <see cref="PropertyInfo"/> for getting and setting a property value from
+        /// current bean class on the property stack.
+        /// </summary>
+        /// <param name="property">the property name</param>
+        /// <param name="getter">the getter method name, or null to use the default</param>
+        /// <param name="setter">the setter method name, or null to use the default</param>
+        /// <param name="isConstructorArgument">is this a constructor argument?</param>
+        /// <returns>the <see cref="PropertyInfo"/></returns>
+        private PropertyInfo GetPropertyDescriptor(string property, string getter, string setter, bool isConstructorArgument)
+        {
+            var beanClass = ((IProperty)_propertyStack.Peek()).PropertyType;
+
+            // calling new PropertyDescriptor(...) will throw an exception if either the getter
+            // or setter method is not null and not found
+            PropertyInfo descriptor = null;
+            try
+            {
+                if (setter != null && getter != null)
+                {
+                    descriptor = beanClass.GetTypeInfo().GetDeclaredProperty(property);
+                }
+                else
+                {
+                    // the Introspector class caches BeanInfo so subsequent calls shouldn't be a concern
+                    var info = beanClass.GetTypeInfo();
+
+                }
+            }
         }
 
         private class UnboundComponent : Component

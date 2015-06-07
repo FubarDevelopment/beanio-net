@@ -24,7 +24,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets or sets the class type of the array
         /// </summary>
-        public Type ArrayType { get; set; }
+        public Type ElementType { get; set; }
 
         /// <summary>
         /// Returns the unmarshalled property value.
@@ -40,7 +40,7 @@ namespace BeanIO.Internal.Parser
             try
             {
                 var index = 0;
-                var array = Array.CreateInstance(ArrayType, collection.Count);
+                var array = Array.CreateInstance(ElementType, collection.Count);
                 foreach (var obj in collection)
                     array.SetValue(obj, index++);
                 return array;
