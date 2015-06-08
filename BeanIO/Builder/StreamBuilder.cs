@@ -92,7 +92,7 @@ namespace BeanIO.Builder
         {
             var thc = new TypeHandlerConfig()
             {
-                Name = name ?? createFunc().TargetType.GetFullName(),
+                Name = name ?? createFunc().TargetType.GetAssemblyQualifiedName(),
                 CreateFunc = createFunc,
             };
             Config.AddHandler(thc);

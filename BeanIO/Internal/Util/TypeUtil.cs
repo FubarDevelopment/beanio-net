@@ -71,8 +71,8 @@ namespace BeanIO.Internal.Util
         /// <returns>The well known names of the given <paramref name="type"/></returns>
         public static IEnumerable<string> GetWellKnownNamesFor(this Type type)
         {
-            var fullName = type.GetFullName();
-            return _wellKnownTypes.Where(x => x.Value.GetFullName() == fullName).Select(x => x.Key);
+            var fullName = type.GetAssemblyQualifiedName();
+            return _wellKnownTypes.Where(x => x.Value.GetAssemblyQualifiedName() == fullName).Select(x => x.Key);
         }
 
         /// <summary>
@@ -235,11 +235,11 @@ namespace BeanIO.Internal.Util
         }
 
         /// <summary>
-        /// Get the full name using the <see cref="Type.Namespace"/>, <see cref="Type.Name"/>, and <see cref="Assembly.FullName"/>
+        /// Get the assembly qualified name using the <see cref="Type.Namespace"/>, <see cref="Type.Name"/>, and <see cref="Assembly.FullName"/>
         /// </summary>
-        /// <param name="t">The type to get the full name for</param>
-        /// <returns>The full type name</returns>
-        public static string GetFullName(this Type t)
+        /// <param name="t">The type to get the assembly qualified name for</param>
+        /// <returns>The assembly qualified type name</returns>
+        public static string GetAssemblyQualifiedName(this Type t)
         {
             var result = new StringBuilder();
             if (!string.IsNullOrEmpty(t.Namespace))
@@ -275,8 +275,8 @@ namespace BeanIO.Internal.Util
 
                 var hasMissingFullName = string.IsNullOrEmpty(x.AssemblyQualifiedName)
                                          || string.IsNullOrEmpty(y.AssemblyQualifiedName);
-                var name1 = hasMissingFullName ? x.GetFullName() : x.AssemblyQualifiedName;
-                var name2 = hasMissingFullName ? y.GetFullName() : y.AssemblyQualifiedName;
+                var name1 = hasMissingFullName ? x.GetAssemblyQualifiedName() : x.AssemblyQualifiedName;
+                var name2 = hasMissingFullName ? y.GetAssemblyQualifiedName() : y.AssemblyQualifiedName;
                 return StringComparer.Ordinal.Compare(name1, name2);
             }
         }

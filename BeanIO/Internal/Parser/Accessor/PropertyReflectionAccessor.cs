@@ -31,7 +31,7 @@ namespace BeanIO.Internal.Parser.Accessor
                 throw new BeanIOException(
                     string.Format(
                         "Failed to get value for property or field '{2}' on bean class '{0}': {1}",
-                        bean.GetType().GetFullName(),
+                        bean.GetType().GetAssemblyQualifiedName(),
                         ex.Message,
                         _property.Name),
                     ex);
@@ -54,7 +54,7 @@ namespace BeanIO.Internal.Parser.Accessor
                 throw new BeanIOException(
                     string.Format(
                         "Failed to set value for property or field '{2}' on bean class '{0}': {1}",
-                        bean.GetType().GetFullName(),
+                        bean.GetType().GetAssemblyQualifiedName(),
                         ex.Message,
                         _property.Name),
                     ex);

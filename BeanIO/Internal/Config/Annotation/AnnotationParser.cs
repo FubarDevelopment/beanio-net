@@ -262,7 +262,7 @@ namespace BeanIO.Internal.Config.Annotation
             fc.TypeHandler = fa.HandlerName.ToValue();
             var handler = fa.HandlerType.ToValue();
             if (handler != null && string.IsNullOrEmpty(fc.TypeHandler))
-                fc.TypeHandler = fa.HandlerType.GetFullName();
+                fc.TypeHandler = fa.HandlerType.GetAssemblyQualifiedName();
 
             fc.XmlType = fa.XmlType.ToValue();
             fc.XmlName = fa.XmlName.ToValue();
@@ -357,7 +357,7 @@ namespace BeanIO.Internal.Config.Annotation
             }
             catch (Exception ex)
             {
-                throw new BeanIOConfigurationException(string.Format("Invalid FieldAttribute annotation on a constructor parameter in class '{0}': {1}", clazz.GetFullName(), ex.Message), ex);
+                throw new BeanIOConfigurationException(string.Format("Invalid FieldAttribute annotation on a constructor parameter in class '{0}': {1}", clazz.GetAssemblyQualifiedName(), ex.Message), ex);
             }
         }
 
@@ -664,7 +664,7 @@ namespace BeanIO.Internal.Config.Annotation
                     }
                 }
 
-                collectionName = collectionType.GetFullName();
+                collectionName = collectionType.GetAssemblyQualifiedName();
             }
             else if (propertyType.IsInstanceOf(typeof(IList<>)))
             {
@@ -691,7 +691,7 @@ namespace BeanIO.Internal.Config.Annotation
                     }
                 }
 
-                collectionName = collectionType.GetFullName();
+                collectionName = collectionType.GetAssemblyQualifiedName();
             }
             else
             {
@@ -736,6 +736,7 @@ namespace BeanIO.Internal.Config.Annotation
             if (val == null)
                 return null;
             if (val < 0)
+                // TODO: Should return null to get rid of int.MaxValue
                 return int.MaxValue;
             return val.Value;
         }

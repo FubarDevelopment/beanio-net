@@ -226,7 +226,7 @@ namespace BeanIO.Internal.Util
             // Ensure that we "unbox" a nullable type
             type = Nullable.GetUnderlyingType(type) ?? type;
 
-            var handler = GetHandler(TypeKey + type.Name, format, properties);
+            var handler = GetHandler(TypeKey + type.FullName, format, properties);
             if (handler == null && typeof(Enum).IsAssignableFrom(type))
                 return GetEnumHandler(type, properties);
 
@@ -279,7 +279,7 @@ namespace BeanIO.Internal.Util
             }
             else
             {
-                RegisterHandlerFor(format, type.GetFullName(), type, createHandler);
+                RegisterHandlerFor(format, type.FullName, type, createHandler);
             }
         }
 
@@ -303,7 +303,7 @@ namespace BeanIO.Internal.Util
         {
             if (type == null)
                 throw new ArgumentNullException("type");
-            RegisterHandlerFor(format, type.GetFullName(), type, createHandler);
+            RegisterHandlerFor(format, type.FullName, type, createHandler);
         }
 
         private void RegisterHandlerFor([CanBeNull] string format, [NotNull] string typeName, [NotNull] Type expectedClass, [NotNull] Func<ITypeHandler> createHandler)

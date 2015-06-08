@@ -78,7 +78,7 @@ namespace BeanIO.Builder
         /// <returns>The value of <see cref="Me"/></returns>
         public virtual T Type(Type type)
         {
-            Config.Type = type.GetFullName();
+            Config.Type = type.GetAssemblyQualifiedName();
             return Me;
         }
 
@@ -89,7 +89,7 @@ namespace BeanIO.Builder
         /// <returns>The value of <see cref="Me"/></returns>
         public virtual T Collection(Type type)
         {
-            Config.Collection = type.GetFullName();
+            Config.Collection = type.GetAssemblyQualifiedName();
             return Me;
         }
 

@@ -84,9 +84,12 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Gets the default <see cref="IRecordParserFactory"/>.
+        /// Creates the default <see cref="IRecordParserFactory"/>.
         /// </summary>
-        protected abstract IRecordParserFactory DefaultRecordParserFactory { get; }
+        /// <returns>
+        /// The new <see cref="IRecordParserFactory"/>
+        /// </returns>
+        protected abstract IRecordParserFactory CreateDefaultRecordParserFactory();
 
         /// <summary>
         /// Creates a new stream parser from a given stream configuration
@@ -212,7 +215,7 @@ namespace BeanIO.Internal.Compiler
 
             // verify the number of constructor arguments matches the provided constructor index
             if (count != args[count - 1].Accessor.ConstructorArgumentIndex + 1)
-                throw new BeanIOConfigurationException(string.Format("Missing constructor argument for bean class '{0}'", bean.GetType().GetFullName()));
+                throw new BeanIOConfigurationException(string.Format("Missing constructor argument for bean class '{0}'", bean.GetType().GetAssemblyQualifiedName()));
 
             // find a suitable constructor
             ConstructorInfo constructor = null;
@@ -228,7 +231,7 @@ namespace BeanIO.Internal.Compiler
 
             // verify a constructor was found
             if (constructor == null)
-                throw new BeanIOConfigurationException(string.Format("No suitable constructor found for bean class '{0}'", bean.PropertyType.GetFullName()));
+                throw new BeanIOConfigurationException(string.Format("No suitable constructor found for bean class '{0}'", bean.PropertyType.GetAssemblyQualifiedName()));
 
             bean.Constructor = constructor;
         }
@@ -1082,7 +1085,7 @@ namespace BeanIO.Internal.Compiler
             if (iteration.PropertyType.IsArray)
             {
                 if (!reflectedType.IsArray)
-                    throw new BeanIOConfigurationException(string.Format("Collection type 'array' does not match bean property type '{0}'", reflectedType.GetFullName()));
+                    throw new BeanIOConfigurationException(string.Format("Collection type 'array' does not match bean property type '{0}'", reflectedType.GetAssemblyQualifiedName()));
 
                 var arrayType = reflectedType.GetElementType();
                 if (type == null)
@@ -1095,7 +1098,7 @@ namespace BeanIO.Internal.Compiler
                         string.Format(
                             "Configured field array of type '{0}' is not assignable to bean property array of type '{1}'",
                             type,
-                            arrayType.GetFullName()));
+                            arrayType.GetAssemblyQualifiedName()));
                 }
             }
             else
@@ -1105,17 +1108,17 @@ namespace BeanIO.Internal.Compiler
                     string beanPropertyTypeName;
                     if (reflectedType.IsArray)
                     {
-                        beanPropertyTypeName = reflectedType.GetElementType().GetFullName() + "[]";
+                        beanPropertyTypeName = reflectedType.GetElementType().GetAssemblyQualifiedName() + "[]";
                     }
                     else
                     {
-                        beanPropertyTypeName = reflectedType.GetFullName();
+                        beanPropertyTypeName = reflectedType.GetAssemblyQualifiedName();
                     }
 
                     throw new BeanIOConfigurationException(
                         string.Format(
                             "Configured collection type '{0}' is not assignable to bean property type '{1}'",
-                            iteration.PropertyType.GetFullName(),
+                            iteration.PropertyType.GetAssemblyQualifiedName(),
                             beanPropertyTypeName));
                 }
             }
@@ -1188,7 +1191,7 @@ namespace BeanIO.Internal.Compiler
             else if (reflectedType != null && !reflectedType.IsAssignableFrom(type))
             {
                 // reflectedType may be null if for read-only streams using a constructor argument
-                throw new BeanIOConfigurationException(string.Format("Property type '{0}' is not assignable to bean property type '{1}'", config.Type, reflectedType.GetFullName()));
+                throw new BeanIOConfigurationException(string.Format("Property type '{0}' is not assignable to bean property type '{1}'", config.Type, reflectedType.GetAssemblyQualifiedName()));
             }
             else if (reflectedType.GetTypeInfo().IsPrimitive)
             {
@@ -1304,7 +1307,7 @@ namespace BeanIO.Internal.Compiler
             BeanConfig<IRecordParserFactory> parserFactoryBean = config.ParserFactory;
             if (parserFactoryBean == null)
             {
-                factory = DefaultRecordParserFactory;
+                factory = CreateDefaultRecordParserFactory();
             }
             else if (parserFactoryBean.CreateFunc != null)
             {
@@ -1314,7 +1317,7 @@ namespace BeanIO.Internal.Compiler
             {
                 if (parserFactoryBean.ClassName == null)
                 {
-                    factory = DefaultRecordParserFactory;
+                    factory = CreateDefaultRecordParserFactory();
                 }
                 else
                 {
@@ -1426,7 +1429,7 @@ namespace BeanIO.Internal.Compiler
             {
                 getterInfo = beanInfo.GetDeclaredMethod(getter);
                 if (getterInfo == null)
-                    throw new BeanIOConfigurationException(string.Format("Getter '{0}' not found for property/field '{1}' of type '{2}'", getter, property, beanClass.GetFullName()));
+                    throw new BeanIOConfigurationException(string.Format("Getter '{0}' not found for property/field '{1}' of type '{2}'", getter, property, beanClass.GetAssemblyQualifiedName()));
             }
 
             MethodInfo setterInfo;
@@ -1438,7 +1441,7 @@ namespace BeanIO.Internal.Compiler
             {
                 setterInfo = beanInfo.GetDeclaredMethod(setter);
                 if (setterInfo == null)
-                    throw new BeanIOConfigurationException(string.Format("Setter '{0}' not found for property/field '{1}' of type '{2}'", setter, property, beanClass.GetFullName()));
+                    throw new BeanIOConfigurationException(string.Format("Setter '{0}' not found for property/field '{1}' of type '{2}'", setter, property, beanClass.GetAssemblyQualifiedName()));
             }
 
             PropertyDescriptor descriptor;
@@ -1453,7 +1456,7 @@ namespace BeanIO.Internal.Compiler
                 if (fieldInfo == null)
                 {
                     if (!isConstructorArgument)
-                        throw new BeanIOConfigurationException(string.Format("Neither property or field found with name '{0}' for type '{1}'", property, beanClass.GetFullName()));
+                        throw new BeanIOConfigurationException(string.Format("Neither property or field found with name '{0}' for type '{1}'", property, beanClass.GetAssemblyQualifiedName()));
                     descriptor = new PropertyDescriptor(property, getterInfo, setterInfo);
                 }
                 else
@@ -1464,9 +1467,9 @@ namespace BeanIO.Internal.Compiler
 
             // validate a read method is found for mapping configurations that write streams
             if (!isConstructorArgument && IsReadEnabled && !descriptor.HasSetter)
-                throw new BeanIOConfigurationException(string.Format("No writeable access for property or field '{0}' in class '{1}'", property, beanClass.GetFullName()));
+                throw new BeanIOConfigurationException(string.Format("No writeable access for property or field '{0}' in class '{1}'", property, beanClass.GetAssemblyQualifiedName()));
             if (IsWriteEnabled && !descriptor.HasGetter)
-                throw new BeanIOConfigurationException(string.Format("No readable access for property or field '{0}' in class '{1}'", property, beanClass.GetFullName()));
+                throw new BeanIOConfigurationException(string.Format("No readable access for property or field '{0}' in class '{1}'", property, beanClass.GetAssemblyQualifiedName()));
 
             return descriptor;
         }
@@ -1516,7 +1519,7 @@ namespace BeanIO.Internal.Compiler
                 {
                     // otherwise validate the property type is compatible with the type handler
                     throw new BeanIOConfigurationException(
-                        string.Format("Field property type '{0}' is not compatible with assigned type handler named '{1}'", propertyType.GetFullName(), config.TypeHandler));
+                        string.Format("Field property type '{0}' is not compatible with assigned type handler named '{1}'", propertyType.GetAssemblyQualifiedName(), config.TypeHandler));
                 }
             }
             else
@@ -1534,7 +1537,7 @@ namespace BeanIO.Internal.Compiler
                 {
                     if (typeName == null)
                     {
-                        typeName = propertyType.GetFullName();
+                        typeName = propertyType.GetAssemblyQualifiedName();
                         handler = TypeHandlerFactory.GetTypeHandlerFor(propertyType, _streamFormat, typeHandlerProperties);
                     }
                     else

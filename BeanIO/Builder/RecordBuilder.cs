@@ -28,7 +28,7 @@ namespace BeanIO.Builder
             _config = new RecordConfig()
             {
                 Name = name,
-                Type = type.GetFullName(),
+                Type = type.GetAssemblyQualifiedName(),
             };
         }
 

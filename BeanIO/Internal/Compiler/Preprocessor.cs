@@ -8,7 +8,7 @@ using BeanIO.Internal.Util;
 namespace BeanIO.Internal.Compiler
 {
     /// <summary>
-    /// A Preprocesser is responsible for validating a stream configuration, setting
+    /// A Pre-processer is responsible for validating a stream configuration, setting
     /// default configuration values, and populating any calculated values before the
     /// <see cref="ParserFactorySupport"/> compiles the configuration into parser components.
     /// </summary>
@@ -18,9 +18,7 @@ namespace BeanIO.Internal.Compiler
 
         private static readonly bool SORT_XML_COMPONENTS = Settings.Instance.GetBoolean(Settings.SORT_XML_COMPONENTS_BY_POSITION);
 
-        protected readonly StreamConfig _stream;
-
-        protected PropertyConfig _propertyRoot;
+        private readonly StreamConfig _stream;
 
         private bool _recordIgnored;
 
@@ -28,6 +26,16 @@ namespace BeanIO.Internal.Compiler
         {
             _stream = stream;
         }
+
+        /// <summary>
+        /// Gets the stream configuration
+        /// </summary>
+        protected StreamConfig Stream
+        {
+            get { return _stream; }
+        }
+
+        protected PropertyConfig PropertyRoot { get; set; }
 
         protected override void InitializeStream(StreamConfig stream)
         {
@@ -73,7 +81,7 @@ namespace BeanIO.Internal.Compiler
             if (group.Type != null && group.Target != null)
                 throw new BeanIOConfigurationException("Cannot set both 'class' and 'value'");
 
-            if (_propertyRoot != null)
+            if (PropertyRoot != null)
             {
                 group.IsBound = true;
                 if (group.Collection != null && group.Type == null)
@@ -90,8 +98,8 @@ namespace BeanIO.Internal.Compiler
                     group.IsBound = false;
             }
 
-            if (_propertyRoot == null && (group.Type != null || group.Target != null))
-                _propertyRoot = group;
+            if (PropertyRoot == null && (group.Type != null || group.Target != null))
+                PropertyRoot = group;
         }
 
         /// <summary>
@@ -142,8 +150,8 @@ namespace BeanIO.Internal.Compiler
                 }
             }
 
-            if (_propertyRoot == group)
-                _propertyRoot = null;
+            if (PropertyRoot == group)
+                PropertyRoot = null;
         }
 
         /// <summary>
@@ -157,7 +165,7 @@ namespace BeanIO.Internal.Compiler
             _recordIgnored = false;
             if (record.Type == null && record.Target == null)
             {
-                if (_propertyRoot == null || record.IsRepeating)
+                if (PropertyRoot == null || record.IsRepeating)
                     _recordIgnored = true;
             }
 
@@ -167,9 +175,9 @@ namespace BeanIO.Internal.Compiler
             if (record.MaxOccurs != null && record.MaxOccurs <= 0)
                 throw new BeanIOConfigurationException("Maximum occurrences must be greater than 0");
 
-            if (_propertyRoot == null)
+            if (PropertyRoot == null)
             {
-                _propertyRoot = record;
+                PropertyRoot = record;
                 if (record.IsLazy)
                     throw new BeanIOConfigurationException("Lazy cannot be true for unbound records");
             }
@@ -185,8 +193,8 @@ namespace BeanIO.Internal.Compiler
         {
             FinalizeSegment(record);
 
-            if (_propertyRoot == record)
-                _propertyRoot = null;
+            if (PropertyRoot == record)
+                PropertyRoot = null;
         }
 
         /// <summary>
@@ -222,7 +230,7 @@ namespace BeanIO.Internal.Compiler
             if (segment.Collection != null && segment.Type == null && segment.Target == null)
                 throw new BeanIOConfigurationException("Class or value required if collection is set");
 
-            if (_propertyRoot == null || _propertyRoot != segment)
+            if (PropertyRoot == null || PropertyRoot != segment)
             {
                 segment.IsBound = true;
                 if ((segment.MaxOccurs == null || segment.MaxOccurs > 1) && segment.Collection == null)
@@ -317,7 +325,7 @@ namespace BeanIO.Internal.Compiler
         protected override void HandleConstant(ConstantConfig constant)
         {
             constant.IsBound = true;
-            
+
             if (constant.Name == null)
                 throw new BeanIOConfigurationException("Missing property name");
         }

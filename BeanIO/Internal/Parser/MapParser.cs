@@ -303,7 +303,7 @@ namespace BeanIO.Internal.Parser
             if (Key != null)
                 s.AppendFormat(", key=${0}", Key.Name);
             if (PropertyType != null)
-                s.AppendFormat(", type={0}", PropertyType.GetFullName());
+                s.AppendFormat(", type={0}", PropertyType.GetAssemblyQualifiedName());
         }
     }
 }

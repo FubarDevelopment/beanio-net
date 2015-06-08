@@ -58,6 +58,10 @@
     <Compile Include="Config\MergedPropertiesProvider.cs" />
     <Compile Include="Config\Properties.cs" />
     <Compile Include="Internal\Compiler\Accessor\ReflectionAccessorFactory.cs" />
+    <Compile Include="Internal\Compiler\Csv\CsvParserFactory.cs" />
+    <Compile Include="Internal\Compiler\Delimited\DelimitedParserFactory.cs" />
+    <Compile Include="Internal\Compiler\Flat\FlatParserFactory.cs" />
+    <Compile Include="Internal\Compiler\Flat\FlatPreprocessor.cs" />
     <Compile Include="Internal\Compiler\IParserFactory.cs" />
     <Compile Include="Internal\Compiler\IPropertyAccessorFactory.cs" />
     <Compile Include="Internal\Compiler\ParserFactorySupport.cs" />
@@ -298,11 +302,7 @@
     <EmbeddedResource Include="Internal\Config\beanio.properties" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Internal\Compiler\Csv\" />
-    <Folder Include="Internal\Compiler\Delimited\" />
-    <Folder Include="Internal\Compiler\Flat\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

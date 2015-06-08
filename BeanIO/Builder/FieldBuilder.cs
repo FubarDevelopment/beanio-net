@@ -261,7 +261,7 @@ namespace BeanIO.Builder
         /// <returns>The value of <see cref="Me"/></returns>
         public FieldBuilder TypeHandler<THandler>() where THandler : ITypeHandler, new()
         {
-            Config.TypeHandler = typeof(THandler).GetFullName();
+            Config.TypeHandler = typeof(THandler).GetAssemblyQualifiedName();
             return Me;
         }
 

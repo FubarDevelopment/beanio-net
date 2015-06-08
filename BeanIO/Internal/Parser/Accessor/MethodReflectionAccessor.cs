@@ -25,7 +25,7 @@ namespace BeanIO.Internal.Parser.Accessor
         public override object GetValue(object bean)
         {
             if (_getter == null)
-                throw new BeanIOException(string.Format("There is no getter defined on bean class '{0}'", bean.GetType().GetFullName()));
+                throw new BeanIOException(string.Format("There is no getter defined on bean class '{0}'", bean.GetType().GetAssemblyQualifiedName()));
 
             try
             {
@@ -33,7 +33,7 @@ namespace BeanIO.Internal.Parser.Accessor
             }
             catch (Exception ex)
             {
-                throw new BeanIOException(string.Format("Failed to invoke method '{0}' on bean class '{1}': {2}", _getter.Name, bean.GetType().GetFullName(), ex.Message), ex);
+                throw new BeanIOException(string.Format("Failed to invoke method '{0}' on bean class '{1}': {2}", _getter.Name, bean.GetType().GetAssemblyQualifiedName(), ex.Message), ex);
             }
         }
 
@@ -45,7 +45,7 @@ namespace BeanIO.Internal.Parser.Accessor
         public override void SetValue(object bean, object value)
         {
             if (_setter == null)
-                throw new BeanIOException(string.Format("There is no setter defined on bean class '{0}'", bean.GetType().GetFullName()));
+                throw new BeanIOException(string.Format("There is no setter defined on bean class '{0}'", bean.GetType().GetAssemblyQualifiedName()));
 
             try
             {
@@ -53,7 +53,7 @@ namespace BeanIO.Internal.Parser.Accessor
             }
             catch (Exception ex)
             {
-                throw new BeanIOException(string.Format("Failed to invoke method '{0}' on bean class '{1}': {2}", _setter.Name, bean.GetType().GetFullName(), ex.Message), ex);
+                throw new BeanIOException(string.Format("Failed to invoke method '{0}' on bean class '{1}': {2}", _setter.Name, bean.GetType().GetAssemblyQualifiedName(), ex.Message), ex);
             }
         }
     }

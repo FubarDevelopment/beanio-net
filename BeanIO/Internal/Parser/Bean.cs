@@ -295,7 +295,7 @@ namespace BeanIO.Internal.Parser
             }
             catch (Exception ex)
             {
-                throw new BeanReaderException(string.Format("Failed to instantiate class '{0}'", beanClass.GetFullName()), ex);
+                throw new BeanReaderException(string.Format("Failed to instantiate class '{0}'", beanClass.GetAssemblyQualifiedName()), ex);
             }
         }
 
