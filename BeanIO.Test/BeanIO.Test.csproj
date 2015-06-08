@@ -57,9 +57,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Beans\Bean.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Beans\Order.cs" />
+    <Compile Include="Beans\OrderBatch.cs" />
+    <Compile Include="Beans\OrderItem.cs" />
+    <Compile Include="Beans\Person.cs" />
     <Compile Include="ConfigUtil.cs" />
+    <Compile Include="Config\ConcreteBean.cs" />
+    <Compile Include="Config\IInterfaceBean.cs" />
     <Compile Include="Internal\Util\MarkableTextReaderTests.cs" />
     <Compile Include="Internal\Parser\OptionalValueTests.cs" />
+    <Compile Include="Parser\AbstractParserTest.cs" />
+    <Compile Include="Parser\Annotation\AnnotatedBulb.cs" />
+    <Compile Include="Parser\Annotation\AnnotatedFloor.cs" />
+    <Compile Include="Parser\Annotation\AnnotatedLight.cs" />
+    <Compile Include="Parser\Annotation\AnnotatedRoom.cs" />
+    <Compile Include="Parser\Annotation\AnnotatedUser.cs" />
+    <Compile Include="Parser\Annotation\AnnotatedUserSupport.cs" />
+    <Compile Include="Parser\Annotation\AnnotationTest.cs" />
+    <Compile Include="Parser\Annotation\IAnnotatedUserInterface.cs" />
+    <Compile Include="Parser\ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamFactoryTest.cs" />
   </ItemGroup>
@@ -77,6 +96,29 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="mapping.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Config\a.xml" />
+    <EmbeddedResource Include="Config\ab.xml" />
+    <EmbeddedResource Include="Config\ab_template.xml" />
+    <EmbeddedResource Include="Config\b.xml" />
+    <EmbeddedResource Include="Config\collectionAttributeField.xml" />
+    <EmbeddedResource Include="Config\fieldNamespaceForText.xml" />
+    <EmbeddedResource Include="Config\import.xml" />
+    <EmbeddedResource Include="Config\imported.xml" />
+    <EmbeddedResource Include="Config\invalidBeanClass.xml" />
+    <EmbeddedResource Include="Config\invalidBeanXmlType.xml" />
+    <EmbeddedResource Include="Config\invalidFieldXmlType.xml" />
+    <EmbeddedResource Include="Config\invalidImport_InvalidResource.xml" />
+    <EmbeddedResource Include="Config\invalidImport_ResourceNotFound.xml" />
+    <EmbeddedResource Include="Config\invalidSetter.xml" />
+    <EmbeddedResource Include="Config\invalidStreamMode.xml" />
+    <EmbeddedResource Include="Config\invalidStreamXmlType.xml" />
+    <EmbeddedResource Include="Config\nillableAttributeField.xml" />
+    <EmbeddedResource Include="Config\noBeanProperty.xml" />
+    <EmbeddedResource Include="Config\noReadableMethod.xml" />
+    <EmbeddedResource Include="Config\noWriteableMethod.xml" />
+    <EmbeddedResource Include="Config\prefixWithNoNamespace.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

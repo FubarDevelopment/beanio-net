@@ -254,7 +254,7 @@ namespace BeanIO.Internal.Config.Annotation
             fc.OccursRef = fa.OccursRef.ToValue();
 
             fc.Length = fa.Length.ToValue();
-            fc.Padding = (fa.Padding >= char.MinValue && fa.Padding <= char.MaxValue) ? (char?)null : char.ConvertFromUtf32(fa.Padding)[0];
+            fc.Padding = (fa.Padding >= char.MinValue && fa.Padding <= char.MaxValue) ? char.ConvertFromUtf32(fa.Padding)[0] : (char?)null;
             fc.Justify = fa.Align;
             fc.KeepPadding = fa.KeepPadding;
             fc.IsLenientPadding = fa.LenientPadding;
@@ -347,7 +347,7 @@ namespace BeanIO.Internal.Config.Annotation
                         var info = new TypeInfo
                             {
                                 ArgumentIndex = ++index,
-                                Name = fa.Name.ToValue(),
+                                Name = fa.Name.ToValue() ?? parameter.Name,
                                 Type = parameter.ParameterType,
                             };
 
@@ -357,7 +357,12 @@ namespace BeanIO.Internal.Config.Annotation
             }
             catch (Exception ex)
             {
-                throw new BeanIOConfigurationException(string.Format("Invalid FieldAttribute annotation on a constructor parameter in class '{0}': {1}", clazz.GetAssemblyQualifiedName(), ex.Message), ex);
+                throw new BeanIOConfigurationException(
+                    string.Format(
+                        "Invalid FieldAttribute annotation on a constructor parameter in class '{0}': {1}",
+                        clazz.GetAssemblyQualifiedName(),
+                        ex.Message),
+                    ex);
             }
         }
 
@@ -701,7 +706,7 @@ namespace BeanIO.Internal.Config.Annotation
             }
 
             info.PropertyType = propertyType;
-            info.PropertyName = propertyType.Name;
+            info.PropertyName = propertyType.GetAssemblyQualifiedName();
             info.CollectionName = collectionName;
         }
 
@@ -736,8 +741,10 @@ namespace BeanIO.Internal.Config.Annotation
             if (val == null)
                 return null;
             if (val < 0)
-                // TODO: Should return null to get rid of int.MaxValue
-                return int.MaxValue;
+            {
+                // maximum value (i.e. unbounded)
+                return null;
+            }
             return val.Value;
         }
 
@@ -772,25 +779,17 @@ namespace BeanIO.Internal.Config.Annotation
 
         private class OrdinalComparer : IComparer<ComponentConfig>, IEqualityComparer<ComponentConfig>
         {
-            /// <summary>
-            /// Compares the ordinal values of two component configurations.
-            /// </summary>
-            /// <param name="x">First component configuration</param>
-            /// <param name="y">Second component configuration</param>
-            /// <returns>&lt;0 when <paramref name="x"/> is smaller than <paramref name="y"/>,
-            /// &gt;0 when <paramref name="x"/> is greater than <paramref name="y"/>,
-            /// otherwise 0</returns>
             public int Compare(ComponentConfig x, ComponentConfig y)
             {
-                return x.Ordinal.GetValueOrDefault().CompareTo(y.Ordinal.GetValueOrDefault());
+                var o1 = x.Ordinal;
+                var o2 = y.Ordinal;
+                if (o1 == null)
+                    return o2 == null ? 0 : 1;
+                if (o2 == null)
+                    return -1;
+                return o1.Value.CompareTo(o2.Value);
             }
 
-            /// <summary>
-            /// Equality comparison of the ordinal values of two component configurations
-            /// </summary>
-            /// <param name="x">First component configuration</param>
-            /// <param name="y">Second component configuration</param>
-            /// <returns>true, when the ordinal values of both component configurations are the same.</returns>
             public bool Equals(ComponentConfig x, ComponentConfig y)
             {
                 if (ReferenceEquals(x, y))
@@ -798,11 +797,6 @@ namespace BeanIO.Internal.Config.Annotation
                 return Compare(x, y) == 0;
             }
 
-            /// <summary>
-            /// Calculates the hash code of the ordinal value of a component configuration
-            /// </summary>
-            /// <param name="obj">The component configuration</param>
-            /// <returns>the hash code</returns>
             public int GetHashCode(ComponentConfig obj)
             {
                 return obj.Ordinal.GetValueOrDefault().GetHashCode();

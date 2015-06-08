@@ -10,6 +10,14 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Initializes a new instance of the <see cref="SegmentAttribute" /> class.
         /// </summary>
+        public SegmentAttribute()
+            : this(null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SegmentAttribute" /> class.
+        /// </summary>
         /// <param name="name">The segment name.</param>
         public SegmentAttribute(string name)
         {

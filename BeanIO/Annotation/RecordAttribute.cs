@@ -6,9 +6,17 @@ namespace BeanIO.Annotation
     /// <summary>
     /// Record annotation for classes, and for fields and methods in a class annotated by a parent Group.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
     public class RecordAttribute : Attribute
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RecordAttribute" /> class.
+        /// </summary>
+        public RecordAttribute()
+            : this(null)
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RecordAttribute" /> class.
         /// </summary>

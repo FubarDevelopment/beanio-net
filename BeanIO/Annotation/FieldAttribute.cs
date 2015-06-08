@@ -9,9 +9,21 @@ namespace BeanIO.Annotation
     /// <summary>
     /// Field annotation applied to fields, properties, methods or constructor parameters.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Method)]
     public class FieldAttribute : Attribute
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FieldAttribute"/> class.
+        /// </summary>
+        public FieldAttribute()
+            : this(null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FieldAttribute"/> class.
+        /// </summary>
+        /// <param name="name">The field name</param>
         public FieldAttribute(string name)
         {
             Name = name;
@@ -28,7 +40,6 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Gets the field name.
         /// </summary>
-        [Field("Test", Padding = 'a')]
         public string Name { get; private set; }
 
         /// <summary>
