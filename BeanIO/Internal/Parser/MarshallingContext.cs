@@ -57,7 +57,7 @@ namespace BeanIO.Internal.Parser
         /// <remarks>
         /// This method uses the <see cref="ToRecordObject"/>.
         /// </remarks>
-        public void WriteRecord()
+        public virtual void WriteRecord()
         {
             RecordWriter.Write(ToRecordObject());
             Clear();

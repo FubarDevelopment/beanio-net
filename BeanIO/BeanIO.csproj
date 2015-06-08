@@ -68,6 +68,8 @@
     <Compile Include="Internal\Compiler\Preprocessor.cs" />
     <Compile Include="Internal\Compiler\ProcessorSupport.cs" />
     <Compile Include="Internal\Compiler\StreamCompiler.cs" />
+    <Compile Include="Internal\Compiler\Xml\XmlParserFactory.cs" />
+    <Compile Include="Internal\Compiler\Xml\XmlPreprocessor.cs" />
     <Compile Include="Internal\Config\Annotation\AnnotationParser.cs" />
     <Compile Include="Internal\Config\BeanConfig.cs" />
     <Compile Include="Internal\Config\BeanIOConfig.cs" />
@@ -113,11 +115,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DefaultMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Internal\Parser\Format\Xml\Annotations\IsGroupElementAnnotation.cs" />
+    <Compile Include="Internal\Parser\Format\Xml\Annotations\IsDefaultNamespaceAnnotation.cs" />
+    <Compile Include="Internal\Parser\Format\Xml\Annotations\IsNamespaceIgnoredAnnotation.cs" />
     <Compile Include="Internal\Parser\Format\Xml\DefaultMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DefaultMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Internal\Parser\Format\Xml\IXmlNode.cs" />
+    <Compile Include="Internal\Parser\Format\Xml\XmlMarshallingContext.cs" />
+    <Compile Include="Internal\Parser\Format\Xml\XmlStreamFormat.cs" />
+    <Compile Include="Internal\Parser\Format\Xml\XmlUnmarshallingContext.cs" />
     <Compile Include="Internal\Parser\IParserLocal.cs" />
     <Compile Include="Internal\Parser\AbortRecordUnmarshalligException.cs" />
     <Compile Include="Internal\Parser\Accessor\FieldReflectionAccessor.cs" />

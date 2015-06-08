@@ -36,7 +36,7 @@ namespace BeanIO.Internal.Parser
         /// field positions and indices.
         /// </summary>
         /// <param name="iteration">the <see cref="IIteration"/> to push</param>
-        public void PushIteration(IIteration iteration)
+        public virtual void PushIteration(IIteration iteration)
         {
             _iterations.Push(iteration);
         }
@@ -45,7 +45,7 @@ namespace BeanIO.Internal.Parser
         /// Pops the last <see cref="IIteration"/> pushed onto the stack.
         /// </summary>
         /// <returns>the top most <see cref="IIteration"/></returns>
-        public IIteration PopIteration()
+        public virtual IIteration PopIteration()
         {
             var iter = _iterations.Pop();
             if (iter.IsDynamicIteration)

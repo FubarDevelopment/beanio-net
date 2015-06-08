@@ -84,19 +84,11 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Creates the default <see cref="IRecordParserFactory"/>.
-        /// </summary>
-        /// <returns>
-        /// The new <see cref="IRecordParserFactory"/>
-        /// </returns>
-        protected abstract IRecordParserFactory CreateDefaultRecordParserFactory();
-
-        /// <summary>
         /// Creates a new stream parser from a given stream configuration
         /// </summary>
         /// <param name="config">the stream configuration</param>
         /// <returns>the created <see cref="Parser.Stream"/></returns>
-        public Parser.Stream CreateStream(StreamConfig config)
+        public virtual Parser.Stream CreateStream(StreamConfig config)
         {
             if (config.Name == null)
                 throw new BeanIOConfigurationException("stream name not configured");
@@ -125,6 +117,14 @@ namespace BeanIO.Internal.Compiler
 
             return _stream;
         }
+
+        /// <summary>
+        /// Creates the default <see cref="IRecordParserFactory"/>.
+        /// </summary>
+        /// <returns>
+        /// The new <see cref="IRecordParserFactory"/>
+        /// </returns>
+        protected abstract IRecordParserFactory CreateDefaultRecordParserFactory();
 
         /// <summary>
         /// Creates a stream configuration pre-processor
