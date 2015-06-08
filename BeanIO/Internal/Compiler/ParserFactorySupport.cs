@@ -7,15 +7,15 @@ using System.Reflection;
 using System.Resources;
 
 using BeanIO.Builder;
+using BeanIO.Config;
 using BeanIO.Internal.Compiler.Accessor;
 using BeanIO.Internal.Config;
 using BeanIO.Internal.Parser;
 using BeanIO.Internal.Parser.Accessor;
 using BeanIO.Internal.Parser.Message;
 using BeanIO.Internal.Util;
+using BeanIO.Stream;
 using BeanIO.Types;
-
-using JetBrains.Annotations;
 
 namespace BeanIO.Internal.Compiler
 {
@@ -35,7 +35,7 @@ namespace BeanIO.Internal.Compiler
     {
         private static readonly string CONSTRUCTOR_PREFIX = "#";
 
-        private static readonly bool AllowProtectedPropertyAccess = Settings.Instance.GetBoolean(Settings.ALLOW_PROTECTED_PROPERTY_ACCESS);
+        private static readonly bool _allowProtectedPropertyAccess = Settings.Instance.GetBoolean(Settings.ALLOW_PROTECTED_PROPERTY_ACCESS);
 
         private static readonly Component _unbound = new UnboundComponent();
 
@@ -59,7 +59,7 @@ namespace BeanIO.Internal.Compiler
         public TypeHandlerFactory TypeHandlerFactory { get; set; }
 
         /// <summary>
-        /// Returns a value indicating whether the stream definition must support reading an input stream.
+        /// Gets a value indicating whether the stream definition must support reading an input stream.
         /// </summary>
         public bool IsReadEnabled
         {
@@ -67,7 +67,7 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Returns a value indicating whether the stream definition must support writing to an output stream.
+        /// Gets a value indicating whether the stream definition must support writing to an output stream.
         /// </summary>
         public bool IsWriteEnabled
         {
@@ -84,6 +84,11 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
+        /// Gets the default <see cref="IRecordParserFactory"/>.
+        /// </summary>
+        protected abstract IRecordParserFactory DefaultRecordParserFactory { get; }
+
+        /// <summary>
         /// Creates a new stream parser from a given stream configuration
         /// </summary>
         /// <param name="config">the stream configuration</param>
@@ -93,7 +98,7 @@ namespace BeanIO.Internal.Compiler
             if (config.Name == null)
                 throw new BeanIOConfigurationException("stream name not configured");
 
-            // pre-process configuration settings to set defaults and validate as much as possible 
+            // pre-process configuration settings to set defaults and validate as much as possible
             CreatePreprocessor(config).Process(config);
 
             _accessorFactory = new ReflectionAccessorFactory();
@@ -133,7 +138,7 @@ namespace BeanIO.Internal.Compiler
 
         protected abstract IRecordFormat CreateRecordFormat(RecordConfig config);
 
-        protected abstract IFieldFormat CreateFieldFormat(FieldConfig config);
+        protected abstract IFieldFormat CreateFieldFormat(FieldConfig config, Type type);
 
         protected virtual void PushParser(Component component)
         {
@@ -214,7 +219,7 @@ namespace BeanIO.Internal.Compiler
             foreach (var testConstructor in bean.GetType().GetTypeInfo().DeclaredConstructors.Where(x => x.GetParameters().Length == count))
             {
                 var argsMatching = testConstructor.GetParameters().Select((p, i) => p.ParameterType.IsAssignableFrom(args[i].PropertyType)).All(x => x);
-                if (argsMatching && (testConstructor.IsPublic || AllowProtectedPropertyAccess))
+                if (argsMatching && (testConstructor.IsPublic || _allowProtectedPropertyAccess))
                 {
                     constructor = testConstructor;
                     break;
@@ -583,7 +588,7 @@ namespace BeanIO.Internal.Compiler
             if (config.OccursRef != null)
             {
                 var occurs = FindDynamicOccurs(_parserStack.Peek(), config.OccursRef);
-                aggregation.setOccurs(occurs);
+                aggregation.Occurs = occurs;
             }
 
             PushParser(aggregation);
@@ -646,7 +651,7 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Called by <see cref="FinalizeSegment"/> to finalize segment iteration.
+        /// Called by <see cref="FinalizeSegment(SegmentConfig)"/> to finalize segment iteration.
         /// </summary>
         /// <param name="config">the segment configuration</param>
         /// <param name="property">the property bound to the segment, or null if no property was bound</param>
@@ -677,7 +682,7 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Called by <see cref="FinalizeSegment"/> to finalize the segment component.
+        /// Called by <see cref="FinalizeSegment(SegmentConfig)"/> to finalize the segment component.
         /// </summary>
         /// <param name="config">the segment configuration</param>
         /// <returns>the target property</returns>
@@ -725,7 +730,7 @@ namespace BeanIO.Internal.Compiler
         /// <summary>
         /// Processes a field configuration
         /// </summary>
-        /// <param name="field">the field configuration to process</param>
+        /// <param name="config">the field configuration to process</param>
         protected override void HandleField(FieldConfig config)
         {
             if (config.Name == null)
@@ -787,10 +792,10 @@ namespace BeanIO.Internal.Compiler
             }
 
             // if not already determined, this will update the field type
-            field.Handler = FindTypeHandler(config, field));
+            field.Handler = FindTypeHandler(config, field);
 
             // set the default field value using the configured type handler
-            field.DefaultValue  = ParseDefaultValue(field, config.Default));
+            field.DefaultValue  = ParseDefaultValue(field, config.Default);
 
             field.Format = CreateFieldFormat(config, field.PropertyType);
 
@@ -825,10 +830,9 @@ namespace BeanIO.Internal.Compiler
                 };
 
             // determine the property type
-            Type propertyType = null;
             if (config.Type != null)
             {
-                propertyType = config.Type.ToType();
+                Type propertyType = config.Type.ToType();
                 if (propertyType == null)
                     throw new BeanIOConfigurationException(string.Format("Invalid type or type alias '{0}'", config.Type));
             }
@@ -890,7 +894,7 @@ namespace BeanIO.Internal.Compiler
             }
 
             // create the appropriate iteration type
-            Aggregation aggregation = null;
+            Aggregation aggregation;
             if (collectionType.IsArray)
             {
                 aggregation = new ArrayParser();
@@ -937,7 +941,7 @@ namespace BeanIO.Internal.Compiler
                     if (reflectedType != null)
                     {
                         // use the reflected component type for an array
-                        arrayType = reflectedType.getComponentType();
+                        arrayType = reflectedType.GetElementType();
 
                         // override target type if we were able to reflect its value
                         property.PropertyType = arrayType;
@@ -998,6 +1002,7 @@ namespace BeanIO.Internal.Compiler
             var collectionType = aggregation.PropertyType;
             if (collectionType == null)
                 return;
+
             // if collection was set, then this is a property of its parent
             var reflectedType = ReflectCollectionType(aggregation, property, config.Getter, config.Setter);
 
@@ -1010,7 +1015,7 @@ namespace BeanIO.Internal.Compiler
                 if (reflectedType != null)
                 {
                     // use the reflected component type for an array
-                    arrayType = reflectedType.getComponentType();
+                    arrayType = reflectedType.GetElementType();
 
                     // override target type if we were able to reflect its value
                     property.PropertyType = arrayType;
@@ -1063,29 +1068,11 @@ namespace BeanIO.Internal.Compiler
                 setter = null;
             }
 
-            Type reflectedType;
-            try
-            {
-                // set the property descriptor on the field
-                PropertyInfo descriptor = GetPropertyDescriptor(iteration.Name, getter, setter, construtorArgumentIndex >= 0);
-                reflectedType = descriptor.PropertyType;
+            // set the property descriptor on the field
+            var descriptor = GetPropertyDescriptor(iteration.Name, getter, setter, construtorArgumentIndex >= 0);
+            var reflectedType = descriptor.PropertyType;
 
-                iteration.Accessor = _accessorFactory.CreatePropertyAccessor(parent.PropertyType, descriptor, construtorArgumentIndex);
-            }
-            catch (BeanIOConfigurationException ex)
-            {
-                // if a method accessor is not found, attempt to find a field declaration
-                FieldInfo field = GetField(iteration.Name);
-                if (field == null)
-                {
-                    // give up and rethrow the exception
-                    throw;
-                }
-
-                reflectedType = field.FieldType;
-
-                iteration.Accessor = _accessorFactory.CreatePropertyAccessor(parent.PropertyType, field, construtorArgumentIndex);
-            }
+            iteration.Accessor = _accessorFactory.CreatePropertyAccessor(parent.PropertyType, descriptor, construtorArgumentIndex);
 
             // reflectedType may be null for read-only streams using a constructor argument
             if (reflectedType == null)
@@ -1115,7 +1102,7 @@ namespace BeanIO.Internal.Compiler
             {
                 if (!reflectedType.IsAssignableFrom(iteration.PropertyType))
                 {
-                    String beanPropertyTypeName;
+                    string beanPropertyTypeName;
                     if (reflectedType.IsArray)
                     {
                         beanPropertyTypeName = reflectedType.GetElementType().GetFullName() + "[]";
@@ -1186,28 +1173,11 @@ namespace BeanIO.Internal.Compiler
                 setter = null;
             }
 
-            Type reflectedType;
-            try
-            {
-                // set the property descriptor on the field
-                PropertyInfo descriptor = GetPropertyDescriptor(config.Name, getter, setter, construtorArgumentIndex >= 0);
-                reflectedType = descriptor.PropertyType;
+            // set the property descriptor on the field
+            var descriptor = GetPropertyDescriptor(config.Name, getter, setter, construtorArgumentIndex >= 0);
+            var reflectedType = descriptor.PropertyType;
 
-                property.Accessor = _accessorFactory.CreatePropertyAccessor(parent.PropertyType, descriptor, construtorArgumentIndex);
-            }
-            catch (BeanIOConfigurationException ex)
-            {
-                // if a method accessor is not found, attempt to find a field
-                FieldInfo field = GetField(config.Name);
-                if (field == null)
-                {
-                    // give up and rethrow the exception
-                    throw;
-                }
-                reflectedType = field.FieldType;
-
-                property.Accessor = _accessorFactory.CreatePropertyAccessor(parent.PropertyType, field, construtorArgumentIndex);
-            }
+            property.Accessor = _accessorFactory.CreatePropertyAccessor(parent.PropertyType, descriptor, construtorArgumentIndex);
 
             // validate the reflected type
             var type = property.PropertyType;
@@ -1215,9 +1185,9 @@ namespace BeanIO.Internal.Compiler
             {
                 property.PropertyType = reflectedType;
             }
-            // reflectedType may be null if for read-only streams using a constructor argument
             else if (reflectedType != null && !reflectedType.IsAssignableFrom(type))
             {
+                // reflectedType may be null if for read-only streams using a constructor argument
                 throw new BeanIOConfigurationException(string.Format("Property type '{0}' is not assignable to bean property type '{1}'", config.Type, reflectedType.GetFullName()));
             }
             else if (reflectedType.GetTypeInfo().IsPrimitive)
@@ -1296,6 +1266,80 @@ namespace BeanIO.Internal.Compiler
             return beanClass;
         }
 
+        /// <summary>
+        /// Parses a default field value.
+        /// </summary>
+        /// <param name="field">the field</param>
+        /// <param name="text">the text to parse</param>
+        /// <returns>the default value</returns>
+        protected virtual object ParseDefaultValue(Field field, string text)
+        {
+            if (text == null)
+                return null;
+
+            var handler = field.Handler;
+            if (handler == null)
+                return text;
+
+            try
+            {
+                return handler.Parse(text);
+            }
+            catch (FormatException ex)
+            {
+                throw new BeanIOConfigurationException(string.Format("Type conversion failed for configured default '{0}': {1}", text, ex.Message), ex);
+            }
+        }
+
+        /// <summary>
+        /// Creates the <see cref="IRecordParserFactory"/> for a stream configuration.
+        /// </summary>
+        /// <param name="config">the stream configuration</param>
+        /// <returns>the created <see cref="IRecordParserFactory"/></returns>
+        protected virtual IRecordParserFactory CreateRecordParserFactory(StreamConfig config)
+        {
+            IRecordParserFactory factory;
+
+            // configure the record writer factory
+            BeanConfig<IRecordParserFactory> parserFactoryBean = config.ParserFactory;
+            if (parserFactoryBean == null)
+            {
+                factory = DefaultRecordParserFactory;
+            }
+            else if (parserFactoryBean.CreateFunc != null)
+            {
+                factory = parserFactoryBean.CreateFunc();
+            }
+            else
+            {
+                if (parserFactoryBean.ClassName == null)
+                {
+                    factory = DefaultRecordParserFactory;
+                }
+                else
+                {
+                    factory = BeanUtil.CreateBean(parserFactoryBean.ClassName) as IRecordParserFactory;
+                    if (factory != null)
+                    {
+                        throw new BeanIOConfigurationException(string.Format("Configured writer factory class '{0}' does not implement RecordWriterFactory", parserFactoryBean.ClassName));
+                    }
+                }
+
+                BeanUtil.Configure(factory, parserFactoryBean.Properties);
+            }
+
+            try
+            {
+                Debug.Assert(factory != null, "factory != null");
+                factory.Init();
+                return factory;
+            }
+            catch (ArgumentException ex)
+            {
+                throw new BeanIOConfigurationException(string.Format("Invalid parser setting(s): {0}", ex.Message), ex);
+            }
+        }
+
         private IProperty FindTarget(Component segment, string name)
         {
             Component c = FindDescendant("value", segment, name);
@@ -1320,7 +1364,7 @@ namespace BeanIO.Internal.Compiler
                 if (match != null)
                 {
                     if (c is IIteration)
-                        throw new BeanIOConfigurationException(string.Format("Referenced component '{0}' may not repeat, or belong to a segment that repeats", name));
+                        throw new BeanIOConfigurationException(string.Format("Referenced component '{0}' of type '{1}' may not repeat, or belong to a segment that repeats", name, type));
                     return match;
                 }
             }
@@ -1360,34 +1404,155 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Returns the <see cref="PropertyInfo"/> for getting and setting a property value from
+        /// Returns the <see cref="PropertyDescriptor"/> for getting and setting a property value from
         /// current bean class on the property stack.
         /// </summary>
         /// <param name="property">the property name</param>
         /// <param name="getter">the getter method name, or null to use the default</param>
         /// <param name="setter">the setter method name, or null to use the default</param>
         /// <param name="isConstructorArgument">is this a constructor argument?</param>
-        /// <returns>the <see cref="PropertyInfo"/></returns>
-        private PropertyInfo GetPropertyDescriptor(string property, string getter, string setter, bool isConstructorArgument)
+        /// <returns>the <see cref="PropertyDescriptor"/></returns>
+        private PropertyDescriptor GetPropertyDescriptor(string property, string getter, string setter, bool isConstructorArgument)
         {
             var beanClass = ((IProperty)_propertyStack.Peek()).PropertyType;
+            var beanInfo = beanClass.GetTypeInfo();
 
-            // calling new PropertyDescriptor(...) will throw an exception if either the getter
-            // or setter method is not null and not found
-            PropertyInfo descriptor = null;
-            try
+            MethodInfo getterInfo;
+            if (string.IsNullOrEmpty(getter))
             {
-                if (setter != null && getter != null)
+                getterInfo = null;
+            }
+            else
+            {
+                getterInfo = beanInfo.GetDeclaredMethod(getter);
+                if (getterInfo == null)
+                    throw new BeanIOConfigurationException(string.Format("Getter '{0}' not found for property/field '{1}' of type '{2}'", getter, property, beanClass.GetFullName()));
+            }
+
+            MethodInfo setterInfo;
+            if (string.IsNullOrEmpty(setter))
+            {
+                setterInfo = null;
+            }
+            else
+            {
+                setterInfo = beanInfo.GetDeclaredMethod(setter);
+                if (setterInfo == null)
+                    throw new BeanIOConfigurationException(string.Format("Setter '{0}' not found for property/field '{1}' of type '{2}'", setter, property, beanClass.GetFullName()));
+            }
+
+            PropertyDescriptor descriptor;
+            var propertyInfo = beanInfo.GetDeclaredProperty(property);
+            if (propertyInfo != null)
+            {
+                descriptor = new PropertyDescriptor(propertyInfo, getterInfo, setterInfo);
+            }
+            else
+            {
+                var fieldInfo = beanInfo.GetDeclaredField(property);
+                if (fieldInfo == null)
                 {
-                    descriptor = beanClass.GetTypeInfo().GetDeclaredProperty(property);
+                    if (!isConstructorArgument)
+                        throw new BeanIOConfigurationException(string.Format("Neither property or field found with name '{0}' for type '{1}'", property, beanClass.GetFullName()));
+                    descriptor = new PropertyDescriptor(property, getterInfo, setterInfo);
                 }
                 else
                 {
-                    // the Introspector class caches BeanInfo so subsequent calls shouldn't be a concern
-                    var info = beanClass.GetTypeInfo();
-
+                    descriptor = new PropertyDescriptor(fieldInfo, getterInfo, setterInfo);
                 }
             }
+
+            // validate a read method is found for mapping configurations that write streams
+            if (!isConstructorArgument && IsReadEnabled && !descriptor.HasSetter)
+                throw new BeanIOConfigurationException(string.Format("No writeable access for property or field '{0}' in class '{1}'", property, beanClass.GetFullName()));
+            if (IsWriteEnabled && !descriptor.HasGetter)
+                throw new BeanIOConfigurationException(string.Format("No readable access for property or field '{0}' in class '{1}'", property, beanClass.GetFullName()));
+
+            return descriptor;
+        }
+
+        /// <summary>
+        /// Updates a simple property with its type and accessor, and returns a type handler for it.
+        /// </summary>
+        /// <param name="config">the property configuration</param>
+        /// <param name="field">the property to update</param>
+        /// <returns>a type handler for the property</returns>
+        private ITypeHandler FindTypeHandler(SimplePropertyConfig config, IProperty field)
+        {
+            var propertyType = field.PropertyType;
+
+            // configure type handler properties
+            Properties typeHandlerProperties = null;
+            if (config.Format != null)
+            {
+                typeHandlerProperties = new Properties(new Dictionary<string, string>()
+                    {
+                        { DefaultTypeConfigurationProperties.FORMAT_SETTING, config.Format },
+                    });
+            }
+
+            // determine the type handler based on the named handler or the field class
+            ITypeHandler handler = null;
+            if (config.TypeHandlerInstance != null)
+            {
+                handler = config.TypeHandlerInstance;
+            }
+            else if (config.TypeHandler != null)
+            {
+                handler = TypeHandlerFactory.GetTypeHandler(config.TypeHandler, typeHandlerProperties);
+                if (handler == null)
+                    throw new BeanIOConfigurationException(string.Format("No configured type handler named '{0}'", config.TypeHandler));
+            }
+
+            if (handler != null)
+            {
+                // if the property type was not already determine, use the type from the type handler
+                if (propertyType == null)
+                {
+                    propertyType = handler.TargetType;
+                    field.PropertyType = propertyType;
+                }
+                else if (!propertyType.IsAssignableFrom(handler.TargetType))
+                {
+                    // otherwise validate the property type is compatible with the type handler
+                    throw new BeanIOConfigurationException(
+                        string.Format("Field property type '{0}' is not compatible with assigned type handler named '{1}'", propertyType.GetFullName(), config.TypeHandler));
+                }
+            }
+            else
+            {
+                // assume String type if the property type was not determined any other way
+                if (propertyType == null)
+                {
+                    propertyType = typeof(string);
+                    field.PropertyType = propertyType;
+                }
+
+                // get a type handler for the the property type
+                var typeName = config.Type;
+                try
+                {
+                    if (typeName == null)
+                    {
+                        typeName = propertyType.GetFullName();
+                        handler = TypeHandlerFactory.GetTypeHandlerFor(propertyType, _streamFormat, typeHandlerProperties);
+                    }
+                    else
+                    {
+                        handler = TypeHandlerFactory.GetTypeHandlerFor(typeName, _streamFormat, typeHandlerProperties);
+                    }
+                }
+                catch (ArgumentException ex)
+                {
+                    throw new BeanIOConfigurationException(ex.Message, ex);
+                }
+                if (handler == null)
+                {
+                    throw new BeanIOConfigurationException(string.Format("Type handler not found for type '{0}'", typeName));
+                }
+            }
+
+            return handler;
         }
 
         private class UnboundComponent : Component

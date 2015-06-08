@@ -91,7 +91,7 @@ namespace BeanIO.Internal.Parser
 
         public int? MaxLength { get; set; }
 
-        public string DefaultValue { get; set; }
+        public object DefaultValue { get; set; }
 
         public ITypeHandler Handler { get; set; }
 
@@ -128,7 +128,7 @@ namespace BeanIO.Internal.Parser
             var text = Format.Extract(context, true);
             if (text == null)
             {
-                var value = Value.Missing;
+                object value = Value.Missing;
                 if (UseDefaultIfMissing && DefaultValue != null)
                     value = DefaultValue;
                 SetValue(context, value);
