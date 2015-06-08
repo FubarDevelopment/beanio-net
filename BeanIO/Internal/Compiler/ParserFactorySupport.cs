@@ -1444,6 +1444,55 @@ namespace BeanIO.Internal.Compiler
                     throw new BeanIOConfigurationException(string.Format("Setter '{0}' not found for property/field '{1}' of type '{2}'", setter, property, beanClass.GetAssemblyQualifiedName()));
             }
 
+            if (getterInfo != null && setterInfo == null)
+            {
+                var name = getterInfo.Name;
+                if (name.StartsWith("get", StringComparison.Ordinal) || name.StartsWith("Get", StringComparison.Ordinal))
+                {
+                    name = name.Substring(3);
+                }
+                else if (name.StartsWith("is", StringComparison.Ordinal) || name.StartsWith("Is", StringComparison.Ordinal))
+                {
+                    name = name.Substring(2);
+                }
+                var probableSetterNames = new[]
+                    {
+                        Introspector.Capitalize(name),
+                        "Set" + Introspector.Capitalize(name),
+                    };
+                foreach (var setterName in probableSetterNames)
+                {
+                    var info = beanInfo.GetDeclaredMethod(setterName);
+                    if (info != null && info.GetParameters().Length == 1)
+                    {
+                        setterInfo = info;
+                        break;
+                    }
+                }
+            }
+            else if (getterInfo == null && setterInfo != null)
+            {
+                var name = setterInfo.Name;
+                if (name.StartsWith("set", StringComparison.Ordinal) || name.StartsWith("Set", StringComparison.Ordinal))
+                {
+                    name = name.Substring(3);
+                }
+                var probableGetterNames = new[]
+                    {
+                        Introspector.Capitalize(name),
+                        "Get" + Introspector.Capitalize(name),
+                    };
+                foreach (var getterName in probableGetterNames)
+                {
+                    var info = beanInfo.GetDeclaredMethod(getterName);
+                    if (info != null && info.GetParameters().Length == 0)
+                    {
+                        getterInfo = info;
+                        break;
+                    }
+                }
+            }
+
             PropertyDescriptor descriptor;
             var propertyInfo = beanInfo.GetDeclaredProperty(property);
             if (propertyInfo != null)
@@ -1455,7 +1504,7 @@ namespace BeanIO.Internal.Compiler
                 var fieldInfo = beanInfo.GetDeclaredField(property);
                 if (fieldInfo == null)
                 {
-                    if (!isConstructorArgument)
+                    if (!isConstructorArgument && (setterInfo == null || getterInfo == null))
                         throw new BeanIOConfigurationException(string.Format("Neither property or field found with name '{0}' for type '{1}'", property, beanClass.GetAssemblyQualifiedName()));
                     descriptor = new PropertyDescriptor(property, getterInfo, setterInfo);
                 }

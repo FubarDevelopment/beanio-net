@@ -67,6 +67,8 @@ namespace BeanIO.Internal.Util
                     return _field.IsPublic;
                 if (_property != null)
                     return _getter.IsPublic;
+                if (_getter != null)
+                    return _getter.IsPublic;
                 return null;
             }
         }
@@ -79,6 +81,8 @@ namespace BeanIO.Internal.Util
                     return _field.FieldType;
                 if (_property != null)
                     return _property.PropertyType;
+                if (_getter != null)
+                    return _getter.ReturnType;
                 return null;
             }
         }
