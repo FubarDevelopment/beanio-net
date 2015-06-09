@@ -203,7 +203,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
             {
                 node.AddAnnotation(new IsNamespaceIgnoredAnnotation(true));
             }
-            else if (Prefix == string.Empty)
+            else if (string.IsNullOrEmpty(Prefix))
             {
                 node.AddAnnotation(new IsDefaultNamespaceAnnotation(true));
             }
@@ -480,9 +480,9 @@ namespace BeanIO.Internal.Parser.Format.Xml
                 .AppendFormat(", depth={0}", Depth)
                 .AppendFormat(", group={0}", IsGroup)
                 .AppendFormat(", localName={0}", LocalName);
-            if (Prefix != null)
+            if (!string.IsNullOrEmpty(Prefix))
                 s.AppendFormat(", prefix={0}", Prefix);
-            if (Namespace != null)
+            if (!string.IsNullOrEmpty(Namespace))
                 s.AppendFormat(", xmlns={0}", IsNamespaceAware ? Namespace : "*");
         }
 
@@ -501,7 +501,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
                 {
                     element.AddAnnotation(new IsNamespaceIgnoredAnnotation(true));
                 }
-                else if (Prefix == string.Empty)
+                else if (string.IsNullOrEmpty(Prefix))
                 {
                     element.AddAnnotation(new IsDefaultNamespaceAnnotation(true));
                 }

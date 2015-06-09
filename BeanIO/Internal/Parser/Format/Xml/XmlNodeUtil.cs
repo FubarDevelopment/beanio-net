@@ -13,6 +13,16 @@ namespace BeanIO.Internal.Parser.Format.Xml
         private static readonly XNamespace _xsiNs = XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance");
 
         /// <summary>
+        /// Set the <code>xsi:nil</code> attribute to null
+        /// </summary>
+        /// <param name="element">The element to set the <code>xsi:nil</code> attribute for</param>
+        /// <param name="set">the value to set the attribute to</param>
+        public static void SetNil([NotNull] this XElement element, bool set = true)
+        {
+            element.SetAttributeValue(_xsiNs + "nil", XmlConvert.ToString(set));
+        }
+
+        /// <summary>
         /// Creates an <see cref="XName"/> from the <see cref="IXmlNode.Namespace"/> and <see cref="IXmlNode.LocalName"/>.
         /// </summary>
         /// <param name="node">The node to use to create the <see cref="XName"/> from</param>
