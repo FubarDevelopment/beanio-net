@@ -115,6 +115,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DefaultMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Internal\Parser\Format\Xml\Annotations\GroupCountAnnotation.cs" />
     <Compile Include="Internal\Parser\Format\Xml\Annotations\IsGroupElementAnnotation.cs" />
     <Compile Include="Internal\Parser\Format\Xml\Annotations\IsDefaultNamespaceAnnotation.cs" />
     <Compile Include="Internal\Parser\Format\Xml\Annotations\IsNamespaceIgnoredAnnotation.cs" />
@@ -125,6 +126,8 @@
     </Compile>
     <Compile Include="Internal\Parser\Format\Xml\IXmlNode.cs" />
     <Compile Include="Internal\Parser\Format\Xml\XmlMarshallingContext.cs" />
+    <Compile Include="Internal\Parser\Format\Xml\XmlNodeUtil.cs" />
+    <Compile Include="Internal\Parser\Format\Xml\XmlSelectorWrapper.cs" />
     <Compile Include="Internal\Parser\Format\Xml\XmlStreamFormat.cs" />
     <Compile Include="Internal\Parser\Format\Xml\XmlUnmarshallingContext.cs" />
     <Compile Include="Internal\Parser\IParserLocal.cs" />
@@ -236,6 +239,9 @@
     <Compile Include="Stream\IRecordWriter.cs" />
     <Compile Include="Stream\RecordIOException.cs" />
     <Compile Include="Stream\Util\CommentReader.cs" />
+    <Compile Include="Stream\Xml\ElementStack.cs" />
+    <Compile Include="Stream\Xml\IXmlStreamConfiguration.cs" />
+    <Compile Include="Stream\Xml\IXmlStreamConfigurationAware.cs" />
     <Compile Include="Types\DateTimeOffsetHandler.cs" />
     <Compile Include="Types\IntegerTypeHandler.cs" />
     <Compile Include="Types\TypeConversionException.cs" />

@@ -16,7 +16,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Store previously matched groups for parsing subsequent records in a record group
         /// </summary>
-        private readonly Stack<IXmlNode> _groupStack;
+        private readonly IXmlNode[] _groupStack;
 
         /// <summary>
         /// The DOM to parse
@@ -34,7 +34,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <param name="groupDepth">the maximum depth of an element mapped to a <see cref="Group"/> in the DOM</param>
         public XmlUnmarshallingContext(int groupDepth)
         {
-            _groupStack = new Stack<IXmlNode>(groupDepth);
+            _groupStack = new IXmlNode[groupDepth];
         }
 
         /// <summary>
@@ -130,7 +130,116 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <returns>the matched node or null if not matched</returns>
         public virtual XElement PushPosition(IXmlNode node, int depth, bool isGroup)
         {
-            
+            // if the pushed node is a group node, add it to the group stack
+            // for the workaround below
+            if (isGroup)
+                _groupStack[depth] = node;
+
+            // this is a workaround for handling bean objects that span multiple records
+            // once the first record is identified, parent groups are not called for
+            // subsequent records so the current position will be null even though we
+            // already deeper in the parser tree
+            if (_position == null && depth > 0)
+            {
+                for (int i = 0; i < depth; i++)
+                {
+                    _position = FindElement(_groupStack[i]);
+                    if (_position == null)
+                        return null;
+                }
+
+                // if we still don't match, update the position back to null
+                var element = PushPosition(node);
+                if (element == null)
+                    _position = null;
+                return element;
+            }
+
+            return PushPosition(node);
+        }
+
+        /// <summary>
+        /// Updates <see cref="Position"/> by finding a child of the current position
+        /// that matches a given node.
+        /// </summary>
+        /// <param name="node">the <see cref="IXmlNode"/> to match</param>
+        /// <returns>the matching element, or null if not found</returns>
+        public virtual XElement PushPosition(IXmlNode node)
+        {
+            var element = FindElement(node);
+            if (element == null)
+                return null;
+            _position = element;
+            return _position;
+        }
+
+        /// <summary>
+        /// Updates <see cref="Position"/> to its parent (element), or null if the parent element is the document itself.
+        /// </summary>
+        public virtual void PopPosition()
+        {
+            if (_position == null)
+                return;
+            var n = _position.Parent;
+            if (n == null || n.NodeType == XmlNodeType.Document)
+            {
+                _position = null;
+            }
+            else
+            {
+                _position = n;
+            }
+        }
+
+        /// <summary>
+        /// Finds a child element of the current <see cref="Position"/>.
+        /// </summary>
+        /// <param name="node">the <see cref="IXmlNode"/></param>
+        /// <returns>the matched element or null if not found</returns>
+        public virtual XElement FindElement(IXmlNode node)
+        {
+            var parent = _position;
+
+            XElement element;
+            if (node.IsRepeating)
+            {
+                int index = GetRelativeFieldIndex();
+
+                if (index > 0)
+                {
+                    element = XmlNodeUtil.FindSibling(PreviousElement, node);
+                }
+                else
+                {
+                    element = XmlNodeUtil.FindChild(parent, node, index);
+                }
+                if (element != null)
+                {
+                    PreviousElement = element;
+                }
+            }
+            else
+            {
+                if (parent == null)
+                {
+                    element = XmlNodeUtil.FindChild(_document, node, 0);
+                }
+                else
+                {
+                    element = XmlNodeUtil.FindChild(parent, node, 0);
+                }
+            }
+            return element;
+        }
+
+        /// <summary>
+        /// Converts a <see cref="XElement"/> to a record value.
+        /// </summary>
+        /// <param name="element">The <see cref="XElement"/> to convert</param>
+        /// <returns>the record value, or null if not supported</returns>
+        public override object ToRecordValue(XElement element)
+        {
+            return element;
         }
     }
 }

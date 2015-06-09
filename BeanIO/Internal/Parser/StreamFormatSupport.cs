@@ -9,7 +9,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets or sets the <see cref="IRecordParserFactory"/> used by this stream
         /// </summary>
-        public IRecordParserFactory RecordParserFactory { get; set; }
+        public virtual IRecordParserFactory RecordParserFactory { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the stream

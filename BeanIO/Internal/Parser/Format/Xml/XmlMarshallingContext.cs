@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Xml;
 using System.Xml.Linq;
 
 using BeanIO.Internal.Parser.Format.Xml.Annotations;
@@ -59,7 +58,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Gets or sets the parent node to append in the document being marshalled.
         /// </summary>
-        protected XContainer Parent
+        public XContainer Parent
         {
             get
             {
@@ -72,10 +71,9 @@ namespace BeanIO.Internal.Parser.Format.Xml
                     {
                         var xml = _groupStack.Pop();
 
-                        var ns = xml.IsNamespaceAware && xml.Namespace != null ? XNamespace.Get(xml.Namespace) : XNamespace.None;
-                        var element = new XElement(ns + xml.LocalName);
+                        var element = new XElement(xml.ToXName(false));
                         if (!string.IsNullOrEmpty(xml.Prefix))
-                            element.SetAttributeValue(XNamespace.Xmlns + xml.Prefix, ns.NamespaceName);
+                            element.SetAttributeValue(XNamespace.Xmlns + xml.Prefix, xml.Namespace);
                         element.AddAnnotation(new IsGroupElementAnnotation(true));
                         if (!xml.IsNamespaceAware)
                         {

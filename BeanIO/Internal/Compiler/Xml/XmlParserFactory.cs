@@ -51,17 +51,22 @@ namespace BeanIO.Internal.Compiler.Xml
         /// </returns>
         protected override IRecordParserFactory CreateDefaultRecordParserFactory()
         {
-            throw new NotImplementedException();
+            return new XmlRecordParserFactory();
         }
 
         protected override IStreamFormat CreateStreamFormat(StreamConfig config)
         {
-            throw new NotImplementedException();
+            var format = new XmlStreamFormat()
+                {
+                    Name = config.Name,
+                    RecordParserFactory = CreateRecordParserFactory(config),
+                };
+            return format;
         }
 
         protected override IRecordFormat CreateRecordFormat(RecordConfig config)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         protected override IFieldFormat CreateFieldFormat(FieldConfig config, Type type)

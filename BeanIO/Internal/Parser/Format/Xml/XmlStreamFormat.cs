@@ -1,5 +1,8 @@
 ﻿using System.Xml.Linq;
 
+using BeanIO.Stream;
+using BeanIO.Stream.Xml;
+
 namespace BeanIO.Internal.Parser.Format.Xml
 {
     public class XmlStreamFormat : StreamFormatSupport
@@ -13,6 +16,24 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// Gets or sets the maximum depth of a group component in the parser tree
         /// </summary>
         public int GroupDepth { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="IRecordParserFactory"/> used by this stream
+        /// </summary>
+        public override IRecordParserFactory RecordParserFactory
+        {
+            get
+            {
+                return base.RecordParserFactory;
+            }
+            set
+            {
+                var configAware = value as IXmlStreamConfigurationAware;
+                if (configAware != null)
+                    configAware.Configure(new RecordParserXmlStreamConfiguration(this));
+                base.RecordParserFactory = value;
+            }
+        }
 
         /// <summary>
         /// Creates a new unmarshalling context
@@ -44,7 +65,25 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <returns>the new <see cref="XDocument"/> made up of group nodes</returns>
         protected virtual XDocument CreateBaseDocument(ISelector layout)
         {
-            
+            var wrapper = layout as XmlSelectorWrapper;
+            if (wrapper == null)
+                return new XDocument();
+            return wrapper.CreateBaseDocument();
+        }
+
+        private class RecordParserXmlStreamConfiguration : IXmlStreamConfiguration
+        {
+            private readonly XmlStreamFormat _format;
+
+            public RecordParserXmlStreamConfiguration(XmlStreamFormat format)
+            {
+                _format = format;
+            }
+
+            public XDocument Document
+            {
+                get { return _format.CreateBaseDocument(_format.Layout); }
+            }
         }
     }
 }
