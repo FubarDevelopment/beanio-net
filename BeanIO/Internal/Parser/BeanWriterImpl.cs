@@ -155,7 +155,7 @@ namespace BeanIO.Internal.Parser
         /// </summary>
         /// <param name="ns">a string to prefix all state keys with</param>
         /// <param name="state">the <see cref="IDictionary{TKey,TValue}"/> containing the state to restore</param>
-        public void RestoreState(string ns, IDictionary<string, object> state)
+        public void RestoreState(string ns, IReadOnlyDictionary<string, object> state)
         {
             _layout.RestoreState(_context, ns + ".m", state);
 

@@ -7,6 +7,6 @@
             Count = count;
         }
 
-        public int Count { get; private set; }
+        public int Count { get; set; }
     }
 }

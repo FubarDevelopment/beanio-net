@@ -117,8 +117,8 @@
     </Compile>
     <Compile Include="Internal\Parser\Format\Xml\Annotations\GroupCountAnnotation.cs" />
     <Compile Include="Internal\Parser\Format\Xml\Annotations\IsGroupElementAnnotation.cs" />
-    <Compile Include="Internal\Parser\Format\Xml\Annotations\IsDefaultNamespaceAnnotation.cs" />
-    <Compile Include="Internal\Parser\Format\Xml\Annotations\IsNamespaceIgnoredAnnotation.cs" />
+    <Compile Include="Internal\Parser\Format\Xml\Annotations\NamespaceModeAnnotation.cs" />
+    <Compile Include="Internal\Parser\Format\Xml\Annotations\NamespaceHandlingMode.cs" />
     <Compile Include="Internal\Parser\Format\Xml\DefaultMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -185,6 +185,8 @@
     <Compile Include="Internal\Parser\RecordArray.cs" />
     <Compile Include="Internal\Parser\RecordCollection.cs" />
     <Compile Include="Internal\Parser\RecordMap.cs" />
+    <Compile Include="Internal\Util\DomUtil.cs" />
+    <Compile Include="Internal\Util\NamespaceAwareElementComparer.cs" />
     <Compile Include="Internal\Util\ObjectUtils.cs" />
     <Compile Include="Internal\Parser\ParserComponent.cs" />
     <Compile Include="Internal\Parser\ParserLocal.cs" />
@@ -251,6 +253,7 @@
     <Compile Include="Stream\Xml\XmlRecordMarshaller.cs" />
     <Compile Include="Stream\Xml\XmlRecordParserFactory.cs" />
     <Compile Include="Stream\Xml\XmlRecordUnmarshaller.cs" />
+    <Compile Include="Stream\Xml\XmlWriter.cs" />
     <Compile Include="Types\DateTimeOffsetHandler.cs" />
     <Compile Include="Types\IntegerTypeHandler.cs" />
     <Compile Include="Types\TypeConversionException.cs" />

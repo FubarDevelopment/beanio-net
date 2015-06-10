@@ -24,7 +24,7 @@ namespace BeanIO.Internal.Parser
         /// </summary>
         public virtual int MinOccurs
         {
-            get { return Selector.MinOccurs; } 
+            get { return Selector.MinOccurs; }
         }
 
         /// <summary>
@@ -222,7 +222,7 @@ namespace BeanIO.Internal.Parser
         /// <param name="context">the <see cref="ParsingContext"/></param>
         /// <param name="ns">a <see cref="string"/> to prefix all state keys with</param>
         /// <param name="state">the <see cref="IDictionary{TKey,TValue}"/> containing the state to restore</param>
-        public virtual void RestoreState(ParsingContext context, string ns, IDictionary<string, object> state)
+        public virtual void RestoreState(ParsingContext context, string ns, IReadOnlyDictionary<string, object> state)
         {
             Selector.RestoreState(context, ns, state);
         }

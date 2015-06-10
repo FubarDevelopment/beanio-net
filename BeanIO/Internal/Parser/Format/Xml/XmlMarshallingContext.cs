@@ -77,11 +77,11 @@ namespace BeanIO.Internal.Parser.Format.Xml
                         element.AddAnnotation(new IsGroupElementAnnotation(true));
                         if (!xml.IsNamespaceAware)
                         {
-                            element.AddAnnotation(new IsNamespaceIgnoredAnnotation(true));
+                            element.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.IgnoreNamespace));
                         }
                         else if (string.IsNullOrEmpty(xml.Prefix))
                         {
-                            element.AddAnnotation(new IsDefaultNamespaceAnnotation(true));
+                            element.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.DefaultNamespace));
                         }
 
                         _parent = element;

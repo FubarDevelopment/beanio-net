@@ -99,13 +99,13 @@ namespace BeanIO.Internal.Parser.Format.Xml
             var element = new XElement(this.ToXName(true), fieldText);
             if (!IsNamespaceAware)
             {
-                element.AddAnnotation(new IsNamespaceIgnoredAnnotation(true));
+                element.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.IgnoreNamespace));
             }
             else
             {
                 if (string.IsNullOrEmpty(Prefix))
                 {
-                    element.AddAnnotation(new IsDefaultNamespaceAnnotation(true));
+                    element.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.DefaultNamespace));
                 }
                 else
                 {

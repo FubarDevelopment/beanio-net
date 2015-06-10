@@ -201,11 +201,11 @@ namespace BeanIO.Internal.Parser.Format.Xml
             }
             if (!IsNamespaceAware)
             {
-                node.AddAnnotation(new IsNamespaceIgnoredAnnotation(true));
+                node.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.IgnoreNamespace));
             }
             else if (string.IsNullOrEmpty(Prefix))
             {
-                node.AddAnnotation(new IsDefaultNamespaceAnnotation(true));
+                node.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.DefaultNamespace));
             }
             else
             {
@@ -422,7 +422,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <param name="context">the <see cref="ParsingContext"/></param>
         /// <param name="ns">a <see cref="string"/> to prefix all state keys with</param>
         /// <param name="state">the <see cref="IDictionary{TKey,TValue}"/> containing the state to restore</param>
-        public void RestoreState(ParsingContext context, string ns, IDictionary<string, object> state)
+        public void RestoreState(ParsingContext context, string ns, IReadOnlyDictionary<string, object> state)
         {
             var key = GetKey(ns, WRITTEN_KEY);
             var written = (bool)state[key];
@@ -499,11 +499,11 @@ namespace BeanIO.Internal.Parser.Format.Xml
 
                 if (!wrapper.IsNamespaceAware)
                 {
-                    element.AddAnnotation(new IsNamespaceIgnoredAnnotation(true));
+                    element.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.IgnoreNamespace));
                 }
                 else if (string.IsNullOrEmpty(Prefix))
                 {
-                    element.AddAnnotation(new IsDefaultNamespaceAnnotation(true));
+                    element.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.DefaultNamespace));
                 }
                 else
                 {

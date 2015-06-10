@@ -55,7 +55,10 @@ namespace BeanIO.Internal.Parser
         /// </summary>
         public override bool IsIdentifier
         {
-            get { return false; }
+            get
+            {
+                return false;
+            }
             set
             {
                 if (value)
@@ -435,7 +438,7 @@ namespace BeanIO.Internal.Parser
         /// <param name="context">the <see cref="ParsingContext"/></param>
         /// <param name="ns">a <see cref="string"/> to prefix all state keys with</param>
         /// <param name="state">the <see cref="IDictionary{TKey,TValue}"/> containing the state to restore</param>
-        public void RestoreState(ParsingContext context, string ns, IDictionary<string, object> state)
+        public void RestoreState(ParsingContext context, string ns, IReadOnlyDictionary<string, object> state)
         {
             var key = GetKey(ns, COUNT_KEY);
             var n = (int?)state.Get(key);

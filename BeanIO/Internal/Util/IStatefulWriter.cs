@@ -18,10 +18,10 @@ namespace BeanIO.Internal.Util
         void UpdateState(string ns, IDictionary<string, object> state);
 
         /// <summary>
-        /// Restores a <see cref="IDictionary{TKey,TValue}"/> of previously stored state information
+        /// Restores a <see cref="IReadOnlyDictionary{TKey,TValue}"/> of previously stored state information
         /// </summary>
         /// <param name="ns">a string to prefix all state keys with</param>
-        /// <param name="state">the <see cref="IDictionary{TKey,TValue}"/> containing the state to restore</param>
-        void RestoreState(string ns, IDictionary<string, object> state);
+        /// <param name="state">the <see cref="IReadOnlyDictionary{TKey,TValue}"/> containing the state to restore</param>
+        void RestoreState(string ns, IReadOnlyDictionary<string, object> state);
     }
 }

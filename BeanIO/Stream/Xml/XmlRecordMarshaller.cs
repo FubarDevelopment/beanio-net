@@ -1,10 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Linq.Expressions;
 using System.Xml;
 using System.Xml.Linq;
-
-using JetBrains.Annotations;
 
 namespace BeanIO.Stream.Xml
 {
@@ -57,7 +54,7 @@ namespace BeanIO.Stream.Xml
             }
 
             var output = new StringWriter();
-            using (var xmlWriter = XmlWriter.Create(output, _writerSettings))
+            using (var xmlWriter = System.Xml.XmlWriter.Create(output, _writerSettings))
                 document.WriteTo(xmlWriter);
 
             return output.ToString();

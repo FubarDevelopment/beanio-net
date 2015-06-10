@@ -12,6 +12,11 @@ namespace BeanIO.Internal.Parser.Format.Xml
     {
         private static readonly XNamespace _xsiNs = XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance");
 
+        public static XNamespace Xsi
+        {
+            get { return _xsiNs; }
+        }
+
         /// <summary>
         /// Set the <code>xsi:nil</code> attribute to null
         /// </summary>
