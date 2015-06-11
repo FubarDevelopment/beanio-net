@@ -134,6 +134,7 @@
     <Compile Include="Internal\Parser\Format\Xml\XmlStreamFormat.cs" />
     <Compile Include="Internal\Parser\Format\Xml\XmlTextField.cs" />
     <Compile Include="Internal\Parser\Format\Xml\XmlUnmarshallingContext.cs" />
+    <Compile Include="Internal\Parser\Format\Xml\XmlWrapper.cs" />
     <Compile Include="Internal\Parser\IParserLocal.cs" />
     <Compile Include="Internal\Parser\AbortRecordUnmarshalligException.cs" />
     <Compile Include="Internal\Parser\Accessor\FieldReflectionAccessor.cs" />

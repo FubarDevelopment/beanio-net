@@ -159,13 +159,13 @@ namespace BeanIO.Internal.Config
         /// Gets or sets the minimum size of this component (based on its field length
         /// or the field length of its descendants).
         /// </summary>
-        public int? MinSize { get; set; }
+        public int MinSize { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum size of one occurrence of this component (based on its field length
         /// or the field length of its descendants).
         /// </summary>
-        public int? MaxSize { get; set; }
+        public int MaxSize { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this component is bound to a collection or array.

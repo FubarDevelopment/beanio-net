@@ -159,7 +159,6 @@ namespace BeanIO.Internal.Compiler.Xml
         protected override void InitializeRecordMain(RecordConfig config, IProperty property)
         {
             // a record is always mapped to an XML element
-
             var wrapper = new XmlSelectorWrapper()
                 {
                     Name = config.Name,
@@ -217,10 +216,36 @@ namespace BeanIO.Internal.Compiler.Xml
         {
             if (IsWrappingRequired(config))
             {
+                var wrapper = new XmlWrapper
+                    {
+                        Name = config.Name,
+                        LocalName = config.XmlName,
+                        Namespace = config.XmlNamespace,
+                        IsNamespaceAware = config.IsXmlNamespaceAware,
+                        Prefix = config.XmlPrefix,
+                        IsNillable = config.IsNillable,
+                        IsRepeating = config.IsRepeating,
+                        IsLazy = config.MinOccurs.GetValueOrDefault() == 0,
+                    };
+                PushParser(wrapper);
+            }
+            base.InitializeSegmentMain(config, property);
+        }
+
+        /// <summary>
+        /// Called by <see cref="ParserFactorySupport.FinalizeSegment(BeanIO.Internal.Config.SegmentConfig)"/> to finalize the segment component.
+        /// </summary>
+        /// <param name="config">the segment configuration</param>
+        /// <returns>the target property</returns>
+        protected override IProperty FinalizeSegmentMain(SegmentConfig config)
+        {
+            var property = base.FinalizeSegmentMain(config);
+            if (IsWrappingRequired(config))
+            {
                 // pop the wrapper
                 PopParser();
             }
-            base.InitializeSegmentMain(config, property);
+            return property;
         }
 
         /// <summary>

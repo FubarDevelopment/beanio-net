@@ -27,7 +27,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// indicates the last record read from the reader has been processed
         /// </summary>
-        private bool _isProcessed;
+        private bool _isProcessed = true;
 
         /// <summary>
         /// the top level component name being unmarshalled

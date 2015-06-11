@@ -154,9 +154,9 @@ namespace BeanIO.Internal.Compiler.Flat
 
             PropertyConfig first = null;
             PropertyConfig last = null;
-            int? position = 0;
-            int? minSize = 0;
-            int? maxSize = -1;
+            int position = 0;
+            int minSize = 0;
+            int maxSize = -1;
 
             // by default, a segment is not constant
             segment.IsConstant = false;
@@ -182,9 +182,9 @@ namespace BeanIO.Internal.Compiler.Flat
                 if (!isRecord && segment.IsRepeating && config.MinOccurs.GetValueOrDefault() == 0)
                     throw new BeanIOConfigurationException("A repeating segment may not contain components where minOccurs=0");
 
-                if (config.MaxSize == null || config.MaxSize == int.MaxValue)
+                if (config.MaxSize == int.MaxValue)
                 {
-                    maxSize = null;
+                    maxSize = int.MaxValue;
                 }
                 var n = config.Position;
                 if (first == null || ComparePosition(n, first.Position) < 0)
@@ -200,7 +200,7 @@ namespace BeanIO.Internal.Compiler.Flat
             {
                 if (segment.ComponentType == ComponentType.Record)
                 {
-                    maxSize = null;
+                    maxSize = int.MaxValue;
                 }
                 else
                 {
@@ -208,25 +208,25 @@ namespace BeanIO.Internal.Compiler.Flat
                     maxSize = 0;
                 }
             }
-            else if (maxSize != null && maxSize < 0)
+            else if (maxSize < 0)
             {
-                position = first.Position;
+                position = first.Position.Value;
                 if (last.Position.GetValueOrDefault() < 0 && first.Position.GetValueOrDefault() >= 0)
                 {
                     if (!isRecord && segment.IsRepeating)
                     {
                         throw new BeanIOConfigurationException("A repeating segment may not contain components of indeterminate size");
                     }
-                    maxSize = null;
+                    maxSize = int.MaxValue;
                 }
                 else if (last.MaxOccurs == null || last.MaxOccurs == int.MaxValue)
                 {
-                    maxSize = null;
+                    maxSize = int.MaxValue;
                 }
                 else
                 {
                     maxSize = Math.Abs(last.Position.GetValueOrDefault() - first.Position.GetValueOrDefault())
-                              + (last.MaxSize.GetValueOrDefault() * last.MaxOccurs.GetValueOrDefault());
+                              + (last.MaxSize * last.MaxOccurs.GetValueOrDefault());
                 }
             }
 
@@ -241,7 +241,7 @@ namespace BeanIO.Internal.Compiler.Flat
                     if (config.ComponentType == ComponentType.Constant)
                         continue;
 
-                    minSize += config.MinSize * config.MinOccurs;
+                    minSize += config.MinSize * config.MinOccurs.Value;
 
                     var n = config.Position;
                     if (first == null || ComparePosition(n, first.Position) < 0)
@@ -269,7 +269,7 @@ namespace BeanIO.Internal.Compiler.Flat
                 else
                 {
                     minSize = Math.Abs(last.Position.GetValueOrDefault() - first.Position.GetValueOrDefault())
-                              + (last.MaxSize.GetValueOrDefault() * last.MinOccurs.GetValueOrDefault());
+                              + (last.MaxSize * last.MinOccurs.GetValueOrDefault());
                 }
             }
 
@@ -303,7 +303,7 @@ namespace BeanIO.Internal.Compiler.Flat
                 else if (
                     (segment.IsRepeating && segment.MinOccurs != segment.MaxOccurs) ||
                     segment.MaxOccurs.GetValueOrDefault(int.MaxValue) == int.MaxValue ||
-                    segment.MaxSize.GetValueOrDefault(int.MaxValue) == int.MaxValue)
+                    segment.MaxSize == int.MaxValue)
                 {
                     if (_unboundedComponent == null)
                     {
@@ -405,12 +405,12 @@ namespace BeanIO.Internal.Compiler.Flat
             if (size == null || size == -1)
             {
                 field.MinSize = 0;
-                field.MaxSize = null;
+                field.MaxSize = int.MaxValue;
             }
             else
             {
-                field.MaxSize = size;
-                field.MinSize = size;
+                field.MaxSize = size.Value;
+                field.MinSize = size.Value;
             }
 
             // calculate the position of this field (size must be calculated first)
@@ -530,7 +530,7 @@ namespace BeanIO.Internal.Compiler.Flat
         private bool IsVariableSized(FieldConfig config)
         {
             return config.MaxOccurs == null || config.MaxOccurs == int.MaxValue
-                   || (IsFixedLength && (config.MaxSize == null || config.MaxSize == int.MaxValue))
+                   || (IsFixedLength && config.MaxSize == int.MaxValue)
                    || (config.IsRepeating && config.MinOccurs != config.MaxOccurs);
         }
 

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 
 using BeanIO.Internal.Util;
 
@@ -100,6 +102,31 @@ namespace BeanIO.Internal.Parser
         public override void ClearValue(ParsingContext context)
         {
             _value.Set(context, null);
+        }
+
+        /// <summary>
+        /// Called by a stream to register variables stored in the parsing context.
+        /// </summary>
+        /// <remarks>
+        /// This method should be overridden by subclasses that need to register
+        /// one or more parser context variables.
+        /// </remarks>
+        /// <param name="locals">set of local variables</param>
+        public override void RegisterLocals(ISet<IParserLocal> locals)
+        {
+            if (locals.Add(_value))
+                base.RegisterLocals(locals);
+        }
+
+        /// <summary>
+        /// Returns whether this parser or any of its descendant have content for marshalling.
+        /// </summary>
+        /// <param name="context">The <see cref="ParsingContext"/></param>
+        /// <returns>true if there is content for marshalling, false otherwise</returns>
+        public override bool HasContent(ParsingContext context)
+        {
+            var collection = GetCollection(context);
+            return collection != null && collection.Count > 0;
         }
 
         protected override bool Marshal(MarshallingContext context, IParser parser, int minOccurs, int? maxOccurs)
@@ -224,7 +251,7 @@ namespace BeanIO.Internal.Parser
 
         protected virtual IList CreateCollection()
         {
-            return (IList)ObjectUtils.NewInstance(PropertyType);
+            return (IList)PropertyType.NewInstance();
         }
 
         /// <summary>
@@ -235,6 +262,17 @@ namespace BeanIO.Internal.Parser
         protected virtual bool IsInvalid(ParsingContext context)
         {
             return ReferenceEquals(_value.Get(context), Value.Invalid);
+        }
+
+        /// <summary>
+        /// Called by <see cref="TreeNode{T}.ToString"/> to append node parameters to the output
+        /// </summary>
+        /// <param name="s">The output to append</param>
+        protected override void ToParamString(StringBuilder s)
+        {
+            base.ToParamString(s);
+            if (PropertyType != null)
+                s.AppendFormat(", type={0}", PropertyType.GetAssemblyQualifiedName());
         }
     }
 }

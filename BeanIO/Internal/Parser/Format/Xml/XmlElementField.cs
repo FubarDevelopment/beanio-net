@@ -103,7 +103,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
             }
             else
             {
-                if (string.IsNullOrEmpty(Prefix))
+                if (string.Equals(Prefix, string.Empty))
                 {
                     element.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.DefaultNamespace));
                 }

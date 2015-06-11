@@ -456,8 +456,6 @@ namespace BeanIO.Internal.Compiler
 
         protected virtual void InitializeRecordMain(RecordConfig config, IProperty property)
         {
-            Debug.Assert(config.MaxSize != null, "config.MaxSize != null");
-
             var record = new Record()
                 {
                     Name = config.Name,
@@ -471,7 +469,7 @@ namespace BeanIO.Internal.Compiler
                 };
 
             record.SetOptional(config.MaxOccurs == null || (config.MinOccurs ?? 0) < config.MaxOccurs);
-            record.SetSize(config.MaxSize.Value);
+            record.SetSize(config.MaxSize);
 
             if (property != null)
             {
@@ -610,8 +608,6 @@ namespace BeanIO.Internal.Compiler
             if (name == null)
                 throw new BeanIOConfigurationException("Segment name not set");
 
-            Debug.Assert(config.MaxSize != null, "config.MaxSize != null");
-
             var segment = new Segment()
                 {
                     Name = name,
@@ -621,7 +617,7 @@ namespace BeanIO.Internal.Compiler
                     IsExistencePredetermined = config.IsDefaultExistence,
                 };
 
-            segment.SetSize(config.MaxSize.Value);
+            segment.SetSize(config.MaxSize);
             segment.SetOptional(config.MaxOccurs == null || (config.MinOccurs ?? 0) < config.MaxOccurs);
 
             if (IsSegmentRequired(config))

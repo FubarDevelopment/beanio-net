@@ -203,7 +203,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
             {
                 node.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.IgnoreNamespace));
             }
-            else if (string.IsNullOrEmpty(Prefix))
+            else if (string.Equals(Prefix, string.Empty))
             {
                 node.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.DefaultNamespace));
             }
@@ -501,7 +501,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
                 {
                     element.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.IgnoreNamespace));
                 }
-                else if (string.IsNullOrEmpty(Prefix))
+                else if (string.Equals(Prefix, string.Empty))
                 {
                     element.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.DefaultNamespace));
                 }

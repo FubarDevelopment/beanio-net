@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -381,6 +383,7 @@ namespace BeanIO.Stream.Xml
         /// Recursively writes an element to the XML stream writer
         /// </summary>
         /// <param name="element">the DOM element to write</param>
+        [SuppressMessage("StyleCopPlus.StyleCopPlusRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         private void Write(XElement element)
         {
             var name = element.Name.LocalName;
@@ -409,7 +412,189 @@ namespace BeanIO.Stream.Xml
                 }
             }
 
+            // flag indicating if the element is empty or not
+            var empty = false;
 
+            // flag for lazily appending to stack
+            var pendingStackUpdate = true;
+
+            // start the element
+            if (_elementStack == null)
+            {
+                if (ignoreNamespace)
+                {
+                    _out.WriteStartElement(name);
+                }
+                else if (!string.IsNullOrEmpty(prefix))
+                {
+                    _out.WriteStartElement(prefix, name, ns);
+                }
+                else
+                {
+                    _out.WriteStartElement(name, XNamespace.None.NamespaceName);
+                }
+
+                Push(ns, prefix, name);
+                foreach (var entry in _config.NamespaceMap)
+                {
+                    _out.WriteAttributeString("xmlns", entry.Key, XNamespace.Xmlns.NamespaceName, entry.Value);
+                    _elementStack.AddNamespace(entry.Key, entry.Value);
+                }
+
+                pendingStackUpdate = false;
+            }
+            else
+            {
+                empty = !element.HasElements;
+
+                if (ignoreNamespace || (_elementStack.IsDefaultNamespace(ns) && string.IsNullOrEmpty(prefix)))
+                {
+                    ns = _elementStack.DefaultNamespace;
+                    prefix = null;
+                    if (empty)
+                    {
+                        _out.WriteElementString(name, ns, null);
+                    }
+                    else
+                    {
+                        _out.WriteStartElement(name, ns);
+                    }
+                }
+                else
+                {
+                    var p = _elementStack.FindPrefix(ns);
+
+                    if (!string.IsNullOrEmpty(p) && string.IsNullOrEmpty(prefix) && !setDefaultNamespace)
+                    {
+                        prefix = p;
+                    }
+
+                    if (string.IsNullOrEmpty(prefix))
+                    {
+                        if (empty)
+                        {
+                            _out.WriteElementString(name, ns, null);
+                        }
+                        else
+                        {
+                            _out.WriteStartElement(name, ns);
+                        }
+                    }
+                    else
+                    {
+                        if (empty)
+                        {
+                            _out.WriteElementString(prefix, name, ns, null);
+                        }
+                        else
+                        {
+                            _out.WriteStartElement(prefix, name, ns);
+                        }
+                    }
+                }
+            }
+
+            // write attributes
+            ISet<string> attPrefixSet = null;
+            var map = element.Attributes().ToList();
+            if (map.Count > 0)
+            {
+                if (pendingStackUpdate)
+                {
+                    Push(ns, prefix, name);
+                    pendingStackUpdate = false;
+                }
+            }
+            for (int i = 0, j = map.Count; i < j; i++)
+            {
+                var att = map[i];
+                var attName = att.Name.LocalName;
+                var attNamespace = att.Name.NamespaceName;
+                var attPrefix = element.GetPrefixOfNamespace(attNamespace);
+
+                if (string.IsNullOrEmpty(attNamespace))
+                {
+                    _out.WriteAttributeString(attName, att.Value);
+                }
+                else
+                {
+                    var p = _elementStack.FindPrefix(attNamespace);
+
+                    var declareNamespace = false;
+                    if (p == null)
+                    {
+                        if (attPrefix == null)
+                        {
+                            _namespaceMap.TryGetValue(attNamespace, out attPrefix);
+                            if (attPrefix == null)
+                            {
+                                attPrefix = CreateNamespace(attNamespace);
+                            }
+                        }
+
+                        if (attPrefixSet == null || !attPrefixSet.Contains(attPrefix))
+                        {
+                            declareNamespace = true;
+                        }
+                    }
+                    else if (attPrefix == null)
+                    {
+                        attPrefix = p;
+                    }
+
+                    if (declareNamespace)
+                    {
+                        if (attPrefixSet == null)
+                        {
+                            attPrefixSet = new HashSet<string>();
+                        }
+                        attPrefixSet.Add(attPrefix);
+                    }
+
+                    _out.WriteAttributeString(attPrefix, attNamespace, attName, att.Value);
+                }
+            }
+
+            // write children
+            var child = element.FirstNode;
+            while (child != null)
+            {
+                switch (child.NodeType)
+                {
+                    case XmlNodeType.Element:
+                        if (pendingStackUpdate)
+                        {
+                            Push(ns, prefix, name);
+                            pendingStackUpdate = false;
+                        }
+
+                        Write((XElement)child);
+                        break;
+
+                    case XmlNodeType.Text:
+                        _out.WriteString(((XText)child).Value);
+                        break;
+                    case XmlNodeType.CDATA:
+                        _out.WriteCData(((XCData)child).Value);
+                        break;
+                }
+                child = child.NextNode;
+            }
+
+            // end the element if it is not a group
+            var isGroupElementAnnotation = element.Annotation<IsGroupElementAnnotation>();
+            var isGroupElement = isGroupElementAnnotation != null && isGroupElementAnnotation.IsGroupElement;
+            if (!isGroupElement)
+            {
+                if (!pendingStackUpdate)
+                {
+                    Pop();
+                }
+                if (!empty)
+                {
+                    _out.WriteEndElement();
+                }
+            }
         }
 
         private void EndElement()
@@ -429,13 +614,11 @@ namespace BeanIO.Stream.Xml
             ++_level;
         }
 
-        private ElementStack Pop()
+        private void Pop()
         {
-            var e = _elementStack;
             _elementStack = _elementStack.Parent;
             --_level;
             _dirtyLevel = Math.Min(_dirtyLevel, _level);
-            return e;
         }
 
         private string CreateNamespace(string uri)
