@@ -96,7 +96,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
             if (ReferenceEquals(fieldText, Value.Nil))
                 fieldText = null;
 
-            var element = new XElement(this.ToXName(true), fieldText.ToConvertedName(ctx.NameConversionMode));
+            var element = new XElement(this.ToXName(true).ToConvertedName(ctx.NameConversionMode));
             if (!IsNamespaceAware)
             {
                 element.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.IgnoreNamespace));
