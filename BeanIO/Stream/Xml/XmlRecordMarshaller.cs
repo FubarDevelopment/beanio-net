@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -53,11 +54,16 @@ namespace BeanIO.Stream.Xml
                 document.Declaration = new XDeclaration(version, encoding, null);
             }
 
-            var output = new StringWriter();
+            var outputEncoding = _writerSettings.Encoding;
+            var temp = new MemoryStream();
+            var output = new StreamWriter(temp, outputEncoding);
             using (var xmlWriter = System.Xml.XmlWriter.Create(output, _writerSettings))
                 document.WriteTo(xmlWriter);
 
-            return output.ToString();
+            var data = temp.ToArray();
+            var result = outputEncoding.GetString(data, 0, data.Length);
+
+            return result;
         }
 
         /// <summary>
@@ -73,6 +79,7 @@ namespace BeanIO.Stream.Xml
                     IndentChars = new string(' ', _config.Indentation.GetValueOrDefault()),
                     NamespaceHandling = NamespaceHandling.OmitDuplicates,
                     OmitXmlDeclaration = _config.SuppressHeader,
+                    Encoding = _config.Encoding ?? new UTF8Encoding(false),
                 };
             return settings;
         }
