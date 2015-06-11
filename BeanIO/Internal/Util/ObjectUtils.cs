@@ -20,10 +20,10 @@ namespace BeanIO.Internal.Util
                 return null;
             try
             {
-                var constructor = type.GetTypeInfo().DeclaredConstructors.SingleOrDefault(x => x.GetParameters().Length == 0);
+                var constructor = type.GetTypeInfo().DeclaredConstructors.SingleOrDefault(x => !x.IsStatic && x.GetParameters().Length == 0);
                 if (constructor == null)
                     return _getDefaultGenericMethodInfo.MakeGenericMethod(type).Invoke(null, null);
-                return type.GetTypeInfo().DeclaredConstructors.Single(x => x.GetParameters().Length == 0).Invoke(null);
+                return constructor.Invoke(null);
             }
             catch (Exception ex)
             {

@@ -932,18 +932,29 @@ namespace BeanIO.Internal.Compiler
                 var reflectedType = ReflectCollectionType(aggregation, property, config.Getter, config.Setter);
 
                 // descriptor may be null if the parent was Map or Collection
-                if (collectionType.IsArray)
+                var collectionParser = aggregation as CollectionParser;
+                if (collectionParser != null)
                 {
                     var arrayType = property.PropertyType;
 
                     // reflectedType may be null if our parent is a Map
                     if (reflectedType != null)
                     {
-                        // use the reflected component type for an array
-                        arrayType = reflectedType.GetElementType();
+                        if (collectionType.IsArray)
+                        {
+                            // use the reflected component type for an array
+                            arrayType = reflectedType.GetElementType();
+                        }
+                        else if (reflectedType.IsConstructedGenericType)
+                        {
+                            arrayType = reflectedType.GenericTypeArguments[0];
+                        }
 
-                        // override target type if we were able to reflect its value
-                        property.PropertyType = arrayType;
+                        if (arrayType != null)
+                        {
+                            // override target type if we were able to reflect its value
+                            property.PropertyType = arrayType;
+                        }
                     }
                     else if (arrayType == null)
                     {
@@ -951,7 +962,7 @@ namespace BeanIO.Internal.Compiler
                         arrayType = typeof(string);
                     }
 
-                    ((ArrayParser)aggregation).ElementType = arrayType;
+                    collectionParser.ElementType = arrayType;
                 }
             }
         }

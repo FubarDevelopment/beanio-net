@@ -10,7 +10,7 @@ namespace BeanIO.Internal.Parser
     /// A <see cref="IParser"/> component for aggregating inline <see cref="IDictionary"/> objects.
     /// </summary>
     /// <example>
-    /// key1,field1,key2,field2
+    /// <code>key1,field1,key2,field2</code>
     /// </example>
     public class MapParser : Aggregation
     {
@@ -49,7 +49,7 @@ namespace BeanIO.Internal.Parser
         /// Returns the length of aggregation
         /// </summary>
         /// <param name="value">the aggregation value</param>
-        /// <returns></returns>
+        /// <returns>the length</returns>
         public override int Length(object value)
         {
             var map = (IDictionary)value;

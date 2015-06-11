@@ -14,19 +14,6 @@ namespace BeanIO.Internal.Parser
     public class ArrayParser : CollectionParser
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ArrayParser"/> class.
-        /// </summary>
-        public ArrayParser()
-        {
-            ElementType = typeof(object);
-        }
-
-        /// <summary>
-        /// Gets or sets the array element type
-        /// </summary>
-        public Type ElementType { get; set; }
-
-        /// <summary>
         /// Gets the <see cref="IProperty"/> implementation type
         /// </summary>
         public override PropertyType Type

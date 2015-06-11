@@ -106,7 +106,10 @@ namespace BeanIO.Internal.Util
             {
                 _field.SetValue(instance, new[] { value });
             }
-            throw new InvalidOperationException();
+            else
+            {
+                throw new InvalidOperationException();
+            }
         }
     }
 }

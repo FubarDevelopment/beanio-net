@@ -50,7 +50,10 @@ namespace BeanIO.Internal.Parser
         /// <returns>false; iterations cannot be used to identify records</returns>
         public override bool IsIdentifier
         {
-            get { return false; }
+            get
+            {
+                return false;
+            }
             set
             {
                 if (value)
@@ -93,7 +96,7 @@ namespace BeanIO.Internal.Parser
         /// Returns the length of aggregation
         /// </summary>
         /// <param name="value">the aggregation value</param>
-        /// <returns></returns>
+        /// <returns>the length</returns>
         public abstract int Length(object value);
 
         /// <summary>

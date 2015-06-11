@@ -1,18 +1,36 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser
 {
+    /// <summary>
+    /// A <see cref="CollectionParser" /> provides iteration support for a <see cref="Segment"/> or <see cref="Field"/>,
+    /// and is optionally bound to a <see cref="IList{T}"/> type property value.
+    /// </summary>
     public class CollectionParser : Aggregation
     {
         /// <summary>
         /// the property value
         /// </summary>
         private readonly ParserLocal<object> _value = new ParserLocal<object>();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CollectionParser"/> class.
+        /// </summary>
+        public CollectionParser()
+        {
+            ElementType = typeof(object);
+        }
+
+        /// <summary>
+        /// Gets or sets the array element type
+        /// </summary>
+        public Type ElementType { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this aggregation is a property of its parent bean object.
@@ -53,7 +71,7 @@ namespace BeanIO.Internal.Parser
         /// Returns the length of aggregation
         /// </summary>
         /// <param name="value">the aggregation value</param>
-        /// <returns></returns>
+        /// <returns>the length</returns>
         public override int Length(object value)
         {
             var collection = (ICollection)value;
@@ -68,7 +86,7 @@ namespace BeanIO.Internal.Parser
         public override object CreateValue(ParsingContext context)
         {
             var value = _value.Get(context);
-            
+
             if (value == null)
             {
                 value = CreateCollection();
@@ -81,7 +99,6 @@ namespace BeanIO.Internal.Parser
         public override bool Defines(object value)
         {
             // TODO: implement for arrays....
-
             if (value == null || PropertyType == null)
                 return false;
 
@@ -182,7 +199,7 @@ namespace BeanIO.Internal.Parser
             {
                 context.PushIteration(this);
 
-                for (int i = 0; (maxOccurs == null || i != maxOccurs); ++i)
+                for (int i = 0; maxOccurs == null || i != maxOccurs; ++i)
                 {
                     SetIterationIndex(context, i);
 
@@ -251,7 +268,17 @@ namespace BeanIO.Internal.Parser
 
         protected virtual IList CreateCollection()
         {
-            return (IList)PropertyType.NewInstance();
+            var propertyTypeInfo = PropertyType.GetTypeInfo();
+            Type type;
+            if (propertyTypeInfo.ContainsGenericParameters)
+            {
+                type = propertyTypeInfo.MakeGenericType(ElementType);
+            }
+            else
+            {
+                type = PropertyType;
+            }
+            return (IList)type.NewInstance();
         }
 
         /// <summary>
