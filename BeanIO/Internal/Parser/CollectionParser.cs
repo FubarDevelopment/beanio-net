@@ -146,6 +146,36 @@ namespace BeanIO.Internal.Parser
             return collection != null && collection.Count > 0;
         }
 
+        /// <summary>
+        /// Returns the unmarshalled property value.
+        /// </summary>
+        /// <param name="context">The <see cref="ParsingContext"/></param>
+        /// <returns>the property value</returns>
+        public override object GetValue(ParsingContext context)
+        {
+            var value = _value.Get(context);
+            return value ?? Value.Missing;
+        }
+
+        /// <summary>
+        /// Sets the property value for marshaling.
+        /// </summary>
+        /// <param name="context">The <see cref="ParsingContext"/></param>
+        /// <param name="value">the property value</param>
+        public override void SetValue(ParsingContext context, object value)
+        {
+            // convert empty collections to null so that parent parsers
+            // will consider this property missing during marshalling
+            if (value != null && ((ICollection)value).Count == 0)
+            {
+                value = null;
+            }
+
+            _value.Set(context, value);
+
+            base.SetValue(context, value);
+        }
+
         protected override bool Marshal(MarshallingContext context, IParser parser, int minOccurs, int? maxOccurs)
         {
             context.PushIteration(this);

@@ -96,21 +96,18 @@ namespace BeanIO.Internal.Parser.Format.Xml
             if (ReferenceEquals(fieldText, Value.Nil))
                 fieldText = null;
 
-            var element = new XElement(this.ToXName(true), fieldText);
+            var element = new XElement(this.ToXName(true), fieldText.ToConvertedName(ctx));
             if (!IsNamespaceAware)
             {
                 element.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.IgnoreNamespace));
             }
+            else if (string.Equals(Prefix, string.Empty))
+            {
+                element.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.DefaultNamespace));
+            }
             else
             {
-                if (string.Equals(Prefix, string.Empty))
-                {
-                    element.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.DefaultNamespace));
-                }
-                else
-                {
-                    element.SetAttributeValue(XNamespace.Xmlns + Prefix, Namespace);
-                }
+                element.SetAttributeValue(XNamespace.Xmlns + Prefix, Namespace);
             }
 
             if (fieldText == null && IsNillable)

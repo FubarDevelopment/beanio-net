@@ -323,7 +323,7 @@ namespace BeanIO.Internal.Compiler
         /// <param name="config">the stream configuration to finalize</param>
         protected override void FinalizeStream(StreamConfig config)
         {
-            _stream.Layout = (ISelector)_parserStack.Peek();
+            _stream.Layout = (ISelector)_parserStack.Last();
             FinalizeGroup(config);
         }
 

@@ -207,11 +207,11 @@ namespace BeanIO.Internal.Parser.Format.Xml
 
                 if (index > 0)
                 {
-                    element = XmlNodeUtil.FindSibling(PreviousElement, node);
+                    element = XmlNodeUtil.FindSibling(PreviousElement, node, node.GetNameVariants());
                 }
                 else
                 {
-                    element = XmlNodeUtil.FindChild(parent, node, index);
+                    element = XmlNodeUtil.FindChild(parent, node, index, node.GetNameVariants());
                 }
                 if (element != null)
                 {
@@ -222,11 +222,11 @@ namespace BeanIO.Internal.Parser.Format.Xml
             {
                 if (parent == null)
                 {
-                    element = XmlNodeUtil.FindChild(_document, node, 0);
+                    element = XmlNodeUtil.FindChild(_document, node, 0, node.GetNameVariants());
                 }
                 else
                 {
-                    element = XmlNodeUtil.FindChild(parent, node, 0);
+                    element = XmlNodeUtil.FindChild(parent, node, 0, node.GetNameVariants());
                 }
             }
             return element;

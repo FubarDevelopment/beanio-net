@@ -249,6 +249,7 @@
     <Compile Include="Stream\Xml\ElementStack.cs" />
     <Compile Include="Stream\Xml\IXmlStreamConfiguration.cs" />
     <Compile Include="Stream\Xml\IXmlStreamConfigurationAware.cs" />
+    <Compile Include="Stream\ElementNameConversionMode.cs" />
     <Compile Include="Stream\Xml\XmlParserConfiguration.cs" />
     <Compile Include="Stream\Xml\XmlReader.cs" />
     <Compile Include="Stream\Xml\XmlRecordMarshaller.cs" />

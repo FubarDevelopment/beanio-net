@@ -193,7 +193,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
             var ctx = (XmlMarshallingContext)context;
 
             var parent = ctx.Parent;
-            var node = new XElement(this.ToXName(true));
+            var node = new XElement(this.ToXName(true).ToConvertedName());
             parent.Add(node);
             if (IsGroup && ctx.IsStreaming)
             {
@@ -369,7 +369,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <returns>the matched <see cref="ISelector"/></returns>
         public ISelector MatchAny(UnmarshallingContext context)
         {
-            return Match(context, true);
+            return Match(context, false);
         }
 
         /// <summary>
@@ -494,7 +494,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
                 if (!wrapper.IsGroup)
                     return;
 
-                var element = new XElement(wrapper.ToXName(true));
+                var element = new XElement(wrapper.ToXName(true).ToConvertedName());
                 parent.Add(element);
 
                 if (!wrapper.IsNamespaceAware)

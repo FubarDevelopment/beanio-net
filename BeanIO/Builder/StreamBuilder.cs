@@ -140,6 +140,17 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
+        /// Sets the streams name conversion mode.
+        /// </summary>
+        /// <param name="conversionMode">The conversion mode to set</param>
+        /// <returns>The value of <see cref="Me"/></returns>
+        public StreamBuilder NameConversionMode(ElementNameConversionMode conversionMode)
+        {
+            Config.NameConversionMode = conversionMode;
+            return Me;
+        }
+
+        /// <summary>
         /// Indicates unidentified records should be ignored during unmarshalling.
         /// </summary>
         /// <returns>The value of <see cref="Me"/></returns>

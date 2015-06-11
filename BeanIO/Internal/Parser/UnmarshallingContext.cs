@@ -285,7 +285,7 @@ namespace BeanIO.Internal.Parser
                 _isDirty = true;
                 if (LineNumber > 0)
                     throw new InvalidRecordException(string.Format("Invalid '{0}' record at line {1}", _componentName, LineNumber), _recordContext);
-                throw new InvalidRecordException(string.Format("Invalid '{0}' record", _componentName));
+                throw new InvalidRecordException(string.Format("Invalid '{0}' record", _componentName), _recordContext);
             }
         }
 
@@ -341,7 +341,7 @@ namespace BeanIO.Internal.Parser
             Array.Copy(args, 0, messageParams, 4, args.Length);
 
             var pattern = MessageFactory.GetFieldErrorMessage(recordName, fieldName, rule);
-            var message = string.Format(Culture, pattern, args);
+            var message = string.Format(Culture, pattern, messageParams);
             _recordContext.AddFieldError(fieldName, message);
             return message;
         }
@@ -422,7 +422,7 @@ namespace BeanIO.Internal.Parser
             Array.Copy(args, 0, messageParams, 3, args.Length);
 
             var pattern = MessageFactory.GetRecordErrorMessage(recordName, rule);
-            var message = string.Format(Culture, pattern, args);
+            var message = string.Format(Culture, pattern, messageParams);
             _recordContext.AddRecordError(message);
             return message;
         }

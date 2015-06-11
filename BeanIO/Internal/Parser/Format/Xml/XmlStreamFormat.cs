@@ -18,6 +18,11 @@ namespace BeanIO.Internal.Parser.Format.Xml
         public int GroupDepth { get; set; }
 
         /// <summary>
+        /// Gets or sets the element name conversion mode
+        /// </summary>
+        public ElementNameConversionMode NameConversionMode { get; set; }
+
+        /// <summary>
         /// Gets or sets the <see cref="IRecordParserFactory"/> used by this stream
         /// </summary>
         public override IRecordParserFactory RecordParserFactory

@@ -30,8 +30,10 @@ namespace BeanIO.Internal.Compiler.Xml
         public override Parser.Stream CreateStream(StreamConfig config)
         {
             var stream = base.CreateStream(config);
-            ((XmlStreamFormat)stream.Format).Layout = stream.Layout;
-            ((XmlStreamFormat)stream.Format).GroupDepth = _maxGroupDepth;
+            var xmlStreamFormat = (XmlStreamFormat)stream.Format;
+            xmlStreamFormat.Layout = stream.Layout;
+            xmlStreamFormat.GroupDepth = _maxGroupDepth;
+            xmlStreamFormat.NameConversionMode = config.NameConversionMode;
             return stream;
         }
 

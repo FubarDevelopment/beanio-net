@@ -135,9 +135,12 @@ namespace BeanIO.Internal.Parser.Format.Xml
             }
 
             var ctx = (XmlMarshallingContext)context;
+            var parent = ctx.Parent;
+            var parentElement = ctx.Parent as XElement;
 
             // create an element for this node
-            var element = new XElement(Namespace, LocalName);
+            var ns = Namespace ?? (IsNamespaceAware ? string.Empty : (parentElement == null ? string.Empty : parentElement.Name.NamespaceName));
+            var element = new XElement(XNamespace.Get(ns) + LocalName.ToConvertedName());
             if (!IsNamespaceAware)
             {
                 element.SetAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.IgnoreNamespace));
@@ -152,7 +155,6 @@ namespace BeanIO.Internal.Parser.Format.Xml
             }
 
             // append the new element to its parent
-            var parent = ctx.Parent;
             parent.Add(element);
 
             // if nillable and there is no descendant with content, mark the element nil

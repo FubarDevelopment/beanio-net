@@ -14,6 +14,7 @@ namespace BeanIO.Internal.Config
             MinOccurs = 0;
             MaxOccurs = 1;
             Order = 1;
+            NameConversionMode = ElementNameConversionMode.Unchanged;
         }
 
         /// <summary>
@@ -41,9 +42,14 @@ namespace BeanIO.Internal.Config
         public AccessMode? Mode { get; set; }
 
         /// <summary>
-        /// Get or set the full class name of the resource bundle containing customized error messages for this stream
+        /// Gets or sets the full class name of the resource bundle containing customized error messages for this stream
         /// </summary>
         public string ResourceBundle { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="ElementNameConversionMode"/>
+        /// </summary>
+        public ElementNameConversionMode NameConversionMode { get; set; }
 
         /// <summary>
         /// Gets a list of customized type handlers configured for this stream.

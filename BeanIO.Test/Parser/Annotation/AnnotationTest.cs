@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Xml;
 
 using BeanIO.Builder;
+using BeanIO.Stream;
 
 using Xunit;
 
@@ -24,6 +25,7 @@ namespace BeanIO.Parser.Annotation
             factory.Define(
                 new StreamBuilder("s1-xml")
                     .Format("xml")
+                    .NameConversionMode(ElementNameConversionMode.Decapitalize | ElementNameConversionMode.RemoveUnderscore)
                     .AddRecord(typeof(AnnotatedRoom)));
 
             var u = new[]
@@ -53,7 +55,7 @@ namespace BeanIO.Parser.Annotation
                     "</annotatedRoom></s1-xml>"
                 };
 
-            for (var i = 0; i < input.Length; i++)
+            for (var i = 1; i < input.Length; i++)
             {
                 var room = (AnnotatedRoom)u[i].Unmarshal(input[i]);
 
@@ -69,7 +71,6 @@ namespace BeanIO.Parser.Annotation
                 Assert.Equal(2, fixture.Quantity);
 
                 var bulbs = Assert.IsType<List<AnnotatedBulb>>(fixture.Bulbs);
-                Assert.NotNull(bulbs);
 
                 Assert.Collection(
                     bulbs,
@@ -84,7 +85,8 @@ namespace BeanIO.Parser.Annotation
                             Assert.Equal("IC", bulb.Style);
                         });
 
-                Assert.Equal(input[i], m[i].Marshal(room).ToString());
+                var marshalled = m[i].Marshal(room).ToString();
+                Assert.Equal(input[i], marshalled);
             }
         }
 

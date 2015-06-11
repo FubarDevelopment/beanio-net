@@ -2,6 +2,8 @@
 using System.Xml;
 using System.Xml.Linq;
 
+using BeanIO.Internal.Util;
+
 namespace BeanIO.Internal.Parser.Format.Xml
 {
     /// <summary>
@@ -89,7 +91,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
             // format the field text (a null field value may not return null if a custom type handler was configured)
             var text = fieldText;
 
-            // nothing to marshal if minOccurs is 0        
+            // nothing to marshal if minOccurs is 0
             if (text == null && IsLazy)
                 return;
 
@@ -98,24 +100,11 @@ namespace BeanIO.Internal.Parser.Format.Xml
                 if (text == null)
                     text = string.Empty;
 
-                var att = new XAttribute(this.ToXName(true), text);
+                var att = new XAttribute(this.ToXName(true).ToConvertedName(), text);
                 if (!string.IsNullOrEmpty(Prefix))
                     parent.SetAttributeValue(XNamespace.Xmlns + Prefix, Namespace);
                 parent.Add(att);
             }
-        }
-
-        /// <summary>
-        /// Extracts a field from a record during unmarshalling
-        /// </summary>
-        /// <param name="context">the <see cref="XmlUnmarshallingContext"/> holding the record</param>
-        /// <returns>the extracted field text</returns>
-        protected override string ExtractText(XmlUnmarshallingContext context)
-        {
-            var parent = context.Position;
-            if (parent == null)
-                return null;
-            return parent.GetAttribute(this);
         }
 
         /// <summary>
@@ -149,7 +138,6 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// Sets whether this attribute uses a namespace
         /// </summary>
         /// <param name="namespaceAware">true if this attribute uses a namespace, false otherwise</param>
-        /// <returns></returns>
         public void SetNamespaceAware(bool namespaceAware)
         {
             _namespaceAware = namespaceAware;
@@ -158,7 +146,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Called by <see cref="XmlFieldFormat.ToString"/> to append attributes of this field.
         /// </summary>
-        /// <param name="s"></param>
+        /// <param name="s">the <see cref="StringBuilder"/> to write to</param>
         protected override void ToParamString(StringBuilder s)
         {
             base.ToParamString(s);
@@ -167,6 +155,19 @@ namespace BeanIO.Internal.Parser.Format.Xml
                 s.AppendFormat(", prefix={0}", Prefix);
             if (Namespace != null)
                 s.AppendFormat(", xmlns={0}", Namespace);
+        }
+
+        /// <summary>
+        /// Extracts a field from a record during unmarshalling
+        /// </summary>
+        /// <param name="context">the <see cref="XmlUnmarshallingContext"/> holding the record</param>
+        /// <returns>the extracted field text</returns>
+        protected override string ExtractText(XmlUnmarshallingContext context)
+        {
+            var parent = context.Position;
+            if (parent == null)
+                return null;
+            return parent.GetAttribute(this, this.GetNameVariants());
         }
     }
 }

@@ -17,7 +17,15 @@ namespace BeanIO.Stream.Xml
         private readonly Dictionary<string, string> _namespaceMap = new Dictionary<string, string>();
 
         /// <summary>
-        /// the number of spaces to indent each level of XML, or <code>null</code>
+        /// Initializes a new instance of the <see cref="XmlParserConfiguration"/> class.
+        /// </summary>
+        public XmlParserConfiguration()
+        {
+            Version = new Version(1, 0);
+        }
+
+        /// <summary>
+        /// Gets or sets the number of spaces to indent each level of XML, or <code>null</code>
         /// if indentation is disabled.
         /// </summary>
         public int? Indentation { get; set; }
@@ -81,7 +89,7 @@ namespace BeanIO.Stream.Xml
         /// </summary>
         /// <remarks>The list should be formatted as a space delimited list of alternating prefixes and uri's</remarks>
         /// <example>
-        /// xsd http://www.w3.org/2001/XMLSchema b http://www.beanio.org/2011/01
+        /// <code>xsd http://www.w3.org/2001/XMLSchema b http://www.beanio.org/2011/01 </code>
         /// </example>
         /// <param name="list">the space delimited list of namespaces</param>
         public void SetNamespaces(string list)
@@ -92,10 +100,10 @@ namespace BeanIO.Stream.Xml
                 return;
 
             var s = list.Trim().Replace('\t', ' ').Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            if ((s.Length & 1)==1)
+            if ((s.Length & 1) == 1)
                 throw new BeanIOConfigurationException("Invalid namespaces setting.  Must follow 'prefix uri prefix uri' pattern.");
 
-            for (int i = 0; i != s.Length; i += 2)
+            for (var i = 0; i != s.Length; i += 2)
                 AddNamespace(s[i + 1], s[i]);
         }
     }

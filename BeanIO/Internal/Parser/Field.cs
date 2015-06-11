@@ -181,7 +181,7 @@ namespace BeanIO.Internal.Parser
                 text = FormatValue(value);
             }
 
-            Format.InsertValue(context, text);
+            Format.InsertField(context, text);
             return true;
         }
 

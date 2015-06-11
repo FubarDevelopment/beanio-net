@@ -157,7 +157,7 @@ namespace BeanIO.Internal.Parser
 
                     try
                     {
-                        if (value != null && !property.PropertyType.GetTypeInfo().IsPrimitive)
+                        if (value != null)
                             property.Accessor.SetValue(b, value);
                     }
                     catch (Exception ex)

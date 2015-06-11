@@ -2,6 +2,7 @@
 using System.Xml.Linq;
 
 using BeanIO.Internal.Parser.Format.Xml.Annotations;
+using BeanIO.Internal.Util;
 using BeanIO.Stream;
 
 namespace BeanIO.Internal.Parser.Format.Xml
@@ -71,7 +72,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
                     {
                         var xml = _groupStack.Pop();
 
-                        var element = new XElement(xml.ToXName(false));
+                        var element = new XElement(xml.ToXName(false).ToConvertedName());
                         if (!string.IsNullOrEmpty(xml.Prefix))
                             element.SetAttributeValue(XNamespace.Xmlns + xml.Prefix, xml.Namespace);
                         element.AddAnnotation(new IsGroupElementAnnotation(true));

@@ -1,5 +1,8 @@
 ﻿using System.Xml.Linq;
 
+using BeanIO.Internal.Parser.Format.Xml;
+using BeanIO.Stream;
+
 using JetBrains.Annotations;
 
 namespace BeanIO.Internal.Util
@@ -11,6 +14,12 @@ namespace BeanIO.Internal.Util
         {
             obj.RemoveAnnotations<T>();
             obj.AddAnnotation(annotation);
+        }
+
+        public static XName ToConvertedName(this XName name, ElementNameConversionMode conversionMode)
+        {
+            var localName = name.LocalName.ToConvertedName(conversionMode);
+            return XName.Get(localName, name.NamespaceName);
         }
     }
 }

@@ -174,6 +174,7 @@ namespace BeanIO.Internal.Parser
                 if (occursVal < min)
                 {
                     context.AddFieldError(Name, null, "minOccurs", min, max);
+
                     // this prevents a duplicate exception being thrown by a parent segment:
                     if (occursVal == 0)
                         return true;
@@ -188,6 +189,19 @@ namespace BeanIO.Internal.Parser
             }
 
             return Unmarshal(context, Parser, min, max);
+        }
+
+        /// <summary>
+        /// Sets the property value for marshaling.
+        /// </summary>
+        /// <param name="context">The <see cref="ParsingContext"/></param>
+        /// <param name="value">the property value</param>
+        public override void SetValue(ParsingContext context, object value)
+        {
+            if (Occurs != null && !Occurs.IsBound)
+            {
+                Occurs.SetValue(context, Length(value));
+            }
         }
 
         protected abstract bool Marshal(MarshallingContext context, IParser parser, int minOccurs, int? maxOccurs);
