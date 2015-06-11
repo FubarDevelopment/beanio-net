@@ -91,6 +91,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
                         {
                             element.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.DefaultNamespace));
                         }
+                        _parent.Add(element);
 
                         _parent = element;
                     }
