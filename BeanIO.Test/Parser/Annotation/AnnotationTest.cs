@@ -55,7 +55,7 @@ namespace BeanIO.Parser.Annotation
                     "</annotatedRoom></s1-xml>"
                 };
 
-            for (var i = 1; i < input.Length; i++)
+            for (var i = 0; i < input.Length; i++)
             {
                 var room = (AnnotatedRoom)u[i].Unmarshal(input[i]);
 
