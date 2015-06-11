@@ -64,6 +64,7 @@
     <Compile Include="Beans\OrderBatch.cs" />
     <Compile Include="Beans\OrderItem.cs" />
     <Compile Include="Beans\Person.cs" />
+    <Compile Include="Builder\BuilderTest.cs" />
     <Compile Include="ConfigUtil.cs" />
     <Compile Include="Config\ConcreteBean.cs" />
     <Compile Include="Config\IInterfaceBean.cs" />

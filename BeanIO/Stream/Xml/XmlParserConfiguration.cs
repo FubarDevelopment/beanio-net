@@ -14,7 +14,7 @@ namespace BeanIO.Stream.Xml
     /// </remarks>
     public class XmlParserConfiguration
     {
-        private readonly Dictionary<string, string> _namespaceMap = new Dictionary<string, string>();
+        private Dictionary<string, string> _namespaceMap;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlParserConfiguration"/> class.
@@ -22,6 +22,7 @@ namespace BeanIO.Stream.Xml
         public XmlParserConfiguration()
         {
             Version = new Version(1, 0);
+            Encoding = new UTF8Encoding(false);
         }
 
         /// <summary>
@@ -81,6 +82,8 @@ namespace BeanIO.Stream.Xml
                 throw new ArgumentNullException("prefix");
             if (uri == null)
                 throw new ArgumentNullException("uri");
+            if (_namespaceMap == null)
+                _namespaceMap = new Dictionary<string, string>();
             _namespaceMap[uri] = prefix;
         }
 
@@ -94,7 +97,10 @@ namespace BeanIO.Stream.Xml
         /// <param name="list">the space delimited list of namespaces</param>
         public void SetNamespaces(string list)
         {
-            _namespaceMap.Clear();
+            if (_namespaceMap == null)
+                _namespaceMap = new Dictionary<string, string>();
+            else
+                _namespaceMap.Clear();
 
             if (string.IsNullOrWhiteSpace(list))
                 return;

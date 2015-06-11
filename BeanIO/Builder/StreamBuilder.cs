@@ -63,10 +63,7 @@ namespace BeanIO.Builder
         /// <returns>The value of <see cref="Me"/></returns>
         public StreamBuilder Parser(IRecordParserFactory parser)
         {
-            var bc = new BeanConfig<IRecordParserFactory>()
-                {
-                    CreateFunc = () => parser,
-                };
+            var bc = new BeanConfig<IRecordParserFactory>(() => parser);
             Config.ParserFactory = bc;
             return Me;
         }
@@ -90,10 +87,9 @@ namespace BeanIO.Builder
         /// <returns>The value of <see cref="Me"/></returns>
         public StreamBuilder AddTypeHandler([CanBeNull] string name, [NotNull] Func<ITypeHandler> createFunc)
         {
-            var thc = new TypeHandlerConfig()
+            var thc = new TypeHandlerConfig(createFunc)
             {
                 Name = name ?? createFunc().TargetType.GetAssemblyQualifiedName(),
-                CreateFunc = createFunc,
             };
             Config.AddHandler(thc);
             return Me;

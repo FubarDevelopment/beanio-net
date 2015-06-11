@@ -90,6 +90,7 @@ namespace BeanIO.Parser.Annotation
             }
         }
 
+        [Fact]
         public void TestAnnotatedFields()
         {
             var factory = StreamFactory.NewInstance();
@@ -97,13 +98,13 @@ namespace BeanIO.Parser.Annotation
             factory.Define(
                 new StreamBuilder("s1")
                     .Format("csv")
-                    .AddRecord(typeof(AnnotatedRoom)));
+                    .AddRecord(typeof(AnnotatedUser)));
 
             factory.Define(
                 new StreamBuilder("s1-xml")
                     .Format("xml")
                     .XmlType(XmlNodeType.None)
-                    .AddRecord(typeof(AnnotatedRoom)));
+                    .AddRecord(typeof(AnnotatedUser)));
 
             var u = new[]
                 {

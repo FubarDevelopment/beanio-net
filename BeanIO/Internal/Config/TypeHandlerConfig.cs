@@ -1,4 +1,6 @@
-﻿using BeanIO.Types;
+﻿using System;
+
+using BeanIO.Types;
 
 namespace BeanIO.Internal.Config
 {
@@ -10,6 +12,23 @@ namespace BeanIO.Internal.Config
     /// </remarks>
     public class TypeHandlerConfig : BeanConfig<ITypeHandler>
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TypeHandlerConfig"/> class.
+        /// </summary>
+        public TypeHandlerConfig()
+            : this(null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TypeHandlerConfig"/> class.
+        /// </summary>
+        /// <param name="create">the function to create an instance of <see cref="ITypeHandler"/></param>
+        public TypeHandlerConfig(Func<ITypeHandler> create)
+            : base(create)
+        {
+        }
+
         /// <summary>
         /// Gets or sets the name of the type handler.
         /// </summary>

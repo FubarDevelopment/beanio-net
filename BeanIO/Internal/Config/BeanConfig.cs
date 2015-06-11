@@ -15,6 +15,23 @@ namespace BeanIO.Internal.Config
     public class BeanConfig<T> : IBeanConfig
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="BeanConfig{T}"/> class.
+        /// </summary>
+        public BeanConfig()
+            : this(null)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BeanConfig{T}"/> class.
+        /// </summary>
+        /// <param name="create">the function to create an instance of <typeparamref name="T"/></param>
+        public BeanConfig(Func<T> create)
+        {
+            Create = create;
+        }
+
+        /// <summary>
         /// Gets or sets the fully qualified class name of the bean.
         /// </summary>
         public string ClassName { get; set; }
@@ -27,6 +44,6 @@ namespace BeanIO.Internal.Config
         /// <summary>
         /// Gets or sets the configured bean instance.
         /// </summary>
-        public Func<T> CreateFunc { get; set; }
+        public Func<T> Create { get; private set; }
     }
 }

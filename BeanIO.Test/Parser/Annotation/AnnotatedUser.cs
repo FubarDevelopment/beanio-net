@@ -2,12 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Xml;
 
 using BeanIO.Annotation;
 using BeanIO.Builder;
 
 namespace BeanIO.Parser.Annotation
 {
+    [Record(XmlName = "user", XmlNamespace = "http://org.beanio.test")]
+    [UnboundField("type", At = 0, IsRecordIdentifier = true, Literal = "USER", XmlType = XmlNodeType.Attribute)]
     public class AnnotatedUser : AnnotatedUserSupport, IAnnotatedUserInterface
     {
         [Field(At = 6, Type = typeof(int), Padding = '0', Align = Align.Right, Length = 4)]

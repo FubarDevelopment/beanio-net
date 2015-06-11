@@ -45,7 +45,9 @@
     <Compile Include="Builder\AccessMode.cs" />
     <Compile Include="Builder\Align.cs" />
     <Compile Include="Builder\CsvParserBuilder.cs" />
+    <Compile Include="Builder\DelimitedParserBuilder.cs" />
     <Compile Include="Builder\FieldBuilder.cs" />
+    <Compile Include="Builder\FixedLengthParserBuilder.cs" />
     <Compile Include="Builder\GroupBuilder.cs" />
     <Compile Include="Builder\IParserBuilder.cs" />
     <Compile Include="Builder\PropertyBuilderSupport.cs" />
@@ -54,6 +56,7 @@
     <Compile Include="Builder\GroupBuilderSupport.cs" />
     <Compile Include="Builder\SegmentBuilderSupport.cs" />
     <Compile Include="Builder\StreamBuilder.cs" />
+    <Compile Include="Builder\XmlParserBuilder.cs" />
     <Compile Include="Config\DictionaryPropertiesProvider.cs" />
     <Compile Include="Config\MergedPropertiesProvider.cs" />
     <Compile Include="Config\Properties.cs" />

@@ -1316,9 +1316,9 @@ namespace BeanIO.Internal.Compiler
             {
                 factory = CreateDefaultRecordParserFactory();
             }
-            else if (parserFactoryBean.CreateFunc != null)
+            else if (parserFactoryBean.Create != null)
             {
-                factory = parserFactoryBean.CreateFunc();
+                factory = parserFactoryBean.Create();
             }
             else
             {

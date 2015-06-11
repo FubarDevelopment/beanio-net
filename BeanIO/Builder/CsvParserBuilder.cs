@@ -67,10 +67,7 @@ namespace BeanIO.Builder
 
         public BeanConfig<IRecordParserFactory> Build()
         {
-            var config = new BeanConfig<IRecordParserFactory>
-                {
-                    CreateFunc = () => _parser
-                };
+            var config = new BeanConfig<IRecordParserFactory>(() => _parser);
             return config;
         }
     }
