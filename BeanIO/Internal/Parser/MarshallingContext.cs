@@ -46,7 +46,6 @@ namespace BeanIO.Internal.Parser
         /// </summary>
         public virtual void Clear()
         {
-            ClearOffset();
             Bean = null;
             ComponentName = null;
         }
@@ -60,7 +59,7 @@ namespace BeanIO.Internal.Parser
         public virtual void WriteRecord()
         {
             RecordWriter.Write(ToRecordObject());
-            Clear();
+            ClearOffset();
         }
 
         /// <summary>
