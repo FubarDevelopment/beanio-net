@@ -56,17 +56,33 @@ namespace BeanIO.Parser.Annotation
             for (var i = 0; i < input.Length; i++)
             {
                 var room = (AnnotatedRoom)u[i].Unmarshal(input[i]);
-                Assert.Equal(2, room.GetLightFixture().Quantity);
-                Assert.Equal(2, room.GetLightFixture().Bulbs.Count);
-                // ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-                var bulbs = Assert.IsType<List<AnnotatedBulb>>(room.GetLightFixture().Bulbs);
-                Assert.Equal(60, bulbs[0].Watts);
-                Assert.Equal("CFL", bulbs[0].Style);
-                Assert.Equal(40, bulbs[1].Watts);
-                Assert.Equal("IC", bulbs[1].Style);
+
                 Assert.Equal("Bath", room.Name);
-                Assert.Equal(10, room.GetFlooring().Width);
-                Assert.Equal(20, room.GetFlooring().Height);
+
+                var flooring = room.GetFlooring();
+                Assert.NotNull(flooring);
+                Assert.Equal(10, flooring.Width);
+                Assert.Equal(20, flooring.Height);
+
+                var fixture = room.GetLightFixture();
+                Assert.NotNull(fixture);
+                Assert.Equal(2, fixture.Quantity);
+
+                var bulbs = Assert.IsType<List<AnnotatedBulb>>(fixture.Bulbs);
+                Assert.NotNull(bulbs);
+
+                Assert.Collection(
+                    bulbs,
+                    bulb =>
+                        {
+                            Assert.Equal(60, bulb.Watts);
+                            Assert.Equal("CFL", bulb.Style);
+                        },
+                    bulb =>
+                        {
+                            Assert.Equal(40, bulb.Watts);
+                            Assert.Equal("IC", bulb.Style);
+                        });
 
                 Assert.Equal(input[i], m[i].Marshal(room).ToString());
             }
