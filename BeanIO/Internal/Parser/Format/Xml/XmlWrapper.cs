@@ -140,7 +140,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
 
             // create an element for this node
             var ns = Namespace ?? (IsNamespaceAware ? string.Empty : (parentElement == null ? string.Empty : parentElement.Name.NamespaceName));
-            var element = new XElement(XNamespace.Get(ns) + LocalName.ToConvertedName());
+            var element = new XElement(XNamespace.Get(ns) + LocalName.ToConvertedName(ctx.NameConversionMode));
             if (!IsNamespaceAware)
             {
                 element.SetAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.IgnoreNamespace));

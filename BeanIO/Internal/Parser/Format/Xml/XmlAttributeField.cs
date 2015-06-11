@@ -100,7 +100,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
                 if (text == null)
                     text = string.Empty;
 
-                var att = new XAttribute(this.ToXName(true).ToConvertedName(), text);
+                var att = new XAttribute(this.ToXName(true).ToConvertedName(context.NameConversionMode), text);
                 if (!string.IsNullOrEmpty(Prefix))
                     parent.SetAttributeValue(XNamespace.Xmlns + Prefix, Namespace);
                 parent.Add(att);

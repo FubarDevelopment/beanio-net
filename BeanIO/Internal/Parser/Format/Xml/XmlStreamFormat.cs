@@ -56,7 +56,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <returns>the new <see cref="MarshallingContext"/></returns>
         public override MarshallingContext CreateMarshallingContext(bool streaming)
         {
-            var ctx = new XmlMarshallingContext(GroupDepth)
+            var ctx = new XmlMarshallingContext(GroupDepth, NameConversionMode)
                 {
                     IsStreaming = streaming
                 };
@@ -67,13 +67,14 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// Creates a DOM made up of any group nodes in the parser tree.
         /// </summary>
         /// <param name="layout">the <see cref="XmlSelectorWrapper"/></param>
+        /// <param name="nameConversionMode">the element and attribute name conversion mode</param>
         /// <returns>the new <see cref="XDocument"/> made up of group nodes</returns>
-        protected virtual XDocument CreateBaseDocument(ISelector layout)
+        protected virtual XDocument CreateBaseDocument(ISelector layout, ElementNameConversionMode nameConversionMode)
         {
             var wrapper = layout as XmlSelectorWrapper;
             if (wrapper == null)
                 return new XDocument();
-            return wrapper.CreateBaseDocument();
+            return wrapper.CreateBaseDocument(nameConversionMode);
         }
 
         private class RecordParserXmlStreamConfiguration : IXmlStreamConfiguration
@@ -87,7 +88,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
 
             public XDocument Document
             {
-                get { return _format.CreateBaseDocument(_format.Layout); }
+                get { return _format.CreateBaseDocument(_format.Layout, _format.NameConversionMode); }
             }
         }
     }

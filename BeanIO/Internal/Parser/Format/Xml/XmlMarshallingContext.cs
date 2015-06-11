@@ -21,15 +21,22 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// Initializes a new instance of the <see cref="XmlMarshallingContext"/> class.
         /// </summary>
         /// <param name="groupDepth">the maximum depth of a group in the parser tree</param>
-        public XmlMarshallingContext(int groupDepth)
+        /// <param name="nameConversionMode">the name conversion mode</param>
+        public XmlMarshallingContext(int groupDepth, ElementNameConversionMode nameConversionMode)
         {
             _groupStack = new Stack<IXmlNode>(groupDepth);
+            NameConversionMode = nameConversionMode;
         }
 
         /// <summary>
         /// Gets or sets a value indicating whether a stream is being marshalled, versus a single document.
         /// </summary>
         public bool IsStreaming { get; set; }
+
+        /// <summary>
+        /// Gets or sets the element name conversion mode
+        /// </summary>
+        public ElementNameConversionMode NameConversionMode { get; private set; }
 
         /// <summary>
         /// Gets the record object to pass to the <see cref="IRecordWriter"/>
@@ -72,7 +79,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
                     {
                         var xml = _groupStack.Pop();
 
-                        var element = new XElement(xml.ToXName(false).ToConvertedName());
+                        var element = new XElement(xml.ToXName(false).ToConvertedName(NameConversionMode));
                         if (!string.IsNullOrEmpty(xml.Prefix))
                             element.SetAttributeValue(XNamespace.Xmlns + xml.Prefix, xml.Namespace);
                         element.AddAnnotation(new IsGroupElementAnnotation(true));

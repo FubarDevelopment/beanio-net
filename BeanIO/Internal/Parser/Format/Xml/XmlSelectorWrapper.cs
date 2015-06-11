@@ -7,6 +7,7 @@ using System.Xml.Linq;
 
 using BeanIO.Internal.Parser.Format.Xml.Annotations;
 using BeanIO.Internal.Util;
+using BeanIO.Stream;
 
 namespace BeanIO.Internal.Parser.Format.Xml
 {
@@ -193,7 +194,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
             var ctx = (XmlMarshallingContext)context;
 
             var parent = ctx.Parent;
-            var node = new XElement(this.ToXName(true).ToConvertedName());
+            var node = new XElement(this.ToXName(true).ToConvertedName(ctx.NameConversionMode));
             parent.Add(node);
             if (IsGroup && ctx.IsStreaming)
             {
@@ -436,11 +437,12 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Creates a DOM made up of all <see cref="XmlSelectorWrapper"/> descendants that wrap a group or record.
         /// </summary>
+        /// <param name="nameConversionMode">The element and attribute name conversion mode</param>
         /// <returns>the created <see cref="XDocument"/></returns>
-        public virtual XDocument CreateBaseDocument()
+        public virtual XDocument CreateBaseDocument(ElementNameConversionMode nameConversionMode)
         {
             var doc = new XDocument();
-            CreateBaseDocument(doc, this);
+            CreateBaseDocument(doc, this, nameConversionMode);
             return doc;
         }
 
@@ -486,7 +488,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
                 s.AppendFormat(", xmlns={0}", IsNamespaceAware ? Namespace : "*");
         }
 
-        private void CreateBaseDocument(XContainer parent, Component node)
+        private void CreateBaseDocument(XContainer parent, Component node, ElementNameConversionMode nameConversionMode)
         {
             var wrapper = node as XmlSelectorWrapper;
             if (wrapper != null)
@@ -494,7 +496,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
                 if (!wrapper.IsGroup)
                     return;
 
-                var element = new XElement(wrapper.ToXName(true).ToConvertedName());
+                var element = new XElement(wrapper.ToXName(true).ToConvertedName(nameConversionMode));
                 parent.Add(element);
 
                 if (!wrapper.IsNamespaceAware)
@@ -515,7 +517,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
 
             foreach (var child in node.Children)
             {
-                CreateBaseDocument(parent, child);
+                CreateBaseDocument(parent, child, nameConversionMode);
             }
         }
 
