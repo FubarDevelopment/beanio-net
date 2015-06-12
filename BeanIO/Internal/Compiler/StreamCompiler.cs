@@ -153,7 +153,7 @@ namespace BeanIO.Internal.Compiler
 
             foreach (var handlerConfig in typeHandlerConfigurations)
             {
-                if (handlerConfig.Name == null || handlerConfig.Type == null)
+                if (handlerConfig.Name == null && handlerConfig.Type == null)
                     throw new BeanIOConfigurationException("Type handler must specify either 'type' or 'name'");
 
                 var createFunc = handlerConfig.Create;

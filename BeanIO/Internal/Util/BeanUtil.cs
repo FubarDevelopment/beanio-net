@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -70,44 +71,21 @@ namespace BeanIO.Internal.Util
                 return;
 
             var type = bean.GetType();
-            var typeInfo = type.GetTypeInfo();
 
             foreach (var property in properties)
             {
                 var name = property.Key;
+                var descriptor = GetPropertyDescriptor(type, name, null, null, false);
 
-                Action<object> setAction;
-                Type valueType;
-
-                var prop = typeInfo.GetDeclaredProperty(name);
-                if (prop != null && prop.SetMethod != null)
-                {
-                    setAction = v => prop.SetValue(bean, v);
-                    valueType = prop.PropertyType;
-                }
-                else
-                {
-                    var field = typeInfo.GetDeclaredField(name);
-                    if (field != null)
-                    {
-                        setAction = v => field.SetValue(bean, v);
-                        valueType = field.FieldType;
-                    }
-                    else
-                    {
-                        throw new BeanIOConfigurationException(string.Format("Property '{0}' not found on class '{1}'", name, type));
-                    }
-                }
-
-                var handler = _typeHandlerFactory.GetTypeHandlerFor(valueType);
+                var handler = _typeHandlerFactory.GetTypeHandlerFor(descriptor.PropertyType);
                 if (handler == null)
-                    throw new BeanIOConfigurationException(string.Format("Property type '{0}' not supported for property '{1}' on class '{2}'", valueType, name, type));
+                    throw new BeanIOConfigurationException(string.Format("Property type '{0}' not supported for property '{1}' on class '{2}'", descriptor.PropertyType, name, type));
 
                 try
                 {
                     var value = handler.Parse(property.Value);
                     if (value != null)
-                        setAction(value);
+                        descriptor.SetValue(bean, value);
                 }
                 catch (FormatException ex)
                 {
@@ -117,6 +95,208 @@ namespace BeanIO.Internal.Util
                 {
                     throw new BeanIOConfigurationException(string.Format("Failed to set property '{0}' on class '{1}': {2}", name, type, ex.Message), ex);
                 }
+            }
+        }
+
+        public static PropertyDescriptor GetPropertyDescriptor(Type type, string property, string getter, string setter, bool isConstructorArgument)
+        {
+            var detector = new PropertyDescriptorDetector(type, property, getter, setter, isConstructorArgument);
+            return detector.Create();
+        }
+
+        private class PropertyDescriptorDetector
+        {
+            private readonly TypeInfo _typeInfo;
+
+            private readonly string _property;
+
+            private readonly string _getter;
+
+            private readonly string _setter;
+
+            private readonly bool _isConstructorArgument;
+
+            private MethodInfo _getterInfo;
+
+            private MethodInfo _setterInfo;
+
+            public PropertyDescriptorDetector(Type type, string property, string getter, string setter, bool isConstructorArgument)
+            {
+                _typeInfo = type.GetTypeInfo();
+                _property = property;
+                _getter = getter;
+                _setter = setter;
+                _isConstructorArgument = isConstructorArgument;
+            }
+
+            public PropertyDescriptor Create()
+            {
+                _getterInfo = LoadMethodInfo(_getter, "Getter");
+                _setterInfo = LoadMethodInfo(_setter, "Setter");
+
+                var propertyNamesToTest = new[]
+                    {
+                        _property,
+                        Introspector.Capitalize(_property),
+                        Introspector.Decapitalize(_property),
+                        "_" + Introspector.Decapitalize(_property),
+                        "m_" + Introspector.Decapitalize(_property),
+                    };
+                PropertyInfo propertyInfo = null;
+                FieldInfo fieldInfo = null;
+                foreach (var propertyName in propertyNamesToTest)
+                {
+                    propertyInfo = GetDeclaredProperty(propertyName);
+                    fieldInfo = GetDeclaredField(propertyName);
+                    if (propertyInfo != null || fieldInfo != null)
+                        break;
+                }
+
+                if (propertyInfo == null && fieldInfo == null && !_isConstructorArgument)
+                {
+                    if (_getterInfo == null)
+                        _getterInfo = FindGetter(_property);
+                    if (_setterInfo == null)
+                        _setterInfo = FindSetter(_property);
+                }
+
+                if (_getterInfo != null && _setterInfo == null)
+                {
+                    _setterInfo = FindSetterForGetter(_getterInfo.Name);
+                }
+                else if (_setterInfo != null && _getterInfo == null)
+                {
+                    _getterInfo = FindGetterForSetter(_setterInfo.Name);
+                }
+
+                PropertyDescriptor descriptor;
+                if (propertyInfo != null)
+                {
+                    descriptor = new PropertyDescriptor(propertyInfo, _getterInfo, _setterInfo);
+                }
+                else if (fieldInfo == null)
+                {
+                    if (!_isConstructorArgument && _setterInfo == null && _getterInfo == null)
+                        throw new BeanIOConfigurationException(string.Format("Neither property or field found with name '{0}' for type '{1}'", _property, _typeInfo.AssemblyQualifiedName));
+                    descriptor = new PropertyDescriptor(_property, _getterInfo, _setterInfo);
+                }
+                else
+                {
+                    descriptor = new PropertyDescriptor(fieldInfo, _getterInfo, _setterInfo);
+                }
+                return descriptor;
+            }
+
+            private PropertyInfo GetDeclaredProperty(string name)
+            {
+                var typeInfo = _typeInfo;
+                while (typeInfo.AsType() != typeof(object))
+                {
+                    var result = typeInfo
+                        .DeclaredProperties
+                        .Where(x => !(x.GetMethod ?? x.SetMethod).IsStatic)
+                        .SingleOrDefault(x => x.Name == name);
+                    if (result != null)
+                        return result;
+                    if (typeInfo.BaseType == null)
+                        break;
+                    typeInfo = typeInfo.BaseType.GetTypeInfo();
+                }
+                return null;
+            }
+
+            private FieldInfo GetDeclaredField(string name)
+            {
+                var typeInfo = _typeInfo;
+                while (typeInfo.AsType() != typeof(object))
+                {
+                    var result = typeInfo
+                    .DeclaredFields
+                    .Where(x => !x.IsStatic)
+                        .SingleOrDefault(x => x.Name == name);
+                    if (result != null)
+                        return result;
+                    if (typeInfo.BaseType == null)
+                        break;
+                    typeInfo = typeInfo.BaseType.GetTypeInfo();
+                }
+                return null;
+            }
+
+            private MethodInfo FindSetterForGetter(string getterName)
+            {
+                var name = getterName;
+                if (name.StartsWith("get", StringComparison.Ordinal) || name.StartsWith("Get", StringComparison.Ordinal))
+                {
+                    name = name.Substring(3);
+                }
+                else if (name.StartsWith("is", StringComparison.Ordinal) || name.StartsWith("Is", StringComparison.Ordinal))
+                {
+                    name = name.Substring(2);
+                }
+                return FindSetter(name);
+            }
+
+            private MethodInfo FindGetterForSetter(string setterName)
+            {
+                var name = setterName;
+                if (name.StartsWith("set", StringComparison.Ordinal) || name.StartsWith("Set", StringComparison.Ordinal))
+                {
+                    name = name.Substring(3);
+                }
+                return FindGetter(name);
+            }
+
+            private MethodInfo FindGetter(string name)
+            {
+                var probableGetterNames = new[]
+                    {
+                        Introspector.Capitalize(name),
+                        "Get" + Introspector.Capitalize(name),
+                    };
+                foreach (var getterName in probableGetterNames)
+                {
+                    var info = _typeInfo.GetDeclaredMethod(getterName);
+                    if (info != null && info.GetParameters().Length == 0)
+                    {
+                        return info;
+                    }
+                }
+                return null;
+            }
+
+            private MethodInfo FindSetter(string name)
+            {
+                var probableSetterNames = new[]
+                    {
+                        Introspector.Capitalize(name),
+                        "Set" + Introspector.Capitalize(name),
+                    };
+                foreach (var setterName in probableSetterNames)
+                {
+                    var info = _typeInfo.GetDeclaredMethod(setterName);
+                    if (info != null && info.GetParameters().Length == 1)
+                    {
+                        return info;
+                    }
+                }
+                return null;
+            }
+
+            private MethodInfo LoadMethodInfo(string name, string getterOrSetter)
+            {
+                if (string.IsNullOrEmpty(name))
+                    return null;
+                var info = _typeInfo.GetDeclaredMethod(name);
+                if (info == null)
+                    throw new BeanIOConfigurationException(
+                        string.Format(
+                            "{3} '{0}' not found for property/field '{1}' of type '{2}'",
+                            _getter,
+                            _property,
+                            _typeInfo.AssemblyQualifiedName,
+                            getterOrSetter));
+                return info;
             }
         }
 
