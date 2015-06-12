@@ -4,21 +4,22 @@ using NodaTime;
 
 namespace BeanIO.Types
 {
-    public class DateTimeHandler : DateTypeHandlerSupport
+    public class DateTypeHandler : DateTimeTypeHandler
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DateTimeHandler"/> class.
+        /// Initializes a new instance of the <see cref="DateTypeHandler"/> class.
         /// </summary>
-        public DateTimeHandler()
+        public DateTypeHandler()
+            : base(culture => culture.DateTimeFormat.ShortDatePattern)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DateTimeHandler"/> class.
+        /// Initializes a new instance of the <see cref="DateTypeHandler"/> class.
         /// </summary>
         /// <param name="pattern">The pattern to use</param>
-        public DateTimeHandler(string pattern)
-            : base(pattern)
+        public DateTypeHandler(string pattern)
+            : base(culture => culture.DateTimeFormat.ShortDatePattern, pattern)
         {
         }
 
@@ -27,7 +28,7 @@ namespace BeanIO.Types
         /// </summary>
         public override Type TargetType
         {
-            get { return typeof(DateTime); }
+            get { return typeof(LocalDate); }
         }
 
         /// <summary>
@@ -40,7 +41,7 @@ namespace BeanIO.Types
             var dt = ParseDate(text);
             if (dt == null)
                 return null;
-            return dt.Value.ToDateTimeUnspecified();
+            return dt.Value.Date;
         }
 
         /// <summary>
@@ -52,8 +53,8 @@ namespace BeanIO.Types
         {
             if (value == null)
                 return null;
-            var dt = (DateTime)value;
-            return FormatDate(LocalDateTime.FromDateTime(dt));
+            var dt = (LocalDate)value;
+            return FormatDate(dt.AtMidnight());
         }
     }
 }

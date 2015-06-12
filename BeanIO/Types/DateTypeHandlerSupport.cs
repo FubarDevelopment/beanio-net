@@ -1,7 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Globalization;
 
 using BeanIO.Config;
+
+using JetBrains.Annotations;
 
 using NodaTime;
 using NodaTime.Text;
@@ -14,6 +16,8 @@ namespace BeanIO.Types
     /// </summary>
     public abstract class DateTypeHandlerSupport : CultureSupport, IConfigurableTypeHandler
     {
+        private readonly Func<CultureInfo, string> _getDefaultPatternFunc;
+
         private string _pattern;
 
         private LocalDateTimePattern _format;
@@ -22,6 +26,7 @@ namespace BeanIO.Types
         /// Initializes a new instance of the <see cref="DateTypeHandlerSupport"/> class.
         /// </summary>
         protected DateTypeHandlerSupport()
+            : this(culture => string.Format("{0} {1}", culture.DateTimeFormat.ShortDatePattern, culture.DateTimeFormat.LongTimePattern))
         {
         }
 
@@ -30,6 +35,29 @@ namespace BeanIO.Types
         /// </summary>
         /// <param name="pattern">The pattern to use for parsing and formatting</param>
         protected DateTypeHandlerSupport(string pattern)
+            : this()
+        {
+            Pattern = pattern;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DateTypeHandlerSupport"/> class.
+        /// </summary>
+        /// <param name="getDefaultPatternFunc">a function to get the default pattern</param>
+        protected DateTypeHandlerSupport([NotNull] Func<CultureInfo, string> getDefaultPatternFunc)
+        {
+            if (getDefaultPatternFunc == null)
+                throw new ArgumentNullException("getDefaultPatternFunc");
+            _getDefaultPatternFunc = getDefaultPatternFunc;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DateTypeHandlerSupport"/> class.
+        /// </summary>
+        /// <param name="getDefaultPatternFunc">a function to get the default pattern</param>
+        /// <param name="pattern">The pattern to use for parsing and formatting</param>
+        protected DateTypeHandlerSupport(Func<CultureInfo, string> getDefaultPatternFunc, string pattern)
+            : this(getDefaultPatternFunc)
         {
             Pattern = pattern;
         }
@@ -134,11 +162,39 @@ namespace BeanIO.Types
             if (string.IsNullOrEmpty(text))
                 return null;
 
-            var dt = DateFormat.Parse(text).GetValueOrThrow();
-
             var tz = TimeZone ?? DateTimeZone.Utc;
-            var result = IsLenient ? dt.InZoneLeniently(tz) : dt.InZoneStrictly(tz);
-
+            ZonedDateTime result;
+            try
+            {
+                try
+                {
+                    var dt = DateFormat.Parse(text).GetValueOrThrow();
+                    result = IsLenient ? dt.InZoneLeniently(tz) : dt.InZoneStrictly(tz);
+                }
+                catch (UnparsableValueException)
+                {
+                    var temp = text.Substring(0, Math.Min(Pattern.Length, text.Length));
+                    var dt = DateFormat.Parse(temp).GetValueOrThrow();
+                    result = IsLenient ? dt.InZoneLeniently(tz) : dt.InZoneStrictly(tz);
+                }
+            }
+            catch (UnparsableValueException)
+            {
+                // Ignore this error and try again with System.DateTime
+                DateTime dt;
+                try
+                {
+                    var temp = text.Substring(0, Math.Min(Pattern.Length, text.Length));
+                    dt = DateTime.ParseExact(temp, Pattern, Culture, DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AssumeUniversal);
+                    dt = dt.ToUniversalTime();
+                }
+                catch (FormatException)
+                {
+                    dt = DateTime.Parse(text, Culture, DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AssumeUniversal);
+                }
+                var utcOffset = tz.GetUtcOffset(Instant.FromDateTimeUtc(dt));
+                result = ZonedDateTime.FromDateTimeOffset(new DateTimeOffset(dt, utcOffset.ToTimeSpan()));
+            }
             return result;
         }
 
@@ -183,7 +239,7 @@ namespace BeanIO.Types
         /// <returns>The created <see cref="LocalDateTimePattern"/></returns>
         protected virtual LocalDateTimePattern CreateDefaultDateFormat()
         {
-            return LocalDateTimePattern.Create("d", Culture);
+            return LocalDateTimePattern.Create(_getDefaultPatternFunc(Culture), Culture);
         }
     }
 }

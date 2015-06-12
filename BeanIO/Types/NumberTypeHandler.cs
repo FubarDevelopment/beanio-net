@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 
@@ -128,8 +127,19 @@ namespace BeanIO.Types
         {
             // Parse the number into a System.Decimal.
             decimal result;
-            if (!decimal.TryParse(text, styles, Culture, out result))
-                throw new FormatException(string.Format("Number value '{0}' doesn't match the number styles {1}", text, styles));
+
+            if ((styles & NumberStyles.AllowHexSpecifier) == NumberStyles.None)
+            {
+                if (!decimal.TryParse(text, styles, Culture, out result))
+                    throw new FormatException(string.Format("Number value '{0}' doesn't match the number styles {1}", text, styles));
+            }
+            else
+            {
+                long temp;
+                if (!long.TryParse(text, styles, Culture, out temp))
+                    throw new FormatException(string.Format("Number value '{0}' doesn't match the number styles {1}", text, styles));
+                result = temp;
+            }
 
             try
             {

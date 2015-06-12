@@ -5,6 +5,7 @@ using System.Xml;
 
 using BeanIO.Config;
 using BeanIO.Types;
+using BeanIO.Types.Xml;
 
 using JetBrains.Annotations;
 
@@ -66,37 +67,28 @@ namespace BeanIO.Internal.Util
             _defaultFactory.RegisterHandlerFor(typeof(Guid), () => new GuidTypeHandler());
             _defaultFactory.RegisterHandlerFor(typeof(Uri), () => new UrlTypeHandler());
 
-            foreach (var name in typeof(DateTime).GetWellKnownNamesFor())
-                _defaultFactory.RegisterHandlerFor(name.ToType(), () => new DateTimeHandler());
+            _defaultFactory.RegisterHandlerFor("datetime", () => new DateTimeTypeHandler());
+            _defaultFactory.RegisterHandlerFor("datetimeoffset", () => new DateTimeOffsetHandler());
+            _defaultFactory.RegisterHandlerFor("date", () => new DateTypeHandler());
+            _defaultFactory.RegisterHandlerFor("time", () => new TimeTypeHandler());
 
-            foreach (var name in typeof(DateTimeOffset).GetWellKnownNamesFor())
-                _defaultFactory.RegisterHandlerFor(name.ToType(), () => new DateTimeOffsetHandler());
+            _defaultFactory.RegisterHandlerFor(typeof(bool), () => new XmlBooleanTypeHandler(), "xml");
 
             _defaultFactory.RegisterHandlerFor(
-                typeof(bool),
+                "datetime",
                 () => new XmlConvertTypeHandler(
-                          typeof(bool),
-                          v => XmlConvert.ToString((bool)v),
-                          t => XmlConvert.ToBoolean(t)),
+                            typeof(DateTime),
+                            v => XmlConvert.ToString((DateTime)v),
+                            t => XmlConvert.ToDateTimeOffset(t).DateTime),
                 "xml");
 
-            foreach (var name in typeof(DateTime).GetWellKnownNamesFor())
-                _defaultFactory.RegisterHandlerFor(
-                    name,
-                    () => new XmlConvertTypeHandler(
-                              typeof(DateTime),
-                              v => XmlConvert.ToString((DateTime)v),
-                              t => XmlConvert.ToDateTimeOffset(t).DateTime),
-                    "xml");
-
-            foreach (var name in typeof(DateTimeOffset).GetWellKnownNamesFor())
-                _defaultFactory.RegisterHandlerFor(
-                    name,
-                    () => new XmlConvertTypeHandler(
-                              typeof(DateTimeOffset),
-                              v => XmlConvert.ToString((DateTimeOffset)v),
-                              t => XmlConvert.ToDateTimeOffset(t)),
-                    "xml");
+            _defaultFactory.RegisterHandlerFor(
+                "datetimeoffset",
+                () => new XmlConvertTypeHandler(
+                            typeof(DateTimeOffset),
+                            v => XmlConvert.ToString((DateTimeOffset)v),
+                            t => XmlConvert.ToDateTimeOffset(t)),
+                "xml");
         }
 
         /// <summary>
@@ -190,9 +182,6 @@ namespace BeanIO.Internal.Util
             if (typeName == null)
                 throw new ArgumentNullException("typeName");
 
-            if (typeName.IsAliasOnly())
-                return GetHandler(TypeKey + typeName.ToLowerInvariant(), format, properties);
-
             var type = typeName.ToType();
             if (type == null)
                 return null;
@@ -208,6 +197,18 @@ namespace BeanIO.Internal.Util
         public ITypeHandler GetTypeHandlerFor([NotNull] Type type)
         {
             return GetTypeHandlerFor(type, null, null);
+        }
+
+        /// <summary>
+        /// Returns a type handler for a class, or <code>null</code> if there is no type
+        /// handler configured for the class in this factory or any of its ancestors
+        /// </summary>
+        /// <param name="type">the target class to find a type handler for</param>
+        /// <param name="format">the stream format, or if null, format specific handlers will not be returned</param>
+        /// <returns>the type handler, or null if the class is not supported</returns>
+        public ITypeHandler GetTypeHandlerFor([NotNull] Type type, [NotNull] string format)
+        {
+            return GetTypeHandlerFor(type, format, null);
         }
 
         /// <summary>
@@ -272,15 +273,7 @@ namespace BeanIO.Internal.Util
             if (type == null)
                 throw new ArgumentException(string.Format("Invalid type or type alias '{0}'", name), "name");
 
-            if (name.IsAliasOnly())
-            {
-                name = name.ToLowerInvariant();
-                RegisterHandlerFor(format, name, type, createHandler);
-            }
-            else
-            {
-                RegisterHandlerFor(format, type.FullName, type, createHandler);
-            }
+            RegisterHandlerFor(format, type.FullName, type, createHandler);
         }
 
         /// <summary>

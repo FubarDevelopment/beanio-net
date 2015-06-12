@@ -260,13 +260,15 @@
     <Compile Include="Stream\Xml\XmlRecordUnmarshaller.cs" />
     <Compile Include="Stream\Xml\XmlWriter.cs" />
     <Compile Include="Types\DateTimeOffsetHandler.cs" />
+    <Compile Include="Types\TimeTypeHandler.cs" />
+    <Compile Include="Types\DateTypeHandler.cs" />
     <Compile Include="Types\IntegerTypeHandler.cs" />
     <Compile Include="Types\TypeConversionException.cs" />
     <Compile Include="Types\BooleanTypeHandler.cs" />
     <Compile Include="Types\CharacterTypeHandler.cs" />
     <Compile Include="Types\BooleanCharacterTypeHandler.cs" />
     <Compile Include="Types\BooleanIntegerTypeHandler.cs" />
-    <Compile Include="Types\DateTimeHandler.cs" />
+    <Compile Include="Types\DateTimeTypeHandler.cs" />
     <Compile Include="Types\DateTypeHandlerSupport.cs" />
     <Compile Include="Types\DecimalTypeHandler.cs" />
     <Compile Include="Types\DefaultTypeConfigurationProperties.cs" />
@@ -277,7 +279,8 @@
     <Compile Include="Types\NumberTypeHandler.cs" />
     <Compile Include="Types\StringTypeHandler.cs" />
     <Compile Include="Types\UrlTypeHandler.cs" />
-    <Compile Include="Types\XmlConvertTypeHandler.cs" />
+    <Compile Include="Types\Xml\XmlBooleanTypeHandler.cs" />
+    <Compile Include="Types\Xml\XmlConvertTypeHandler.cs" />
     <Compile Include="UnidentifiedRecordException.cs" />
     <Compile Include="UnexpectedRecordException.cs" />
     <Compile Include="IMarshaller .cs" />

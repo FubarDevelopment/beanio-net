@@ -7,7 +7,7 @@ using System.Text;
 
 using JetBrains.Annotations;
 
-//// using NodaTime;
+using NodaTime;
 
 namespace BeanIO.Internal.Util
 {
@@ -49,12 +49,12 @@ namespace BeanIO.Internal.Util
                 { "guid", typeof(Guid) },
                 { "url", typeof(Uri) },
                 { "uri", typeof(Uri) },
-                { "date", typeof(DateTime) },
                 { "datetime", typeof(DateTime) },
-                { "time", typeof(DateTime) },
                 { "dt", typeof(DateTime) },
                 { "datetimeoffset", typeof(DateTimeOffset) },
                 { "dto", typeof(DateTimeOffset) },
+                { "date", typeof(LocalDate) },
+                { "time", typeof(LocalTime) },
                 { "timespan", typeof(TimeSpan) },
                 //// { "ndate", typeof(LocalDate) },
                 //// { "ntime", typeof(LocalTime) },
@@ -66,6 +66,7 @@ namespace BeanIO.Internal.Util
                 //// { "zdt", typeof(ZonedDateTime) },
             };
 
+#if ALIAS_SUPPORT
         /// <summary>
         /// Get all the well known names for a given type.
         /// </summary>
@@ -75,19 +76,6 @@ namespace BeanIO.Internal.Util
         {
             var fullName = type.GetAssemblyQualifiedName();
             return _wellKnownTypes.Where(x => x.Value.GetAssemblyQualifiedName() == fullName).Select(x => x.Key);
-        }
-
-        /// <summary>
-        /// Returns the type object for a class name or type alias.  A type alias is not case sensitive.
-        /// </summary>
-        /// <param name="typeName">the fully qualified class name or type alias</param>
-        /// <returns>the class, or null if the type name is invalid</returns>
-        public static Type ToType(this string typeName)
-        {
-            Type result;
-            if (!_wellKnownTypes.TryGetValue(typeName, out result))
-                result = Type.GetType(typeName, false);
-            return result;
         }
 
         /// <summary>
@@ -104,6 +92,20 @@ namespace BeanIO.Internal.Util
             if (result == null)
                 return false;
             return string.Equals(result.Name, alias, StringComparison.OrdinalIgnoreCase);
+        }
+#endif
+
+        /// <summary>
+        /// Returns the type object for a class name or type alias.  A type alias is not case sensitive.
+        /// </summary>
+        /// <param name="typeName">the fully qualified class name or type alias</param>
+        /// <returns>the class, or null if the type name is invalid</returns>
+        public static Type ToType(this string typeName)
+        {
+            Type result;
+            if (!_wellKnownTypes.TryGetValue(typeName, out result))
+                result = Type.GetType(typeName, false);
+            return result;
         }
 
         /// <summary>

@@ -168,7 +168,7 @@ namespace BeanIO.Builder
             Assert.Equal(ElementNameConversionMode.Unchanged, c.NameConversionMode);
 
             var csvParser = new CsvRecordParserFactory();
-            var birthDateHandler = new DateTimeHandler();
+            var birthDateHandler = new DateTimeTypeHandler();
             var stringTypeHandler = new StringTypeHandler();
 
             b.Format("csv")
