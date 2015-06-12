@@ -1451,8 +1451,46 @@ namespace BeanIO.Internal.Compiler
                     throw new BeanIOConfigurationException(string.Format("Setter '{0}' not found for property/field '{1}' of type '{2}'", setter, property, beanClass.GetAssemblyQualifiedName()));
             }
 
+            var propertyInfo = beanInfo.GetDeclaredProperty(property);
+            var fieldInfo = beanInfo.GetDeclaredField(property);
+
+            if (propertyInfo == null && fieldInfo == null && !isConstructorArgument)
+            {
+                // search for getter and setter if neither property nor field were found
+                var probableGetterNames = new[]
+                    {
+                        Introspector.Capitalize(property),
+                        "Get" + Introspector.Capitalize(property),
+                    };
+                foreach (var getterName in probableGetterNames)
+                {
+                    var info = beanInfo.GetDeclaredMethod(getterName);
+                    if (info != null && info.GetParameters().Length == 0)
+                    {
+                        getterInfo = info;
+                        break;
+                    }
+                }
+
+                var probableSetterNames = new[]
+                    {
+                        Introspector.Capitalize(property),
+                        "Set" + Introspector.Capitalize(property),
+                    };
+                foreach (var setterName in probableSetterNames)
+                {
+                    var info = beanInfo.GetDeclaredMethod(setterName);
+                    if (info != null && info.GetParameters().Length == 1)
+                    {
+                        setterInfo = info;
+                        break;
+                    }
+                }
+            }
+
             if (getterInfo != null && setterInfo == null)
             {
+                // search for setter if a getter was found
                 var name = getterInfo.Name;
                 if (name.StartsWith("get", StringComparison.Ordinal) || name.StartsWith("Get", StringComparison.Ordinal))
                 {
@@ -1479,6 +1517,7 @@ namespace BeanIO.Internal.Compiler
             }
             else if (getterInfo == null && setterInfo != null)
             {
+                // search for getter if a setter was found
                 var name = setterInfo.Name;
                 if (name.StartsWith("set", StringComparison.Ordinal) || name.StartsWith("Set", StringComparison.Ordinal))
                 {
@@ -1501,24 +1540,19 @@ namespace BeanIO.Internal.Compiler
             }
 
             PropertyDescriptor descriptor;
-            var propertyInfo = beanInfo.GetDeclaredProperty(property);
             if (propertyInfo != null)
             {
                 descriptor = new PropertyDescriptor(propertyInfo, getterInfo, setterInfo);
             }
+            else if (fieldInfo == null)
+            {
+                if (!isConstructorArgument && setterInfo == null && getterInfo == null)
+                    throw new BeanIOConfigurationException(string.Format("Neither property or field found with name '{0}' for type '{1}'", property, beanClass.GetAssemblyQualifiedName()));
+                descriptor = new PropertyDescriptor(property, getterInfo, setterInfo);
+            }
             else
             {
-                var fieldInfo = beanInfo.GetDeclaredField(property);
-                if (fieldInfo == null)
-                {
-                    if (!isConstructorArgument && (setterInfo == null || getterInfo == null))
-                        throw new BeanIOConfigurationException(string.Format("Neither property or field found with name '{0}' for type '{1}'", property, beanClass.GetAssemblyQualifiedName()));
-                    descriptor = new PropertyDescriptor(property, getterInfo, setterInfo);
-                }
-                else
-                {
-                    descriptor = new PropertyDescriptor(fieldInfo, getterInfo, setterInfo);
-                }
+                descriptor = new PropertyDescriptor(fieldInfo, getterInfo, setterInfo);
             }
 
             // validate a read method is found for mapping configurations that write streams

@@ -276,6 +276,9 @@ namespace BeanIO.Internal.Config.Xml
             {
                 using (var input = handler.Open(url))
                 {
+                    if (input == null)
+                        throw new BeanIOConfigurationException(string.Format("Resource '{0}' not found in classpath for import", name));
+
                     // push a new Mapping instance onto the stack for this url
                     Push(name, url).Configuration.Source = name;
 
@@ -804,7 +807,10 @@ namespace BeanIO.Internal.Config.Xml
             var text = GetAttribute(element, name);
             if (string.IsNullOrEmpty(text))
                 return null;
-            return (T)Enum.Parse(typeof(T), text);
+            T result;
+            if (Enum.TryParse(text, true, out result))
+                return result;
+            throw new BeanIOConfigurationException(string.Format("Invalid {1} '{0}'", text, name));
         }
 
         private T? GetOptionalEnumAttribute<T>(XElement element, string name)
@@ -813,7 +819,7 @@ namespace BeanIO.Internal.Config.Xml
             var text = GetOptionalAttribute(element, name);
             if (string.IsNullOrEmpty(text))
                 return null;
-            return (T)Enum.Parse(typeof(T), text);
+            return (T)Enum.Parse(typeof(T), text, true);
         }
 
         private Range GetRangeAttribute(XElement element, string name)
