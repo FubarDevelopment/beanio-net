@@ -68,6 +68,7 @@
     <Compile Include="ConfigUtil.cs" />
     <Compile Include="Config\ConcreteBean.cs" />
     <Compile Include="Config\IInterfaceBean.cs" />
+    <Compile Include="Config\XmlMappingConfigurationTest.cs" />
     <Compile Include="Internal\Util\MarkableTextReaderTests.cs" />
     <Compile Include="Internal\Parser\OptionalValueTests.cs" />
     <Compile Include="Parser\AbstractParserTest.cs" />
