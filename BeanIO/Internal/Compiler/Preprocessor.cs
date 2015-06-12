@@ -69,13 +69,12 @@ namespace BeanIO.Internal.Compiler
         {
             if (group.MinOccurs == null)
                 group.MinOccurs = _settings.GetInt(Settings.DEFAULT_GROUP_MIN_OCCURS, 0);
-            if (group.MaxOccurs != null)
-            {
-                if (group.MaxOccurs <= 0)
-                    throw new BeanIOConfigurationException("Maximum occurrences must be greater than 0");
-                if (group.MaxOccurs < group.MinOccurs)
-                    throw new BeanIOConfigurationException("Maximum occurences cannot be less than mininum occurences");
-            }
+            if (group.MaxOccurs == null)
+                group.MaxOccurs = int.MaxValue;
+            if (group.MaxOccurs <= 0)
+                throw new BeanIOConfigurationException("Maximum occurrences must be greater than 0");
+            if (group.MaxOccurs < group.MinOccurs)
+                throw new BeanIOConfigurationException("Maximum occurences cannot be less than mininum occurences");
 
             // validate both 'class' and 'target' aren't set
             if (group.Type != null && group.Target != null)
@@ -172,7 +171,9 @@ namespace BeanIO.Internal.Compiler
             // assign default min and max occurs
             if (record.MinOccurs == null)
                 record.MinOccurs = _settings.GetInt(Settings.DEFAULT_RECORD_MIN_OCCURS, 0);
-            if (record.MaxOccurs != null && record.MaxOccurs <= 0)
+            if (record.MaxOccurs == null)
+                record.MaxOccurs = int.MaxValue;
+            if (record.MaxOccurs <= 0)
                 throw new BeanIOConfigurationException("Maximum occurrences must be greater than 0");
 
             if (PropertyRoot == null)
@@ -216,14 +217,11 @@ namespace BeanIO.Internal.Compiler
             if (segment.MinOccurs == null)
                 segment.MinOccurs = segment.OccursRef != null ? 0 : 1;
             if (segment.MaxOccurs == null)
-                segment.MaxOccurs = segment.OccursRef != null ? (int?)null : 1;
-            if (segment.MaxOccurs != null)
-            {
-                if (segment.MaxOccurs <= 0)
-                    throw new BeanIOConfigurationException("Maximum occurrences must be greater than 0");
-                if (segment.MaxOccurs < segment.MinOccurs)
-                    throw new BeanIOConfigurationException("Maximum occurrences cannot be less than minimum occurrences");
-            }
+                segment.MaxOccurs = segment.OccursRef != null ? int.MaxValue : 1;
+            if (segment.MaxOccurs <= 0)
+                throw new BeanIOConfigurationException("Maximum occurrences must be greater than 0");
+            if (segment.MaxOccurs < segment.MinOccurs)
+                throw new BeanIOConfigurationException("Maximum occurrences cannot be less than minimum occurrences");
 
             if (segment.Key != null && segment.Collection == null)
                 throw new BeanIOConfigurationException("Unexpected key value when collection not set");
@@ -285,7 +283,7 @@ namespace BeanIO.Internal.Compiler
                         ? 0
                         : _settings.GetInt(string.Format("{0}.{1}", Settings.DEFAULT_FIELD_MIN_OCCURS, _stream.Format), 0);
             if (field.MaxOccurs == null)
-                field.MaxOccurs = field.OccursRef != null ? (int?)null : Math.Max(field.MinOccurs.Value, 1);
+                field.MaxOccurs = field.OccursRef != null ? int.MaxValue : Math.Max(field.MinOccurs.Value, 1);
             if (field.MaxOccurs != null)
             {
                 if (field.MaxOccurs <= 0)
@@ -297,7 +295,9 @@ namespace BeanIO.Internal.Compiler
             // set and validate min and max length
             if (field.MinLength == null)
                 field.MinLength = 0;
-            if (field.MaxLength != null && field.MaxLength < field.MinLength)
+            if (field.MaxLength == null)
+                field.MaxLength = int.MaxValue;
+            if (field.MaxLength < field.MinLength)
                 throw new BeanIOConfigurationException("maxLength must be greater than or equal to minLength");
             if (field.Literal != null)
             {

@@ -102,7 +102,7 @@ namespace BeanIO.Internal.Compiler.Flat
                 if (record.MinLength == null)
                     record.MinLength = 0;
                 if (record.MaxLength == null)
-                    record.MaxLength = null;
+                    record.MaxLength = int.MaxValue;
             }
 
             // validate maximum record length is not less than the minimum record length
@@ -309,7 +309,7 @@ namespace BeanIO.Internal.Compiler.Flat
                     {
                         _unboundedComponent = segment;
                     }
-                    _defaultPosition = null;
+                    _defaultPosition = int.MaxValue;
                 }
                 else
                 {

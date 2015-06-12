@@ -275,7 +275,7 @@ namespace BeanIO.Builder
             c = b.Build();
             Assert.Equal(2, c.Order);
             Assert.Equal(1, c.MinLength);
-            Assert.Null(c.MaxLength);
+            Assert.Equal(int.MaxValue, c.MaxLength);
             Assert.Equal(5, c.MinMatchLength);
             Assert.Equal(10, c.MaxMatchLength);
             Assert.Collection(
@@ -424,7 +424,7 @@ namespace BeanIO.Builder
             Assert.True(c.IsLazy);
             Assert.Equal("other", c.OccursRef);
             Assert.Equal(0, c.MinOccurs);
-            Assert.Null(c.MaxOccurs);
+            Assert.Equal(int.MaxValue, c.MaxOccurs);
             Assert.Equal(0, c.MinLength);
             Assert.Null(c.MaxLength);
             Assert.Equal(10, c.Length);

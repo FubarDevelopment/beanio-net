@@ -13,6 +13,11 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
     /// </remarks>
     internal class FixedLengthRecordFormat : IRecordFormat
     {
+        public FixedLengthRecordFormat()
+        {
+            MaxLength = MaxMatchLength = int.MaxValue;
+        }
+
         /// <summary>
         /// Gets or sets the minimum number of fields in the record
         /// </summary>

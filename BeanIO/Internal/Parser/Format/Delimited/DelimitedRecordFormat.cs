@@ -13,6 +13,11 @@ namespace BeanIO.Internal.Parser.Format.Delimited
     /// </remarks>
     internal class DelimitedRecordFormat : IRecordFormat
     {
+        public DelimitedRecordFormat()
+        {
+            MaxLength = MaxMatchLength = int.MaxValue;
+        }
+
         /// <summary>
         /// Gets or sets the minimum number of fields in the record
         /// </summary>

@@ -32,6 +32,8 @@ namespace BeanIO.Internal.Parser
         public Group()
             : base(5)
         {
+            Order = 1;
+            MaxOccurs = int.MaxValue;
         }
 
         /// <summary>

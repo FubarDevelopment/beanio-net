@@ -26,6 +26,7 @@ namespace BeanIO.Internal.Parser
             ErrorIfNullPrimitive = Settings.Instance.GetBoolean(Settings.ERROR_IF_NULL_PRIMITIVE);
             UseDefaultIfMissing = Settings.Instance.GetBoolean(Settings.USE_DEFAULT_IF_MISSING);
             MarshalDefault = Settings.Instance.GetBoolean(Settings.DEFAULT_MARSHALLING_ENABLED);
+            MaxLength = int.MaxValue;
         }
 
         /// <summary>

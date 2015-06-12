@@ -564,7 +564,7 @@ namespace BeanIO.Internal.Config.Xml
                     Type = typeName,
                     Order = GetIntAttribute(element, "order"),
                     MinLength = GetIntAttribute(element, "minLength"),
-                    MaxLength = GetUnboundedIntAttribute(element, "maxLength"),
+                    MaxLength = GetUnboundedIntAttribute(element, "maxLength", int.MaxValue),
                     XmlName = GetAttribute(element, "xmlName"),
                     XmlNamespace = GetOptionalAttribute(element, "xmlNamespace"),
                     XmlPrefix = GetOptionalAttribute(element, "xmlPrefix"),
@@ -837,7 +837,7 @@ namespace BeanIO.Internal.Config.Xml
                 if (range.EndsWith("+", StringComparison.Ordinal))
                 {
                     min = int.Parse(range.Substring(0, range.Length - 1));
-                    max = null;
+                    max = int.MaxValue;
                 }
                 else
                 {
@@ -890,7 +890,7 @@ namespace BeanIO.Internal.Config.Xml
             else
             {
                 config.MinOccurs = GetIntAttribute(element, "minOccurs");
-                config.MaxOccurs = GetUnboundedIntAttribute(element, "maxOccurs");
+                config.MaxOccurs = GetUnboundedIntAttribute(element, "maxOccurs", int.MaxValue);
             }
         }
 

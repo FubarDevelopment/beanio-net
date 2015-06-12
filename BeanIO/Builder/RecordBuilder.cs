@@ -81,7 +81,7 @@ namespace BeanIO.Builder
         /// <returns>The value of <see cref="Me"/></returns>
         public RecordBuilder MaxLength(int max)
         {
-            Config.MaxLength = max < 0 ? (int?)null : max;
+            Config.MaxLength = max < 0 ? int.MaxValue : max;
             return Me;
         }
 
@@ -128,7 +128,7 @@ namespace BeanIO.Builder
         public RecordBuilder RidLength(int min, int max)
         {
             Config.MinMatchLength = min;
-            Config.MaxMatchLength = max < 0 ? (int?)null : max;
+            Config.MaxMatchLength = max < 0 ? int.MaxValue : max;
             return Me;
         }
 

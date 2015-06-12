@@ -645,7 +645,7 @@ namespace BeanIO.Internal.Config.Annotation
             if (propertyType.IsArray)
             {
                 propertyType = annotatedType ?? propertyType.GetElementType();
-                collectionName = null;
+                collectionName = "array";
             }
             else if (propertyType.IsInstanceOf(typeof(IDictionary<,>)))
             {
@@ -746,7 +746,7 @@ namespace BeanIO.Internal.Config.Annotation
             if (val < 0)
             {
                 // maximum value (i.e. unbounded)
-                return null;
+                return int.MaxValue;
             }
             return val.Value;
         }

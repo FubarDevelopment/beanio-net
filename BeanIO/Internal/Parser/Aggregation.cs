@@ -13,6 +13,11 @@ namespace BeanIO.Internal.Parser
     {
         private readonly ParserLocal<int?> _index = new ParserLocal<int?>();
 
+        protected Aggregation()
+        {
+            MaxOccurs = int.MaxValue;
+        }
+
         /// <summary>
         /// Gets a value indicating whether this aggregation is a property of its parent bean object.
         /// </summary>

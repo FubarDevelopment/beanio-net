@@ -16,6 +16,7 @@ namespace BeanIO.Internal.Parser
         public Record()
         {
             Order = 1;
+            MaxOccurs = int.MaxValue;
         }
 
         /// <summary>
