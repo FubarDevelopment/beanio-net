@@ -6,7 +6,7 @@ namespace BeanIO.Internal.Parser
     /// <summary>
     /// A simple property implementation that stores a constant value.
     /// </summary>
-    public class Constant : Component, IProperty
+    internal class Constant : Component, IProperty
     {
         /// <summary>
         /// Gets the <see cref="IProperty"/> implementation type

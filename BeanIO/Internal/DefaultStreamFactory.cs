@@ -13,7 +13,7 @@ namespace BeanIO.Internal
     /// to create bean readers and writers.  A single factory instance may be accessed
     /// concurrently by multiple threads.
     /// </summary>
-    public class DefaultStreamFactory : StreamFactory
+    internal class DefaultStreamFactory : StreamFactory
     {
         private readonly ConcurrentDictionary<string, Parser.Stream> _contextMap = new ConcurrentDictionary<string, Parser.Stream>();
 

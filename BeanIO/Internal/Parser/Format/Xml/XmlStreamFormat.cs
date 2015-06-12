@@ -5,7 +5,7 @@ using BeanIO.Stream.Xml;
 
 namespace BeanIO.Internal.Parser.Format.Xml
 {
-    public class XmlStreamFormat : StreamFormatSupport
+    internal class XmlStreamFormat : StreamFormatSupport
     {
         /// <summary>
         /// Gets or sets the root node of the parser tree

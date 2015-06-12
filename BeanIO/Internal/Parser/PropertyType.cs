@@ -3,7 +3,7 @@
     /// <summary>
     /// The property type
     /// </summary>
-    public enum PropertyType
+    internal enum PropertyType
     {
         /// <summary>
         /// The simple property type that cannot hold other properties

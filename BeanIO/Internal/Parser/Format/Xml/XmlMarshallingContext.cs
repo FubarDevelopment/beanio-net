@@ -7,7 +7,7 @@ using BeanIO.Stream;
 
 namespace BeanIO.Internal.Parser.Format.Xml
 {
-    public class XmlMarshallingContext : MarshallingContext
+    internal class XmlMarshallingContext : MarshallingContext
     {
         private readonly Stack<IXmlNode> _groupStack;
 

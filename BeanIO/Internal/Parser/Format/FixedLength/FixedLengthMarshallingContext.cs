@@ -10,7 +10,7 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
     /// <summary>
     /// A <see cref="MarshallingContext"/> for a fixed length formatted stream.
     /// </summary>
-    public class FixedLengthMarshallingContext : MarshallingContext
+    internal class FixedLengthMarshallingContext : MarshallingContext
     {
         /// <summary>
         /// the list of entries for creating the record (may be unordered)

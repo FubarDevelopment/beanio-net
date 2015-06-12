@@ -11,7 +11,7 @@ using JetBrains.Annotations;
 
 namespace BeanIO.Internal.Parser.Format.Xml
 {
-    public static class XmlNodeUtil
+    internal static class XmlNodeUtil
     {
         private static readonly XNamespace _xsiNs = XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance");
 

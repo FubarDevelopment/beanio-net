@@ -4,7 +4,7 @@ using BeanIO.Internal.Config;
 
 namespace BeanIO.Internal.Compiler.Flat
 {
-    public abstract class FlatParserFactory : ParserFactorySupport
+    internal abstract class FlatParserFactory : ParserFactorySupport
     {
         /// <summary>
         /// Creates a stream configuration pre-processor

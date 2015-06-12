@@ -11,7 +11,7 @@ namespace BeanIO.Internal.Parser
     /// <summary>
     /// The <see cref="ArrayParser"/> class
     /// </summary>
-    public class ArrayParser : CollectionParser
+    internal class ArrayParser : CollectionParser
     {
         /// <summary>
         /// Gets the <see cref="IProperty"/> implementation type

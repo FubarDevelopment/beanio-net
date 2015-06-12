@@ -5,7 +5,7 @@ using BeanIO.Internal.Parser.Format;
 
 namespace BeanIO.Internal.Util
 {
-    public static class DebugUtil
+    internal static class DebugUtil
     {
         public static string FormatRange(int min, int? max)
         {

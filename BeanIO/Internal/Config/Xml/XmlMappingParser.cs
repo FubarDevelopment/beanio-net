@@ -22,7 +22,7 @@ namespace BeanIO.Internal.Config.Xml
     /// <para>This class is not thread safe and a new instance should be created for parsing
     /// each input stream.</para>
     /// </remarks>
-    public class XmlMappingParser : IPropertySource
+    internal class XmlMappingParser : IPropertySource
     {
         private static readonly bool _propertySubstitutionEnabled = Settings.Instance.GetBoolean(Settings.PROPERTY_SUBSTITUTION_ENABLED);
 

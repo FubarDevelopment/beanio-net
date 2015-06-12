@@ -6,7 +6,7 @@ using BeanIO.Stream;
 
 namespace BeanIO.Internal.Parser.Format.Xml
 {
-    public class XmlUnmarshallingContext : UnmarshallingContext
+    internal class XmlUnmarshallingContext : UnmarshallingContext
     {
         /// <summary>
         /// This stack of elements is used to store the last XML node parsed for a field or bean collection.

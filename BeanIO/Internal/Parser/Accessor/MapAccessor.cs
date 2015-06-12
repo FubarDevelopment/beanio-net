@@ -2,7 +2,7 @@
 
 namespace BeanIO.Internal.Parser.Accessor
 {
-    public class MapAccessor : IPropertyAccessor
+    internal class MapAccessor : IPropertyAccessor
     {
         private readonly string _key;
 

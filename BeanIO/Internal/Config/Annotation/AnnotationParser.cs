@@ -11,7 +11,10 @@ using JetBrains.Annotations;
 
 namespace BeanIO.Internal.Config.Annotation
 {
-    public static class AnnotationParser
+    /// <summary>
+    /// Factory class for building component configurations from annotated classes.
+    /// </summary>
+    internal static class AnnotationParser
     {
         private static readonly OrdinalComparer _ordinalComparer = new OrdinalComparer();
 

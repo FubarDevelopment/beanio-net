@@ -5,7 +5,7 @@ namespace BeanIO.Internal.Parser.Format.Delimited
     /// <summary>
     /// A <see cref="IFieldFormat"/> implementation for a field in a delimited stream.
     /// </summary>
-    public class DelimitedFieldFormat : FlatFieldFormatSupport
+    internal class DelimitedFieldFormat : FlatFieldFormatSupport
     {
         /// <summary>
         /// Inserts field text into a record

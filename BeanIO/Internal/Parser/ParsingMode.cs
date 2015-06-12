@@ -3,7 +3,7 @@
     /// <summary>
     /// The parsing mode
     /// </summary>
-    public enum ParsingMode
+    internal enum ParsingMode
     {
         /// <summary>
         /// Unmarshalling mode

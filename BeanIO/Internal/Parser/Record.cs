@@ -6,7 +6,7 @@ using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser
 {
-    public class Record : Segment, ISelector
+    internal class Record : Segment, ISelector
     {
         private readonly ParserLocal<int> _count = new ParserLocal<int>(0);
 

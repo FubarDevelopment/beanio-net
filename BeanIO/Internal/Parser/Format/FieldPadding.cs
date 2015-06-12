@@ -17,7 +17,7 @@ namespace BeanIO.Internal.Parser.Format
     /// regardless of the configured <see cref="Filler"/> when a value does not exist.</para>
     /// <para>Once configured, a <see cref="FieldPadding"/> object is thread-safe.</para>
     /// </remarks>
-    public class FieldPadding
+    internal class FieldPadding
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="FieldPadding"/> class.

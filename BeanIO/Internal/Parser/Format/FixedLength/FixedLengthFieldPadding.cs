@@ -10,7 +10,7 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
     /// optional field (i.e. all spaces) is formatted as the empty string regardless of the filler
     /// character, thus allowing for optional numeric fields.
     /// </remarks>
-    public class FixedLengthFieldPadding : FieldPadding
+    internal class FixedLengthFieldPadding : FieldPadding
     {
         /// <summary>
         /// Initializes padding settings

@@ -9,7 +9,7 @@ namespace BeanIO.Internal.Parser
     /// <summary>
     /// Base class for parser components capable of aggregating descendant properties
     /// </summary>
-    public abstract class Aggregation : DelegatingParser, IProperty, IIteration
+    internal abstract class Aggregation : DelegatingParser, IProperty, IIteration
     {
         private readonly ParserLocal<int?> _index = new ParserLocal<int?>();
 

@@ -8,7 +8,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
     /// <summary>
     /// Base class for XML <see cref="IFieldFormat"/> implementations
     /// </summary>
-    public abstract class XmlFieldFormat : IFieldFormat, IXmlNode
+    internal abstract class XmlFieldFormat : IFieldFormat, IXmlNode
     {
         /// <summary>
         /// Gets the size of the field

@@ -13,7 +13,7 @@ namespace BeanIO.Internal.Util
     /// <summary>
     /// Utility class for instantiating configurable bean classes
     /// </summary>
-    public static class BeanUtil
+    internal static class BeanUtil
     {
         private static readonly bool NULL_ESCAPING_ENABLED = Settings.Instance.GetBoolean(Settings.NULL_ESCAPING_ENABLED);
 

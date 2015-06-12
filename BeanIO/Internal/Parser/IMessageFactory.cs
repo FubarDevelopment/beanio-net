@@ -4,7 +4,7 @@
     /// A <see cref="IMessageFactory"/> implementation is used to generate localized error
     /// messages for record and field level errors.
     /// </summary>
-    public interface IMessageFactory
+    internal interface IMessageFactory
     {
         /// <summary>
         /// Returns the localized label for a record.

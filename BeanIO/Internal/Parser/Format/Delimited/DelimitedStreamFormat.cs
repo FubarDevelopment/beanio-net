@@ -3,7 +3,7 @@
     /// <summary>
     /// A <see cref="StreamFormatSupport"/> implementation for the delimited stream format.
     /// </summary>
-    public class DelimitedStreamFormat : StreamFormatSupport
+    internal class DelimitedStreamFormat : StreamFormatSupport
     {
         /// <summary>
         /// Creates a new unmarshalling context

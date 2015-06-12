@@ -8,7 +8,7 @@ using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Compiler.Flat
 {
-    public class FlatPreprocessor : Preprocessor
+    internal class FlatPreprocessor : Preprocessor
     {
         /// <summary>
         /// the list of components at the end of the record following the unbounded component

@@ -4,7 +4,7 @@ using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser.Format.Flat
 {
-    public abstract class FlatFieldFormatSupport : IFlatFieldFormat
+    internal abstract class FlatFieldFormatSupport : IFlatFieldFormat
     {
         /// <summary>
         /// Gets the size of the field

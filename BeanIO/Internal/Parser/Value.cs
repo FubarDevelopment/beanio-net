@@ -1,6 +1,6 @@
 ﻿namespace BeanIO.Internal.Parser
 {
-    public static class Value
+    internal static class Value
     {
         /// <summary>
         /// Constant indicating the field was not present in the stream

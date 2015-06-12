@@ -31,7 +31,7 @@ namespace BeanIO.Internal.Compiler
     /// <see cref="PushProperty"/> methods.  After a component is finalized, it should be
     /// removed from the stack using the <see cref="PopParser"/> or <see cref="PopProperty"/> method.
     /// </remarks>
-    public abstract class ParserFactorySupport : ProcessorSupport, IParserFactory
+    internal abstract class ParserFactorySupport : ProcessorSupport, IParserFactory
     {
         private static readonly string CONSTRUCTOR_PREFIX = "#";
 

@@ -12,7 +12,7 @@ namespace BeanIO.Internal.Parser
     /// A <see cref="CollectionParser" /> provides iteration support for a <see cref="Segment"/> or <see cref="Field"/>,
     /// and is optionally bound to a <see cref="IList{T}"/> type property value.
     /// </summary>
-    public class CollectionParser : Aggregation
+    internal class CollectionParser : Aggregation
     {
         /// <summary>
         /// the property value

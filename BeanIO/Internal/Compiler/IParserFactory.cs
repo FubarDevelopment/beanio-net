@@ -7,7 +7,7 @@ namespace BeanIO.Internal.Compiler
     /// A <see cref="IParserFactory"/> is used to convert a stream configuration (i.e. <see cref="StreamConfig"/>)
     /// into a stream parser (i.e. <see cref="Parser.Stream"/>).
     /// </summary>
-    public interface IParserFactory
+    internal interface IParserFactory
     {
         /// <summary>
         /// Gets or sets the type handler factory to use for resolving type handlers

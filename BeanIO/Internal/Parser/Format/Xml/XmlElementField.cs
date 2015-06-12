@@ -11,7 +11,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
     /// A <see cref="IFieldFormat"/> for a field in an XML formatted stream parsed as
     /// an element of its parent.
     /// </summary>
-    public class XmlElementField : XmlFieldFormat
+    internal class XmlElementField : XmlFieldFormat
     {
         private string _localName;
 

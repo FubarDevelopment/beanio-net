@@ -5,7 +5,7 @@ using BeanIO.Internal.Parser.Format.Xml.Annotations;
 
 namespace BeanIO.Internal.Util
 {
-    public class NamespaceAwareElementComparer : IComparer<XElement>
+    internal class NamespaceAwareElementComparer : IComparer<XElement>
     {
         static NamespaceAwareElementComparer()
         {

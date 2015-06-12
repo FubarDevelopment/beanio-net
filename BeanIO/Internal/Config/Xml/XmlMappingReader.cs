@@ -6,7 +6,7 @@ namespace BeanIO.Internal.Config.Xml
     /// <summary>
     /// Reads a BeanIO XML mapping file into an XML document object model (DOM)
     /// </summary>
-    public class XmlMappingReader
+    internal class XmlMappingReader
     {
         /// <summary>
         /// Parses an XML BeanIO mapping file into a document object model (DOM).

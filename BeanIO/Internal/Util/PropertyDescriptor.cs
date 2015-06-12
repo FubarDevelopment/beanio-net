@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace BeanIO.Internal.Util
 {
-    public class PropertyDescriptor
+    internal class PropertyDescriptor
     {
         private readonly string _name;
 

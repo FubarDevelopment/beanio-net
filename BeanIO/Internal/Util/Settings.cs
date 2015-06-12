@@ -12,7 +12,7 @@ namespace BeanIO.Internal.Util
     /// <summary>
     /// <see cref="Settings"/> is used to load and store BeanIO configuration settings.
     /// </summary>
-    public class Settings
+    internal class Settings
     {
         /// <summary>
         /// This property is set to the fully qualified class name of the default stream factory implementation

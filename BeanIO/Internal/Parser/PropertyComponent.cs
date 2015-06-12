@@ -5,7 +5,7 @@ using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser
 {
-    public abstract class PropertyComponent : Component, IProperty
+    internal abstract class PropertyComponent : Component, IProperty
     {
         protected static readonly bool CreateMissingBeans = Settings.Instance.GetBoolean(Settings.CREATE_MISSING_BEANS);
 

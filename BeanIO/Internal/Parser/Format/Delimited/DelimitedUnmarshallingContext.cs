@@ -11,7 +11,7 @@ namespace BeanIO.Internal.Parser.Format.Delimited
     /// <remarks>
     /// The record value type for a delimited record is a <see cref="string" /> array.
     /// </remarks>
-    public class DelimitedUnmarshallingContext : UnmarshallingContext
+    internal class DelimitedUnmarshallingContext : UnmarshallingContext
     {
         private string[] _fields;
 

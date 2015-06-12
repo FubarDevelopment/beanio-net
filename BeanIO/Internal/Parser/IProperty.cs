@@ -6,7 +6,7 @@ namespace BeanIO.Internal.Parser
     /// The <see cref="IProperty"/> interface is implemented by parser components capable
     /// of storing a property value.
     /// </summary>
-    public interface IProperty
+    internal interface IProperty
     {
         /// <summary>
         /// Gets the <see cref="IProperty"/> implementation type

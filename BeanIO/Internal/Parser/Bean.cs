@@ -13,7 +13,7 @@ namespace BeanIO.Internal.Parser
     /// A component used to aggregate <see cref="IProperty"/>'s into a bean object, which
     /// may also be a property of a parent bean object itself.
     /// </summary>
-    public class Bean : PropertyComponent
+    internal class Bean : PropertyComponent
     {
         /// <summary>
         /// the constructor for creating this bean object (if null, the default constructor is used)

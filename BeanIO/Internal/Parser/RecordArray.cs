@@ -11,7 +11,7 @@ namespace BeanIO.Internal.Parser
     /// <remarks>
     /// A <see cref="RecordArray"/> supports a single <see cref="Record"/> child.
     /// </remarks>
-    public class RecordArray : RecordCollection
+    internal class RecordArray : RecordCollection
     {
         /// <summary>
         /// Gets the <see cref="IProperty"/> implementation type

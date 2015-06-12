@@ -7,7 +7,7 @@ using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser
 {
-    public abstract class RecordAggregation : DelegatingParser, ISelector, IProperty
+    internal abstract class RecordAggregation : DelegatingParser, ISelector, IProperty
     {
         /// <summary>
         /// The property value

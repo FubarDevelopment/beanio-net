@@ -28,7 +28,7 @@ namespace BeanIO.Internal.Util
     /// factory.  If a factory cannot find a type handler, its parent will be checked
     /// recursively until there is no parent left to check.</para>
     /// </remarks>
-    public class TypeHandlerFactory
+    internal class TypeHandlerFactory
     {
         private const string NameKey = "name:";
 

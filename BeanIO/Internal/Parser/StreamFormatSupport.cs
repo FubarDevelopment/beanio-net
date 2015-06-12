@@ -4,7 +4,7 @@ using BeanIO.Stream;
 
 namespace BeanIO.Internal.Parser
 {
-    public abstract class StreamFormatSupport : IStreamFormat
+    internal abstract class StreamFormatSupport : IStreamFormat
     {
         /// <summary>
         /// Gets or sets the <see cref="IRecordParserFactory"/> used by this stream

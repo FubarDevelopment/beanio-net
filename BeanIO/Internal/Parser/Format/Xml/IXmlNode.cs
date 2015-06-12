@@ -2,7 +2,7 @@
 
 namespace BeanIO.Internal.Parser.Format.Xml
 {
-    public interface IXmlNode
+    internal interface IXmlNode
     {
         /// <summary>
         /// Gets the XML node type

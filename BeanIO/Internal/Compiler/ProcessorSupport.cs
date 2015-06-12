@@ -14,7 +14,7 @@ namespace BeanIO.Internal.Compiler
     /// configuration components and generates a "stack trace" if
     /// any overridden method throws a <see cref="BeanIOConfigurationException"/>.
     /// </remarks>
-    public abstract class ProcessorSupport
+    internal abstract class ProcessorSupport
     {
         private readonly Stack<ComponentConfig> _componentConfigurations = new Stack<ComponentConfig>();
 

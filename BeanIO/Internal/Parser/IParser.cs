@@ -3,7 +3,7 @@
     /// <summary>
     /// A <see cref="IParser"/> is used marshal and unmarshal record components.
     /// </summary>
-    public interface IParser
+    internal interface IParser
     {
         /// <summary>
         /// Gets the name of this parser component

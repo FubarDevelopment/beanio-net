@@ -5,7 +5,7 @@ using BeanIO.Config;
 
 namespace BeanIO.Internal.Util
 {
-    public static class StringUtil
+    internal static class StringUtil
     {
         private static readonly bool LAZY_IF_EMPTY = Settings.Instance.GetBoolean(Settings.LAZY_IF_EMPTY);
 

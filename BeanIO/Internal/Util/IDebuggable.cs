@@ -9,7 +9,7 @@ namespace BeanIO.Internal.Util
     /// <remarks>
     /// The information displayed by these methods may be changed without notice.
     /// </remarks>
-    public interface IDebuggable
+    internal interface IDebuggable
     {
         /// <summary>
         /// Prints the internal view of the stream configuration

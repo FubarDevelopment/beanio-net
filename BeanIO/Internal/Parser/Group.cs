@@ -15,7 +15,7 @@ namespace BeanIO.Internal.Parser
     /// This class is the dynamic counterpart to the <see cref="GroupConfig"/> and
     /// holds the current state of a group node during stream processing.
     /// </remarks>
-    public class Group : ParserComponent, ISelector
+    internal class Group : ParserComponent, ISelector
     {
         /// <summary>
         /// map key used to store the state of the 'lastMatchedChild' attribute

@@ -5,7 +5,7 @@ using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser
 {
-    public class RecordMap : RecordAggregation
+    internal class RecordMap : RecordAggregation
     {
         /// <summary>
         /// Gets the <see cref="IProperty"/> implementation type

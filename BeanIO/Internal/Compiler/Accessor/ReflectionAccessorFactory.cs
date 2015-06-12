@@ -10,7 +10,7 @@ namespace BeanIO.Internal.Compiler.Accessor
     /// <summary>
     /// <see cref="IPropertyAccessorFactory"/> implementations based on .NET reflection
     /// </summary>
-    public class ReflectionAccessorFactory : IPropertyAccessorFactory
+    internal class ReflectionAccessorFactory : IPropertyAccessorFactory
     {
         /// <summary>
         /// Creates a new <see cref="IPropertyAccessor"/>

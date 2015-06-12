@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Reflection;
 using System.Text;
 
+using BeanIO.Internal.Config;
+using BeanIO.Stream;
 using BeanIO.Stream.Csv;
 using BeanIO.Stream.Delimited;
 using BeanIO.Stream.FixedLength;
 using BeanIO.Stream.Xml;
+using BeanIO.Types;
 
 using Xunit;
 
@@ -152,7 +156,69 @@ namespace BeanIO.Builder
             var b = new StreamBuilder("stream");
             var c = b.Build();
             Assert.Equal("stream", c.Name);
-            throw new NotImplementedException();
+            Assert.Equal(1, c.Order);
+            Assert.Equal(0, c.MinOccurs);
+            Assert.Equal(1, c.MaxOccurs);
+            Assert.Null(c.Format);
+            Assert.Null(c.Mode);
+            Assert.False(c.IsStrict);
+            Assert.False(c.IgnoreUnidentifiedRecords);
+            Assert.Equal(ElementNameConversionMode.Unchanged, c.NameConversionMode);
+
+            var csvParser = new CsvRecordParserFactory();
+            var birthDateHandler = new DateTimeHandler();
+            var stringTypeHandler = new StringTypeHandler();
+
+            b.Format("csv")
+             .ReadOnly()
+             .ResourceBundle("bundle")
+             .Strict()
+             .IgnoreUnidentifiedRecords()
+             .Parser(csvParser)
+             .AddRecord(new RecordBuilder("record"))
+             .AddGroup(new GroupBuilder("subgroup"))
+             .AddTypeHandler("birthDate", () => birthDateHandler)
+             .AddTypeHandler(typeof(string), () => stringTypeHandler);
+            c = b.Build();
+            Assert.Equal("csv", c.Format);
+            Assert.Equal(AccessMode.Read, c.Mode);
+            Assert.Equal("bundle", c.ResourceBundle);
+            Assert.True(c.IsStrict);
+            Assert.True(c.IgnoreUnidentifiedRecords);
+            Assert.Same(csvParser, c.ParserFactory.Create());
+            Assert.Collection(
+                c.Children,
+                child =>
+                    {
+                        Assert.Equal("record", child.Name);
+                        Assert.IsType(typeof(RecordConfig), child);
+                    },
+                child =>
+                    {
+                        Assert.Equal("subgroup", child.Name);
+                        Assert.IsType(typeof(GroupConfig), child);
+                    });
+            Assert.Collection(
+                c.Handlers,
+                handler =>
+                    {
+                        Assert.Equal("birthDate", handler.Name);
+                        Assert.Same(birthDateHandler, handler.Create());
+                    },
+                handler =>
+                    {
+                        Assert.Equal(typeof(string).GetTypeInfo().AssemblyQualifiedName, handler.Name);
+                        Assert.Same(stringTypeHandler, handler.Create());
+                    });
+
+            var xmlParser = new XmlParserBuilder();
+            b = new StreamBuilder("stream", "fixedlength")
+                .WriteOnly()
+                .Parser(xmlParser);
+            c = b.Build();
+            Assert.Equal("fixedlength", c.Format);
+            Assert.Equal(AccessMode.Write, c.Mode);
+            Assert.IsType(typeof(XmlRecordParserFactory), c.ParserFactory.Create());
         }
     }
 }

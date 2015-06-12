@@ -7,7 +7,7 @@ using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser.Format.Xml
 {
-    public class XmlWrapper : DelegatingParser, IXmlNode
+    internal class XmlWrapper : DelegatingParser, IXmlNode
     {
         /// <summary>
         /// Gets the XML node type

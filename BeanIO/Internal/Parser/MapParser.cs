@@ -12,7 +12,7 @@ namespace BeanIO.Internal.Parser
     /// <example>
     /// <code>key1,field1,key2,field2</code>
     /// </example>
-    public class MapParser : Aggregation
+    internal class MapParser : Aggregation
     {
         /// <summary>
         /// the property value

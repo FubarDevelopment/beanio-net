@@ -5,7 +5,7 @@ using BeanIO.Stream.FixedLength;
 
 namespace BeanIO.Internal.Parser.Format.FixedLength
 {
-    public class FixedLengthStreamFormat : StreamFormatSupport
+    internal class FixedLengthStreamFormat : StreamFormatSupport
     {
         /// <summary>
         /// Creates a new unmarshalling context

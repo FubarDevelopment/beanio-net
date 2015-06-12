@@ -2,12 +2,11 @@
 
 namespace BeanIO.Internal.Parser
 {
-    public abstract class DelegatingParser : ParserComponent
+    internal abstract class DelegatingParser : ParserComponent
     {
         protected DelegatingParser()
             : base(1)
         {
-            
         }
 
         /// <summary>

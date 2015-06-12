@@ -5,7 +5,7 @@ using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser.Accessor
 {
-    public class PropertyReflectionAccessor : PropertyAccessorSupport
+    internal class PropertyReflectionAccessor : PropertyAccessorSupport
     {
         private readonly PropertyDescriptor _property;
 

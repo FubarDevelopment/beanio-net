@@ -7,7 +7,7 @@ namespace BeanIO.Internal.Util
     /// that in case of an error, the last updated state of the writer can be restored and
     /// writing can resume.
     /// </summary>
-    public interface IStatefulWriter
+    internal interface IStatefulWriter
     {
         /// <summary>
         /// Updates a <see cref="IDictionary{TKey,TValue}"/> with the current state of the Writer to allow for

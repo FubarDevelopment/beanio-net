@@ -8,7 +8,7 @@ namespace BeanIO.Internal.Config
     /// A <see cref="IConfigurationLoader"/> is used to load BeanIO mapping configurations from
     /// an input stream.
     /// </summary>
-    public interface IConfigurationLoader
+    internal interface IConfigurationLoader
     {
         /// <summary>
         /// Loads a BeanIO configuration from an input stream

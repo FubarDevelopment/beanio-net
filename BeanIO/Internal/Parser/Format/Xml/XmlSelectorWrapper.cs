@@ -11,7 +11,7 @@ using BeanIO.Stream;
 
 namespace BeanIO.Internal.Parser.Format.Xml
 {
-    public class XmlSelectorWrapper : ParserComponent, ISelector, IXmlNode
+    internal class XmlSelectorWrapper : ParserComponent, ISelector, IXmlNode
     {
         /// <summary>
         /// map key used to store the state of the 'addToHierarchy' attribute

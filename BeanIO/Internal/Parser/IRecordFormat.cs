@@ -3,7 +3,7 @@
     /// <summary>
     /// A <see cref="IRecordFormat"/> provides format specific processing for a <see cref="Record"/> parser.
     /// </summary>
-    public interface IRecordFormat
+    internal interface IRecordFormat
     {
         /// <summary>
         /// Returns whether the record meets configured matching criteria during unmarshalling.

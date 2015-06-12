@@ -3,7 +3,7 @@ using System.Xml.Linq;
 
 namespace BeanIO.Internal.Parser.Format.Xml
 {
-    public class XmlTextField : XmlFieldFormat
+    internal class XmlTextField : XmlFieldFormat
     {
         /// <summary>
         /// Gets the XML node type

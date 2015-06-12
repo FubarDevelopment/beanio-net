@@ -4,7 +4,7 @@
     /// This exception may be thrown by <see cref="IParser.Unmarshal"/> to
     /// abort record unmarshalling after a critical validation error has occurred.
     /// </summary>
-    public class AbortRecordUnmarshalligException : BeanIOException
+    internal class AbortRecordUnmarshalligException : BeanIOException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AbortRecordUnmarshalligException"/> class.

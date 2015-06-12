@@ -10,7 +10,7 @@ using BeanIO.Stream.Delimited;
 
 namespace BeanIO.Internal.Compiler.Delimited
 {
-    public class DelimitedParserFactory : FlatParserFactory
+    internal class DelimitedParserFactory : FlatParserFactory
     {
         /// <summary>
         /// Creates the default <see cref="IRecordParserFactory"/>.

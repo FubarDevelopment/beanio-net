@@ -11,7 +11,7 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
     /// A fixed length record may be configured to validate record length by
     /// setting a minimum and maximum length.
     /// </remarks>
-    public class FixedLengthRecordFormat : IRecordFormat
+    internal class FixedLengthRecordFormat : IRecordFormat
     {
         /// <summary>
         /// Gets or sets the minimum number of fields in the record

@@ -7,7 +7,7 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
     /// <summary>
     /// The <see cref="UnmarshallingContext"/> implementation for a fixed length formatted stream.
     /// </summary>
-    public class FixedLengthUnmarshallingContext : UnmarshallingContext
+    internal class FixedLengthUnmarshallingContext : UnmarshallingContext
     {
         private string _record;
 

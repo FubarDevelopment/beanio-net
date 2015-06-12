@@ -9,7 +9,7 @@ namespace BeanIO.Internal.Compiler
     /// <summary>
     /// Factory interface for creating <see cref="IPropertyAccessor"/> implementations.
     /// </summary>
-    public interface IPropertyAccessorFactory
+    internal interface IPropertyAccessorFactory
     {
         /// <summary>
         /// Creates a new <see cref="IPropertyAccessor"/>

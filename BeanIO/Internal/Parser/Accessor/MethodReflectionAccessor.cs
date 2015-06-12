@@ -5,7 +5,7 @@ using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser.Accessor
 {
-    public class MethodReflectionAccessor : PropertyAccessorSupport
+    internal class MethodReflectionAccessor : PropertyAccessorSupport
     {
         private readonly MethodInfo _getter;
         private readonly MethodInfo _setter;

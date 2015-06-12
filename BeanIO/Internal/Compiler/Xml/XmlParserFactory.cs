@@ -13,7 +13,7 @@ namespace BeanIO.Internal.Compiler.Xml
     /// <summary>
     /// A <see cref="IParserFactory"/> for the XML stream format.
     /// </summary>
-    public class XmlParserFactory : ParserFactorySupport
+    internal class XmlParserFactory : ParserFactorySupport
     {
         /// <summary>
         /// the current depth of the parser tree

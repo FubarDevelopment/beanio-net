@@ -8,7 +8,7 @@ namespace BeanIO.Internal.Parser
     /// <summary>
     /// The base class for all nodes in the parser tree.
     /// </summary>
-    public abstract class Component : TreeNode<Component>
+    internal abstract class Component : TreeNode<Component>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Component"/> class.

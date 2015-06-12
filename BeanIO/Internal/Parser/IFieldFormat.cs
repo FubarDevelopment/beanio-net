@@ -3,7 +3,7 @@
     /// <summary>
     /// A <see cref="IFieldFormat"/> provides format specific processing for a <see cref="Field"/> parser.
     /// </summary>
-    public interface IFieldFormat
+    internal interface IFieldFormat
     {
         /// <summary>
         /// Gets the size of the field

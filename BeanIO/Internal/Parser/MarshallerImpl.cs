@@ -6,7 +6,7 @@ using BeanIO.Stream;
 
 namespace BeanIO.Internal.Parser
 {
-    public class MarshallerImpl : IMarshaller
+    internal class MarshallerImpl : IMarshaller
     {
         private readonly ISelector _layout;
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace BeanIO.Internal.Parser
 {
-    public sealed class OptionalValueComparer : IComparer<OptionalValue>, IEqualityComparer<OptionalValue>, IComparer, IEqualityComparer
+    internal sealed class OptionalValueComparer : IComparer<OptionalValue>, IEqualityComparer<OptionalValue>, IComparer, IEqualityComparer
     {
         private static readonly OptionalValueComparer _default = new OptionalValueComparer(StringComparer.Ordinal);
 

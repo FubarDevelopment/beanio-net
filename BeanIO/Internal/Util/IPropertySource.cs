@@ -3,7 +3,7 @@
     /// <summary>
     /// A source of property values.
     /// </summary>
-    public interface IPropertySource
+    internal interface IPropertySource
     {
         /// <summary>
         /// Returns the property value for a given key

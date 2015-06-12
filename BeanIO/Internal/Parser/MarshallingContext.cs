@@ -13,7 +13,7 @@ namespace BeanIO.Internal.Parser
     /// when <see cref="WriteRecord"/> is called to write a record object to the
     /// configured <see cref="IRecordWriter"/>.
     /// </returns>
-    public abstract class MarshallingContext : ParsingContext
+    internal abstract class MarshallingContext : ParsingContext
     {
         /// <summary>
         /// Gets or sets the bean object to marshal.

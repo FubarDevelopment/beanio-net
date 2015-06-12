@@ -2,7 +2,7 @@
 
 namespace BeanIO.Internal.Parser.Format.FixedLength
 {
-    public class FixedLengthFieldFormat : FlatFieldFormatSupport
+    internal class FixedLengthFieldFormat : FlatFieldFormatSupport
     {
         /// <summary>
         /// Gets or sets a value indicating whether to keep field padding during unmarshalling

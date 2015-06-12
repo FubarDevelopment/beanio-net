@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace BeanIO.Internal.Parser
 {
-    public class ErrorContext : IRecordContext
+    internal class ErrorContext : IRecordContext
     {
         private static readonly List<string> _noErrors = new List<string>();
 

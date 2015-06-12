@@ -3,7 +3,7 @@
     /// <summary>
     /// A PropertyAccessor provides access to a bean property.
     /// </summary>
-    public interface IPropertyAccessor
+    internal interface IPropertyAccessor
     {
         /// <summary>
         /// Gets a value indicating whether this property is a constructor argument.

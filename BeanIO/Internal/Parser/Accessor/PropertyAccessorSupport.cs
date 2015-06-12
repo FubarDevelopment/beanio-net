@@ -1,6 +1,6 @@
 ﻿namespace BeanIO.Internal.Parser.Accessor
 {
-    public abstract class PropertyAccessorSupport : IPropertyAccessor
+    internal abstract class PropertyAccessorSupport : IPropertyAccessor
     {
         private int? _constructorArgumentIndex;
 

@@ -7,7 +7,7 @@ using BeanIO.Stream.Csv;
 
 namespace BeanIO.Internal.Compiler.Csv
 {
-    public class CsvParserFactory : DelimitedParserFactory
+    internal class CsvParserFactory : DelimitedParserFactory
     {
         protected override IStreamFormat CreateStreamFormat(StreamConfig config)
         {

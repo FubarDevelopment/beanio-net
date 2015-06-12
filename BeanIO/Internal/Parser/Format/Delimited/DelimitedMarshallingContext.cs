@@ -9,7 +9,7 @@ namespace BeanIO.Internal.Parser.Format.Delimited
     /// <summary>
     /// A <see cref="MarshallingContext"/> for delimited records.
     /// </summary>
-    public class DelimitedMarshallingContext : MarshallingContext
+    internal class DelimitedMarshallingContext : MarshallingContext
     {
         /// <summary>
         /// the list of entries for creating the record (may be unordered)

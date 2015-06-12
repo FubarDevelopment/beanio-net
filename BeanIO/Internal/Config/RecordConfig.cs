@@ -1,5 +1,12 @@
 ﻿namespace BeanIO.Internal.Config
 {
+    /// <summary>
+    /// A record is a segment that is bound to a record in a stream.
+    /// </summary>
+    /// <remarks>
+    /// The physical representation of a record is dependent on the type of stream.
+    /// A typical example might be a line in a fixed length or delimited flat file.
+    /// </remarks>
     public class RecordConfig : SegmentConfig, ISelectorConfig
     {
         /// <summary>

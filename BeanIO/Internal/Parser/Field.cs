@@ -8,7 +8,13 @@ using BeanIO.Types;
 
 namespace BeanIO.Internal.Parser
 {
-    public class Field : ParserComponent, IProperty
+    /// <summary>
+    /// A parser for marshalling and unmarshalling a single field in a record.
+    /// </summary>
+    /// <remarks>
+    /// A field is usually, but optionally, bound to a simple property value.
+    /// </remarks>
+    internal class Field : ParserComponent, IProperty
     {
         private readonly ParserLocal<object> _value = new ParserLocal<object>(Value.Missing);
 

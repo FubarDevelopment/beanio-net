@@ -5,7 +5,7 @@
     /// a record for marshalling or unmarshalling, namely <see cref="RecordConfig"/> and
     /// <see cref="GroupConfig"/> components.
     /// </summary>
-    public interface ISelectorConfig
+    internal interface ISelectorConfig
     {
         /// <summary>
         /// Gets the component type of this selector.

@@ -8,7 +8,7 @@ namespace BeanIO.Internal.Parser.Accessor
     /// <summary>
     /// A <see cref="IPropertyAccessor"/> that uses reflection to access a public field.
     /// </summary>
-    public class FieldReflectionAccessor : PropertyAccessorSupport
+    internal class FieldReflectionAccessor : PropertyAccessorSupport
     {
         private readonly FieldInfo _field;
 

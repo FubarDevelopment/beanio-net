@@ -5,6 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
+using JetBrains.Annotations;
+
 //// using NodaTime;
 
 namespace BeanIO.Internal.Util
@@ -239,8 +241,10 @@ namespace BeanIO.Internal.Util
         /// </summary>
         /// <param name="t">The type to get the assembly qualified name for</param>
         /// <returns>The assembly qualified type name</returns>
-        public static string GetAssemblyQualifiedName(this Type t)
+        public static string GetAssemblyQualifiedName([CanBeNull] this Type t)
         {
+            if (t == null)
+                return null;
             var result = new StringBuilder();
             if (!string.IsNullOrEmpty(t.Namespace))
                 result.AppendFormat("{0}.", t.Namespace);

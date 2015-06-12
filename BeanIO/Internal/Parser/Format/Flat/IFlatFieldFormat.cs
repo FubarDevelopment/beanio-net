@@ -4,7 +4,7 @@
     /// A <see cref="IFlatFieldFormat"/> is a <see cref="IFieldFormat"/> for flat stream formats
     /// (i.e. CSV, delimited and fixed length).
     /// </summary>
-    public interface IFlatFieldFormat : IFieldFormat
+    internal interface IFlatFieldFormat : IFieldFormat
     {
         /// <summary>
         /// Gets the field position

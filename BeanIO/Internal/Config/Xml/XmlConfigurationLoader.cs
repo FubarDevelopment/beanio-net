@@ -12,7 +12,7 @@ namespace BeanIO.Internal.Config.Xml
     /// to <see cref="XmlMappingParser"/>, for which a new instance is created for
     /// each input stream that requires parsing.
     /// </remarks>
-    public class XmlConfigurationLoader : IConfigurationLoader
+    internal class XmlConfigurationLoader : IConfigurationLoader
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlConfigurationLoader"/> class.

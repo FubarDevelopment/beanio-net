@@ -7,6 +7,17 @@ using Newtonsoft.Json.Linq;
 
 namespace BeanIO.Internal.Config
 {
+    /// <summary>
+    /// A base class for configuration components that can be bound to a property
+    /// of a bean object.
+    /// </summary>
+    /// <remarks>
+    /// <para>The following attributes are set during compilation, and are meant for internal use only:</para>
+    /// <list type="bullet">
+    ///     <item>minSize</item>
+    ///     <item>maxSize</item>
+    /// </list>
+    /// </remarks>
     public abstract class PropertyConfig : ComponentConfig
     {
         /// <summary>

@@ -6,7 +6,7 @@ namespace BeanIO.Internal.Parser
     /// Used to create a reference to a variable held by a <see cref="ParsingContext"/>.
     /// </summary>
     /// <typeparam name="T">the variable type</typeparam>
-    public class ParserLocal<T> : IParserLocal
+    internal class ParserLocal<T> : IParserLocal
     {
         private readonly Func<T> _createFunc;
 

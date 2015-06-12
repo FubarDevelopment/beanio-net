@@ -9,7 +9,7 @@ namespace BeanIO.Internal.Compiler.Xml
     /// <summary>
     /// Configuration <see cref="Preprocessor"/> for an XML stream format.
     /// </summary>
-    public class XmlPreprocessor : Preprocessor
+    internal class XmlPreprocessor : Preprocessor
     {
         public XmlPreprocessor(StreamConfig stream)
             : base(stream)

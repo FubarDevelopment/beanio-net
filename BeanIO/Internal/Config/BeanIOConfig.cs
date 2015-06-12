@@ -5,7 +5,7 @@ namespace BeanIO.Internal.Config
     /// <summary>
     /// Stores BeanIO stream mapping configuration settings
     /// </summary>
-    public class BeanIOConfig
+    internal class BeanIOConfig
     {
         private readonly List<TypeHandlerConfig> _handlerList = new List<TypeHandlerConfig>();
 

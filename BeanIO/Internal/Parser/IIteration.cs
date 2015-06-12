@@ -4,7 +4,7 @@
     /// Repeating components must implement <see cref="IIteration"/> to offset record positions
     /// during marshalling and unmarshalling.
     /// </summary>
-    public interface IIteration
+    internal interface IIteration
     {
         /// <summary>
         /// Gets the size of the components that make up a single iteration.

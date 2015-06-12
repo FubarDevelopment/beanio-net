@@ -8,7 +8,7 @@
     /// During marshalling, constants can be used to identify the record mapping for
     /// a bean object if <code>identifier</code> is set to true.
     /// </remarks>
-    public class ConstantConfig : SimplePropertyConfig
+    internal class ConstantConfig : SimplePropertyConfig
     {
         /// <summary>
         /// Gets the component type

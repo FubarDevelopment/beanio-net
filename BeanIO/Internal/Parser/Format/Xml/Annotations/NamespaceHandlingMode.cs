@@ -3,7 +3,7 @@
     /// <summary>
     /// Various modes of namespace handling
     /// </summary>
-    public enum NamespaceHandlingMode
+    internal enum NamespaceHandlingMode
     {
         /// <summary>
         /// Use the namespace as-is

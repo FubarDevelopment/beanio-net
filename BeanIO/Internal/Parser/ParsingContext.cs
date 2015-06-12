@@ -7,7 +7,7 @@ namespace BeanIO.Internal.Parser
     /// <summary>
     /// Base class for the parsing context - marshalling or unmarshalling.
     /// </summary>
-    public abstract class ParsingContext
+    internal abstract class ParsingContext
     {
         private readonly Stack<IIteration> _iterations = new Stack<IIteration>();
 

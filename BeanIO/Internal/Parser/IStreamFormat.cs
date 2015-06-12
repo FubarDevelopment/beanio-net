@@ -7,7 +7,7 @@ namespace BeanIO.Internal.Parser
     /// <summary>
     /// A <see cref="IStreamFormat"/> provides format specific extensions for a <see cref="BeanIO.Stream"/> parser.
     /// </summary>
-    public interface IStreamFormat
+    internal interface IStreamFormat
     {
         /// <summary>
         /// Gets the name of the stream

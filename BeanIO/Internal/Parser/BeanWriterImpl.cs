@@ -8,7 +8,7 @@ namespace BeanIO.Internal.Parser
     /// <summary>
     /// A <see cref="BeanReader"/> implementation.
     /// </summary>
-    public class BeanWriterImpl : IBeanWriter, IStatefulWriter
+    internal class BeanWriterImpl : IBeanWriter, IStatefulWriter
     {
         private ISelector _layout;
 

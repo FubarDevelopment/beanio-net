@@ -2,7 +2,7 @@
 
 namespace BeanIO.Internal.Parser
 {
-    public sealed class OptionalValue : IComparable<OptionalValue>, IEquatable<OptionalValue>, IComparable
+    internal sealed class OptionalValue : IComparable<OptionalValue>, IEquatable<OptionalValue>, IComparable
     {
         /// <summary>
         /// Constant indicating the field did not pass validation

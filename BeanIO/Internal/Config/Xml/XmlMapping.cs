@@ -10,7 +10,7 @@ namespace BeanIO.Internal.Config.Xml
     /// <summary>
     /// Stores parsing information about an XML mapping file.
     /// </summary>
-    public class XmlMapping
+    internal class XmlMapping
     {
         private const int TYPE_HANDLER_NAMESPACE = 0;
 

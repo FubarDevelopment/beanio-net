@@ -6,7 +6,7 @@ namespace BeanIO.Internal.Parser
     /// A <see cref="ISelector"/> is used to match a <see cref="Group"/> or <see cref="Record"/> for
     /// marshalling and unmarshalling.
     /// </summary>
-    public interface ISelector : IParser
+    internal interface ISelector : IParser
     {
         /// <summary>
         /// Gets the minimum number of occurrences of this component (within the context of its parent).

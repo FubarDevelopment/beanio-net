@@ -7,7 +7,7 @@ using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser
 {
-    public class Segment : ParserComponent
+    internal class Segment : ParserComponent
     {
         private readonly ParserLocal<IList<IParser>> _missing = new ParserLocal<IList<IParser>>(() => new List<IParser>());
 

@@ -17,7 +17,7 @@ namespace BeanIO.Internal.Compiler
     /// Compiles a mapping file read from an <see cref="System.IO.Stream"/> into a collection of
     /// <see cref="Parser.Stream"/> parsers.
     /// </summary>
-    public class StreamCompiler
+    internal class StreamCompiler
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="StreamCompiler"/> class.

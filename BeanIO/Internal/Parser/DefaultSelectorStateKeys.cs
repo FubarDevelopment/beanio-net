@@ -3,7 +3,7 @@
     /// <summary>
     /// Default selector state keys
     /// </summary>
-    public static class DefaultSelectorStateKeys
+    internal static class DefaultSelectorStateKeys
     {
         /// <summary>
         /// map key used to store the state of the 'count' attribute

@@ -6,7 +6,7 @@ using BeanIO.Stream;
 
 namespace BeanIO.Internal.Parser
 {
-    public class UnmarshallerImpl : IUnmarshaller
+    internal class UnmarshallerImpl : IUnmarshaller
     {
         private readonly UnmarshallingContext _context;
 

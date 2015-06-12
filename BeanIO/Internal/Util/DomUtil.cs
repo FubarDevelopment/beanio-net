@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 
 namespace BeanIO.Internal.Util
 {
-    public static class DomUtil
+    internal static class DomUtil
     {
         public static void SetAnnotation<T>([NotNull] this XObject obj, T annotation)
             where T : class

@@ -17,7 +17,7 @@ namespace BeanIO.Internal.Parser
     /// by <see cref="NextRecord"/> each time a new record is read from the <see cref="IRecordReader"/>.
     /// The object used to represent a record is dependent on the <see cref="IRecordReader"/>
     /// implementation for the stream format.</remarks>
-    public abstract class UnmarshallingContext : ParsingContext
+    internal abstract class UnmarshallingContext : ParsingContext
     {
         /// <summary>
         /// a list of record contexts (for parsing record groups)

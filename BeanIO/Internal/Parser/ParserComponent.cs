@@ -5,7 +5,7 @@ namespace BeanIO.Internal.Parser
     /// <summary>
     /// Base class for all parser components in that implement <see cref="IParser"/>.
     /// </summary>
-    public abstract class ParserComponent : Component, IParser
+    internal abstract class ParserComponent : Component, IParser
     {
         /// <summary>
         /// map key used to store the state of the 'count' attribute

@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace BeanIO.Internal.Parser
 {
-    public class BeanReaderImpl : BeanReader
+    internal class BeanReaderImpl : BeanReader
     {
         [CanBeNull]
         private UnmarshallingContext _context;

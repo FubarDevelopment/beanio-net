@@ -11,7 +11,7 @@ namespace BeanIO.Internal.Parser.Format.Delimited
     /// A delimited record may be configured to validate a record field count by
     /// setting a minimum and maximum length.
     /// </remarks>
-    public class DelimitedRecordFormat : IRecordFormat
+    internal class DelimitedRecordFormat : IRecordFormat
     {
         /// <summary>
         /// Gets or sets the minimum number of fields in the record

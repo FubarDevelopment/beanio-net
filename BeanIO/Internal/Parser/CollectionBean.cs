@@ -6,7 +6,7 @@ using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser
 {
-    public class CollectionBean : PropertyComponent
+    internal class CollectionBean : PropertyComponent
     {
         private readonly ParserLocal<object> _bean;
 

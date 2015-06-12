@@ -6,7 +6,7 @@ using System.Resources;
 
 namespace BeanIO.Internal.Parser.Message
 {
-    public class ResourceBundleMessageFactory : IMessageFactory
+    internal class ResourceBundleMessageFactory : IMessageFactory
     {
         /// <summary>
         /// Key prefix for labels

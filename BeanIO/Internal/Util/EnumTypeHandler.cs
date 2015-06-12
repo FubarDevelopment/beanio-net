@@ -9,7 +9,7 @@ namespace BeanIO.Internal.Util
     /// <summary>
     /// Default <see cref="Enum"/> type handler
     /// </summary>
-    public class EnumTypeHandler : IConfigurableTypeHandler
+    internal class EnumTypeHandler : IConfigurableTypeHandler
     {
         private string _enumFormat;
 

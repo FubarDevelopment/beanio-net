@@ -12,7 +12,7 @@ namespace BeanIO.Internal.Compiler
     /// default configuration values, and populating any calculated values before the
     /// <see cref="ParserFactorySupport"/> compiles the configuration into parser components.
     /// </summary>
-    public class Preprocessor : ProcessorSupport
+    internal class Preprocessor : ProcessorSupport
     {
         private static readonly Settings _settings = Settings.Instance;
 

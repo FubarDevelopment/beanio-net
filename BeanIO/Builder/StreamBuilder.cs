@@ -30,6 +30,20 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="StreamBuilder"/> class.
+        /// </summary>
+        /// <param name="name">The stream name</param>
+        /// <param name="format">the stream format</param>
+        public StreamBuilder(string name, string format)
+        {
+            _config = new StreamConfig()
+            {
+                Name = name,
+                Format = format
+            };
+        }
+
+        /// <summary>
         /// Gets this.
         /// </summary>
         protected override StreamBuilder Me
@@ -87,12 +101,18 @@ namespace BeanIO.Builder
         /// <returns>The value of <see cref="Me"/></returns>
         public StreamBuilder AddTypeHandler([CanBeNull] string name, [NotNull] Func<ITypeHandler> createFunc)
         {
-            var thc = new TypeHandlerConfig(createFunc)
-            {
-                Name = name ?? createFunc().TargetType.GetAssemblyQualifiedName(),
-            };
-            Config.AddHandler(thc);
-            return Me;
+            return AddTypeHandler(name, null, createFunc);
+        }
+
+        /// <summary>
+        /// Adds a type handler
+        /// </summary>
+        /// <param name="type">the class parsed by the type handler</param>
+        /// <param name="createFunc">the type handler creation function</param>
+        /// <returns>The value of <see cref="Me"/></returns>
+        public StreamBuilder AddTypeHandler([CanBeNull] Type type, [NotNull] Func<ITypeHandler> createFunc)
+        {
+            return AddTypeHandler(null, type, createFunc);
         }
 
         /// <summary>
@@ -100,9 +120,28 @@ namespace BeanIO.Builder
         /// </summary>
         /// <param name="createFunc">the type handler creation function</param>
         /// <returns>The value of <see cref="Me"/></returns>
-        public StreamBuilder AddTypeHandler(Func<ITypeHandler> createFunc)
+        public StreamBuilder AddTypeHandler([NotNull] Func<ITypeHandler> createFunc)
         {
-            return AddTypeHandler(null, createFunc);
+            return AddTypeHandler(null, null, createFunc);
+        }
+
+        /// <summary>
+        /// Adds a type handler
+        /// </summary>
+        /// <param name="name">the name of the type handler</param>
+        /// <param name="type">the class parsed by the type handler</param>
+        /// <param name="createFunc">the type handler creation function</param>
+        /// <returns>The value of <see cref="Me"/></returns>
+        public StreamBuilder AddTypeHandler([CanBeNull] string name, [CanBeNull] Type type, [NotNull] Func<ITypeHandler> createFunc)
+        {
+            var thc = new TypeHandlerConfig(createFunc)
+            {
+                Name = name ?? createFunc().TargetType.GetAssemblyQualifiedName(),
+            };
+            if (type != null)
+                thc.Type = type.FullName;
+            Config.AddHandler(thc);
+            return Me;
         }
 
         /// <summary>
@@ -122,6 +161,12 @@ namespace BeanIO.Builder
         public StreamBuilder WriteOnly()
         {
             Config.Mode = AccessMode.Write;
+            return Me;
+        }
+
+        public StreamBuilder ResourceBundle(string name)
+        {
+            Config.ResourceBundle = name;
             return Me;
         }
 

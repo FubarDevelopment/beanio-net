@@ -9,7 +9,7 @@ using JetBrains.Annotations;
 
 namespace BeanIO.Internal.Parser
 {
-    public class Stream
+    internal class Stream
     {
         private ISet<IParserLocal> _locals;
 
