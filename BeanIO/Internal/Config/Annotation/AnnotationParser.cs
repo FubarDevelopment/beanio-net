@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -674,7 +675,7 @@ namespace BeanIO.Internal.Config.Annotation
 
                 collectionName = collectionType.GetAssemblyQualifiedName();
             }
-            else if (propertyType.IsInstanceOf(typeof(IList<>)))
+            else if (propertyType.IsInstanceOf(typeof(IList<>)) || propertyType.IsInstanceOf(typeof(IList)))
             {
                 var collectionType = annotatedCollection.ToValue();
                 if (collectionType == null)
