@@ -1,4 +1,6 @@
-﻿using BeanIO.Internal.Config;
+﻿using System;
+
+using BeanIO.Internal.Config;
 using BeanIO.Internal.Util;
 using BeanIO.Types;
 
@@ -115,7 +117,7 @@ namespace BeanIO.Builder
         /// <returns>The value of <see cref="Me"/></returns>
         public FieldBuilder MaxLength(int n)
         {
-            Config.MaxLength = n;
+            Config.MaxLength = n < 0 ? (int?)null : n;
             return Me;
         }
 
@@ -257,12 +259,22 @@ namespace BeanIO.Builder
         /// <summary>
         /// Sets the type handler used for parsing and formatting field text.
         /// </summary>
+        /// <param name="typeHandlerType">the type of the type handler</param>
+        /// <returns>The value of <see cref="Me"/></returns>
+        public FieldBuilder TypeHandler(Type typeHandlerType)
+        {
+            Config.TypeHandler = typeHandlerType.GetAssemblyQualifiedName();
+            return Me;
+        }
+
+        /// <summary>
+        /// Sets the type handler used for parsing and formatting field text.
+        /// </summary>
         /// <typeparam name="THandler">the type handler class</typeparam>
         /// <returns>The value of <see cref="Me"/></returns>
         public FieldBuilder TypeHandler<THandler>() where THandler : ITypeHandler, new()
         {
-            Config.TypeHandler = typeof(THandler).GetAssemblyQualifiedName();
-            return Me;
+            return TypeHandler(typeof(THandler));
         }
 
         /// <summary>

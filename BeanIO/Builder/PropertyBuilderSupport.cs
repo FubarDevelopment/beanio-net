@@ -45,7 +45,7 @@ namespace BeanIO.Builder
         /// <returns>The value of <see cref="Me"/></returns>
         public T MaxOccurs(int max)
         {
-            Config.MaxOccurs = max < 0 ? -1 : max;
+            Config.MaxOccurs = max < 0 ? (int?)null : max;
             return Me;
         }
 
