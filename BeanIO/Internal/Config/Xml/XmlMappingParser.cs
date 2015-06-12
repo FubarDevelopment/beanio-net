@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -254,7 +255,11 @@ namespace BeanIO.Internal.Config.Xml
             var url = new Uri(resource);
             ISchemeHandler handler;
             if (!Settings.Instance.SchemeHandlers.TryGetValue(url.Scheme, out handler))
-                throw new BeanIOConfigurationException("Import resource name must begin with 'classpath:' or 'file:'");
+                throw new BeanIOConfigurationException(
+                    string.Format(
+                        "Scheme of import resource name {0} must one of: {1}",
+                        resource,
+                        string.Join(", ", Settings.Instance.SchemeHandlers.Keys.Select(x => string.Format("'{0}'", x)))));
 
             if (_mapping.IsLoading(url))
                 throw new BeanIOConfigurationException(string.Format("Failed to import resource '{0}': Circular reference(s) detected", name));
