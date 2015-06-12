@@ -79,6 +79,8 @@
     <Compile Include="Config\XmlMappingConfigurationTest.cs" />
     <Compile Include="Internal\Util\MarkableTextReaderTests.cs" />
     <Compile Include="Internal\Parser\OptionalValueTests.cs" />
+    <Compile Include="Internal\Util\StringUtilTest.cs" />
+    <Compile Include="Internal\Util\TypeUtilTest.cs" />
     <Compile Include="Parser\AbstractParserTest.cs" />
     <Compile Include="Parser\Annotation\AnnotatedBulb.cs" />
     <Compile Include="Parser\Annotation\AnnotatedFloor.cs" />

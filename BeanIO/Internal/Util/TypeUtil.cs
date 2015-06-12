@@ -133,7 +133,7 @@ namespace BeanIO.Internal.Util
             return clazz;
         }
 
-        public static Type ToAggregationType(string type)
+        public static Type ToAggregationType(this string type)
         {
             switch (type.ToLowerInvariant())
             {
@@ -149,6 +149,8 @@ namespace BeanIO.Internal.Util
             }
 
             var clazz = Type.GetType(type);
+            if (clazz == null)
+                return null;
             if (typeof(IList).IsAssignableFrom(clazz))
                 return clazz;
             if (typeof(IDictionary).IsAssignableFrom(clazz))
