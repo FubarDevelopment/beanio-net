@@ -30,13 +30,13 @@ namespace BeanIO.Internal.Compiler.Xml
             }
 
             var type = config.XmlType;
-            if (type == null || type == XmlNodeType.None)
+            if (type == null)
             {
                 config.XmlType = XmlNodeType.Element;
             }
             else
             {
-                if (type != XmlNodeType.Element)
+                if (type != XmlNodeType.Element && type != XmlNodeType.None)
                     throw new BeanIOConfigurationException(string.Format("Invalid xmlType '{0}'", type));
             }
 
@@ -88,7 +88,7 @@ namespace BeanIO.Internal.Compiler.Xml
             }
 
             var type = config.XmlType;
-            if (type == null || type == XmlNodeType.None)
+            if (type == null)
             {
                 config.XmlType = XmlNodeType.Element;
             }
@@ -141,7 +141,7 @@ namespace BeanIO.Internal.Compiler.Xml
             }
 
             var type = config.XmlType;
-            if (type == null || type == XmlNodeType.None)
+            if (type == null)
             {
                 var xmlType = Settings.Instance.GetProperty(Settings.DEFAULT_XML_TYPE);
                 XmlNodeType newXmlNodeType;

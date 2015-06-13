@@ -145,7 +145,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
             {
                 element.SetAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.IgnoreNamespace));
             }
-            else if (string.Equals(Prefix, string.Empty))
+            else if (string.IsNullOrEmpty(Prefix))
             {
                 element.SetAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.DefaultNamespace));
             }

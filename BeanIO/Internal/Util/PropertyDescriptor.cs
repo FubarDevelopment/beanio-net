@@ -17,6 +17,8 @@ namespace BeanIO.Internal.Util
 
         private readonly MethodInfo _setter;
 
+        private Type _type;
+
         public PropertyDescriptor([NotNull] string constructorArgument, MethodInfo getter = null, MethodInfo setter = null)
         {
             _name = constructorArgument;
@@ -77,18 +79,8 @@ namespace BeanIO.Internal.Util
 
         public Type PropertyType
         {
-            get
-            {
-                if (_field != null)
-                    return _field.FieldType;
-                if (_property != null)
-                    return _property.PropertyType;
-                if (_getter != null)
-                    return _getter.ReturnType;
-                if (_setter != null)
-                    return _setter.GetParameters()[0].ParameterType;
-                return null;
-            }
+            get { return _type ?? (_type = GuessPropertyType()); }
+            set { _type = value; }
         }
 
         public object GetValue(object instance)
@@ -108,12 +100,25 @@ namespace BeanIO.Internal.Util
             }
             else if (_field != null)
             {
-                _field.SetValue(instance, new[] { value });
+                _field.SetValue(instance, value);
             }
             else
             {
                 throw new InvalidOperationException();
             }
+        }
+
+        private Type GuessPropertyType()
+        {
+            if (_field != null)
+                return _field.FieldType;
+            if (_property != null)
+                return _property.PropertyType;
+            if (_getter != null)
+                return _getter.ReturnType;
+            if (_setter != null)
+                return _setter.GetParameters()[0].ParameterType;
+            return null;
         }
     }
 }

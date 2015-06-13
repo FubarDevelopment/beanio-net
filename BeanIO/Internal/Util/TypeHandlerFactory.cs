@@ -68,27 +68,15 @@ namespace BeanIO.Internal.Util
             _defaultFactory.RegisterHandlerFor(typeof(Uri), () => new UrlTypeHandler());
 
             _defaultFactory.RegisterHandlerFor("datetime", () => new DateTimeTypeHandler());
-            _defaultFactory.RegisterHandlerFor("datetimeoffset", () => new DateTimeOffsetHandler());
+            _defaultFactory.RegisterHandlerFor("datetimeoffset", () => new DateTimeOffsetTypeHandler());
             _defaultFactory.RegisterHandlerFor("date", () => new DateTypeHandler());
             _defaultFactory.RegisterHandlerFor("time", () => new TimeTypeHandler());
 
             _defaultFactory.RegisterHandlerFor(typeof(bool), () => new XmlBooleanTypeHandler(), "xml");
-
-            _defaultFactory.RegisterHandlerFor(
-                "datetime",
-                () => new XmlConvertTypeHandler(
-                            typeof(DateTime),
-                            v => XmlConvert.ToString((DateTime)v),
-                            t => XmlConvert.ToDateTimeOffset(t).DateTime),
-                "xml");
-
-            _defaultFactory.RegisterHandlerFor(
-                "datetimeoffset",
-                () => new XmlConvertTypeHandler(
-                            typeof(DateTimeOffset),
-                            v => XmlConvert.ToString((DateTimeOffset)v),
-                            t => XmlConvert.ToDateTimeOffset(t)),
-                "xml");
+            _defaultFactory.RegisterHandlerFor("datetime", () => new XmlDateTimeTypeHandler(), "xml");
+            _defaultFactory.RegisterHandlerFor("datetimeoffset", () => new XmlDateTimeOffsetTypeHandler(), "xml");
+            _defaultFactory.RegisterHandlerFor("date", () => new XmlDateTypeHandler(), "xml");
+            _defaultFactory.RegisterHandlerFor("time", () => new XmlTimeTypeHandler(), "xml");
         }
 
         /// <summary>

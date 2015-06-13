@@ -1410,10 +1410,12 @@ namespace BeanIO.Internal.Compiler
             if (!type.IsArray && type != typeof(Array) && (type.GetTypeInfo().IsInterface || type.GetTypeInfo().IsAbstract))
             {
                 if (typeof(ISet<>).IsAssignableFrom(type))
-                    return typeof(HashSet<>);
+                    return typeof(HashSet<>).Instantiate(type);
                 if (typeof(IDictionary).IsAssignableFrom(type))
-                    return typeof(Dictionary<,>);
-                return typeof(List<>);
+                    return typeof(Dictionary<,>).Instantiate(type);
+                if (typeof(IList<>).IsAssignableFrom(type))
+                    return typeof(List<>).Instantiate(type);
+                return typeof(List<object>);
             }
             return type;
         }

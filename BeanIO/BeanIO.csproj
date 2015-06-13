@@ -259,7 +259,7 @@
     <Compile Include="Stream\Xml\XmlRecordParserFactory.cs" />
     <Compile Include="Stream\Xml\XmlRecordUnmarshaller.cs" />
     <Compile Include="Stream\Xml\XmlWriter.cs" />
-    <Compile Include="Types\DateTimeOffsetHandler.cs" />
+    <Compile Include="Types\DateTimeOffsetTypeHandler.cs" />
     <Compile Include="Types\TimeTypeHandler.cs" />
     <Compile Include="Types\DateTypeHandler.cs" />
     <Compile Include="Types\IntegerTypeHandler.cs" />
@@ -279,8 +279,13 @@
     <Compile Include="Types\NumberTypeHandler.cs" />
     <Compile Include="Types\StringTypeHandler.cs" />
     <Compile Include="Types\UrlTypeHandler.cs" />
+    <Compile Include="Types\Xml\AbstractXmlDateTypeHandler.cs" />
     <Compile Include="Types\Xml\XmlBooleanTypeHandler.cs" />
     <Compile Include="Types\Xml\XmlConvertTypeHandler.cs" />
+    <Compile Include="Types\Xml\XmlDateTimeOffsetTypeHandler.cs" />
+    <Compile Include="Types\Xml\XmlTimeTypeHandler.cs" />
+    <Compile Include="Types\Xml\XmlDateTypeHandler.cs" />
+    <Compile Include="Types\Xml\XmlDateTimeTypeHandler.cs" />
     <Compile Include="UnidentifiedRecordException.cs" />
     <Compile Include="UnexpectedRecordException.cs" />
     <Compile Include="IMarshaller .cs" />

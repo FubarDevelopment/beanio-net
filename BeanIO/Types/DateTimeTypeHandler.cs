@@ -26,25 +26,6 @@ namespace BeanIO.Types
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DateTimeTypeHandler"/> class.
-        /// </summary>
-        /// <param name="getDefaultPatternFunc">a function to get the default pattern</param>
-        protected DateTimeTypeHandler([NotNull] Func<CultureInfo, string> getDefaultPatternFunc)
-            : base(getDefaultPatternFunc)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DateTimeTypeHandler"/> class.
-        /// </summary>
-        /// <param name="getDefaultPatternFunc">a function to get the default pattern</param>
-        /// <param name="pattern">The pattern to use</param>
-        protected DateTimeTypeHandler([NotNull] Func<CultureInfo, string> getDefaultPatternFunc, string pattern)
-            : base(getDefaultPatternFunc, pattern)
-        {
-        }
-
-        /// <summary>
         /// Gets the class type supported by this handler.
         /// </summary>
         public override Type TargetType

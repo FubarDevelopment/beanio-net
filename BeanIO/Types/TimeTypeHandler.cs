@@ -4,7 +4,7 @@ using NodaTime;
 
 namespace BeanIO.Types
 {
-    public class TimeTypeHandler : DateTimeTypeHandler
+    public class TimeTypeHandler : DateTypeHandlerSupport
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TimeTypeHandler"/> class.

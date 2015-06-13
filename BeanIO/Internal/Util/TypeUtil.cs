@@ -294,6 +294,23 @@ namespace BeanIO.Internal.Util
         }
 
         /// <summary>
+        /// Instantiate a generic type using the type arguments from <paramref name="with"/>
+        /// </summary>
+        /// <param name="type">The new types instance</param>
+        /// <param name="with">The type to get the generic arguments from</param>
+        /// <returns>The constructed generic type from <paramref name="type"/></returns>
+        public static Type Instantiate(this Type type, Type with)
+        {
+            if (!with.IsConstructedGenericType)
+                return type;
+            var typeInfo = type.GetTypeInfo();
+            var withInfo = with.GetTypeInfo();
+            if (typeInfo.GenericTypeParameters.Length != withInfo.GenericTypeArguments.Length)
+                throw new InvalidOperationException(string.Format("The number of type arguments must match"));
+            return type.MakeGenericType(with.GenericTypeArguments);
+        }
+
+        /// <summary>
         /// The comparer that nullifies some .NET insanities where <see cref="Type.FullName"/> is null.
         /// </summary>
         private class TypeComparer : IComparer<Type>

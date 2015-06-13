@@ -4,20 +4,20 @@ using NodaTime;
 
 namespace BeanIO.Types
 {
-    public class DateTimeOffsetHandler : DateTypeHandlerSupport
+    public class DateTimeOffsetTypeHandler : DateTypeHandlerSupport
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DateTimeOffsetHandler"/> class.
+        /// Initializes a new instance of the <see cref="DateTimeOffsetTypeHandler"/> class.
         /// </summary>
-        public DateTimeOffsetHandler()
+        public DateTimeOffsetTypeHandler()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DateTimeOffsetHandler"/> class.
+        /// Initializes a new instance of the <see cref="DateTimeOffsetTypeHandler"/> class.
         /// </summary>
         /// <param name="pattern">The pattern to use</param>
-        public DateTimeOffsetHandler(string pattern)
+        public DateTimeOffsetTypeHandler(string pattern)
             : base(pattern)
         {
         }

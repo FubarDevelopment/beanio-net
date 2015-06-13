@@ -17,7 +17,7 @@ namespace BeanIO.Parser.Annotation
         private object _age;
 
         [Field(At = 5, Format = "yyyy-MM-dd")]
-        public DateTime Birthday { get; set; }
+        public DateTime BirthDate { get; set; }
 
         [Field(At = 7, MinOccurs = 2)]
         public IList<char?> Letters { get; set; }

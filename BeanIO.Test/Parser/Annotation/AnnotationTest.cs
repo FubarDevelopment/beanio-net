@@ -146,7 +146,7 @@ namespace BeanIO.Parser.Annotation
                 Assert.Equal("smith", user.GetSurname());
                 Assert.Equal("left", user.Hands[0]);
                 Assert.Equal("right", user.Hands[1]);
-                Assert.Equal(new DateTime(1970, 0, 1), user.Birthday);
+                Assert.Equal(new DateTime(1970, 1, 1), user.BirthDate);
                 Assert.Equal(28, user.Age);
                 Assert.Equal(2, user.Letters.Count);
                 Assert.Equal('A', user.Letters[0]);
