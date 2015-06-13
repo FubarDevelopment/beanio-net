@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 
 using Xunit;
@@ -112,7 +113,7 @@ namespace BeanIO.Parser.Bean
         }
 
         [Fact]
-        public virtual void TestFixedLengthMap()
+        public void TestFixedLengthMap()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Bean.widget.xml");
             var reader = factory.CreateReader("w4", LoadStream("w4_map.txt"));
@@ -139,6 +140,29 @@ namespace BeanIO.Parser.Bean
                 text = new StringWriter();
                 factory.CreateWriter("w4", text).Write(w);
                 Assert.Equal("1name12name23name3" + Environment.NewLine, text.ToString());
+            }
+            finally
+            {
+                reader.Close();
+            }
+        }
+
+        [Fact]
+        public void TestFixedLengthOutOfOrder()
+        {
+            var factory = NewStreamFactory("BeanIO.Parser.Bean.widget.xml");
+            var reader = factory.CreateReader("w5", LoadStream("w5_outOfOrder.txt"));
+            try
+            {
+                Widget w;
+                var map = (IDictionary)reader.Read();
+                w = (Widget)map["part3"];
+                Assert.Equal(3, w.Id);
+                Assert.Equal("name3", w.Name);
+
+                var text = new StringWriter();
+                factory.CreateWriter("w5", text).Write(map);
+                Assert.Equal("123name1name2name3" + Environment.NewLine, text.ToString());
             }
             finally
             {

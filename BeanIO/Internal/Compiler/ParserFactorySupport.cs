@@ -1209,9 +1209,12 @@ namespace BeanIO.Internal.Compiler
             {
                 property.PropertyType = reflectedType;
             }
-            else if (reflectedType.IsConstructedGenericType && !type.IsConstructedGenericType)
+            else if (!type.IsConstructedGenericType && type.GetTypeInfo().IsGenericType)
             {
-                property.PropertyType = type.Instantiate(reflectedType);
+                if (reflectedType.IsConstructedGenericType)
+                {
+                    property.PropertyType = type.Instantiate(reflectedType);
+                }
             }
         }
 

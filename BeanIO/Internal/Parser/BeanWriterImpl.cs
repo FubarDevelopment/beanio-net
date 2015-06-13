@@ -69,16 +69,15 @@ namespace BeanIO.Internal.Parser
                     {
                         throw new BeanWriterException(
                             string.Format(
-                                "Bean identification failed: " + "record name '{0}' not matched at the current position{1}",
+                                "Bean identification failed: record name '{0}' not matched at the current position{1}",
                                 recordName,
                                 bean != null ? " for bean class '" + bean.GetType() + "'" : string.Empty));
                     }
-                    else
-                    {
-                        throw new BeanWriterException("Bean identification failed: " +
-                            "no record or group mapping for bean class '" + bean.GetType() +
-                            "' at the current position");
-                    }
+                    
+                    throw new BeanWriterException(
+                        string.Format(
+                            "Bean identification failed: no record or group mapping for bean class '{0}' at the current position",
+                            bean));
                 }
 
                 // marshal the bean object
