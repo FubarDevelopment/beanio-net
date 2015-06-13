@@ -57,6 +57,60 @@ namespace BeanIO.Parser.Bean
             }
         }
 
+        [Fact]
+        public void TestFixedLengthAndOptionalFields()
+        {
+            var factory = NewStreamFactory("BeanIO.Parser.Bean.widget.xml");
+            var reader = factory.CreateReader("w3", LoadStream("w3_fixedLength.txt"));
+            try
+            {
+                var w = (Widget)reader.Read();
+                Assert.Equal(1, w.Id);
+                Assert.Equal("name1", w.Name);
+                Assert.Equal("mode1", w.Model);
+
+                var text = new StringWriter();
+                factory.CreateWriter("w3", text).Write(w);
+                Assert.Equal(" 1name1mode1" + Environment.NewLine, text.ToString());
+
+                w = (Widget)reader.Read();
+                Assert.Equal(1, w.Id);
+                Assert.Equal("name1", w.Name);
+                Assert.Equal("mode1", w.Model);
+                Assert.Collection(
+                    w.PartsList,
+                    part =>
+                        {
+                            Assert.Equal(2, part.Id);
+                            Assert.Equal("name2", part.Name);
+                            Assert.Equal("mode2", part.Model);
+                        },
+                    part =>
+                        {
+                            Assert.Equal(3, part.Id);
+                        },
+                    part =>
+                        {
+                            Assert.Equal(4, part.Id);
+                            Assert.Equal("name4", part.Name);
+                            Assert.Equal(string.Empty, part.Model);
+                        });
+
+                text = new StringWriter();
+                factory.CreateWriter("w3", text).Write(w);
+                Assert.Equal(" 1name1mode1 2name2mode2 3           4name4     " + Environment.NewLine, text.ToString());
+
+                w = (Widget)reader.Read();
+                text = new StringWriter();
+                factory.CreateWriter("w3", text).Write(w);
+                Assert.Equal(" 1name1mode1 2name2mode2 0           4name4mode4" + Environment.NewLine, text.ToString());
+            }
+            finally
+            {
+                reader.Close();
+            }
+        }
+
         private static TextReader LoadStream(string fileName)
         {
             var resourceName = string.Format("BeanIO.Parser.Bean.{0}", fileName);

@@ -46,11 +46,11 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
             string text;
             if (length < 0)
             {
-                text = _record.Substring(position, max);
+                text = _record.Substring(position, max - position);
             }
             else
             {
-                text = _record.Substring(position, Math.Min(max, position + length));
+                text = _record.Substring(position, Math.Min(max, position + length) - position);
             }
 
             SetFieldText(name, text);
