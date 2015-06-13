@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -433,9 +434,14 @@ namespace BeanIO.Internal.Parser
                 context.AddFieldError(Name, fieldText, "type", ex.Message);
                 return Value.Invalid;
             }
+            catch (FormatException ex)
+            {
+                context.AddFieldError(Name, fieldText, "type", ex.Message);
+                return Value.Invalid;
+            }
             catch (Exception ex)
             {
-                throw new BeanReaderException(string.Format("Type conversion failed for field '{0}' while parsing text '{1}'", Name, fieldText), ex);
+                throw new BeanReaderException(string.Format("Type conversion failed for field '{0}' while parsing text '{1}'", Name, fieldText), ex, context.GetRecordContexts().ToArray());
             }
         }
     }

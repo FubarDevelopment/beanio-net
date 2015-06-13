@@ -32,5 +32,10 @@ namespace BeanIO.Types
             : base(message, inner)
         {
         }
+
+        public override string Message
+        {
+            get { return string.Format("Type conversion error: {0}", base.Message); }
+        }
     }
 }

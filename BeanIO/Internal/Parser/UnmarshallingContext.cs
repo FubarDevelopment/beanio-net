@@ -112,6 +112,13 @@ namespace BeanIO.Internal.Parser
             get { return _recordContext.HasRecordErrors; }
         }
 
+        public IEnumerable<IRecordContext> GetRecordContexts()
+        {
+            var contexts = new List<IRecordContext> { _recordContext };
+            contexts.AddRange(_recordList);
+            return contexts;
+        }
+
         /// <summary>
         /// Sets the value of the record returned from the <see cref="IRecordReader"/>
         /// </summary>

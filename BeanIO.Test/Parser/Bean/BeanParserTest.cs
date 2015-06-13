@@ -170,6 +170,21 @@ namespace BeanIO.Parser.Bean
             }
         }
 
+        [Fact]
+        public void TestFieldError()
+        {
+            var factory = NewStreamFactory("BeanIO.Parser.Bean.widget.xml");
+            var reader = factory.CreateReader("w6", LoadStream("w6_fieldError.txt"));
+            try
+            {
+                AssertFieldError(reader, 1, "record1", "Id", 2, "A", "Type conversion error: Invalid Integer value 'A'");
+            }
+            finally
+            {
+                reader.Close();
+            }
+        }
+
         private static TextReader LoadStream(string fileName)
         {
             var resourceName = string.Format("BeanIO.Parser.Bean.{0}", fileName);

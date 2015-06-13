@@ -131,13 +131,13 @@ namespace BeanIO.Types
             if ((styles & NumberStyles.AllowHexSpecifier) == NumberStyles.None)
             {
                 if (!decimal.TryParse(text, styles, Culture, out result))
-                    throw new FormatException(string.Format("Number value '{0}' doesn't match the number styles {1}", text, styles));
+                    throw new TypeConversionException(string.Format("Invalid {0} value '{1}'", TargetType, text));
             }
             else
             {
                 long temp;
                 if (!long.TryParse(text, styles, Culture, out temp))
-                    throw new FormatException(string.Format("Number value '{0}' doesn't match the number styles {1}", text, styles));
+                    throw new TypeConversionException(string.Format("Invalid {0} value '{1}'", TargetType, text));
                 result = temp;
             }
 
@@ -148,7 +148,7 @@ namespace BeanIO.Types
             }
             catch (Exception ex)
             {
-                throw new FormatException(string.Format("Invalid value '{0}' for type '{1}'", text, TargetType.Name), ex);
+                throw new TypeConversionException(string.Format("Invalid {0} value '{1}'", TargetType, text), ex);
             }
         }
 

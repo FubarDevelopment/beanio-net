@@ -11,7 +11,7 @@ namespace BeanIO.Types
         public void TestParseInvalid()
         {
             var handler = new IntegerTypeHandler();
-            Assert.Throws<FormatException>(() => handler.Parse("abc"));
+            Assert.Throws<TypeConversionException>(() => handler.Parse("abc"));
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace BeanIO.Types
             {
                 Pattern = Tuple.Create(NumberStyles.Any, "0")
             };
-            Assert.Throws<FormatException>(() => handler.Parse("10a"));
+            Assert.Throws<TypeConversionException>(() => handler.Parse("10a"));
         }
     }
 }
