@@ -34,6 +34,29 @@ namespace BeanIO.Parser.Bean
             }
         }
 
+        [Fact]
+        public void TestCollectionsAndDefaultDelmitedPositions()
+        {
+            var factory = NewStreamFactory("BeanIO.Parser.Bean.widget.xml");
+            var reader = factory.CreateReader("w2", LoadStream("w2_collections.txt"));
+            try
+            {
+                var w = (Widget)reader.Read();
+                Assert.Equal("3", w.Name);
+                Assert.True(w.PartsList.Count > 1);
+                Assert.True(w.PartsList[1].PartsList.Count > 1);
+                Assert.Equal("2B", w.GetPart(1).GetPart(1).Name);
+
+                var text = new StringWriter();
+                factory.CreateWriter("w2", text).Write(w);
+                Assert.Equal("1,1M,1A,1AM,1B,1BM,2,2M,2A,2AM,2B,2BM,3" + Environment.NewLine, text.ToString());
+            }
+            finally
+            {
+                reader.Close();
+            }
+        }
+
         private static TextReader LoadStream(string fileName)
         {
             var resourceName = string.Format("BeanIO.Parser.Bean.{0}", fileName);

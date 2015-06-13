@@ -383,9 +383,8 @@ namespace BeanIO.Stream.Csv
             }
 
             RecordText = text.ToString();
-            _fieldList = null;
-
             var record = _fieldList.ToArray();
+            _fieldList = null;
             return record;
         }
 
