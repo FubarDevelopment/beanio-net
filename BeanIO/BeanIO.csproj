@@ -63,6 +63,8 @@
     <Compile Include="Internal\Compiler\Accessor\ReflectionAccessorFactory.cs" />
     <Compile Include="Internal\Compiler\Csv\CsvParserFactory.cs" />
     <Compile Include="Internal\Compiler\Delimited\DelimitedParserFactory.cs" />
+    <Compile Include="Internal\Compiler\FixedLength\FixedLengthParserFactory.cs" />
+    <Compile Include="Internal\Compiler\FixedLength\FixedLengthPreprocessor.cs" />
     <Compile Include="Internal\Compiler\Flat\FlatParserFactory.cs" />
     <Compile Include="Internal\Compiler\Flat\FlatPreprocessor.cs" />
     <Compile Include="Internal\Compiler\IParserFactory.cs" />
