@@ -114,7 +114,7 @@ namespace BeanIO.Internal.Parser
             if (value == null || PropertyType == null)
                 return false;
 
-            if (value is IDictionary)
+            if (value.GetType().IsMap())
             {
                 // children of collections cannot be used to identify bean objects
                 // so we can immediately return true here

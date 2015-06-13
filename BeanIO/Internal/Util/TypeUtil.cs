@@ -157,13 +157,9 @@ namespace BeanIO.Internal.Util
             var clazz = Type.GetType(type);
             if (clazz == null)
                 return null;
-            if (typeof(IList).IsAssignableFrom(clazz))
+            if (clazz.IsList())
                 return clazz;
-            if (typeof(IList<>).IsAssignableFrom(clazz))
-                return clazz;
-            if (typeof(IDictionary).IsAssignableFrom(clazz))
-                return clazz;
-            if (typeof(IDictionary<,>).IsAssignableFrom(clazz))
+            if (clazz.IsMap())
                 return clazz;
             return null;
         }
@@ -221,6 +217,10 @@ namespace BeanIO.Internal.Util
             if (testType.IsConstructedGenericType && !refType.IsConstructedGenericType)
             {
                 testType = testType.GetGenericTypeDefinition();
+            }
+            else if (!testType.IsConstructedGenericType && refType.IsConstructedGenericType)
+            {
+                refType = refType.GetGenericTypeDefinition();
             }
 
             var refTypeInfo = refType.GetTypeInfo();
@@ -299,6 +299,18 @@ namespace BeanIO.Internal.Util
             return type.GetTypeInfo().IsPrimitive || Nullable.GetUnderlyingType(type) != null;
         }
 
+        public static bool IsList(this Type type)
+        {
+            return typeof(IList).IsAssignableFrom(type)
+                   || typeof(IList<>).IsAssignableFrom(type);
+        }
+
+        public static bool IsMap(this Type type)
+        {
+            return typeof(IDictionary).IsAssignableFrom(type)
+                   || typeof(IDictionary<,>).IsAssignableFrom(type);
+        }
+
         /// <summary>
         /// Instantiate a generic type using the type arguments from <paramref name="with"/>
         /// </summary>
@@ -312,7 +324,7 @@ namespace BeanIO.Internal.Util
             var typeInfo = type.GetTypeInfo();
             var withInfo = with.GetTypeInfo();
             if (typeInfo.GenericTypeParameters.Length != withInfo.GenericTypeArguments.Length)
-                throw new InvalidOperationException(string.Format("The number of type arguments must match"));
+                throw new InvalidOperationException("The number of type arguments must match");
             return type.MakeGenericType(with.GenericTypeArguments);
         }
 

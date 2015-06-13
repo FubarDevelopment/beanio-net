@@ -643,12 +643,12 @@ namespace BeanIO.Internal.Config.Annotation
             string collectionName;
             var propertyType = info.Type;
 
-            if (propertyType.IsArray)
+            if (propertyType.IsArray || propertyType == typeof(Array))
             {
                 propertyType = annotatedType ?? propertyType.GetElementType();
                 collectionName = "array";
             }
-            else if (propertyType.IsInstanceOf(typeof(IDictionary<,>)))
+            else if (propertyType.IsMap())
             {
                 var collectionType = annotatedCollection.ToValue();
                 if (collectionType == null)
@@ -675,7 +675,7 @@ namespace BeanIO.Internal.Config.Annotation
 
                 collectionName = collectionType.GetAssemblyQualifiedName();
             }
-            else if (propertyType.IsInstanceOf(typeof(IList<>)) || propertyType.IsInstanceOf(typeof(IList)))
+            else if (propertyType.IsList())
             {
                 var collectionType = annotatedCollection.ToValue();
                 if (collectionType == null)

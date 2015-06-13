@@ -55,8 +55,7 @@ namespace BeanIO.Internal.Parser
         /// </summary>
         protected virtual bool IsMap
         {
-            get { return typeof(IDictionary).IsAssignableFrom(PropertyType)
-                || typeof(IDictionary<,>).IsAssignableFrom(PropertyType); }
+            get { return PropertyType.IsMap(); }
         }
 
         /// <summary>

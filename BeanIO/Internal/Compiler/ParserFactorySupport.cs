@@ -879,7 +879,7 @@ namespace BeanIO.Internal.Compiler
                     throw new BeanIOConfigurationException(string.Format("Invalid collection type or type alias '{0}'", collection));
                 }
 
-                isMap = typeof(IDictionary).IsAssignableFrom(collectionType);
+                isMap = collectionType.IsMap();
                 if (isMap && config.ComponentType == ComponentType.Field)
                 {
                     throw new BeanIOConfigurationException("Map type collections are not supported for fields");
@@ -985,7 +985,7 @@ namespace BeanIO.Internal.Compiler
                 if (collectionType == null)
                     throw new BeanIOConfigurationException(string.Format("Invalid collection type or type alias '{0}'", collection));
 
-                isMap = typeof(IDictionary).IsAssignableFrom(collectionType);
+                isMap = collectionType.IsMap();
                 if (isMap && config.Key == null)
                     throw new BeanIOConfigurationException("Key required for Map type collection");
 
@@ -1411,9 +1411,13 @@ namespace BeanIO.Internal.Compiler
             {
                 if (typeof(ISet<>).IsAssignableFrom(type))
                     return typeof(HashSet<>).Instantiate(type);
-                if (typeof(IDictionary).IsAssignableFrom(type))
+                if (typeof(IDictionary<,>).IsAssignableFrom(type))
                     return typeof(Dictionary<,>).Instantiate(type);
                 if (typeof(IList<>).IsAssignableFrom(type))
+                    return typeof(List<>).Instantiate(type);
+                if (typeof(IDictionary).IsAssignableFrom(type))
+                    return typeof(Dictionary<,>).Instantiate(type);
+                if (typeof(IList).IsAssignableFrom(type))
                     return typeof(List<>).Instantiate(type);
                 return typeof(List<object>);
             }

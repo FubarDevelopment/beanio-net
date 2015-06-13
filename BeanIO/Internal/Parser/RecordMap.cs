@@ -127,7 +127,7 @@ namespace BeanIO.Internal.Parser
 
         public override bool Defines(object value)
         {
-            return value is IDictionary;
+            return value != null && value.GetType().IsMap();
         }
 
         /// <summary>
