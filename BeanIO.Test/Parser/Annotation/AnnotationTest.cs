@@ -159,17 +159,7 @@ namespace BeanIO.Parser.Annotation
                 Assert.Equal("END", user.End);
 
                 var marshalled = m[i].Marshal(user).ToString();
-                if (i == 1)
-                {
-                    var doc = XDocument.Parse(marshalled);
-                    var docOriginal = XDocument.Parse(input[i]);
-                    var comparer = new XNodeEqualityComparer();
-                    Assert.True(comparer.Equals(doc.Root, docOriginal.Root));
-                }
-                else
-                {
-                    Assert.Equal(input[i], marshalled);
-                }
+                Assert.Equal(input[i], marshalled);
             }
         }
     }
