@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
+using System.Xml.Linq;
 
 using BeanIO.Builder;
 using BeanIO.Stream;
@@ -104,6 +105,7 @@ namespace BeanIO.Parser.Annotation
                 new StreamBuilder("s1-xml")
                     .Format("xml")
                     .XmlType(XmlNodeType.None)
+                    .NameConversionMode(ElementNameConversionMode.Decapitalize | ElementNameConversionMode.RemoveUnderscore)
                     .AddRecord(typeof(AnnotatedUser)));
 
             var u = new[]
@@ -156,7 +158,18 @@ namespace BeanIO.Parser.Annotation
                 Assert.Equal(1, numbers[0]);
                 Assert.Equal("END", user.End);
 
-                Assert.Equal(input[i], m[i].Marshal(user).ToString());
+                var marshalled = m[i].Marshal(user).ToString();
+                if (i == 1)
+                {
+                    var doc = XDocument.Parse(marshalled);
+                    var docOriginal = XDocument.Parse(input[i]);
+                    var comparer = new XNodeEqualityComparer();
+                    Assert.True(comparer.Equals(doc.Root, docOriginal.Root));
+                }
+                else
+                {
+                    Assert.Equal(input[i], marshalled);
+                }
             }
         }
     }

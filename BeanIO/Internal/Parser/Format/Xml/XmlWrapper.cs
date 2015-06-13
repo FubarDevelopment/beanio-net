@@ -153,6 +153,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
             {
                 element.SetAttributeValue(XNamespace.Xmlns + Prefix, Namespace);
             }
+            element = XElement.Parse(element.ToString());
 
             // append the new element to its parent
             parent.Add(element);

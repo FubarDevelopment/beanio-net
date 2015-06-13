@@ -195,7 +195,6 @@ namespace BeanIO.Internal.Parser.Format.Xml
 
             var parent = ctx.Parent;
             var node = new XElement(this.ToXName(true).ToConvertedName(ctx.NameConversionMode));
-            parent.Add(node);
             if (IsGroup && ctx.IsStreaming)
             {
                 node.AddAnnotation(new IsGroupElementAnnotation(true));
@@ -212,6 +211,8 @@ namespace BeanIO.Internal.Parser.Format.Xml
             {
                 node.SetAttributeValue(XNamespace.Xmlns + Prefix, Namespace);
             }
+            node = XElement.Parse(node.ToString());
+            parent.Add(node);
 
             ctx.Parent = node;
             var b = ChildSelector.Marshal(context);
@@ -511,6 +512,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
                 {
                     element.SetAttributeValue(XNamespace.Xmlns + wrapper.Prefix, wrapper.Namespace);
                 }
+                element = XElement.Parse(element.ToString());
 
                 parent = element;
             }

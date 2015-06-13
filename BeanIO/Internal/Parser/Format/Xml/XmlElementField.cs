@@ -109,6 +109,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
             {
                 element.SetAttributeValue(XNamespace.Xmlns + Prefix, Namespace);
             }
+            element = XElement.Parse(element.ToString());
 
             if (fieldText == null && IsNillable)
             {
