@@ -153,7 +153,11 @@ namespace BeanIO.Internal.Util
                 return null;
             if (typeof(IList).IsAssignableFrom(clazz))
                 return clazz;
+            if (typeof(IList<>).IsAssignableFrom(clazz))
+                return clazz;
             if (typeof(IDictionary).IsAssignableFrom(clazz))
+                return clazz;
+            if (typeof(IDictionary<,>).IsAssignableFrom(clazz))
                 return clazz;
             return null;
         }
@@ -208,7 +212,7 @@ namespace BeanIO.Internal.Util
         /// <returns>true, if <paramref name="testType"/> is an instance of <paramref name="refType"/></returns>
         public static bool IsInstanceOf(this Type testType, Type refType)
         {
-            if (testType.IsConstructedGenericType)
+            if (testType.IsConstructedGenericType && !refType.IsConstructedGenericType)
             {
                 testType = testType.GetGenericTypeDefinition();
             }
@@ -223,6 +227,21 @@ namespace BeanIO.Internal.Util
             if (comparer.Compare(refType, testType) == 0)
                 return true;
 
+            foreach (var implementedInterface in testTypeInfo.ImplementedInterfaces)
+            {
+                if (comparer.Compare(refType, implementedInterface) == 0)
+                    return true;
+
+                if (!testTypeInfo.IsInterface)
+                {
+                    var ifMap = testTypeInfo.GetRuntimeInterfaceMap(implementedInterface);
+                    if (ifMap.InterfaceType != null)
+                    {
+                        if (comparer.Compare(refType, ifMap.InterfaceType) == 0)
+                            return true;
+                    }
+                }
+            }
             if (testTypeInfo.ImplementedInterfaces.Any(x => comparer.Compare(refType, x) == 0))
                 return true;
 
@@ -250,9 +269,16 @@ namespace BeanIO.Internal.Util
             if (t == null)
                 return null;
             var result = new StringBuilder();
-            if (!string.IsNullOrEmpty(t.Namespace))
-                result.AppendFormat("{0}.", t.Namespace);
-            result.Append(t.Name);
+            if (!string.IsNullOrEmpty(t.FullName))
+            {
+                result.Append(t.FullName);
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(t.Namespace))
+                    result.Append(t.Namespace).Append(".");
+                result.Append(t.Name);
+            }
             result.AppendFormat(", {0}", t.GetTypeInfo().Assembly.FullName);
             return result.ToString();
         }
