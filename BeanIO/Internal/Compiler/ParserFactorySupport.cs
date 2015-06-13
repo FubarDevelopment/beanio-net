@@ -1209,6 +1209,10 @@ namespace BeanIO.Internal.Compiler
             {
                 property.PropertyType = reflectedType;
             }
+            else if (reflectedType.IsConstructedGenericType && !type.IsConstructedGenericType)
+            {
+                property.PropertyType = type.Instantiate(reflectedType);
+            }
         }
 
         /// <summary>
@@ -1224,7 +1228,7 @@ namespace BeanIO.Internal.Compiler
                 return null;
 
             IProperty property;
-            if (typeof(IList).IsAssignableFrom(beanClass))
+            if (beanClass.IsList())
             {
                 var required = _propertyStack.Count == 0;
                 if (config.ComponentType == ComponentType.Segment)

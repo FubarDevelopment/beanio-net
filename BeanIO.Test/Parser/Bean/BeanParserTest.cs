@@ -111,6 +111,41 @@ namespace BeanIO.Parser.Bean
             }
         }
 
+        [Fact]
+        public virtual void TestFixedLengthMap()
+        {
+            var factory = NewStreamFactory("BeanIO.Parser.Bean.widget.xml");
+            var reader = factory.CreateReader("w4", LoadStream("w4_map.txt"));
+            try
+            {
+                var w = (Widget)reader.Read();
+                Assert.Equal(1, w.Id);
+                Assert.Equal("name1", w.Name);
+                Assert.NotNull(w.PartsMap);
+                Assert.True(w.PartsMap.ContainsKey("part1"));
+                Assert.Equal(2, w.GetPart("part1").Id);
+                Assert.Equal("name2", w.GetPart("part1").Name);
+
+                var text = new StringWriter();
+                factory.CreateWriter("w4", text).Write(w);
+                Assert.Equal("1name12name2" + Environment.NewLine, text.ToString());
+
+                w = (Widget)reader.Read();
+                Assert.NotNull(w.PartsMap);
+                Assert.True(w.PartsMap.ContainsKey("part2"));
+                Assert.Equal(3, w.GetPart("part2").Id);
+                Assert.Equal("name3", w.GetPart("part2").Name);
+
+                text = new StringWriter();
+                factory.CreateWriter("w4", text).Write(w);
+                Assert.Equal("1name12name23name3" + Environment.NewLine, text.ToString());
+            }
+            finally
+            {
+                reader.Close();
+            }
+        }
+
         private static TextReader LoadStream(string fileName)
         {
             var resourceName = string.Format("BeanIO.Parser.Bean.{0}", fileName);
