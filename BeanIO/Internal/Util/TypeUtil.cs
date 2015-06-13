@@ -5,6 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
+using BeanIO.Internal.Parser;
+
 using JetBrains.Annotations;
 
 using NodaTime;
@@ -14,7 +16,7 @@ namespace BeanIO.Internal.Util
     /// <summary>
     /// Type utility functions
     /// </summary>
-    public static class TypeUtil
+    internal static class TypeUtil
     {
         private static readonly IDictionary<string, Type> _wellKnownTypes = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase)
             {
@@ -133,7 +135,7 @@ namespace BeanIO.Internal.Util
             return clazz;
         }
 
-        public static Type ToAggregationType(this string type)
+        public static Type ToAggregationType(this string type, IProperty property)
         {
             switch (type.ToLowerInvariant())
             {
@@ -141,11 +143,15 @@ namespace BeanIO.Internal.Util
                     return typeof(Array);
                 case "collection":
                 case "list":
-                    return typeof(List<>);
+                    if (property == null || property.PropertyType == null)
+                        return typeof(IList);
+                    return typeof(IList<>).MakeGenericType(property.PropertyType);
                 case "set":
-                    return typeof(HashSet<>);
+                    if (property == null || property.PropertyType == null)
+                        return typeof(ISet<object>);
+                    return typeof(ISet<>).MakeGenericType(property.PropertyType);
                 case "map":
-                    return typeof(Dictionary<,>);
+                    return typeof(IDictionary<,>);
             }
 
             var clazz = Type.GetType(type);

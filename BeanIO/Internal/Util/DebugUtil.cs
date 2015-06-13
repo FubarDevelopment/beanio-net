@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 
 using BeanIO.Internal.Parser.Format;
 
@@ -36,6 +39,35 @@ namespace BeanIO.Internal.Util
                 writer.Flush();
                 return writer.ToString();
             }
+        }
+
+        public static string ToDebug<T>(this IEnumerable<T> items)
+        {
+            var writer = new StringBuilder();
+            var first = true;
+            writer.Append("[");
+            foreach (var item in items)
+            {
+                if (first)
+                {
+                    first = false;
+                }
+                else
+                {
+                    writer.Append(", ");
+                }
+                var debuggable = item as IDebuggable;
+                if (debuggable != null)
+                {
+                    writer.Append(debuggable.ToDebug());
+                }
+                else
+                {
+                    writer.Append(item);
+                }
+            }
+            writer.Append("]");
+            return writer.ToString();
         }
     }
 }

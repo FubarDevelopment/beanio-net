@@ -90,6 +90,8 @@
     <Compile Include="Parser\Annotation\AnnotatedUserSupport.cs" />
     <Compile Include="Parser\Annotation\AnnotationTest.cs" />
     <Compile Include="Parser\Annotation\IAnnotatedUserInterface.cs" />
+    <Compile Include="Parser\Bean\BeanParserTest.cs" />
+    <Compile Include="Parser\Bean\Widget.cs" />
     <Compile Include="Parser\ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamFactoryTest.cs" />
@@ -137,6 +139,21 @@
     <EmbeddedResource Include="Config\noReadableMethod.xml" />
     <EmbeddedResource Include="Config\noWriteableMethod.xml" />
     <EmbeddedResource Include="Config\prefixWithNoNamespace.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Bean\widget.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Bean\w10_nestedBeans.txt" />
+    <EmbeddedResource Include="Parser\Bean\w1_position.txt" />
+    <EmbeddedResource Include="Parser\Bean\w2_collections.txt" />
+    <EmbeddedResource Include="Parser\Bean\w3_fixedLength.txt" />
+    <EmbeddedResource Include="Parser\Bean\w4_map.txt" />
+    <EmbeddedResource Include="Parser\Bean\w5_outOfOrder.txt" />
+    <EmbeddedResource Include="Parser\Bean\w6_fieldError.txt" />
+    <EmbeddedResource Include="Parser\Bean\w9_flcollections.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

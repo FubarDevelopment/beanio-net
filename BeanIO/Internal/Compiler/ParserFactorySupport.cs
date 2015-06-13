@@ -873,7 +873,7 @@ namespace BeanIO.Internal.Compiler
             Type collectionType = null;
             if (collection != null)
             {
-                collectionType = collection.ToAggregationType();
+                collectionType = collection.ToAggregationType(property);
                 if (collectionType == null)
                 {
                     throw new BeanIOConfigurationException(string.Format("Invalid collection type or type alias '{0}'", collection));
@@ -981,7 +981,7 @@ namespace BeanIO.Internal.Compiler
             Type collectionType = null;
             if (collection != null)
             {
-                collectionType = collection.ToAggregationType();
+                collectionType = collection.ToAggregationType(property);
                 if (collectionType == null)
                     throw new BeanIOConfigurationException(string.Format("Invalid collection type or type alias '{0}'", collection));
 

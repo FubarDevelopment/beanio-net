@@ -47,15 +47,15 @@ namespace BeanIO.Internal.Util
         [Fact]
         public void TestToAggregation()
         {
-            Assert.Equal(typeof(List<>), "list".ToAggregationType());
-            Assert.Equal(typeof(List<>), "collection".ToAggregationType());
-            Assert.Equal(typeof(HashSet<>), "set".ToAggregationType());
-            Assert.Equal(typeof(Array), "array".ToAggregationType());
-            Assert.Equal(typeof(List<>), "System.Collections.Generic.List`1".ToAggregationType());
-            Assert.Equal(typeof(ArrayList), "System.Collections.ArrayList".ToAggregationType());
-            Assert.Equal(typeof(Dictionary<,>), "map".ToAggregationType());
-            Assert.Equal(typeof(Dictionary<,>), "System.Collections.Generic.Dictionary`2".ToAggregationType());
-            Assert.Null("BeanIO.Types.NoClass".ToAggregationType());
+            Assert.Equal(typeof(IList), "list".ToAggregationType(null));
+            Assert.Equal(typeof(IList), "collection".ToAggregationType(null));
+            Assert.Equal(typeof(ISet<object>), "set".ToAggregationType(null));
+            Assert.Equal(typeof(Array), "array".ToAggregationType(null));
+            Assert.Equal(typeof(IList<>), "System.Collections.Generic.IList`1".ToAggregationType(null));
+            Assert.Equal(typeof(ArrayList), "System.Collections.ArrayList".ToAggregationType(null));
+            Assert.Equal(typeof(IDictionary<,>), "map".ToAggregationType(null));
+            Assert.Equal(typeof(IDictionary<,>), "System.Collections.Generic.IDictionary`2".ToAggregationType(null));
+            Assert.Null("BeanIO.Types.NoClass".ToAggregationType(null));
         }
     }
 }
