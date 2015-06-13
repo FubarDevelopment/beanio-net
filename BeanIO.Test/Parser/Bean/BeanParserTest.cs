@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 
 using Xunit;
@@ -154,9 +155,8 @@ namespace BeanIO.Parser.Bean
             var reader = factory.CreateReader("w5", LoadStream("w5_outOfOrder.txt"));
             try
             {
-                Widget w;
                 var map = (IDictionary)reader.Read();
-                w = (Widget)map["part3"];
+                var w = (Widget)map["part3"];
                 Assert.Equal(3, w.Id);
                 Assert.Equal("name3", w.Name);
 
@@ -183,6 +183,83 @@ namespace BeanIO.Parser.Bean
             {
                 reader.Close();
             }
+        }
+
+        [Fact]
+        public void TestWriteNull()
+        {
+            var factory = NewStreamFactory("BeanIO.Parser.Bean.widget.xml");
+            var w = new Widget();
+
+            var text = new StringWriter();
+            factory.CreateWriter("w6", text).Write(w);
+            Assert.Equal(string.Empty + Environment.NewLine, text.ToString());
+
+            var part1 = new Widget()
+                {
+                    Id = 1,
+                    Name = "part1",
+                };
+            w.AddPart(part1);
+
+            text = new StringWriter();
+            factory.CreateWriter("w6", text).Write(w);
+            Assert.Equal("1,part1" + Environment.NewLine, text.ToString());
+
+            w.AddPart(null);
+
+            text = new StringWriter();
+            factory.CreateWriter("w6", text).Write(w);
+            Assert.Equal("1,part1,," + Environment.NewLine, text.ToString());
+
+            var part2 = new Widget()
+            {
+                Id = 2,
+                Name = "part2",
+            };
+            w.AddPart(part2);
+
+            text = new StringWriter();
+            factory.CreateWriter("w6", text).Write(w);
+            Assert.Equal("1,part1,,,2,part2" + Environment.NewLine, text.ToString());
+        }
+
+        [Fact]
+        public void TestBackfill()
+        {
+            var factory = NewStreamFactory("BeanIO.Parser.Bean.widget.xml");
+            var w = new Widget
+                {
+                    Id = 1,
+                };
+
+            var text = new StringWriter();
+            factory.CreateWriter("w7", text).Write(w);
+            Assert.Equal("1" + Environment.NewLine, text.ToString());
+
+            w.Model = "model";
+
+            text = new StringWriter();
+            factory.CreateWriter("w7", text).Write(w);
+            Assert.Equal("1,,model" + Environment.NewLine, text.ToString());
+        }
+
+        [Fact]
+        public void TestRecordIdentifier()
+        {
+            var factory = NewStreamFactory("BeanIO.Parser.Bean.widget.xml");
+            var w = new Widget()
+                {
+                    Id = 1,
+                    Name = "name1",
+                };
+
+            var map = new Dictionary<string, Widget>();
+            map["widget"] = w;
+
+            var text = new StringWriter();
+            factory.CreateWriter("w8", text).Write(map);
+            Assert.Equal("R1,1,name1" + Environment.NewLine, text.ToString());
         }
 
         private static TextReader LoadStream(string fileName)
