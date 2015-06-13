@@ -873,7 +873,7 @@ namespace BeanIO.Internal.Compiler
             Type collectionType = null;
             if (collection != null)
             {
-                collectionType = TypeUtil.ToAggregationType(collection);
+                collectionType = collection.ToAggregationType();
                 if (collectionType == null)
                 {
                     throw new BeanIOConfigurationException(string.Format("Invalid collection type or type alias '{0}'", collection));
@@ -894,9 +894,14 @@ namespace BeanIO.Internal.Compiler
 
             // create the appropriate iteration type
             Aggregation aggregation;
-            if (collectionType.IsArray)
+            if (collectionType.IsArray || collectionType == typeof(Array))
             {
-                aggregation = new ArrayParser();
+                var collParser = new ArrayParser
+                    {
+                        ElementType = property.PropertyType
+                    };
+                aggregation = collParser;
+                collectionType = property.PropertyType.MakeArrayType();
             }
             else if (isMap)
             {
@@ -976,7 +981,7 @@ namespace BeanIO.Internal.Compiler
             Type collectionType = null;
             if (collection != null)
             {
-                collectionType = TypeUtil.ToAggregationType(collection);
+                collectionType = collection.ToAggregationType();
                 if (collectionType == null)
                     throw new BeanIOConfigurationException(string.Format("Invalid collection type or type alias '{0}'", collection));
 
@@ -1099,7 +1104,7 @@ namespace BeanIO.Internal.Compiler
                 {
                     property.PropertyType = arrayType;
                 }
-                else if (arrayType.IsAssignableFrom(type))
+                else if (!arrayType.IsAssignableFrom(type))
                 {
                     throw new BeanIOConfigurationException(
                         string.Format(
@@ -1402,7 +1407,7 @@ namespace BeanIO.Internal.Compiler
         {
             if (type == null)
                 return null;
-            if (!type.IsArray && (type.GetTypeInfo().IsInterface || type.GetTypeInfo().IsAbstract))
+            if (!type.IsArray && type != typeof(Array) && (type.GetTypeInfo().IsInterface || type.GetTypeInfo().IsAbstract))
             {
                 if (typeof(ISet<>).IsAssignableFrom(type))
                     return typeof(HashSet<>);
