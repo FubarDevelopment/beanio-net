@@ -412,7 +412,7 @@ namespace BeanIO.Builder
              .TypeHandler("typeHandler");
             c = b.Build();
             Assert.Equal(typeof(int).GetTypeInfo().AssemblyQualifiedName, c.Type);
-            Assert.Equal(typeof(List<>).GetTypeInfo().AssemblyQualifiedName, c.Collection);
+            Assert.Equal(typeof(List<object>).GetTypeInfo().AssemblyQualifiedName, c.Collection);
             Assert.Equal("GetField", c.Getter);
             Assert.Equal("SetField", c.Setter);
             Assert.False(c.IsBound);
