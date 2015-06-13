@@ -287,8 +287,18 @@ namespace BeanIO.Internal.Util
             {
                 if (string.IsNullOrEmpty(name))
                     return null;
-                var info = _typeInfo.GetDeclaredMethod(name);
-                if (info == null)
+                MethodInfo methodInfo = null;
+                var typeInfo = _typeInfo;
+                while (typeInfo.GetType() != typeof(object))
+                {
+                    methodInfo = typeInfo.GetDeclaredMethod(name);
+                    if (methodInfo != null)
+                        break;
+                    if (typeInfo.BaseType == null)
+                        break;
+                    typeInfo = typeInfo.BaseType.GetTypeInfo();
+                }
+                if (methodInfo == null)
                     throw new BeanIOConfigurationException(
                         string.Format(
                             "{3} '{0}' not found for property/field '{1}' of type '{2}'",
@@ -296,7 +306,7 @@ namespace BeanIO.Internal.Util
                             _property,
                             _typeInfo.AssemblyQualifiedName,
                             getterOrSetter));
-                return info;
+                return methodInfo;
             }
         }
 
