@@ -213,9 +213,7 @@ namespace BeanIO.Internal.Parser
             }
             else
             {
-                if (_fieldTexts.ContainsKey(fieldName))
-                    throw new InvalidOperationException();
-                _fieldTexts.Add(fieldName, text);
+                _fieldTexts[fieldName] = text;
             }
         }
 
