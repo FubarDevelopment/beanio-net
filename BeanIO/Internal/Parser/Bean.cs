@@ -249,7 +249,7 @@ namespace BeanIO.Internal.Parser
                 return true;
 
             // check identifying properties
-            foreach (var property in Children.Cast<IProperty>().Where(x => !x.IsIdentifier))
+            foreach (var property in Children.Cast<IProperty>().Where(x => x.IsIdentifier))
             {
                 var value = property.Accessor.GetValue(bean);
                 if (!property.Defines(value))

@@ -260,6 +260,20 @@ namespace BeanIO.Parser.Bean
             var text = new StringWriter();
             factory.CreateWriter("w8", text).Write(map);
             Assert.Equal("R1,1,name1" + Environment.NewLine, text.ToString());
+
+            w.Id = 2;
+            w.Name = "name2";
+
+            text = new StringWriter();
+            factory.CreateWriter("w8", text).Write(map);
+            Assert.Equal("R2,2,name2" + Environment.NewLine, text.ToString());
+
+            w.Id = 3;
+            Assert.Throws<BeanWriterException>(
+                () =>
+                    {
+                        factory.CreateWriter("w8", text).Write(map);
+                    });
         }
 
         private static TextReader LoadStream(string fileName)
