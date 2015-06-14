@@ -156,6 +156,9 @@ namespace BeanIO.Internal.Parser
 
                     try
                     {
+                        var setProxyList = value as SetProxyList;
+                        if (setProxyList != null)
+                            value = setProxyList.Instance;
                         if (value != null)
                             property.Accessor.SetValue(b, value);
                     }

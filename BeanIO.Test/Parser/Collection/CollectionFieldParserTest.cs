@@ -50,6 +50,39 @@ namespace BeanIO.Parser.Collection
             }
         }
 
+        [Fact]
+        public void TestCollectionFixedLength()
+        {
+            var factory = NewStreamFactory("BeanIO.Parser.Collection.collection.xml");
+            var reader = factory.CreateReader("fc1", LoadStream("fc1_valid.txt"));
+            try
+            {
+                var bean = (CollectionBean)reader.Read();
+                Assert.Equal(new[] { 1, 100, 24 }, bean.Array);
+                Assert.Equal(new char?[] { 'A', 'B', 'C', ' ' }, bean.Set);
+
+                var text = new StringWriter();
+                factory.CreateWriter("fc1", text).Write(bean);
+                Assert.Equal("001100024ABC " + Environment.NewLine, text.ToString());
+
+                bean = (CollectionBean)reader.Read();
+                Assert.Equal(new[] { 0, 400, 500 }, bean.Array);
+                Assert.Empty(bean.Set);
+
+                text = new StringWriter();
+                factory.CreateWriter("fc1", text).Write(bean);
+                Assert.Equal("000400500" + Environment.NewLine, text.ToString());
+
+                text = new StringWriter();
+                factory.CreateWriter("fc1", text).Write(new CollectionBean());
+                Assert.Equal("000000000" + Environment.NewLine, text.ToString());
+            }
+            finally
+            {
+                reader.Close();
+            }
+        }
+
         private static TextReader LoadStream(string fileName)
         {
             var resourceName = string.Format("BeanIO.Parser.Collection.{0}", fileName);

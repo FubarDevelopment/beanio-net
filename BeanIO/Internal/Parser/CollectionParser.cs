@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -166,9 +167,11 @@ namespace BeanIO.Internal.Parser
         {
             // convert empty collections to null so that parent parsers
             // will consider this property missing during marshalling
-            if (value != null && ((ICollection)value).Count == 0)
+            if (value != null)
             {
-                value = null;
+                var list = value.AsList();
+                if (list.Count == 0)
+                    value = null;
             }
 
             _value.Set(context, value);
@@ -221,7 +224,7 @@ namespace BeanIO.Internal.Parser
 
         protected override bool Unmarshal(UnmarshallingContext context, IParser parser, int minOccurs, int? maxOccurs)
         {
-            IList collection = IsLazy ? null : CreateCollection();
+            var collection = IsLazy ? null : CreateCollection();
 
             var invalid = false;
             var count = 0;
@@ -299,7 +302,7 @@ namespace BeanIO.Internal.Parser
             var value = _value.Get(context);
             if (ReferenceEquals(value, Value.Invalid))
                 return null;
-            return (IList)value;
+            return value.AsList();
         }
 
         protected virtual IList CreateCollection()
@@ -318,7 +321,11 @@ namespace BeanIO.Internal.Parser
             {
                 type = PropertyType;
             }
-            return (IList)type.NewInstance();
+            var result = type.NewInstance();
+            var resultAsList = result as IList;
+            if (resultAsList != null)
+                return resultAsList;
+            return new SetProxyList((IEnumerable)result);
         }
 
         /// <summary>

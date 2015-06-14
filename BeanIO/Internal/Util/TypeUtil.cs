@@ -336,7 +336,15 @@ namespace BeanIO.Internal.Util
             return type.GetTypeInfo().IsPrimitive || Nullable.GetUnderlyingType(type) != null;
         }
 
-        public static Type GetElementType(this IList list)
+        public static IList AsList(this object value)
+        {
+            if (value == null)
+                return null;
+            var list = (value as IList) ?? new SetProxyList((IEnumerable)value);
+            return list;
+        }
+
+        public static Type GetElementType(this ICollection list)
         {
             var listType = list.GetType();
             if (listType.IsInstanceOf(typeof(IList<>)))

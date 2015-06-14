@@ -216,6 +216,7 @@
     <Compile Include="Internal\Util\IStatefulWriter.cs" />
     <Compile Include="Internal\Util\MarkableTextReader.cs" />
     <Compile Include="Internal\Util\PropertyDescriptor.cs" />
+    <Compile Include="Internal\Util\SetProxyList.cs" />
     <Compile Include="Internal\Util\Settings.cs" />
     <Compile Include="Internal\Util\StringUtil.cs" />
     <Compile Include="Internal\Util\TreeNode.cs" />

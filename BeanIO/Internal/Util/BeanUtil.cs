@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -28,6 +29,14 @@ namespace BeanIO.Internal.Util
                 _typeHandlerFactory.RegisterHandlerFor(typeof(string), () => new EscapedStringTypeHandler());
                 _typeHandlerFactory.RegisterHandlerFor(typeof(char), () => new EscapedCharacterTypeHandler());
             }
+        }
+
+        public static void Add(this ICollection collection, object value)
+        {
+            var t = collection.GetType();
+            var i = t.GetTypeInfo();
+            var addMethod = i.DeclaredMethods.FirstOrDefault(x => x.IsPublic && !x.IsStatic && x.Name == "Add" && x.GetParameters().Length == 1);
+            addMethod.Invoke(collection, new[] { value });
         }
 
         public static object CreateBean([NotNull] string className, Properties properties)
