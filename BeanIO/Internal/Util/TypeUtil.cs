@@ -145,6 +145,8 @@ namespace BeanIO.Internal.Util
                 case "list":
                     if (property == null || property.PropertyType == null)
                         return typeof(IList);
+                    if (property.PropertyType.GetTypeInfo().ContainsGenericParameters && !property.PropertyType.IsConstructedGenericType)
+                        return typeof(IList);
                     return typeof(IList<>).MakeGenericType(property.PropertyType);
                 case "set":
                     if (property == null || property.PropertyType == null)
