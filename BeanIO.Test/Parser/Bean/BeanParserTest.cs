@@ -321,7 +321,7 @@ namespace BeanIO.Parser.Bean
                 Assert.True(b1.Contains("f2"));
                 Assert.Equal("d", b1["f2"]);
 
-                Assert.True(map.Contains("b2"));
+                Assert.True(b1.Contains("b2"));
                 var b2List = (IList)b1["b2"];
                 Assert.NotNull(b2List);
                 Assert.Equal(2, b2List.Count);
@@ -332,12 +332,13 @@ namespace BeanIO.Parser.Bean
                 b1 = (IDictionary)b2List[1];
                 Assert.NotNull(b1);
                 Assert.True(b1.Contains("f1"));
-                Assert.Equal("d", b1["f1"]);
+                Assert.Equal("c", b1["f1"]);
 
+                b1 = (IDictionary)list[1];
                 Assert.True(b1.Contains("f0"));
                 Assert.Equal("e", b1["f0"]);
-                Assert.True(b1.Contains("f1"));
-                Assert.Equal("h", b1["f1"]);
+                Assert.True(b1.Contains("f2"));
+                Assert.Equal("h", b1["f2"]);
 
                 Assert.True(b1.Contains("b2"));
                 b2List = (IList)b1["b2"];
