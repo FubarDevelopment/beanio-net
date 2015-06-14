@@ -276,6 +276,92 @@ namespace BeanIO.Parser.Bean
                     });
         }
 
+        [Fact]
+        public void TestFixedLengthCollection()
+        {
+            var factory = NewStreamFactory("BeanIO.Parser.Bean.widget.xml");
+            var reader = factory.CreateReader("w9", LoadStream("w9_flcollections.txt"));
+            try
+            {
+                var w = (Widget)reader.Read();
+                Assert.Equal(1, w.Id);
+                Assert.Equal("name", w.Name);
+
+                var text = new StringWriter();
+                factory.CreateWriter("w9", text).Write(w);
+                Assert.Equal(" 1 1part1 2part2name " + Environment.NewLine, text.ToString());
+            }
+            finally
+            {
+                reader.Close();
+            }
+        }
+
+        [Fact]
+        public void TestNestedBeans()
+        {
+            var factory = NewStreamFactory("BeanIO.Parser.Bean.widget.xml");
+            var reader = factory.CreateReader("w10", LoadStream("w10_nestedBeans.txt"));
+            try
+            {
+                reader.Read();
+                var map = (IDictionary)reader.Read();
+                Assert.True(map.Contains("eof"));
+                Assert.Equal("eof", map["eof"]);
+
+                Assert.True(map.Contains("b1"));
+                var list = (IList)map["b1"];
+                Assert.NotNull(list);
+                Assert.Equal(2, list.Count);
+
+                var b1 = (IDictionary)list[0];
+                Assert.NotNull(b1);
+                Assert.True(b1.Contains("f0"));
+                Assert.Equal("a", b1["f0"]);
+                Assert.True(b1.Contains("f2"));
+                Assert.Equal("d", b1["f2"]);
+
+                Assert.True(map.Contains("b2"));
+                var b2List = (IList)b1["b2"];
+                Assert.NotNull(b2List);
+                Assert.Equal(2, b2List.Count);
+                var b2Map0 = (IDictionary)b2List[0];
+                Assert.NotNull(b2Map0);
+                Assert.True(b2Map0.Contains("f1"));
+                Assert.Equal("b", b2Map0["f1"]);
+                b1 = (IDictionary)b2List[1];
+                Assert.NotNull(b1);
+                Assert.True(b1.Contains("f1"));
+                Assert.Equal("d", b1["f1"]);
+
+                Assert.True(b1.Contains("f0"));
+                Assert.Equal("e", b1["f0"]);
+                Assert.True(b1.Contains("f1"));
+                Assert.Equal("h", b1["f1"]);
+
+                Assert.True(b1.Contains("b2"));
+                b2List = (IList)b1["b2"];
+                Assert.NotNull(b2List);
+                Assert.Equal(2, b2List.Count);
+                b2Map0 = (IDictionary)b2List[0];
+                Assert.NotNull(b2Map0);
+                Assert.True(b2Map0.Contains("f1"));
+                Assert.Equal("f", b2Map0["f1"]);
+                b1 = (IDictionary)b2List[1];
+                Assert.NotNull(b1);
+                Assert.True(b1.Contains("f1"));
+                Assert.Equal("g", b1["f1"]);
+
+                var text = new StringWriter();
+                factory.CreateWriter("w10", text).Write(map);
+                Assert.Equal("a b c d e f g h eof" + Environment.NewLine, text.ToString());
+            }
+            finally
+            {
+                reader.Close();
+            }
+        }
+
         private static TextReader LoadStream(string fileName)
         {
             var resourceName = string.Format("BeanIO.Parser.Bean.{0}", fileName);
