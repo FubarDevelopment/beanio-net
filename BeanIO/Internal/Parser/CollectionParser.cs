@@ -221,7 +221,7 @@ namespace BeanIO.Internal.Parser
 
         protected override bool Unmarshal(UnmarshallingContext context, IParser parser, int minOccurs, int? maxOccurs)
         {
-            var collection = IsLazy ? null : CreateCollection();
+            IList collection = IsLazy ? null : CreateCollection();
 
             var invalid = false;
             var count = 0;
@@ -254,6 +254,12 @@ namespace BeanIO.Internal.Parser
                         {
                             if (collection == null)
                                 collection = CreateCollection();
+                            if (fieldValue == null)
+                            {
+                                var elementType = collection.GetElementType();
+                                if (elementType.GetTypeInfo().IsPrimitive)
+                                    fieldValue = elementType.NewInstance();
+                            }
                             collection.Add(fieldValue);
                         }
                     }

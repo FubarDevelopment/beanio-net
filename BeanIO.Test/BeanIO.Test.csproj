@@ -92,6 +92,8 @@
     <Compile Include="Parser\Annotation\IAnnotatedUserInterface.cs" />
     <Compile Include="Parser\Bean\BeanParserTest.cs" />
     <Compile Include="Parser\Bean\Widget.cs" />
+    <Compile Include="Parser\Collection\CollectionBean.cs" />
+    <Compile Include="Parser\Collection\CollectionFieldParserTest.cs" />
     <Compile Include="Parser\ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamFactoryTest.cs" />
@@ -154,6 +156,12 @@
     <EmbeddedResource Include="Parser\Bean\w5_outOfOrder.txt" />
     <EmbeddedResource Include="Parser\Bean\w6_fieldError.txt" />
     <EmbeddedResource Include="Parser\Bean\w9_flcollections.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Collection\collection.xml" />
+    <EmbeddedResource Include="Parser\Collection\dc1_valid.txt" />
+    <EmbeddedResource Include="Parser\Collection\dc2_nullPrimitive.txt" />
+    <EmbeddedResource Include="Parser\Collection\fc1_valid.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

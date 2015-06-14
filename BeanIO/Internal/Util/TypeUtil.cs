@@ -156,13 +156,48 @@ namespace BeanIO.Internal.Util
                     return typeof(IDictionary<,>);
             }
 
-            var clazz = Type.GetType(type);
+            var clazz = Type.GetType(type, false);
             if (clazz == null)
-                return null;
+            {
+                var firstCommaPos = type.IndexOf(',');
+                if (firstCommaPos != -1)
+                    type = type.Substring(0, firstCommaPos);
+                switch (type)
+                {
+                    case "System.Collections.Generic.HashSet`1":
+                        clazz = typeof(HashSet<>);
+                        break;
+                    case "System.Collections.Generic.ISet`1":
+                        clazz = typeof(ISet<>);
+                        break;
+                    default:
+                        return null;
+                }
+            }
+            if (clazz.IsSet())
+            {
+                if (property != null && property.PropertyType != null && !clazz.IsConstructedGenericType && clazz.GetTypeInfo().ContainsGenericParameters)
+                {
+                    if (property.PropertyType.GetTypeInfo().ContainsGenericParameters && !property.PropertyType.IsConstructedGenericType)
+                        return clazz;
+                    return clazz.MakeGenericType(property.PropertyType);
+                }
+                return clazz;
+            }
             if (clazz.IsList())
+            {
+                if (property != null && property.PropertyType != null && !clazz.IsConstructedGenericType && clazz.GetTypeInfo().ContainsGenericParameters)
+                {
+                    if (property.PropertyType.GetTypeInfo().ContainsGenericParameters && !property.PropertyType.IsConstructedGenericType)
+                        return clazz;
+                    return clazz.MakeGenericType(property.PropertyType);
+                }
                 return clazz;
+            }
             if (clazz.IsMap())
+            {
                 return clazz;
+            }
             return null;
         }
 
@@ -301,6 +336,18 @@ namespace BeanIO.Internal.Util
             return type.GetTypeInfo().IsPrimitive || Nullable.GetUnderlyingType(type) != null;
         }
 
+        public static Type GetElementType(this IList list)
+        {
+            var listType = list.GetType();
+            if (listType.IsInstanceOf(typeof(IList<>)))
+                return listType.GenericTypeArguments[0];
+            if (listType.IsArray)
+                return listType.GetElementType();
+            if (listType.IsInstanceOf(typeof(ISet<>)))
+                return listType.GenericTypeArguments[0];
+            return typeof(object);
+        }
+
         public static bool IsList(this Type type)
         {
             return typeof(IList).IsAssignableFrom(type)
@@ -311,6 +358,11 @@ namespace BeanIO.Internal.Util
         {
             return typeof(IDictionary).IsAssignableFrom(type)
                    || typeof(IDictionary<,>).IsAssignableFrom(type);
+        }
+
+        public static bool IsSet(this Type type)
+        {
+            return typeof(ISet<>).IsAssignableFrom(type);
         }
 
         /// <summary>

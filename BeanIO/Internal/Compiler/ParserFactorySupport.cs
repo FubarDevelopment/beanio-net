@@ -1117,6 +1117,19 @@ namespace BeanIO.Internal.Compiler
             {
                 if (!reflectedType.IsAssignableFrom(iteration.PropertyType))
                 {
+                    if (reflectedType.IsConstructedGenericType)
+                    {
+                        if (iteration.PropertyType.IsConstructedGenericType)
+                        {
+                            var propType = iteration.PropertyType;
+                            propType = propType.GetGenericTypeDefinition();
+                            propType = propType.MakeGenericType(reflectedType.GenericTypeArguments);
+                            iteration.PropertyType = propType;
+                        }
+                    }
+                }
+                if (!reflectedType.IsAssignableFrom(iteration.PropertyType))
+                {
                     string beanPropertyTypeName;
                     if (reflectedType.IsArray)
                     {

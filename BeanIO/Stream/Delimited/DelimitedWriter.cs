@@ -120,7 +120,7 @@ namespace BeanIO.Stream.Delimited
                 var pos = 0;
                 foreach (var field in record)
                 {
-                    if (++pos > 0)
+                    if (pos++ > 0)
                         _out.Write(_delim);
                     _out.Write(field);
                 }
