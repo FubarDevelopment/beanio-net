@@ -112,15 +112,14 @@ namespace BeanIO.Config
             LoadInvalidMappingFile("noBeanProperty.xml", errorMessage);
         }
 
+        // ReSharper disable once UnusedParameter.Local
         private void LoadInvalidMappingFile(string name, string errorMessage)
         {
             var factory = StreamFactory.NewInstance();
-            using (var stream = typeof(ParserTest).Assembly.GetManifestResourceStream(string.Format("BeanIO.Config.{0}", name)))
-            {
-                var ex = Assert.Throws<BeanIOConfigurationException>(() => factory.Load(stream));
-                var innermostException = ex.GetBaseException();
-                Assert.Equal(errorMessage, innermostException.Message);
-            }
+            var stream = typeof(ParserTest).Assembly.GetManifestResourceStream(string.Format("BeanIO.Config.{0}", name));
+            var ex = Assert.Throws<BeanIOConfigurationException>(() => factory.Load(stream));
+            var innermostException = ex.GetBaseException();
+            Assert.Equal(errorMessage, innermostException.Message);
         }
     }
 }

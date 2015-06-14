@@ -17,6 +17,7 @@ namespace BeanIO.Internal.Compiler.Flat
             return new FlatPreprocessor(config);
         }
 
+        // ReSharper disable once RedundantOverridenMember
         /// <summary>
         /// Finalizes a record configuration after its children have been processed
         /// </summary>

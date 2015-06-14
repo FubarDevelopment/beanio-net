@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 
 using BeanIO.Internal.Parser;
 using BeanIO.Internal.Util;

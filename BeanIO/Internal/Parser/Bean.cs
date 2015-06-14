@@ -175,11 +175,7 @@ namespace BeanIO.Internal.Parser
                 {
                     b = NewInstance(context);
                 }
-                else if (hasProperties)
-                {
-                    b = null;
-                }
-                else
+                else if (!hasProperties)
                 {
                     b = Value.Missing;
                 }

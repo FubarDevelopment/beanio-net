@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using BeanIO.Config;
 using BeanIO.Types;

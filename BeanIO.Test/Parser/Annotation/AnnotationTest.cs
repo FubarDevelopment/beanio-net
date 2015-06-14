@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
-using System.Xml.Linq;
 
 using BeanIO.Builder;
 using BeanIO.Stream;
