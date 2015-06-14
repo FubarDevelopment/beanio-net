@@ -300,9 +300,13 @@ namespace BeanIO.Internal.Parser
         {
             var propertyTypeInfo = PropertyType.GetTypeInfo();
             Type type;
-            if (propertyTypeInfo.ContainsGenericParameters)
+            if (propertyTypeInfo.ContainsGenericParameters && !PropertyType.IsConstructedGenericType)
             {
-                type = propertyTypeInfo.MakeGenericType(ElementType);
+                Type elementType = ElementType;
+                var elementTypeInfo = elementType.GetTypeInfo();
+                if (!elementType.IsConstructedGenericType && elementTypeInfo.ContainsGenericParameters)
+                    elementType = typeof(object);
+                type = propertyTypeInfo.MakeGenericType(elementType);
             }
             else
             {
