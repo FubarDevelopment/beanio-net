@@ -36,7 +36,7 @@ namespace BeanIO.Internal.Config
         /// this field when the field is not present or empty during unmarshalling.
         /// </summary>
         [CanBeNull]
-        public string Default { get; set; }
+        public string DefaultValue { get; set; }
 
         /// <summary>
         /// Gets or sets the minimum length of this field in characters, or null

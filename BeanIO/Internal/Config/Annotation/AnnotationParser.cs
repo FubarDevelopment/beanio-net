@@ -246,7 +246,7 @@ namespace BeanIO.Internal.Config.Annotation
             fc.RegEx = fa.RegEx.ToValue();
             fc.Format = fa.Format.ToValue();
             fc.IsRequired = fa.IsRequired;
-            fc.Default = fa.DefaultValue.ToValue();
+            fc.DefaultValue = fa.DefaultValue.ToValue();
             fc.IsIdentifier = fa.IsRecordIdentifier;
             fc.IsTrim = fa.Trim;
             fc.IsLazy = fa.IsLazy;

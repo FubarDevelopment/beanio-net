@@ -150,7 +150,7 @@ namespace BeanIO.Builder
         /// <returns>The value of <see cref="Me"/></returns>
         public FieldBuilder DefaultValue(string defaultValue)
         {
-            Config.Default = defaultValue;
+            Config.DefaultValue = defaultValue;
             return Me;
         }
 

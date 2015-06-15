@@ -795,7 +795,7 @@ namespace BeanIO.Internal.Compiler
             field.Handler = FindTypeHandler(config, field);
 
             // set the default field value using the configured type handler
-            field.DefaultValue  = ParseDefaultValue(field, config.Default);
+            field.DefaultValue  = ParseDefaultValue(field, config.DefaultValue);
 
             field.Format = CreateFieldFormat(config, field.PropertyType);
 

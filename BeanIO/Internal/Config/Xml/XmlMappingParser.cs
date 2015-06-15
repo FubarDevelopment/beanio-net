@@ -381,7 +381,7 @@ namespace BeanIO.Internal.Config.Xml
                     TypeHandler = GetTypeHandler(element, "typeHandler"),
                     Type = GetAttribute(element, "type"),
                     Format = GetAttribute(element, "format"),
-                    Default = GetOptionalAttribute(element, "format"),
+                    DefaultValue = GetOptionalAttribute(element, "default"),
                     Length = GetUnboundedIntAttribute(element, "length"),
                     Padding = GetCharacterAttribute(element, "padding"),
                     XmlType = GetEnumAttribute<XmlNodeType>(element, "xmlType"),

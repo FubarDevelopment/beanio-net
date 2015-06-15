@@ -98,6 +98,7 @@
     <Compile Include="Parser\Constructor\AnnotatedColor.cs" />
     <Compile Include="Parser\Constructor\Color.cs" />
     <Compile Include="Parser\Constructor\ConstructorParserTest.cs" />
+    <Compile Include="Parser\DefaultValue\DefaultValueTest.cs" />
     <Compile Include="Parser\ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamFactoryTest.cs" />

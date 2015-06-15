@@ -366,7 +366,7 @@ namespace BeanIO.Builder
             Assert.Null(c.MaxLength);
             Assert.Null(c.Length);
             Assert.Null(c.Literal);
-            Assert.Null(c.Default);
+            Assert.Null(c.DefaultValue);
             Assert.Null(c.Format);
             Assert.Equal(Align.Left, c.Justify);
             Assert.Null(c.Padding);
@@ -429,7 +429,7 @@ namespace BeanIO.Builder
             Assert.Null(c.MaxLength);
             Assert.Equal(10, c.Length);
             Assert.Equal("literal", c.Literal);
-            Assert.Equal("default", c.Default);
+            Assert.Equal("default", c.DefaultValue);
             Assert.Equal("format", c.Format);
             Assert.Equal(Align.Right, c.Justify);
             Assert.Equal('X', c.Padding);
