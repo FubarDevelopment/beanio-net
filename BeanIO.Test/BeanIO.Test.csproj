@@ -114,6 +114,7 @@
       <DependentUpon>f2_messages.resx</DependentUpon>
     </Compile>
     <Compile Include="Parser\FixedLength\FixedLengthParserTest.cs" />
+    <Compile Include="Parser\Groups\GroupParserTest.cs" />
     <Compile Include="Parser\ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamFactoryTest.cs" />
@@ -222,6 +223,31 @@
     <EmbeddedResource Include="Parser\FixedLength\f5_valid.txt" />
     <EmbeddedResource Include="Parser\FixedLength\f7.txt" />
     <EmbeddedResource Include="Parser\FixedLength\fixedlength.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Groups\g1_empty.txt" />
+    <EmbeddedResource Include="Parser\Groups\g1_missingBatchTrailer.txt" />
+    <EmbeddedResource Include="Parser\Groups\g1_nobatch.txt" />
+    <EmbeddedResource Include="Parser\Groups\g1_noHeader.txt" />
+    <EmbeddedResource Include="Parser\Groups\g1_noTrailer.txt" />
+    <EmbeddedResource Include="Parser\Groups\g1_oneBatch.txt" />
+    <EmbeddedResource Include="Parser\Groups\g1_threeBatch.txt" />
+    <EmbeddedResource Include="Parser\Groups\g1_tooManyHeaders.txt" />
+    <EmbeddedResource Include="Parser\Groups\g1_unidentifiedRecord.txt" />
+    <EmbeddedResource Include="Parser\Groups\g2_empty.txt" />
+    <EmbeddedResource Include="Parser\Groups\g2_missingGroup.txt" />
+    <EmbeddedResource Include="Parser\Groups\g2_tooManyGroups.txt" />
+    <EmbeddedResource Include="Parser\Groups\g2_twoLayout.txt" />
+    <EmbeddedResource Include="Parser\Groups\g2_valid1.txt" />
+    <EmbeddedResource Include="Parser\Groups\g3_valid.txt" />
+    <EmbeddedResource Include="Parser\Groups\g4_endOfGroup.txt" />
+    <EmbeddedResource Include="Parser\Groups\g4_repeatingGroup.txt" />
+    <EmbeddedResource Include="Parser\Groups\g4_tooManyGroups.txt" />
+    <EmbeddedResource Include="Parser\Groups\g5_subgroups.txt" />
+    <EmbeddedResource Include="Parser\Groups\g6_missingRecordEOF.txt" />
+    <EmbeddedResource Include="Parser\Groups\g7_missingGroupEOF.txt" />
+    <EmbeddedResource Include="Parser\Groups\g8_repeatingStream.txt" />
+    <EmbeddedResource Include="Parser\Groups\group.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
