@@ -95,6 +95,9 @@
     <Compile Include="Parser\Collection\CollectionBean.cs" />
     <Compile Include="Parser\Collection\CollectionFieldParserTest.cs" />
     <Compile Include="Parser\Comments\CommentsParserTest.cs" />
+    <Compile Include="Parser\Constructor\AnnotatedColor.cs" />
+    <Compile Include="Parser\Constructor\Color.cs" />
+    <Compile Include="Parser\Constructor\ConstructorParserTest.cs" />
     <Compile Include="Parser\ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamFactoryTest.cs" />
@@ -167,6 +170,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Parser\Comments\c1.txt" />
     <EmbeddedResource Include="Parser\Comments\comments_mapping.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Constructor\constructor_mapping.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
