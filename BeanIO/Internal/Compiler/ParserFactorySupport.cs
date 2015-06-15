@@ -1128,6 +1128,10 @@ namespace BeanIO.Internal.Compiler
                             iteration.PropertyType = propType;
                         }
                     }
+                    else if (reflectedType.IsInstanceOf(typeof(IList)) && iteration.PropertyType.IsList())
+                    {
+                        iteration.PropertyType = reflectedType;
+                    }
                 }
                 if (!reflectedType.IsAssignableFrom(iteration.PropertyType))
                 {
