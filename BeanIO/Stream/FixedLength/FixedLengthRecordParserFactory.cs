@@ -28,7 +28,7 @@ namespace BeanIO.Stream.FixedLength
         /// <returns>The created <see cref="IRecordReader"/></returns>
         public IRecordReader CreateReader(TextReader reader)
         {
-            return new FixedLengthReader(reader);
+            return new FixedLengthReader(reader, this);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace BeanIO.Stream.FixedLength
         /// <returns>The new <see cref="IRecordWriter"/></returns>
         public IRecordWriter CreateWriter(TextWriter writer)
         {
-            return new FixedLengthWriter(writer);
+            return new FixedLengthWriter(writer, RecordTerminator);
         }
 
         /// <summary>
