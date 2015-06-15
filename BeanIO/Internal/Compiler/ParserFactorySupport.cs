@@ -539,6 +539,8 @@ namespace BeanIO.Internal.Compiler
                 ReflectRecordAggregationType(config, aggregation, property);
             }
 
+            var recordMap = aggregation as RecordMap;
+
             // assumes key is not null only for map aggregation
             var key = config.Key;
             if (key != null)
@@ -552,7 +554,19 @@ namespace BeanIO.Internal.Compiler
                 if (keyProperty == null || keyProperty.PropertyType == null)
                     throw new BeanIOConfigurationException(string.Format("Key '{0}' is not a property", key));
 
-                ((RecordMap)aggregation).Key = keyProperty;
+                recordMap.KeyProperty = keyProperty;
+            }
+
+
+            if (recordMap != null)
+            {
+                var propertyTypeInfo = recordMap.PropertyType.GetTypeInfo();
+                if (propertyTypeInfo.IsGenericTypeDefinition)
+                {
+                    var keyType = recordMap.KeyProperty != null ? recordMap.KeyProperty.PropertyType : typeof(object);
+                    var valueType = recordMap.ValueProperty != null ? recordMap.ValueProperty.PropertyType : typeof(object);
+                    recordMap.PropertyType = recordMap.PropertyType.MakeGenericType(keyType, valueType);
+                }
             }
         }
 
@@ -1075,6 +1089,14 @@ namespace BeanIO.Internal.Compiler
                 }
 
                 ((RecordArray)aggregation).ElementType = arrayType;
+            }
+            else
+            {
+                var recordMap = aggregation as RecordMap;
+                if (recordMap != null)
+                {
+                    recordMap.ValueProperty = property;
+                }
             }
         }
 

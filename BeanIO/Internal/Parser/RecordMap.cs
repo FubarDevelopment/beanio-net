@@ -18,7 +18,12 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets or sets the child property used for the key
         /// </summary>
-        public IProperty Key { get; set; }
+        public IProperty KeyProperty { get; set; }
+
+        /// <summary>
+        /// Gets or sets the child property used for the value
+        /// </summary>
+        public IProperty ValueProperty { get; set; }
 
         /// <summary>
         /// Unmarshals a record
@@ -33,7 +38,7 @@ namespace BeanIO.Internal.Parser
             var aggregatedValue = Selector.GetValue(context);
             if (!ReferenceEquals(aggregatedValue, Value.Invalid))
             {
-                var keyValue = Key.GetValue(context);
+                var keyValue = KeyProperty.GetValue(context);
 
                 if (!IsLazy || StringUtil.HasValue(keyValue) || StringUtil.HasValue(aggregatedValue))
                 {
@@ -79,7 +84,7 @@ namespace BeanIO.Internal.Parser
                         return true;
 
                     var mapValue = map[mapKey];
-                    Key.SetValue(context, mapKey);
+                    KeyProperty.SetValue(context, mapKey);
                     parser.SetValue(context, mapValue);
                     parser.Marshal(context);
                     ++index;
@@ -88,7 +93,7 @@ namespace BeanIO.Internal.Parser
 
             if (index < minOccurs)
             {
-                Key.SetValue(context, null);
+                KeyProperty.SetValue(context, null);
                 parser.SetValue(context, null);
                 while (index < minOccurs)
                 {
@@ -137,8 +142,8 @@ namespace BeanIO.Internal.Parser
         protected override void ToParamString(StringBuilder s)
         {
             base.ToParamString(s);
-            if (Key != null)
-                s.AppendFormat(", key=${0}", Key.Name);
+            if (KeyProperty != null)
+                s.AppendFormat(", key=${0}", KeyProperty.Name);
         }
 
         protected virtual IDictionary GetMap(ParsingContext context)
