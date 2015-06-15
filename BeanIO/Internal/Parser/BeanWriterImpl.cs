@@ -89,6 +89,7 @@ namespace BeanIO.Internal.Parser
             }
             catch (BeanWriterException)
             {
+                // TODO: Use C# 6 exception filter
                 throw;
             }
             catch (BeanIOException e)

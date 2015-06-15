@@ -241,7 +241,17 @@ namespace BeanIO.Internal.Parser
             }
 
             if (!PropertyType.IsAssignableFrom(bean.GetType()))
-                return false;
+            {
+                if (PropertyType == typeof(Dictionary<,>))
+                {
+                    if (!bean.GetType().IsMap())
+                        return false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
 
             // 'identifier' indicates the value of a child component must match
             if (!IsIdentifier)
