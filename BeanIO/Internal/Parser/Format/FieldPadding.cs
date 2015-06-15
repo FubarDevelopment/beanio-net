@@ -105,7 +105,7 @@ namespace BeanIO.Internal.Parser.Format
         public virtual string Pad(string text)
         {
             int currentLength;
-            if (string.IsNullOrEmpty(text))
+            if (text == null)
             {
                 if (IsOptional)
                     return PaddedNull;

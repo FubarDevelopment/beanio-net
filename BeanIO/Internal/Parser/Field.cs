@@ -304,7 +304,7 @@ namespace BeanIO.Internal.Parser
                 try
                 {
                     text = Handler.Format(value);
-                    if (string.IsNullOrEmpty(text))
+                    if (text == null || ReferenceEquals(text, Value.Nil))
                     {
                         if (Format.IsNillable)
                             return Value.Nil;

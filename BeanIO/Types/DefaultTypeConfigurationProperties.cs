@@ -1,6 +1,6 @@
 ﻿namespace BeanIO.Types
 {
-    public static class DefaultTypeConfigurationProperties
+    internal static class DefaultTypeConfigurationProperties
     {
         public const string FORMAT_SETTING = "format";
 
