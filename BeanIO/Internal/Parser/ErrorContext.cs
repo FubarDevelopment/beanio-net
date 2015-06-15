@@ -143,7 +143,10 @@ namespace BeanIO.Internal.Parser
             var key = !_fieldCounters.ContainsKey(fieldName) && index == 0
                           ? fieldName
                           : string.Format("{0}:{1}", index, fieldName);
-            return _fieldTexts[key];
+            string fieldText;
+            if (_fieldTexts.TryGetValue(key, out fieldText))
+                return fieldText;
+            return null;
         }
 
         /// <summary>
