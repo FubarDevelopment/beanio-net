@@ -38,14 +38,9 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
         {
             // return empty string if the field is all spaces, to allow for optional
             // zero padded fields
-            if (IsOptional && IsBlank(fieldText))
+            if (IsOptional && string.IsNullOrWhiteSpace(fieldText))
                 return string.Empty;
             return base.Unpad(fieldText);
-        }
-
-        private bool IsBlank(string s)
-        {
-            return s == null || s == PaddedNull;
         }
     }
 }
