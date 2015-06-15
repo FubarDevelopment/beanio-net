@@ -125,6 +125,8 @@
     <Compile Include="Parser\Lazy\LazyTest.cs" />
     <Compile Include="Parser\Lazy\LazyUser.cs" />
     <Compile Include="Parser\Lazy\Transaction.cs" />
+    <Compile Include="Parser\LenientPadding\LenientPaddingTest.cs" />
+    <Compile Include="Parser\Misc\MiscParserTest.cs" />
     <Compile Include="Parser\ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamFactoryTest.cs" />
@@ -279,6 +281,10 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Parser\Lazy\lazy_mapping.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Misc\m1.txt" />
+    <EmbeddedResource Include="Parser\Misc\misc_mapping.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
