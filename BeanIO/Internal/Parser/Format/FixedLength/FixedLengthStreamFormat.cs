@@ -1,7 +1,4 @@
-﻿using System.IO;
-
-using BeanIO.Stream;
-using BeanIO.Stream.FixedLength;
+﻿using System;
 
 namespace BeanIO.Internal.Parser.Format.FixedLength
 {
