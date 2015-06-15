@@ -298,6 +298,7 @@ namespace BeanIO.Internal.Compiler
                 try
                 {
                     var resType = Type.GetType(bundleName, true);
+                    bundleName = !string.IsNullOrEmpty(resType.Namespace) ? string.Format("{0}.{1}", resType.Namespace, resType.Name) : resType.Name;
                     var resMgr = new ResourceManager(bundleName, resType.GetTypeInfo().Assembly);
                     resMgr.GetString("ignore");
                     messageFactory.ResourceBundle = resMgr;
