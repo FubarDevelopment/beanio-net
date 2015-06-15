@@ -219,7 +219,8 @@ namespace BeanIO.Internal.Compiler
 
             // find a suitable constructor
             ConstructorInfo constructor = null;
-            foreach (var testConstructor in bean.GetType().GetTypeInfo().DeclaredConstructors.Where(x => x.GetParameters().Length == count))
+            var beanType = bean.PropertyType;
+            foreach (var testConstructor in beanType.GetTypeInfo().DeclaredConstructors.Where(x => x.GetParameters().Length == count))
             {
                 var argsMatching = testConstructor.GetParameters().Select((p, i) => p.ParameterType.IsAssignableFrom(args[i].PropertyType)).All(x => x);
                 if (argsMatching && (testConstructor.IsPublic || _allowProtectedPropertyAccess))

@@ -340,16 +340,16 @@ namespace BeanIO.Internal.Config.Annotation
                 foreach (var constructor in typeInfo.DeclaredConstructors)
                 {
                     var parameters = constructor.GetParameters();
-                    var index = 0;
-                    foreach (var parameter in parameters)
+                    for (var i = 0; i != parameters.Length; ++i)
                     {
+                        var parameter = parameters[i];
                         var fa = parameter.GetCustomAttribute<FieldAttribute>();
                         if (fa == null)
                             continue;
 
                         var info = new TypeInfo
                             {
-                                ArgumentIndex = ++index,
+                                ArgumentIndex = i + 1,
                                 Name = fa.Name.ToValue() ?? parameter.Name,
                                 Type = parameter.ParameterType,
                             };
