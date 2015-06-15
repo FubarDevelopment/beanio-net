@@ -118,6 +118,9 @@
     <Compile Include="Parser\IgnoreUnidentifiedRecords\IgnoreUnidentifiedRecordsParserTest.cs" />
     <Compile Include="Parser\Imports\ImportParserTest.cs" />
     <Compile Include="Parser\Indeterminates\IndeterminateSegmentsTest.cs" />
+    <Compile Include="Parser\InlineMaps\InlineMapParserTest.cs" />
+    <Compile Include="Parser\InlineMaps\InlineMapsTest.cs" />
+    <Compile Include="Parser\InlineMaps\Job.cs" />
     <Compile Include="Parser\ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamFactoryTest.cs" />
@@ -266,6 +269,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Parser\Indeterminates\indeterminates_mapping.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\InlineMaps\map_mapping.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
