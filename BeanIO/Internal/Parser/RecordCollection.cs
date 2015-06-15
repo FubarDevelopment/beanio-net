@@ -127,7 +127,8 @@ namespace BeanIO.Internal.Parser
         /// <returns>the <see cref="IList"/></returns>
         protected virtual ICollection GetCollection(ParsingContext context)
         {
-            return (ICollection)GetValue(context);
+            // ReSharper disable once RedundantBaseQualifier
+            return (ICollection)base.GetValue(context);
         }
     }
 }
