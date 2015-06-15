@@ -226,7 +226,7 @@ namespace BeanIO.Internal.Parser
         {
             base.ToParamString(s);
             if (Occurs != null)
-                s.AppendFormat("occursRef=${0}", Occurs.Name);
+                s.AppendFormat(", occursRef=${0}", Occurs.Name);
             s.AppendFormat(", occurs={0}", DebugUtil.FormatRange(MinOccurs, MaxOccurs))
              .AppendFormat(", {0}", DebugUtil.FormatOption("lazy", IsLazy));
         }
