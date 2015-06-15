@@ -525,7 +525,7 @@ namespace BeanIO.Internal.Config.Xml
                 {
                     Type = typeName,
                     Order = GetIntAttribute(element, "order"),
-                    Target = GetAttribute(element, "target"),
+                    Target = GetAttribute(element, "value"),
                     XmlName = GetAttribute(element, "xmlName"),
                     XmlNamespace = GetOptionalAttribute(element, "xmlNamespace"),
                     XmlPrefix = GetOptionalAttribute(element, "xmlPrefix"),
