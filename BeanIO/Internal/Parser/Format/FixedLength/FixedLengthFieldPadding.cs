@@ -24,7 +24,7 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
             if (Length > 0)
             {
                 var s = new StringBuilder(Length);
-                s.Append(Filler, Length);
+                s.Append(' ', Length);
                 PaddedNull = s.ToString();
             }
         }
