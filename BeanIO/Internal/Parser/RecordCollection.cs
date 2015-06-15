@@ -36,11 +36,11 @@ namespace BeanIO.Internal.Parser
             {
                 if (!IsLazy || StringUtil.HasValue(aggregatedValue))
                 {
-                    var aggregation = _value.Get(context);
+                    var aggregation = PropertyValue.Get(context);
                     if (aggregation == null || ReferenceEquals(aggregation, Value.Missing))
                     {
                         aggregation = CreateAggregationType();
-                        _value.Set(context, aggregation);
+                        PropertyValue.Set(context, aggregation);
                     }
 
                     var collection = (IList)aggregation;
@@ -110,16 +110,6 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Returns the collection value being parsed
-        /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <returns>the <see cref="IList"/></returns>
-        protected virtual ICollection GetCollection(ParsingContext context)
-        {
-            return (ICollection)GetValue(context);
-        }
-
-        /// <summary>
         /// Returns whether this parser or any of its descendant have content for marshalling.
         /// </summary>
         /// <param name="context">The <see cref="ParsingContext"/></param>
@@ -128,6 +118,16 @@ namespace BeanIO.Internal.Parser
         {
             var collection = GetCollection(context);
             return collection != null && collection.Count != 0;
+        }
+
+        /// <summary>
+        /// Returns the collection value being parsed
+        /// </summary>
+        /// <param name="context">the <see cref="ParsingContext"/></param>
+        /// <returns>the <see cref="IList"/></returns>
+        protected virtual ICollection GetCollection(ParsingContext context)
+        {
+            return (ICollection)GetValue(context);
         }
     }
 }

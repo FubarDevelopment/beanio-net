@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -158,6 +159,7 @@ namespace BeanIO.Stream.Delimited
         /// The type of object returned depends on the format of the stream.
         /// </returns>
         /// <returns>The record value, or null if the end of the stream was reached.</returns>
+        [SuppressMessage("StyleCopPlus.StyleCopPlusRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         public object Read()
         {
             // fieldList is set to null when the end of stream is reached
@@ -251,13 +253,13 @@ namespace BeanIO.Stream.Delimited
                         field.Append(c);
                         continue;
                     }
-                    
+
                     if (c == _escapeChar)
                     {
                         field.Append(_escapeChar);
                         continue;
                     }
-                    
+
                     field.Append(_escapeChar);
                 }
 
@@ -294,7 +296,7 @@ namespace BeanIO.Stream.Delimited
             _recordLineNumber = _lineNumber - lineOffset;
             RecordText = text.ToString();
 
-            // if eol is true, we're done; if not, then the end of file was reached 
+            // if eol is true, we're done; if not, then the end of file was reached
             // and further validation is needed
             if (eol)
             {
@@ -356,7 +358,7 @@ namespace BeanIO.Stream.Delimited
                     _skipLineFeed = skipLineFeed;
                     return true;
                 }
-                
+
                 if (ch == '\n')
                 {
                     return true;

@@ -226,6 +226,7 @@ namespace BeanIO.Internal.Parser
                                 throw _context.NewUnsatisfiedGroupException(unsatisfied.Name);
                             throw _context.NewUnsatisfiedRecordException(unsatisfied.Name);
                         }
+                        return null;
                     }
                     finally
                     {

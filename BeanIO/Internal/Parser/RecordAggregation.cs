@@ -12,7 +12,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// The property value
         /// </summary>
-        protected readonly ParserLocal<object> _value = new ParserLocal<object>(Value.Missing);
+        private readonly ParserLocal<object> _value = new ParserLocal<object>(Value.Missing);
 
         /// <summary>
         /// Gets or sets the bean property type
@@ -103,6 +103,14 @@ namespace BeanIO.Internal.Parser
             {
                 // a collection cannot be used to identify a bean
             }
+        }
+
+        /// <summary>
+        /// Gets the property value
+        /// </summary>
+        protected ParserLocal<object> PropertyValue
+        {
+            get { return _value; }
         }
 
         /// <summary>

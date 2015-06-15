@@ -60,7 +60,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         public abstract bool IsNillable { get; }
 
         /// <summary>
-        /// Gets a value indicating whether this field is optionally present in the record.
+        /// Gets or sets a value indicating whether this field is optionally present in the record.
         /// </summary>
         /// <remarks>
         /// TODO: rename isLazy to something better??
@@ -183,7 +183,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Called by <see cref="ToString"/> to append attributes of this field.
         /// </summary>
-        /// <param name="s"></param>
+        /// <param name="s">the string builder to add the parameters to</param>
         protected virtual void ToParamString(StringBuilder s)
         {
             s.Append(DebugUtil.FormatOption("optional", IsLazy));

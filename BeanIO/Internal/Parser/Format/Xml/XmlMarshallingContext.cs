@@ -34,7 +34,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         public bool IsStreaming { get; set; }
 
         /// <summary>
-        /// Gets or sets the element name conversion mode
+        /// Gets the element name conversion mode
         /// </summary>
         public ElementNameConversionMode NameConversionMode { get; private set; }
 

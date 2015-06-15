@@ -42,7 +42,7 @@ namespace BeanIO.Internal.Config
         public Properties Properties { get; set; }
 
         /// <summary>
-        /// Gets or sets the configured bean instance.
+        /// Gets the configured bean instance.
         /// </summary>
         public Func<T> Create { get; private set; }
     }

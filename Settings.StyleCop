@@ -28,7 +28,7 @@
         </Rule>
       </Rules>
       <AnalyzerSettings>
-        <StringProperty Name="AdvancedNaming_Words">3D A B C DE EN FxCop ID IDs IO OK StyleCop US X</StringProperty>
+        <StringProperty Name="AdvancedNaming_Words">3D A B C DE EN EOF FxCop ID IDs IO OK QName StyleCop US X</StringProperty>
         <StringProperty Name="AdvancedNaming_PublicConst">$(AaBb):$(AABB):$(AA_BB)</StringProperty>
         <StringProperty Name="AdvancedNaming_ProtectedConst">$(AaBb):c_$(aaBb):$(AABB):$(AA_BB)</StringProperty>
         <StringProperty Name="AdvancedNaming_PrivateConst">$(AaBb):c_$(aaBb):$(AABB):$(AA_BB)</StringProperty>

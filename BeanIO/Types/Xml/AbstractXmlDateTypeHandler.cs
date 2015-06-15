@@ -7,7 +7,7 @@ namespace BeanIO.Types.Xml
 {
     /// <summary>
     /// Base class for <see cref="ZonedDateTime"/> type handlers based on the W3C XML Schema
-    /// datatype specification.
+    /// data type specification.
     /// </summary>
     public abstract class AbstractXmlDateTypeHandler : DateTypeHandlerSupport
     {
@@ -23,7 +23,7 @@ namespace BeanIO.Types.Xml
         /// Gets or sets a value indicating whether time zone information is allowed when parsing field text.
         /// </summary>
         /// <remarks>
-        /// Defaukts to <code>true</code>
+        /// Defaults to <code>true</code>
         /// </remarks>
         public bool IsTimeZoneAllowed { get; set; }
 

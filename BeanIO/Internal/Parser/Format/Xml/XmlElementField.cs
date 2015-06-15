@@ -125,25 +125,6 @@ namespace BeanIO.Internal.Parser.Format.Xml
         }
 
         /// <summary>
-        /// Extracts a field from a record during unmarshalling
-        /// </summary>
-        /// <param name="context">the <see cref="XmlUnmarshallingContext"/> holding the record</param>
-        /// <returns>the extracted field text</returns>
-        protected override string ExtractText(XmlUnmarshallingContext context)
-        {
-            var node = context.FindElement(this);
-            if (node == null)
-                return null;
-
-            // check for nil elements
-            if (node.IsNil())
-                return Value.Nil;
-
-            var fieldText = node.GetText() ?? string.Empty;
-            return fieldText;
-        }
-
-        /// <summary>
         /// Sets the attribute name.
         /// </summary>
         /// <param name="localName">the attribute name</param>
@@ -164,7 +145,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Sets the prefix to use for this attribute's namespace.
         /// </summary>
-        /// <param name="prefix"> the namespace prefix</param>
+        /// <param name="prefix">the namespace prefix</param>
         public void SetPrefix(string prefix)
         {
             _prefix = prefix;
@@ -174,7 +155,6 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// Sets whether this attribute uses a namespace
         /// </summary>
         /// <param name="namespaceAware">true if this attribute uses a namespace, false otherwise</param>
-        /// <returns></returns>
         public void SetNamespaceAware(bool namespaceAware)
         {
             _namespaceAware = namespaceAware;
@@ -199,9 +179,28 @@ namespace BeanIO.Internal.Parser.Format.Xml
         }
 
         /// <summary>
+        /// Extracts a field from a record during unmarshalling
+        /// </summary>
+        /// <param name="context">the <see cref="XmlUnmarshallingContext"/> holding the record</param>
+        /// <returns>the extracted field text</returns>
+        protected override string ExtractText(XmlUnmarshallingContext context)
+        {
+            var node = context.FindElement(this);
+            if (node == null)
+                return null;
+
+            // check for nil elements
+            if (node.IsNil())
+                return Value.Nil;
+
+            var fieldText = node.GetText() ?? string.Empty;
+            return fieldText;
+        }
+
+        /// <summary>
         /// Called by <see cref="XmlFieldFormat.ToString"/> to append attributes of this field.
         /// </summary>
-        /// <param name="s"></param>
+        /// <param name="s">the string builder to add the parameters to</param>
         protected override void ToParamString(StringBuilder s)
         {
             base.ToParamString(s);

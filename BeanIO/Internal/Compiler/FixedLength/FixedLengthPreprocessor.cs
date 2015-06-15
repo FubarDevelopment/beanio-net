@@ -18,6 +18,14 @@ namespace BeanIO.Internal.Compiler.FixedLength
         }
 
         /// <summary>
+        /// Gets a value indicating whether the stream format is fixed length.
+        /// </summary>
+        protected override bool IsFixedLength
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Returns the size of a field.
         /// </summary>
         /// <remarks>null = unbounded</remarks>
@@ -26,14 +34,6 @@ namespace BeanIO.Internal.Compiler.FixedLength
         protected override int? GetSize(FieldConfig field)
         {
             return field.Length;
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether the stream format is fixed length.
-        /// </summary>
-        protected override bool IsFixedLength
-        {
-            get { return true; }
         }
     }
 }

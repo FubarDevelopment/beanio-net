@@ -37,11 +37,11 @@ namespace BeanIO.Internal.Parser
 
                 if (!IsLazy || StringUtil.HasValue(keyValue) || StringUtil.HasValue(aggregatedValue))
                 {
-                    var aggregation = _value.Get(context);
+                    var aggregation = PropertyValue.Get(context);
                     if (aggregation == null || ReferenceEquals(aggregation, Value.Missing))
                     {
                         aggregation = CreateAggregationType();
-                        _value.Set(context, aggregation);
+                        PropertyValue.Set(context, aggregation);
                     }
 
                     var map = (IDictionary)aggregation;

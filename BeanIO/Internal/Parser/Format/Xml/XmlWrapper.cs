@@ -163,10 +163,9 @@ namespace BeanIO.Internal.Parser.Format.Xml
             {
                 element.SetNil();
             }
-
-            // otherwise marshal our descendants
             else
             {
+                // otherwise marshal our descendants
                 ctx.Parent = element;
                 base.Marshal(context);
                 ctx.Parent = parent;

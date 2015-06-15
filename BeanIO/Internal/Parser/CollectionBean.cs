@@ -180,15 +180,6 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Creates a new instance of this bean object
-        /// </summary>
-        /// <returns>the new bean object</returns>
-        protected virtual object NewInstance()
-        {
-            return PropertyType.NewInstance();
-        }
-
-        /// <summary>
         /// Called by a stream to register variables stored in the parsing context.
         /// </summary>
         /// <remarks>
@@ -200,6 +191,15 @@ namespace BeanIO.Internal.Parser
         {
             if (locals.Add(_bean))
                 base.RegisterLocals(locals);
+        }
+
+        /// <summary>
+        /// Creates a new instance of this bean object
+        /// </summary>
+        /// <returns>the new bean object</returns>
+        protected virtual object NewInstance()
+        {
+            return PropertyType.NewInstance();
         }
 
         private void Backfill(IList collection, Component to)

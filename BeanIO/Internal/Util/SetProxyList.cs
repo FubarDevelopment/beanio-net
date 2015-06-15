@@ -27,6 +27,37 @@ namespace BeanIO.Internal.Util
             get { return _instance; }
         }
 
+        public bool IsFixedSize
+        {
+            get { return false; }
+        }
+
+        public bool IsReadOnly
+        {
+            get { return false; }
+        }
+
+        public int Count
+        {
+            get { return (int)_countProperty.GetMethod.Invoke(_instance, null); }
+        }
+
+        public bool IsSynchronized
+        {
+            get { throw new NotSupportedException(); }
+        }
+
+        public object SyncRoot
+        {
+            get { throw new NotSupportedException(); }
+        }
+
+        public object this[int index]
+        {
+            get { throw new NotSupportedException(); }
+            set { throw new NotSupportedException(); }
+        }
+
         public int Add(object value)
         {
             _addMethod.Invoke(_instance, new[] { value });
@@ -63,22 +94,6 @@ namespace BeanIO.Internal.Util
             throw new NotSupportedException();
         }
 
-        public bool IsFixedSize
-        {
-            get { return false; }
-        }
-
-        public bool IsReadOnly
-        {
-            get { return false; }
-        }
-
-        public object this[int index]
-        {
-            get { throw new NotSupportedException(); }
-            set { throw new NotSupportedException(); }
-        }
-
         public IEnumerator GetEnumerator()
         {
             return _instance.GetEnumerator();
@@ -87,21 +102,6 @@ namespace BeanIO.Internal.Util
         public void CopyTo(Array array, int index)
         {
             throw new NotSupportedException();
-        }
-
-        public int Count
-        {
-            get { return (int)_countProperty.GetMethod.Invoke(_instance, null); }
-        }
-
-        public bool IsSynchronized
-        {
-            get { throw new NotSupportedException(); }
-        }
-
-        public object SyncRoot
-        {
-            get { throw new NotSupportedException(); }
         }
     }
 }
