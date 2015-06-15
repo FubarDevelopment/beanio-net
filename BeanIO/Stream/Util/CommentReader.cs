@@ -50,7 +50,9 @@ namespace BeanIO.Stream.Util
             _recordTerminator = recordTerminator;
 
             var maximumCommentLength = _comments.Where(x => x != null).Max(x => x.Length);
-            _commentBuffer = new char[maximumCommentLength];
+
+            // +1 because the first character might be a \n
+            _commentBuffer = new char[maximumCommentLength + 1];
         }
 
         /// <summary>
