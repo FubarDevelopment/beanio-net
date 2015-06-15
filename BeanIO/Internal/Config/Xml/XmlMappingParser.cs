@@ -479,6 +479,7 @@ namespace BeanIO.Internal.Config.Xml
                     XmlNamespace = GetOptionalAttribute(element, "xmlNamespace"),
                     XmlPrefix = GetOptionalAttribute(element, "xmlPrefix"),
                     XmlType = GetOptionalEnumAttribute<XmlNodeType>(element, "xmlType"),
+                    ResourceBundle = GetAttribute(element, "resourceBundle"),
                 };
             config.IsStrict = GetBoolAttribute(element, "strict") ?? config.IsStrict;
             config.IgnoreUnidentifiedRecords = GetBoolAttribute(element, "ignoreUnidentifiedRecords") ?? config.IgnoreUnidentifiedRecords;
