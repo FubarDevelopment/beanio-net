@@ -73,7 +73,7 @@ namespace BeanIO.Internal.Parser
                                 recordName,
                                 bean != null ? " for bean class '" + bean.GetType() + "'" : string.Empty));
                     }
-                    
+
                     throw new BeanWriterException(
                         string.Format(
                             "Bean identification failed: no record or group mapping for bean class '{0}' at the current position",
