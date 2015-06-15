@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 
 using BeanIO.Parser.Bean;
@@ -88,6 +89,7 @@ namespace BeanIO.Parser.Collection
             var resourceName = string.Format("BeanIO.Parser.Collection.{0}", fileName);
             var asm = typeof(BeanParserTest).Assembly;
             var resStream = asm.GetManifestResourceStream(resourceName);
+            Debug.Assert(resStream != null, "resStream != null");
             return new StreamReader(resStream);
         }
     }
