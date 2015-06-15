@@ -99,6 +99,12 @@
     <Compile Include="Parser\Constructor\Color.cs" />
     <Compile Include="Parser\Constructor\ConstructorParserTest.cs" />
     <Compile Include="Parser\DefaultValue\DefaultValueTest.cs" />
+    <Compile Include="Parser\Delimited\d1_messages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>d1_messages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Parser\Delimited\DelimitedParserTest.cs" />
     <Compile Include="Parser\ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamFactoryTest.cs" />
@@ -110,6 +116,10 @@
     <Compile Include="Types\XmlBooleanTypeHandlerTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Parser\Delimited\d1_messages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>d1_messages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -174,6 +184,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Parser\Constructor\constructor_mapping.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Delimited\d1_recordErrors.txt" />
+    <EmbeddedResource Include="Parser\Delimited\d2_optionalField.txt" />
+    <EmbeddedResource Include="Parser\Delimited\d3_padding.txt" />
+    <EmbeddedResource Include="Parser\Delimited\delimited.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
