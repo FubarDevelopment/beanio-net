@@ -25,25 +25,5 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
         {
             return new FixedLengthMarshallingContext();
         }
-
-        /// <summary>
-        /// Creates a new record reader
-        /// </summary>
-        /// <param name="reader">the <see cref="TextReader"/> to read records from</param>
-        /// <returns>the new <see cref="IRecordReader"/></returns>
-        public override IRecordReader CreateRecordReader(TextReader reader)
-        {
-            return new FixedLengthReader(reader);
-        }
-
-        /// <summary>
-        /// Creates a new record writer
-        /// </summary>
-        /// <param name="writer">the <see cref="TextWriter"/> to write records to</param>
-        /// <returns>the new <see cref="IRecordWriter"/></returns>
-        public override IRecordWriter CreateRecordWriter(TextWriter writer)
-        {
-            return new FixedLengthWriter(writer);
-        }
     }
 }
