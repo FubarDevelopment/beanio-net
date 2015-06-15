@@ -904,6 +904,16 @@ namespace BeanIO.Internal.Compiler
                 }
 
                 collectionType = GetConcreteAggregationType(collectionType);
+
+                if (config.IsNillable && collectionType.IsConstructedGenericType && !collectionType.IsMap())
+                {
+                    var elementType = collectionType.GenericTypeArguments[0];
+                    if (elementType.GetTypeInfo().IsPrimitive)
+                    {
+                        elementType = typeof(Nullable<>).MakeGenericType(elementType);
+                        collectionType = collectionType.GetGenericTypeDefinition().MakeGenericType(elementType);
+                    }
+                }
             }
 
             // create the appropriate iteration type
