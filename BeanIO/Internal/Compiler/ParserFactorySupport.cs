@@ -897,12 +897,13 @@ namespace BeanIO.Internal.Compiler
             Aggregation aggregation;
             if (collectionType.IsArray || collectionType == typeof(Array))
             {
+                var elementType = property.PropertyType ?? typeof(object);
                 var collParser = new ArrayParser
                     {
-                        ElementType = property.PropertyType
+                        ElementType = elementType
                     };
                 aggregation = collParser;
-                collectionType = property.PropertyType.MakeArrayType();
+                collectionType = elementType.MakeArrayType();
             }
             else if (isMap)
             {
