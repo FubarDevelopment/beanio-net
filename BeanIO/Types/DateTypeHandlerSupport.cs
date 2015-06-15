@@ -173,6 +173,10 @@ namespace BeanIO.Types
                 }
                 catch (UnparsableValueException)
                 {
+                    // TODO: Use C# 6 exception filter
+                    if (Pattern == null)
+                        throw;
+
                     var temp = text.Substring(0, Math.Min(Pattern.Length, text.Length));
                     var dt = DateFormat.Parse(temp).GetValueOrThrow();
                     result = IsLenient ? dt.InZoneLeniently(tz) : dt.InZoneStrictly(tz);
@@ -182,15 +186,22 @@ namespace BeanIO.Types
             {
                 // Ignore this error and try again with System.DateTime
                 DateTime dt;
-                try
-                {
-                    var temp = text.Substring(0, Math.Min(Pattern.Length, text.Length));
-                    dt = DateTime.ParseExact(temp, Pattern, Culture, DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AssumeUniversal);
-                    dt = dt.ToUniversalTime();
-                }
-                catch (FormatException)
+                if (Pattern == null)
                 {
                     dt = DateTime.Parse(text, Culture, DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AssumeUniversal);
+                }
+                else
+                {
+                    try
+                    {
+                        var temp = text.Substring(0, Math.Min(Pattern.Length, text.Length));
+                        dt = DateTime.ParseExact(temp, Pattern, Culture, DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AssumeUniversal);
+                        dt = dt.ToUniversalTime();
+                    }
+                    catch (FormatException)
+                    {
+                        dt = DateTime.Parse(text, Culture, DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AssumeUniversal);
+                    }
                 }
                 var utcOffset = tz.GetUtcOffset(Instant.FromDateTimeUtc(dt));
                 result = ZonedDateTime.FromDateTimeOffset(new DateTimeOffset(dt, utcOffset.ToTimeSpan()));
