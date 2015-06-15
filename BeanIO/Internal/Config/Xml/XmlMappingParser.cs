@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
@@ -291,7 +292,7 @@ namespace BeanIO.Internal.Config.Xml
                     return _mapping;
                 }
             }
-            catch (Exception ex)
+            catch (IOException ex)
             {
                 throw new BeanIOConfigurationException(string.Format("Failed to import mapping file '{0}'", name), ex);
             }
