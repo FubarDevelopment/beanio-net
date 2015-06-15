@@ -108,6 +108,12 @@
     <Compile Include="Parser\Direct\DirectParserTest.cs" />
     <Compile Include="Parser\Direct\DirectUser.cs" />
     <Compile Include="Parser\DynamicOccurs\DynamicOccursParserTest.cs" />
+    <Compile Include="Parser\FixedLength\f2_messages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>f2_messages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Parser\FixedLength\FixedLengthParserTest.cs" />
     <Compile Include="Parser\ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamFactoryTest.cs" />
@@ -122,6 +128,10 @@
     <EmbeddedResource Include="Parser\Delimited\d1_messages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>d1_messages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Parser\FixedLength\f2_messages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>f2_messages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>
@@ -200,6 +210,18 @@
   <ItemGroup>
     <EmbeddedResource Include="Parser\Direct\d1.txt" />
     <EmbeddedResource Include="Parser\Direct\direct_mapping.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\FixedLength\f1_maxLength.txt" />
+    <EmbeddedResource Include="Parser\FixedLength\f1_minLength.txt" />
+    <EmbeddedResource Include="Parser\FixedLength\f1_valid.txt" />
+    <EmbeddedResource Include="Parser\FixedLength\f2_invalid.txt" />
+    <EmbeddedResource Include="Parser\FixedLength\f2_valid.txt" />
+    <EmbeddedResource Include="Parser\FixedLength\f3_valid.txt" />
+    <EmbeddedResource Include="Parser\FixedLength\f4_padding.txt" />
+    <EmbeddedResource Include="Parser\FixedLength\f5_valid.txt" />
+    <EmbeddedResource Include="Parser\FixedLength\f7.txt" />
+    <EmbeddedResource Include="Parser\FixedLength\fixedlength.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
