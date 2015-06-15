@@ -382,7 +382,7 @@ namespace BeanIO.Internal.Config.Xml
                     Type = GetAttribute(element, "type"),
                     Format = GetAttribute(element, "format"),
                     DefaultValue = GetOptionalAttribute(element, "default"),
-                    Length = GetUnboundedIntAttribute(element, "length"),
+                    Length = GetUnboundedIntAttribute(element, "length", -1),
                     Padding = GetCharacterAttribute(element, "padding"),
                     XmlType = GetEnumAttribute<XmlNodeType>(element, "xmlType"),
                     XmlName = GetAttribute(element, "xmlName"),
@@ -410,6 +410,7 @@ namespace BeanIO.Internal.Config.Xml
             }
 
             config.Until = GetIntAttribute(element, "until");
+            config.IsRequired = GetBoolAttribute(element, "required") ?? config.IsRequired;
             config.IsTrim = GetBoolAttribute(element, "trim") ?? config.IsTrim;
             config.IsLazy = GetBoolAttribute(element, "lazy") ?? config.IsLazy;
             config.IsIdentifier = GetBoolAttribute(element, "rid") ?? config.IsIdentifier;
