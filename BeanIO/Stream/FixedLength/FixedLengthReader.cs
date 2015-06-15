@@ -61,7 +61,7 @@ namespace BeanIO.Stream.FixedLength
                 {
                     _recordTerminator = s[0];
                 }
-                else
+                else if (s.Length > 1)
                 {
                     throw new ArgumentOutOfRangeException("config", "Record terminator must be a single character");
                 }
