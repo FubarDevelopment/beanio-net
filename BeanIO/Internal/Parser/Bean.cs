@@ -294,26 +294,9 @@ namespace BeanIO.Internal.Parser
             var beanClass = PropertyType;
             if (beanClass == null)
                 return null;
-            var beanTypeInfo = beanClass.GetTypeInfo();
-            if (beanTypeInfo.IsGenericType && !beanClass.IsConstructedGenericType)
-            {
-                if (beanClass.IsMap())
-                {
-                    beanClass = typeof(Dictionary<string, object>);
-                }
-                else if (beanClass.IsList())
-                {
-                    beanClass = typeof(List<object>);
-                }
-                else if (beanClass.IsInstanceOf(typeof(ISet<>)))
-                {
-                    beanClass = typeof(HashSet<object>);
-                }
-                else
-                {
-                    throw new InvalidOperationException();
-                }
-            }
+            beanClass = beanClass.CreateDefaultType();
+            if (beanClass == null)
+                throw new InvalidOperationException();
 
             try
             {

@@ -24,21 +24,18 @@ namespace BeanIO.Parser.Indeterminates
             Assert.True(map.ContainsKey("f1"));
             Assert.Equal("v1", map["f1"]);
 
-            // TODO: Should be List<Dictionary<string, object>> instead of List<object>
-            var list = Assert.IsType<List<object>>(map["rs1"]);
+            var list = Assert.IsType<List<Dictionary<string, object>>>(map["rs1"]);
             Assert.Collection(
                 list,
-                item =>
+                subMap =>
                     {
-                        var subMap = Assert.IsType<Dictionary<string, object>>(item);
                         Assert.True(subMap.ContainsKey("f2"));
                         Assert.Equal("v2.1", subMap["f2"]);
                         Assert.True(subMap.ContainsKey("f3"));
                         Assert.Equal("v3.1", subMap["f3"]);
                     },
-                item =>
+                subMap =>
                     {
-                        var subMap = Assert.IsType<Dictionary<string, object>>(item);
                         Assert.True(subMap.ContainsKey("f2"));
                         Assert.Equal("v2.2", subMap["f2"]);
                         Assert.True(subMap.ContainsKey("f3"));
@@ -47,13 +44,11 @@ namespace BeanIO.Parser.Indeterminates
             Assert.True(map.ContainsKey("f4"));
             Assert.Equal("v4", map["f4"]);
 
-            // TODO: Should be List<Dictionary<string, object>> instead of List<object>
-            list = Assert.IsType<List<object>>(map["rs2"]);
+            list = Assert.IsType<List<Dictionary<string, object>>>(map["rs2"]);
             Assert.Collection(
                 list,
-                item =>
+                subMap =>
                 {
-                    var subMap = Assert.IsType<Dictionary<string, object>>(item);
                     Assert.True(subMap.ContainsKey("f5"));
                     Assert.Equal("v5.1", subMap["f5"]);
                     Assert.True(subMap.ContainsKey("f6"));
@@ -63,9 +58,8 @@ namespace BeanIO.Parser.Indeterminates
                         subItem => Assert.Equal("v6.1", subItem),
                         subItem => Assert.Equal("v6.2", subItem));
                 },
-                item =>
+                subMap =>
                 {
-                    var subMap = Assert.IsType<Dictionary<string, object>>(item);
                     Assert.True(subMap.ContainsKey("f5"));
                     Assert.Equal("v5.2", subMap["f5"]);
                     Assert.True(subMap.ContainsKey("f6"));
@@ -96,21 +90,18 @@ namespace BeanIO.Parser.Indeterminates
             var subMap = Assert.IsType<Dictionary<string, object>>(map["rs1"]);
             Assert.True(subMap.ContainsKey("rs2"));
 
-            // TODO: Should be List<Dictionary<string, object>> instead of List<object>
-            var list = Assert.IsType<List<object>>(subMap["rs2"]);
+            var list = Assert.IsType<List<Dictionary<string, object>>>(subMap["rs2"]);
             Assert.Collection(
                 list,
-                item =>
+                itemMap =>
                     {
-                        var itemMap = Assert.IsType<Dictionary<string, object>>(item);
                         Assert.True(itemMap.ContainsKey("f2"));
                         Assert.Equal("v2.1", itemMap["f2"]);
                         Assert.True(itemMap.ContainsKey("f3"));
                         Assert.Equal("v3.1", itemMap["f3"]);
                     },
-                item =>
+                itemMap =>
                     {
-                        var itemMap = Assert.IsType<Dictionary<string, object>>(item);
                         Assert.True(itemMap.ContainsKey("f2"));
                         Assert.Equal("v2.2", itemMap["f2"]);
                         Assert.True(itemMap.ContainsKey("f3"));

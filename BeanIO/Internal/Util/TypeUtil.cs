@@ -135,23 +135,47 @@ namespace BeanIO.Internal.Util
             return clazz;
         }
 
+        public static Type CreateDefaultType(this Type type)
+        {
+            var typeInfo = type.GetTypeInfo();
+            if (!type.IsConstructedGenericType && typeInfo.ContainsGenericParameters)
+            {
+                if (type.IsMap())
+                    return typeof(Dictionary<string, object>);
+                if (type.IsList())
+                    return typeof(List<object>);
+                if (type.IsInstanceOf(typeof(ISet<>)))
+                    return typeof(HashSet<object>);
+                return null;
+            }
+            return type;
+        }
+
         public static Type ToAggregationType(this string type, IProperty property)
         {
+            Type propertyType;
+            if (property != null && property.PropertyType != null)
+            {
+                propertyType = property.PropertyType.CreateDefaultType();
+            }
+            else
+            {
+                propertyType = null;
+            }
+
             switch (type.ToLowerInvariant())
             {
                 case "array":
                     return typeof(Array);
                 case "collection":
                 case "list":
-                    if (property == null || property.PropertyType == null)
+                    if (propertyType == null)
                         return typeof(IList);
-                    if (property.PropertyType.GetTypeInfo().ContainsGenericParameters && !property.PropertyType.IsConstructedGenericType)
-                        return typeof(IList);
-                    return typeof(IList<>).MakeGenericType(property.PropertyType);
+                    return typeof(IList<>).MakeGenericType(propertyType);
                 case "set":
-                    if (property == null || property.PropertyType == null)
+                    if (propertyType == null)
                         return typeof(ISet<object>);
-                    return typeof(ISet<>).MakeGenericType(property.PropertyType);
+                    return typeof(ISet<>).MakeGenericType(propertyType);
                 case "map":
                     return typeof(IDictionary<,>);
             }
@@ -162,7 +186,7 @@ namespace BeanIO.Internal.Util
                 var firstCommaPos = type.IndexOf(',');
                 if (firstCommaPos != -1)
                     type = type.Substring(0, firstCommaPos);
-                switch (type)
+                switch (type.Trim())
                 {
                     case "System.Collections.Generic.HashSet`1":
                         clazz = typeof(HashSet<>);
@@ -176,21 +200,17 @@ namespace BeanIO.Internal.Util
             }
             if (clazz.IsSet())
             {
-                if (property != null && property.PropertyType != null && !clazz.IsConstructedGenericType && clazz.GetTypeInfo().ContainsGenericParameters)
+                if (propertyType != null && !clazz.IsConstructedGenericType && clazz.GetTypeInfo().ContainsGenericParameters)
                 {
-                    if (property.PropertyType.GetTypeInfo().ContainsGenericParameters && !property.PropertyType.IsConstructedGenericType)
-                        return clazz;
-                    return clazz.MakeGenericType(property.PropertyType);
+                    return clazz.MakeGenericType(propertyType);
                 }
                 return clazz;
             }
             if (clazz.IsList())
             {
-                if (property != null && property.PropertyType != null && !clazz.IsConstructedGenericType && clazz.GetTypeInfo().ContainsGenericParameters)
+                if (propertyType != null && !clazz.IsConstructedGenericType && clazz.GetTypeInfo().ContainsGenericParameters)
                 {
-                    if (property.PropertyType.GetTypeInfo().ContainsGenericParameters && !property.PropertyType.IsConstructedGenericType)
-                        return clazz;
-                    return clazz.MakeGenericType(property.PropertyType);
+                    return clazz.MakeGenericType(propertyType);
                 }
                 return clazz;
             }
