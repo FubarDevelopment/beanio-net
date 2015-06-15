@@ -289,7 +289,7 @@ namespace BeanIO.Internal.Parser
             {
                 if (beanClass.IsMap())
                 {
-                    beanClass = typeof(Dictionary<object, object>);
+                    beanClass = typeof(Dictionary<string, object>);
                 }
                 else if (beanClass.IsList())
                 {

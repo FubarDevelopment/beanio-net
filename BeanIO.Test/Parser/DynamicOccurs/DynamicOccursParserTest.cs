@@ -63,7 +63,7 @@ namespace BeanIO.Parser.DynamicOccurs
             var m = factory.CreateMarshaller("o2");
 
             var text = "02Rob 00Mike020102end";
-            var map = (Dictionary<object, object>)u.Unmarshal(text);
+            var map = (Dictionary<string, object>)u.Unmarshal(text);
             Assert.NotNull(map);
             Assert.True(map.ContainsKey("people"));
             var people = (List<Person>)map["people"];
@@ -84,7 +84,7 @@ namespace BeanIO.Parser.DynamicOccurs
             Assert.Equal(text, m.Marshal(map).ToString());
 
             text = "00end";
-            map = (Dictionary<object, object>)u.Unmarshal(text);
+            map = (Dictionary<string, object>)u.Unmarshal(text);
             Assert.NotNull(map);
             Assert.True(map.ContainsKey("people"));
             people = (List<Person>)map["people"];
@@ -100,7 +100,7 @@ namespace BeanIO.Parser.DynamicOccurs
             var m = factory.CreateMarshaller("o3");
 
             var text = "0201Rob 02Mikeend";
-            var map = Assert.IsType<Dictionary<object, object>>(u.Unmarshal(text));
+            var map = Assert.IsType<Dictionary<string, object>>(u.Unmarshal(text));
             Assert.NotNull(map);
             Assert.True(map.ContainsKey("names"));
             var inline = Assert.IsType<Dictionary<int, string>>(map["names"]);
@@ -120,7 +120,7 @@ namespace BeanIO.Parser.DynamicOccurs
             Assert.Equal(text, m.Marshal(map).ToString());
 
             text = "00end";
-            map = Assert.IsType<Dictionary<object, object>>(u.Unmarshal(text));
+            map = Assert.IsType<Dictionary<string, object>>(u.Unmarshal(text));
             inline = Assert.IsType<Dictionary<int, string>>(map["names"]);
             Assert.NotNull(inline);
             Assert.Equal(0, inline.Count);
@@ -135,14 +135,14 @@ namespace BeanIO.Parser.DynamicOccurs
             var m = factory.CreateMarshaller("o4");
 
             var text = "3,3,2,1,end";
-            var map = Assert.IsType<Dictionary<object, object>>(u.Unmarshal(text));
+            var map = Assert.IsType<Dictionary<string, object>>(u.Unmarshal(text));
             Assert.True(map.ContainsKey("numbers"));
             var numbers = Assert.IsType<int[]>(map["numbers"]);
             Assert.Equal(new[] { 3, 2, 1 }, numbers);
             Assert.Equal(text, m.Marshal(map).ToString());
 
             text = "0,end";
-            map = Assert.IsType<Dictionary<object, object>>(u.Unmarshal(text));
+            map = Assert.IsType<Dictionary<string, object>>(u.Unmarshal(text));
             Assert.True(map.ContainsKey("numbers"));
             numbers = Assert.IsType<int[]>(map["numbers"]);
             Assert.Equal(new int[0], numbers);
