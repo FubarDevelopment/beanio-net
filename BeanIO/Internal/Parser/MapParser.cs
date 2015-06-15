@@ -19,7 +19,15 @@ namespace BeanIO.Internal.Parser
         /// </summary>
         private readonly ParserLocal<object> _value = new ParserLocal<object>();
 
-        public IProperty Key { get; set; }
+        /// <summary>
+        /// Gets or sets the key property
+        /// </summary>
+        public IProperty KeyProperty { get; set; }
+
+        /// <summary>
+        /// Gets or sets the value property
+        /// </summary>
+        public IProperty ValueProperty { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this aggregation is a property of its parent bean object.
@@ -145,8 +153,8 @@ namespace BeanIO.Internal.Parser
         /// <param name="locals">set of local variables</param>
         public override void RegisterLocals(ISet<IParserLocal> locals)
         {
-            if (Key != null)
-                ((Component)Key).RegisterLocals(locals);
+            if (KeyProperty != null)
+                ((Component)KeyProperty).RegisterLocals(locals);
             if (locals.Add(_value))
                 base.RegisterLocals(locals);
         }
@@ -181,7 +189,7 @@ namespace BeanIO.Internal.Parser
                             return true;
                         var mapValue = map[mapKey];
                         SetIterationIndex(context, i);
-                        Key.SetValue(context, mapKey);
+                        KeyProperty.SetValue(context, mapKey);
                         parser.SetValue(context, mapValue);
                         parser.Marshal(context);
                         ++i;
@@ -190,7 +198,7 @@ namespace BeanIO.Internal.Parser
 
                 if (i < minOccurs)
                 {
-                    Key.SetValue(context, null);
+                    KeyProperty.SetValue(context, null);
                     parser.SetValue(context, null);
                     while (i < minOccurs)
                     {
@@ -238,7 +246,7 @@ namespace BeanIO.Internal.Parser
                     }
                     else if (!ReferenceEquals(fieldValue, Value.Missing))
                     {
-                        var mapKey = Key.GetValue(context);
+                        var mapKey = KeyProperty.GetValue(context);
                         if (!IsLazy || StringUtil.HasValue(mapKey) || StringUtil.HasValue(fieldValue))
                         {
                             if (map == null)
@@ -300,8 +308,8 @@ namespace BeanIO.Internal.Parser
         protected override void ToParamString(StringBuilder s)
         {
             base.ToParamString(s);
-            if (Key != null)
-                s.AppendFormat(", key=${0}", Key.Name);
+            if (KeyProperty != null)
+                s.AppendFormat(", key=${0}", KeyProperty.Name);
             if (PropertyType != null)
                 s.AppendFormat(", type={0}", PropertyType.GetAssemblyQualifiedName());
         }

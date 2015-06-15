@@ -659,6 +659,7 @@ namespace BeanIO.Internal.Compiler
         protected virtual void FinalizeSegmentIteration(SegmentConfig config, IProperty property)
         {
             var aggregation = (Aggregation)PopParser();
+            var mapParser = aggregation as MapParser;
             if (config.Type != null || config.Target != null)
             {
                 PopProperty(); // pop the iteration
@@ -678,7 +679,18 @@ namespace BeanIO.Internal.Compiler
                 if (keyProperty == null || keyProperty.PropertyType == null)
                     throw new BeanIOConfigurationException(string.Format("Key '{0}' is not a property", key));
 
-                ((MapParser)aggregation).Key = keyProperty;
+                mapParser.KeyProperty = keyProperty;
+            }
+
+            if (mapParser != null)
+            {
+                var propertyTypeInfo = mapParser.PropertyType.GetTypeInfo();
+                if (propertyTypeInfo.IsGenericTypeDefinition)
+                {
+                    var keyType = mapParser.KeyProperty != null ? mapParser.KeyProperty.PropertyType : typeof(object);
+                    var valueType = mapParser.ValueProperty != null ? mapParser.ValueProperty.PropertyType : typeof(object);
+                    mapParser.PropertyType = mapParser.PropertyType.MakeGenericType(keyType, valueType);
+                }
             }
         }
 
@@ -971,6 +983,14 @@ namespace BeanIO.Internal.Compiler
                     }
 
                     collectionParser.ElementType = arrayType;
+                }
+                else
+                {
+                    var mapParser = aggregation as MapParser;
+                    if (mapParser != null)
+                    {
+                        mapParser.ValueProperty = property;
+                    }
                 }
             }
         }
