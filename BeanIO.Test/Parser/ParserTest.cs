@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 
 using Xunit;
@@ -26,6 +27,7 @@ namespace BeanIO.Parser
         {
             using (var resStream = typeof(ParserTest).Assembly.GetManifestResourceStream(resourceName))
             {
+                Debug.Assert(resStream != null, "resStream != null");
                 var reader = new StreamReader(resStream);
                 return reader.ReadToEnd();
             }
