@@ -376,6 +376,11 @@ namespace BeanIO.Internal.Util
             return typeof(object);
         }
 
+        public static bool IsArray(this Type type)
+        {
+            return type.IsArray || type == typeof(Array);
+        }
+
         public static bool IsList(this Type type)
         {
             return typeof(IList).IsAssignableFrom(type)

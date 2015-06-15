@@ -932,7 +932,7 @@ namespace BeanIO.Internal.Compiler
 
             // create the appropriate iteration type
             Aggregation aggregation;
-            if (collectionType.IsArray || collectionType == typeof(Array))
+            if (collectionType.IsArray())
             {
                 var elementType = property.PropertyType ?? typeof(object);
                 var collParser = new ArrayParser
@@ -1041,7 +1041,7 @@ namespace BeanIO.Internal.Compiler
 
             // create the appropriate iteration type
             RecordAggregation aggregation;
-            if (collectionType.IsArray)
+            if (collectionType.IsArray())
             {
                 aggregation = new RecordArray();
             }
@@ -1069,7 +1069,7 @@ namespace BeanIO.Internal.Compiler
             var reflectedType = ReflectCollectionType(aggregation, property, config.Getter, config.Setter);
 
             // descriptor may be null if the parent was Map or Collection
-            if (collectionType.IsArray)
+            if (collectionType.IsArray())
             {
                 var arrayType = property.PropertyType;
 
@@ -1149,9 +1149,9 @@ namespace BeanIO.Internal.Compiler
                 return null;
 
             var type = property.PropertyType;
-            if (iteration.PropertyType.IsArray)
+            if (iteration.PropertyType.IsArray())
             {
-                if (!reflectedType.IsArray)
+                if (!reflectedType.IsArray())
                     throw new BeanIOConfigurationException(string.Format("Collection type 'array' does not match bean property type '{0}'", reflectedType.GetAssemblyQualifiedName()));
 
                 var arrayType = reflectedType.GetElementType();
@@ -1190,7 +1190,7 @@ namespace BeanIO.Internal.Compiler
                 if (!reflectedType.IsAssignableFrom(iteration.PropertyType))
                 {
                     string beanPropertyTypeName;
-                    if (reflectedType.IsArray)
+                    if (reflectedType.IsArray())
                     {
                         beanPropertyTypeName = reflectedType.GetElementType().GetAssemblyQualifiedName() + "[]";
                     }
@@ -1486,7 +1486,7 @@ namespace BeanIO.Internal.Compiler
         {
             if (type == null)
                 return null;
-            if (!type.IsArray && type != typeof(Array) && (type.GetTypeInfo().IsInterface || type.GetTypeInfo().IsAbstract))
+            if (!type.IsArray() && (type.GetTypeInfo().IsInterface || type.GetTypeInfo().IsAbstract))
             {
                 if (typeof(ISet<>).IsAssignableFrom(type))
                     return typeof(HashSet<>).Instantiate(type);
