@@ -121,6 +121,10 @@
     <Compile Include="Parser\InlineMaps\InlineMapParserTest.cs" />
     <Compile Include="Parser\InlineMaps\InlineMapsTest.cs" />
     <Compile Include="Parser\InlineMaps\Job.cs" />
+    <Compile Include="Parser\Lazy\Account.cs" />
+    <Compile Include="Parser\Lazy\LazyTest.cs" />
+    <Compile Include="Parser\Lazy\LazyUser.cs" />
+    <Compile Include="Parser\Lazy\Transaction.cs" />
     <Compile Include="Parser\ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamFactoryTest.cs" />
@@ -272,6 +276,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Parser\InlineMaps\map_mapping.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Lazy\lazy_mapping.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
