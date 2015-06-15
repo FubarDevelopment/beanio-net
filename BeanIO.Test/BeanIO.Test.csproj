@@ -105,6 +105,9 @@
       <DependentUpon>d1_messages.resx</DependentUpon>
     </Compile>
     <Compile Include="Parser\Delimited\DelimitedParserTest.cs" />
+    <Compile Include="Parser\Direct\DirectParserTest.cs" />
+    <Compile Include="Parser\Direct\DirectUser.cs" />
+    <Compile Include="Parser\DynamicOccurs\DynamicOccursParserTest.cs" />
     <Compile Include="Parser\ParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamFactoryTest.cs" />
@@ -190,6 +193,13 @@
     <EmbeddedResource Include="Parser\Delimited\d2_optionalField.txt" />
     <EmbeddedResource Include="Parser\Delimited\d3_padding.txt" />
     <EmbeddedResource Include="Parser\Delimited\delimited.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\DynamicOccurs\dynamicOccurs_mapping.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Direct\d1.txt" />
+    <EmbeddedResource Include="Parser\Direct\direct_mapping.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
