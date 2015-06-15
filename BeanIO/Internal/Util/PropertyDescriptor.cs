@@ -32,7 +32,9 @@ namespace BeanIO.Internal.Util
         {
             _name = property.Name;
             _field = null;
-            _property = property;
+            _property = getter != null && setter != null && !ReferenceEquals(property.GetMethod, getter) && !ReferenceEquals(property.SetMethod, setter)
+                            ? null
+                            : property;
             _getter = getter ?? property.GetMethod;
             _setter = setter ?? property.SetMethod;
         }
