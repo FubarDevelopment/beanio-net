@@ -23,7 +23,7 @@ namespace BeanIO.Parser.Collection
 
                 var text = new StringWriter();
                 factory.CreateWriter("dc1", text).Write(bean);
-                Assert.Equal("George,Gary,Jon,1,2,3,4" + Environment.NewLine, text.ToString());
+                Assert.Equal("George,Gary,Jon,1,2,3,4" + LineSeparator, text.ToString());
             }
             finally
             {
@@ -43,7 +43,7 @@ namespace BeanIO.Parser.Collection
 
                 var text = new StringWriter();
                 factory.CreateWriter("dc2", text).Write(new CollectionBean());
-                Assert.Equal(",," + Environment.NewLine, text.ToString());
+                Assert.Equal(",," + LineSeparator, text.ToString());
             }
             finally
             {
@@ -64,7 +64,7 @@ namespace BeanIO.Parser.Collection
 
                 var text = new StringWriter();
                 factory.CreateWriter("fc1", text).Write(bean);
-                Assert.Equal("001100024ABC " + Environment.NewLine, text.ToString());
+                Assert.Equal("001100024ABC " + LineSeparator, text.ToString());
 
                 bean = (CollectionBean)reader.Read();
                 Assert.Equal(new[] { 0, 400, 500 }, bean.Array);
@@ -72,11 +72,11 @@ namespace BeanIO.Parser.Collection
 
                 text = new StringWriter();
                 factory.CreateWriter("fc1", text).Write(bean);
-                Assert.Equal("000400500" + Environment.NewLine, text.ToString());
+                Assert.Equal("000400500" + LineSeparator, text.ToString());
 
                 text = new StringWriter();
                 factory.CreateWriter("fc1", text).Write(new CollectionBean());
-                Assert.Equal("000000000" + Environment.NewLine, text.ToString());
+                Assert.Equal("000000000" + LineSeparator, text.ToString());
             }
             finally
             {

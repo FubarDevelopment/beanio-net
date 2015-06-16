@@ -28,7 +28,7 @@ namespace BeanIO.Parser.Bean
 
                 var text = new StringWriter();
                 factory.CreateWriter("w1", text).Write(w);
-                Assert.Equal(",Widget1,1,2,Widget2,Widget3,3" + Environment.NewLine, text.ToString());
+                Assert.Equal(",Widget1,1,2,Widget2,Widget3,3" + LineSeparator, text.ToString());
             }
             finally
             {
@@ -51,7 +51,7 @@ namespace BeanIO.Parser.Bean
 
                 var text = new StringWriter();
                 factory.CreateWriter("w2", text).Write(w);
-                Assert.Equal("1,1M,1A,1AM,1B,1BM,2,2M,2A,2AM,2B,2BM,3" + Environment.NewLine, text.ToString());
+                Assert.Equal("1,1M,1A,1AM,1B,1BM,2,2M,2A,2AM,2B,2BM,3" + LineSeparator, text.ToString());
             }
             finally
             {
@@ -73,7 +73,7 @@ namespace BeanIO.Parser.Bean
 
                 var text = new StringWriter();
                 factory.CreateWriter("w3", text).Write(w);
-                Assert.Equal(" 1name1mode1" + Environment.NewLine, text.ToString());
+                Assert.Equal(" 1name1mode1" + LineSeparator, text.ToString());
 
                 w = (Widget)reader.Read();
                 Assert.Equal(1, w.Id);
@@ -100,12 +100,12 @@ namespace BeanIO.Parser.Bean
 
                 text = new StringWriter();
                 factory.CreateWriter("w3", text).Write(w);
-                Assert.Equal(" 1name1mode1 2name2mode2 3           4name4     " + Environment.NewLine, text.ToString());
+                Assert.Equal(" 1name1mode1 2name2mode2 3           4name4     " + LineSeparator, text.ToString());
 
                 w = (Widget)reader.Read();
                 text = new StringWriter();
                 factory.CreateWriter("w3", text).Write(w);
-                Assert.Equal(" 1name1mode1 2name2mode2 0           4name4mode4" + Environment.NewLine, text.ToString());
+                Assert.Equal(" 1name1mode1 2name2mode2 0           4name4mode4" + LineSeparator, text.ToString());
             }
             finally
             {
@@ -130,7 +130,7 @@ namespace BeanIO.Parser.Bean
 
                 var text = new StringWriter();
                 factory.CreateWriter("w4", text).Write(w);
-                Assert.Equal("1name12name2" + Environment.NewLine, text.ToString());
+                Assert.Equal("1name12name2" + LineSeparator, text.ToString());
 
                 w = (Widget)reader.Read();
                 Assert.NotNull(w.PartsMap);
@@ -140,7 +140,7 @@ namespace BeanIO.Parser.Bean
 
                 text = new StringWriter();
                 factory.CreateWriter("w4", text).Write(w);
-                Assert.Equal("1name12name23name3" + Environment.NewLine, text.ToString());
+                Assert.Equal("1name12name23name3" + LineSeparator, text.ToString());
             }
             finally
             {
@@ -162,7 +162,7 @@ namespace BeanIO.Parser.Bean
 
                 var text = new StringWriter();
                 factory.CreateWriter("w5", text).Write(map);
-                Assert.Equal("123name1name2name3" + Environment.NewLine, text.ToString());
+                Assert.Equal("123name1name2name3" + LineSeparator, text.ToString());
             }
             finally
             {
@@ -193,7 +193,7 @@ namespace BeanIO.Parser.Bean
 
             var text = new StringWriter();
             factory.CreateWriter("w6", text).Write(w);
-            Assert.Equal(string.Empty + Environment.NewLine, text.ToString());
+            Assert.Equal(string.Empty + LineSeparator, text.ToString());
 
             var part1 = new Widget()
                 {
@@ -204,13 +204,13 @@ namespace BeanIO.Parser.Bean
 
             text = new StringWriter();
             factory.CreateWriter("w6", text).Write(w);
-            Assert.Equal("1,part1" + Environment.NewLine, text.ToString());
+            Assert.Equal("1,part1" + LineSeparator, text.ToString());
 
             w.AddPart(null);
 
             text = new StringWriter();
             factory.CreateWriter("w6", text).Write(w);
-            Assert.Equal("1,part1,," + Environment.NewLine, text.ToString());
+            Assert.Equal("1,part1,," + LineSeparator, text.ToString());
 
             var part2 = new Widget()
             {
@@ -221,7 +221,7 @@ namespace BeanIO.Parser.Bean
 
             text = new StringWriter();
             factory.CreateWriter("w6", text).Write(w);
-            Assert.Equal("1,part1,,,2,part2" + Environment.NewLine, text.ToString());
+            Assert.Equal("1,part1,,,2,part2" + LineSeparator, text.ToString());
         }
 
         [Fact]
@@ -235,13 +235,13 @@ namespace BeanIO.Parser.Bean
 
             var text = new StringWriter();
             factory.CreateWriter("w7", text).Write(w);
-            Assert.Equal("1" + Environment.NewLine, text.ToString());
+            Assert.Equal("1" + LineSeparator, text.ToString());
 
             w.Model = "model";
 
             text = new StringWriter();
             factory.CreateWriter("w7", text).Write(w);
-            Assert.Equal("1,,model" + Environment.NewLine, text.ToString());
+            Assert.Equal("1,,model" + LineSeparator, text.ToString());
         }
 
         [Fact]
@@ -259,14 +259,14 @@ namespace BeanIO.Parser.Bean
 
             var text = new StringWriter();
             factory.CreateWriter("w8", text).Write(map);
-            Assert.Equal("R1,1,name1" + Environment.NewLine, text.ToString());
+            Assert.Equal("R1,1,name1" + LineSeparator, text.ToString());
 
             w.Id = 2;
             w.Name = "name2";
 
             text = new StringWriter();
             factory.CreateWriter("w8", text).Write(map);
-            Assert.Equal("R2,2,name2" + Environment.NewLine, text.ToString());
+            Assert.Equal("R2,2,name2" + LineSeparator, text.ToString());
 
             w.Id = 3;
             Assert.Throws<BeanWriterException>(
@@ -289,7 +289,7 @@ namespace BeanIO.Parser.Bean
 
                 var text = new StringWriter();
                 factory.CreateWriter("w9", text).Write(w);
-                Assert.Equal(" 1 1part1 2part2name " + Environment.NewLine, text.ToString());
+                Assert.Equal(" 1 1part1 2part2name " + LineSeparator, text.ToString());
             }
             finally
             {
@@ -355,7 +355,7 @@ namespace BeanIO.Parser.Bean
 
                 var text = new StringWriter();
                 factory.CreateWriter("w10", text).Write(map);
-                Assert.Equal("a b c d e f g h eof" + Environment.NewLine, text.ToString());
+                Assert.Equal("a b c d e f g h eof" + LineSeparator, text.ToString());
             }
             finally
             {

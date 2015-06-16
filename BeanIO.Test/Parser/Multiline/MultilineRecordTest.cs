@@ -19,7 +19,7 @@ namespace BeanIO.Parser.Multiline
             try
             {
                 // read a valid multi-line record
-                var order = Assert.IsType<Order>(reader.Read());
+                var order = Assert.IsType<Beans.Order>(reader.Read());
 
                 Assert.Equal(1, reader.LineNumber);
                 Assert.Equal(4, reader.RecordCount);
@@ -85,7 +85,7 @@ namespace BeanIO.Parser.Multiline
                 Assert.Equal(2, reader.Skip(2));
 
                 // read another valid record
-                order = Assert.IsType<Order>(reader.Read());
+                order = Assert.IsType<Beans.Order>(reader.Read());
                 Assert.Equal(13, reader.LineNumber);
                 Assert.Equal(3, reader.RecordCount);
                 Assert.Equal("orderGroup", reader.RecordName);
@@ -192,7 +192,7 @@ namespace BeanIO.Parser.Multiline
             try
             {
                 // read order #1
-                var order = Assert.IsType<Order>(reader.Read());
+                var order = Assert.IsType<Beans.Order>(reader.Read());
 
                 var itemMap = order.ItemMap;
                 Assert.Collection(
@@ -215,7 +215,7 @@ namespace BeanIO.Parser.Multiline
 
                 writer.Write(order);
 
-                order = Assert.IsType<Order>(reader.Read());
+                order = Assert.IsType<Beans.Order>(reader.Read());
                 Assert.NotNull(order.ItemMap);
                 Assert.Equal(3, order.ItemMap.Count);
 
@@ -274,7 +274,78 @@ namespace BeanIO.Parser.Multiline
         [Fact]
         public void TestEmptyRecordList()
         {
-            throw new NotImplementedException();
+            var factory = NewStreamFactory("BeanIO.Parser.Multiline.multiline_mapping.xml");
+            var reader = factory.CreateReader("ml6", LoadStream("ml6.txt"));
+            try
+            {
+                // read a valid multi-line record
+                var order = Assert.IsType<Beans.Order>(reader.Read());
+                Assert.Equal(1, reader.LineNumber);
+                Assert.Equal(1, reader.RecordCount);
+                Assert.Equal("orderGroup", reader.RecordName);
+
+                Assert.Null(order.Items);
+            }
+            finally
+            {
+                reader.Close();
+            }
+        }
+
+        [Fact]
+        public void TestInlineRecordMap()
+        {
+            var factory = NewStreamFactory("BeanIO.Parser.Multiline.multiline_mapping.xml");
+            var reader = factory.CreateReader("ml7", LoadStream("ml7.txt"));
+            try
+            {
+                var record = Assert.IsType<Dictionary<string, string>>(reader.Read());
+                Assert.Collection(
+                    record,
+                    item =>
+                        {
+                            Assert.Equal("key1", item.Key);
+                            Assert.Equal("value1", item.Value);
+                        },
+                    item =>
+                        {
+                            Assert.Equal("key2", item.Key);
+                            Assert.Equal("value2", item.Value);
+                        },
+                    item =>
+                        {
+                            Assert.Equal("key3", item.Key);
+                            Assert.Equal("value3", item.Value);
+                        });
+                var text = new StringWriter();
+                factory.CreateWriter("ml7", text).Write(record);
+                Assert.Equal(
+                    "key1,value1\n" +
+                    "key2,value2\n" +
+                    "key3,value3\n",
+                    text.ToString());
+            }
+            finally
+            {
+                reader.Close();
+            }
+        }
+
+        [Fact]
+        public void TestOptionalRecord()
+        {
+            var factory = NewStreamFactory("BeanIO.Parser.Multiline.multiline_mapping.xml");
+            var text = "CUSTGeorge" + LineSeparator;
+            var reader = factory.CreateReader("ml8", new StringReader(text));
+            var order = Assert.IsType<Beans.Order>(reader.Read());
+            Assert.NotNull(order.Customer);
+            Assert.Equal("CUST", order.Customer.Id);
+            Assert.Equal("George", order.Customer.FirstName);
+            Assert.Null(order.Shipper);
+
+            var output = new StringWriter();
+            factory.CreateWriter("ml8", output).Write(order);
+            Assert.Equal(text, output.ToString());
         }
 
         private static TextReader LoadStream(string fileName)

@@ -22,7 +22,7 @@ namespace BeanIO.Parser.Misc
 
                 var text = new StringWriter();
                 factory.CreateWriter("stream1", text).Write(map);
-                Assert.Equal("Joe,Smith" + Environment.NewLine, text.ToString());
+                Assert.Equal("Joe,Smith" + LineSeparator, text.ToString());
             }
             finally
             {
@@ -50,8 +50,8 @@ namespace BeanIO.Parser.Misc
                 writer.Write(map);
 
                 Assert.Equal(
-                    Environment.NewLine +
-                    "Joe,Smith" + Environment.NewLine,
+                    LineSeparator +
+                    "Joe,Smith" + LineSeparator,
                     text.ToString());
             }
             finally

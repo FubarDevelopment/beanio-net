@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using BeanIO.Config;
 
@@ -38,7 +39,7 @@ namespace BeanIO.Internal.Util
         [Fact]
         public void TestMissingProperty()
         {
-            Assert.Throws<BeanIOException>(() => StringUtil.DoPropertySubstitution("${missing}", (Properties)null));
+            Assert.Throws<ArgumentException>(() => StringUtil.DoPropertySubstitution("${missing}", (Properties)null));
         }
     }
 }

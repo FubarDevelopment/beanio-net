@@ -129,7 +129,7 @@ namespace BeanIO.Parser.FixedLength
 
                 var text = new StringWriter();
                 factory.CreateWriter("f3", text).Write(map);
-                Assert.Equal("00001     XXXXX" + Environment.NewLine, text.ToString());
+                Assert.Equal("00001     XXXXX" + LineSeparator, text.ToString());
 
                 map = Assert.IsType<Dictionary<string, object>>(reader.Read());
                 Assert.True(map.ContainsKey("field1"));
@@ -141,7 +141,7 @@ namespace BeanIO.Parser.FixedLength
 
                 text = new StringWriter();
                 factory.CreateWriter("f3", text).Write(map);
-                Assert.Equal("00002Value" + Environment.NewLine, text.ToString());
+                Assert.Equal("00002Value" + LineSeparator, text.ToString());
             }
             finally
             {
