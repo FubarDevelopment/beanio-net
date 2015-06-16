@@ -430,7 +430,7 @@ namespace BeanIO.Internal.Parser
 
             var pattern = MessageFactory.GetRecordErrorMessage(recordName, rule);
             var message = string.Format(Culture, pattern, messageParams);
-            _recordContext.AddRecordError(message);
+            errorContext.AddRecordError(message);
             return message;
         }
 
