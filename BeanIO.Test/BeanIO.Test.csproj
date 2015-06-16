@@ -136,6 +136,8 @@
     <Compile Include="Parser\Skip\SkippingParserTest.cs" />
     <Compile Include="Parser\Strict\StrictTest.cs" />
     <Compile Include="Parser\Substitution\PropertySubstitutionParserTest.cs" />
+    <Compile Include="Parser\Target\TargetTest.cs" />
+    <Compile Include="Parser\Template\TemplateParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamFactoryTest.cs" />
     <Compile Include="Types\CharacterTypeHandlerTest.cs" />
@@ -323,6 +325,18 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Parser\Substitution\substitution_mapping.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Target\targetAndClass.xml" />
+    <EmbeddedResource Include="Parser\Target\targetIsNotProperty.xml" />
+    <EmbeddedResource Include="Parser\Target\targetNotFound.xml" />
+    <EmbeddedResource Include="Parser\Target\targetRepeating.xml" />
+    <EmbeddedResource Include="Parser\Target\target_mapping.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Template\t1.txt" />
+    <EmbeddedResource Include="Parser\Template\t3.txt" />
+    <EmbeddedResource Include="Parser\Template\template_mapping.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
