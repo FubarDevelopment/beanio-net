@@ -105,7 +105,7 @@ namespace BeanIO.Internal.Util
                             if (value == null && valueBegin > 0)
                                 value = new string(cs, valueBegin + 1, i - valueBegin - 1);
                             if (value == null)
-                                throw new BeanIOException(string.Format("Unresolved property '{0}'", key));
+                                throw new ArgumentException(string.Format("Unresolved property '{0}'", key));
                             if (s == null)
                                 s = new StringBuilder(new string(cs, 0, keyBegin));
                             s.Append(value);
