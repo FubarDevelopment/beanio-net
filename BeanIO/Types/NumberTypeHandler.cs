@@ -15,6 +15,8 @@ namespace BeanIO.Types
     /// </remarks>
     public class NumberTypeHandler : CultureSupport, IConfigurableTypeHandler
     {
+        private static readonly CultureInfo _cultureEnUs = new CultureInfo("en-US");
+
         private Tuple<NumberStyles, string> _pattern;
 
         /// <summary>
@@ -28,6 +30,7 @@ namespace BeanIO.Types
             if (!numberType.GetTypeInfo().IsValueType)
                 throw new ArgumentOutOfRangeException("numberType");
             TargetType = numberType;
+            Culture = _cultureEnUs;
         }
 
         /// <summary>

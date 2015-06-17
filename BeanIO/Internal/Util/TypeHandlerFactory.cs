@@ -57,8 +57,8 @@ namespace BeanIO.Internal.Util
             _defaultFactory.RegisterHandlerFor(typeof(uint), () => new NumberTypeHandler(typeof(uint)));
             _defaultFactory.RegisterHandlerFor(typeof(ulong), () => new NumberTypeHandler(typeof(ulong)));
 
-            _defaultFactory.RegisterHandlerFor(typeof(float), () => new NumberTypeHandler(typeof(float)));
-            _defaultFactory.RegisterHandlerFor(typeof(double), () => new NumberTypeHandler(typeof(double)));
+            _defaultFactory.RegisterHandlerFor(typeof(float), () => new SingleTypeHandler());
+            _defaultFactory.RegisterHandlerFor(typeof(double), () => new DoubleTypeHandler());
 
             _defaultFactory.RegisterHandlerFor(typeof(decimal), () => new NumberTypeHandler(typeof(decimal)));
 

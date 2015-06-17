@@ -263,6 +263,8 @@
     <Compile Include="Stream\Xml\XmlRecordUnmarshaller.cs" />
     <Compile Include="Stream\Xml\XmlWriter.cs" />
     <Compile Include="Types\DateTimeOffsetTypeHandler.cs" />
+    <Compile Include="Types\DoubleTypeHandler.cs" />
+    <Compile Include="Types\SingleTypeHandler.cs" />
     <Compile Include="Types\TimeTypeHandler.cs" />
     <Compile Include="Types\DateTypeHandler.cs" />
     <Compile Include="Types\IntegerTypeHandler.cs" />
