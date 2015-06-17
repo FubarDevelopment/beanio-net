@@ -12,6 +12,8 @@ namespace BeanIO.Internal.Util
     {
         private string _enumFormat;
 
+        private EnumFormatMode _enumFormatMode = EnumFormatMode.String;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EnumTypeHandler"/> class.
         /// </summary>
@@ -19,6 +21,14 @@ namespace BeanIO.Internal.Util
         public EnumTypeHandler(Type enumType)
         {
             TargetType = enumType;
+        }
+
+        private enum EnumFormatMode
+        {
+            Format,
+            String,
+            LowerString,
+            UpperString,
         }
 
         /// <summary>
@@ -55,8 +65,15 @@ namespace BeanIO.Internal.Util
         {
             if (value == null)
                 return null;
-            if (string.IsNullOrEmpty(_enumFormat))
-                return value.ToString();
+            switch (_enumFormatMode)
+            {
+                case EnumFormatMode.LowerString:
+                    return value.ToString().ToLowerInvariant();
+                case EnumFormatMode.UpperString:
+                    return value.ToString().ToUpperInvariant();
+                case EnumFormatMode.String:
+                    return value.ToString();
+            }
             return Enum.Format(TargetType, value, _enumFormat);
         }
 
@@ -70,11 +87,29 @@ namespace BeanIO.Internal.Util
             if (properties.TryGetValue("format", out format))
             {
                 if (string.IsNullOrEmpty(format) || format == "name")
+                {
+                    _enumFormatMode = EnumFormatMode.Format;
                     _enumFormat = "g";
+                }
                 else if (string.Equals(format, "toString", StringComparison.OrdinalIgnoreCase))
+                {
+                    _enumFormatMode = EnumFormatMode.String;
                     _enumFormat = null;
+                }
+                else if (string.Equals(format, "toLower", StringComparison.OrdinalIgnoreCase))
+                {
+                    _enumFormatMode = EnumFormatMode.LowerString;
+                    _enumFormat = null;
+                }
+                else if (string.Equals(format, "toUpper", StringComparison.OrdinalIgnoreCase))
+                {
+                    _enumFormatMode = EnumFormatMode.UpperString;
+                    _enumFormat = null;
+                }
                 else
+                {
                     throw new BeanIOConfigurationException(string.Format("Invalid format '{0}', expected 'toString' or 'name' (default)", format));
+                }
             }
         }
     }
