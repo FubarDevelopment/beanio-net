@@ -138,6 +138,11 @@
     <Compile Include="Parser\Substitution\PropertySubstitutionParserTest.cs" />
     <Compile Include="Parser\Target\TargetTest.cs" />
     <Compile Include="Parser\Template\TemplateParserTest.cs" />
+    <Compile Include="Parser\Trim\TrimTest.cs" />
+    <Compile Include="Parser\Types\ObjectRecord.cs" />
+    <Compile Include="Parser\Types\PrimitiveRecord.cs" />
+    <Compile Include="Parser\Types\TypeEnum.cs" />
+    <Compile Include="Parser\Types\TypeHandlerLocaleTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamFactoryTest.cs" />
     <Compile Include="Types\CharacterTypeHandlerTest.cs" />
@@ -284,7 +289,9 @@
     <EmbeddedResource Include="Parser\Imports\import_mapping3.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Parser\Indeterminates\indeterminates_mapping.xml" />
+    <EmbeddedResource Include="Parser\Indeterminates\indeterminates_mapping.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Parser\InlineMaps\map_mapping.xml" />
@@ -337,6 +344,19 @@
     <EmbeddedResource Include="Parser\Template\t1.txt" />
     <EmbeddedResource Include="Parser\Template\t3.txt" />
     <EmbeddedResource Include="Parser\Template\template_mapping.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Trim\trim_mapping.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Types\t1_valid.txt" />
+    <EmbeddedResource Include="Parser\Types\t2_valid.txt" />
+    <EmbeddedResource Include="Parser\Types\t3_valid.txt" />
+    <EmbeddedResource Include="Parser\Types\t4_valid.txt" />
+    <EmbeddedResource Include="Parser\Types\t5_valid.txt" />
+    <EmbeddedResource Include="Parser\Types\t7_valid.txt" />
+    <EmbeddedResource Include="Parser\Types\t8_valid.txt" />
+    <EmbeddedResource Include="Parser\Types\types.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
