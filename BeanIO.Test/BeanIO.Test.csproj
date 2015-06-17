@@ -143,6 +143,7 @@
     <Compile Include="Parser\Types\PrimitiveRecord.cs" />
     <Compile Include="Parser\Types\TypeEnum.cs" />
     <Compile Include="Parser\Types\TypeHandlerLocaleTest.cs" />
+    <Compile Include="Parser\Types\TypesParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamFactoryTest.cs" />
     <Compile Include="Types\CharacterTypeHandlerTest.cs" />

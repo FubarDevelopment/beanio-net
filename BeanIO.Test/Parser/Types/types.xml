@@ -3,13 +3,13 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.beanio.org/2012/03 http://www.beanio.org/2012/03/mapping.xsd">
 
-  <typeHandler type="NodaTime.LocalDate" format="delimited" class="BeanIO.Types.DateTypeHandler, BeanIO">
+  <typeHandler type="date" format="delimited" class="BeanIO.Types.DateTypeHandler, BeanIO">
     <property name="pattern" value="yyyy-MM-dd" />
   </typeHandler>
-  <typeHandler type="NodaTime.LocalDate" format="csv" class="BeanIO.Types.DateTypeHandler, BeanIO">
+  <typeHandler type="date" format="csv" class="BeanIO.Types.DateTypeHandler, BeanIO">
     <property name="pattern" value="MMddyy" />
   </typeHandler>
-  <typeHandler name="NodaTime.LocalTime" class="BeanIO.Types.TimeTypeHandler, BeanIO">
+  <typeHandler name="time" class="BeanIO.Types.TimeTypeHandler, BeanIO">
     <property name="pattern" value="hh:mm:ss" />
   </typeHandler>
 
@@ -25,31 +25,29 @@
       <field name="stringValue" />
       <field name="dateValue" />
       <field name="booleanValue" />
-      <field name="bigIntegerValue" />
-      <field name="bigDecimalValue" />
-      <field name="calendar" />
+      <field name="decimalValue" />
       <field name="id" />
       <field name="url" />
       <field name="enum1" />
-      <field name="enum2" format="toString" />
+      <field name="enum2" format="toLower" />
     </record>
   </stream>
 
   <stream name="t2" format="csv">
-    <record name="record" class="BeanIO.Parser.Types.PrimitiveRecord">
+    <record name="record" class="BeanIO.Parser.Types.PrimitiveRecord, BeanIO.Test">
       <field name="byteValue" default="0" />
       <field name="shortValue" default="0" />
-      <field name="intValue" default="0" />
+      <field name="integerValue" default="0" />
       <field name="longValue" default="0" />
       <field name="floatValue" default="0" />
       <field name="doubleValue" default="0" />
-      <field name="charValue" default="x" />
+      <field name="characterValue" default="x" />
       <field name="booleanValue" default="false" />
     </record>
   </stream>
 
   <stream name="t3" format="csv">
-    <typeHandler type="NodaTime.LocalDate" class="BeanIO.Types.DateTypeHandler, BeanIO">
+    <typeHandler type="NodaTime.LocalDate, NodaTime" class="BeanIO.Types.DateTypeHandler, BeanIO">
       <property name="pattern" value="MM-dd-yyyy" />
     </typeHandler>
     <record name="record" class="BeanIO.Parser.Types.ObjectRecord, BeanIO.Test">
@@ -75,7 +73,7 @@
 
   <stream name="t6" format="csv">
     <record name="record" class="BeanIO.Parser.Types.PrimitiveRecord, BeanIO.Test">
-      <field name="intValue" />
+      <field name="integerValue" />
     </record>
   </stream>
 
@@ -88,8 +86,7 @@
       <field name="floatValue" format="0.00x" />
       <field name="doubleValue" format="0.00x" />
       <field name="dateValue" format='yyyy-MM-dd' />
-      <field name="bigIntegerValue" format="0x" />
-      <field name="bigDecimalValue" format="0.00x" />
+      <field name="decimalValue" format="0.00x" />
     </record>
   </stream>
 
