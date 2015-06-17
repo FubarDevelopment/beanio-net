@@ -15,8 +15,6 @@ namespace BeanIO.Types
     /// </remarks>
     public class NumberTypeHandler : CultureSupport, IConfigurableTypeHandler
     {
-        private static readonly CultureInfo _cultureEnUs = new CultureInfo("en-US");
-
         private Tuple<NumberStyles, string> _pattern;
 
         /// <summary>
@@ -30,7 +28,6 @@ namespace BeanIO.Types
             if (!numberType.GetTypeInfo().IsValueType)
                 throw new ArgumentOutOfRangeException("numberType");
             TargetType = numberType;
-            Culture = _cultureEnUs;
         }
 
         /// <summary>
@@ -102,9 +99,27 @@ namespace BeanIO.Types
                     var parts = formatSetting.Split(new[] { ';' }, 2);
                     var format = parts[0];
                     var stylesAsString = parts.Length == 2 ? parts[1] : string.Empty;
-                    var styles = (stylesAsString == string.Empty)
-                                     ? (NumberStyles)Enum.Parse(typeof(NumberStyles), stylesAsString, true)
-                                     : NumberStyles.Number;
+                    NumberStyles styles;
+                    if (string.IsNullOrEmpty(stylesAsString))
+                    {
+                        styles = NumberStyles.Number;
+                        if (format.IndexOf(',') != -1)
+                            styles |= NumberStyles.AllowThousands;
+                        if (format.IndexOf('.') != -1)
+                            styles |= NumberStyles.AllowDecimalPoint;
+                        if (format.IndexOfAny(new[] { 'e', 'E' }) != -1)
+                            styles |= NumberStyles.AllowExponent;
+                        if (format.IndexOf('-') != -1)
+                            styles |= NumberStyles.AllowLeadingSign;
+                        if (format.IndexOfAny(new[] { '(', ')' }) != -1)
+                            styles |= NumberStyles.AllowParentheses;
+                        if (format.IndexOfAny(new[] { 'x', 'X' }) != -1)
+                            styles |= NumberStyles.AllowHexSpecifier;
+                    }
+                    else
+                    {
+                        styles = (NumberStyles)Enum.Parse(typeof(NumberStyles), stylesAsString, true);
+                    }
                     Pattern = Tuple.Create(styles, format);
                 }
             }
