@@ -77,11 +77,14 @@ namespace BeanIO.Types
         {
             if (value == null)
                 return null;
-            if (Pattern == null)
-                return value.ToString();
             var fmt = value as IFormattable;
             if (fmt == null)
                 return value.ToString();
+            if (Pattern == null)
+            {
+                var dec = Convert.ToDecimal(value);
+                return dec.ToString(Culture);
+            }
             return fmt.ToString(Pattern.Item2, Culture);
         }
 
@@ -113,7 +116,8 @@ namespace BeanIO.Types
                             styles |= NumberStyles.AllowLeadingSign;
                         if (format.IndexOfAny(new[] { '(', ')' }) != -1)
                             styles |= NumberStyles.AllowParentheses;
-                        if (format.IndexOfAny(new[] { 'x', 'X' }) != -1)
+                        var hasDigitPlaceholders = format.IndexOfAny(new[] { '0', '#' }) != -1;
+                        if (!hasDigitPlaceholders && styles == NumberStyles.Number && format.IndexOfAny(new[] { 'x', 'X' }) != -1)
                             styles |= NumberStyles.AllowHexSpecifier;
                     }
                     else

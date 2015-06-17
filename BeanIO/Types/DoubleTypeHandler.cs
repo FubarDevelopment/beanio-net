@@ -17,6 +17,26 @@ namespace BeanIO.Types
         }
 
         /// <summary>
+        /// Formats an object into field text.
+        /// </summary>
+        /// <param name="value">The value to format, which may be null</param>
+        /// <returns>The formatted field text, or <code>null</code> to indicate the value is not present</returns>
+        public override string Format(object value)
+        {
+            if (value == null)
+                return null;
+            var fmt = value as IFormattable;
+            if (fmt == null)
+                return value.ToString();
+            if (Pattern == null)
+            {
+                var v = (double)value;
+                return v.ToString(Culture);
+            }
+            return fmt.ToString(Pattern.Item2, Culture);
+        }
+
+        /// <summary>
         /// Parses a string to a number by converting the text first to a decimal number and than
         /// to the target type.
         /// </summary>
