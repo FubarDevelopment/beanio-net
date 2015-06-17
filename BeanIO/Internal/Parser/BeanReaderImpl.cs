@@ -81,13 +81,15 @@ namespace BeanIO.Internal.Parser
                 {
                     // if an exception is thrown when parsing a dependent record,
                     // there is little chance of recovery
-                    OnError(ex);
+                    if (!OnError(ex))
+                        throw;
                 }
                 catch (BeanIOException ex)
                 {
                     // wrap the generic exception in a BeanReaderException
                     var e = new BeanReaderException("Fatal BeanIOException caught", ex);
-                    OnError(e);
+                    if (!OnError(e))
+                        throw;
                 }
             }
         }

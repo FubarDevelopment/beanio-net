@@ -32,16 +32,17 @@ namespace BeanIO
         /// Triggers the <see cref="Error" /> event or throws the exception when no event handler was given.
         /// </summary>
         /// <param name="exception">The exception to be passed to the event.</param>
-        protected virtual void OnError(BeanReaderException exception)
+        protected virtual bool OnError(BeanReaderException exception)
         {
             var tmp = Error;
 
             if (tmp == null)
-                throw exception;
+                return false;
 
             try
             {
                 tmp(new BeanReaderErrorEventArgs(exception));
+                return true;
             }
             catch (BeanReaderException)
             {
