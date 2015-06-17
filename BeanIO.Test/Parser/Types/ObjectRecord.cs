@@ -30,7 +30,7 @@ namespace BeanIO.Parser.Types
 
         public string StringValue { get; set; }
 
-        public LocalDate DateValue { get; set; }
+        public LocalDate? DateValue { get; set; }
 
         public bool? BooleanValue { get; set; }
 
@@ -40,8 +40,8 @@ namespace BeanIO.Parser.Types
 
         public Uri Url { get; set; }
 
-        public TypeEnum Enum1 { get; set; }
+        public TypeEnum? Enum1 { get; set; }
 
-        public TypeEnum Enum2 { get; set; }
+        public TypeEnum? Enum2 { get; set; }
     }
 }

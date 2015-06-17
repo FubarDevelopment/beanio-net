@@ -3,14 +3,14 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.beanio.org/2012/03 http://www.beanio.org/2012/03/mapping.xsd">
 
-  <typeHandler type="date" format="delimited" class="BeanIO.Types.DateTypeHandler, BeanIO">
+  <typeHandler type="NodaTime.LocalDate, NodaTime" format="delimited" class="BeanIO.Types.DateTypeHandler, BeanIO">
     <property name="pattern" value="yyyy-MM-dd" />
   </typeHandler>
-  <typeHandler type="date" format="csv" class="BeanIO.Types.DateTypeHandler, BeanIO">
+  <typeHandler type="NodaTime.LocalDate, NodaTime" format="csv" class="BeanIO.Types.DateTypeHandler, BeanIO">
     <property name="pattern" value="MMddyy" />
   </typeHandler>
   <typeHandler name="time" class="BeanIO.Types.TimeTypeHandler, BeanIO">
-    <property name="pattern" value="hh:mm:ss" />
+    <property name="pattern" value="HH:mm:ss" />
   </typeHandler>
 
   <stream name="t1" format="csv">
@@ -43,6 +43,7 @@
       <field name="doubleValue" default="0" />
       <field name="characterValue" default="x" />
       <field name="booleanValue" default="false" />
+      <field name="decimalValue" default="0" />
     </record>
   </stream>
 
