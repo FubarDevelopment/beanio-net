@@ -144,6 +144,12 @@
     <Compile Include="Parser\Types\TypeEnum.cs" />
     <Compile Include="Parser\Types\TypeHandlerLocaleTest.cs" />
     <Compile Include="Parser\Types\TypesParserTest.cs" />
+    <Compile Include="Parser\Validation\FieldValidationTest.cs" />
+    <Compile Include="Parser\Validation\v1_messages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>v1_messages.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamFactoryTest.cs" />
     <Compile Include="Types\CharacterTypeHandlerTest.cs" />
@@ -161,6 +167,10 @@
     <EmbeddedResource Include="Parser\FixedLength\f2_messages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>f2_messages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Parser\Validation\v1_messages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>v1_messages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>
@@ -358,6 +368,10 @@
     <EmbeddedResource Include="Parser\Types\t7_valid.txt" />
     <EmbeddedResource Include="Parser\Types\t8_valid.txt" />
     <EmbeddedResource Include="Parser\Types\types.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Validation\v1.txt" />
+    <EmbeddedResource Include="Parser\Validation\validation.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
