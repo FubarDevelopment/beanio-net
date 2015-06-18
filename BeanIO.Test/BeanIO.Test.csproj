@@ -162,6 +162,7 @@
     <Compile Include="Parser\Xml\Multiline\XmlMultilineRecordTest.cs" />
     <Compile Include="Parser\Xml\Namespace\XmlNamespaceTest.cs" />
     <Compile Include="Parser\Xml\Person.cs" />
+    <Compile Include="Parser\Xml\Record\XmlRecordTest.cs" />
     <Compile Include="Parser\Xml\TestXmlWriterFactory.cs" />
     <Compile Include="Parser\Xml\XmlParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -458,6 +459,10 @@
     <EmbeddedResource Include="Parser\Xml\Namespace\ns_noMatchingGroup.xml" />
     <EmbeddedResource Include="Parser\Xml\Namespace\ns_noMatchingRecord.xml" />
     <EmbeddedResource Include="Parser\Xml\Namespace\ns_noMatchingStream.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Xml\Record\r1_in.xml" />
+    <EmbeddedResource Include="Parser\Xml\Record\record_mapping.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
