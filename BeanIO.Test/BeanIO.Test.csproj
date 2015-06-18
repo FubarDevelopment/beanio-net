@@ -160,6 +160,7 @@
     <Compile Include="Parser\Xml\Male.cs" />
     <Compile Include="Parser\Xml\Marshaller\XmlMarshallerTest.cs" />
     <Compile Include="Parser\Xml\Multiline\XmlMultilineRecordTest.cs" />
+    <Compile Include="Parser\Xml\Namespace\XmlNamespaceTest.cs" />
     <Compile Include="Parser\Xml\Person.cs" />
     <Compile Include="Parser\Xml\TestXmlWriterFactory.cs" />
     <Compile Include="Parser\Xml\XmlParserTest.cs" />
@@ -436,6 +437,27 @@
     <EmbeddedResource Include="Parser\Xml\Multiline\ml1_in.xml" />
     <EmbeddedResource Include="Parser\Xml\Multiline\ml1_out.xml" />
     <EmbeddedResource Include="Parser\Xml\Multiline\xml_multiline_mapping.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Xml\Namespace\namespace_mapping.xml" />
+    <EmbeddedResource Include="Parser\Xml\Namespace\ns10_out.xml" />
+    <EmbeddedResource Include="Parser\Xml\Namespace\ns11_out.xml" />
+    <EmbeddedResource Include="Parser\Xml\Namespace\ns12_out.xml" />
+    <EmbeddedResource Include="Parser\Xml\Namespace\ns13_out.xml" />
+    <EmbeddedResource Include="Parser\Xml\Namespace\ns1_in.xml" />
+    <EmbeddedResource Include="Parser\Xml\Namespace\ns1_out.xml" />
+    <EmbeddedResource Include="Parser\Xml\Namespace\ns2_out.xml" />
+    <EmbeddedResource Include="Parser\Xml\Namespace\ns3_out.xml" />
+    <EmbeddedResource Include="Parser\Xml\Namespace\ns4_out.xml" />
+    <EmbeddedResource Include="Parser\Xml\Namespace\ns5_out.xml" />
+    <EmbeddedResource Include="Parser\Xml\Namespace\ns6_out.xml" />
+    <EmbeddedResource Include="Parser\Xml\Namespace\ns7_out.xml" />
+    <EmbeddedResource Include="Parser\Xml\Namespace\ns8_out.xml" />
+    <EmbeddedResource Include="Parser\Xml\Namespace\ns9_out.xml" />
+    <EmbeddedResource Include="Parser\Xml\Namespace\ns_noMatchingField.xml" />
+    <EmbeddedResource Include="Parser\Xml\Namespace\ns_noMatchingGroup.xml" />
+    <EmbeddedResource Include="Parser\Xml\Namespace\ns_noMatchingRecord.xml" />
+    <EmbeddedResource Include="Parser\Xml\Namespace\ns_noMatchingStream.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
