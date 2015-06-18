@@ -29,7 +29,7 @@ namespace BeanIO.Types
                     IsLenient = false,
                     Pattern = "MM-dd-yyyy",
                 };
-            handler.Parse("01-01-2000abc");
+            Assert.Throws<TypeConversionException>(() => handler.Parse("01-01-2000abc"));
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace BeanIO.Types
                 IsLenient = false,
                 Pattern = "MM-dd-yyyy",
             };
-            Assert.Throws<FormatException>(() => handler.Parse("01-32-2000"));
+            Assert.Throws<TypeConversionException>(() => handler.Parse("01-32-2000"));
         }
 
         [Fact]

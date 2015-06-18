@@ -171,11 +171,11 @@ namespace BeanIO.Types
                     var dt = DateFormat.Parse(text).GetValueOrThrow();
                     result = IsLenient ? dt.InZoneLeniently(tz) : dt.InZoneStrictly(tz);
                 }
-                catch (UnparsableValueException)
+                catch (UnparsableValueException ex)
                 {
                     // TODO: Use C# 6 exception filter
-                    if (Pattern == null)
-                        throw;
+                    if (Pattern == null || !IsLenient)
+                        throw new TypeConversionException(ex.Message, ex);
 
                     var temp = text.Substring(0, Math.Min(Pattern.Length, text.Length));
                     var dt = DateFormat.Parse(temp).GetValueOrThrow();
@@ -184,27 +184,34 @@ namespace BeanIO.Types
             }
             catch (UnparsableValueException)
             {
-                // Ignore this error and try again with System.DateTime
-                DateTime dt;
-                if (Pattern == null)
+                try
                 {
-                    dt = DateTime.Parse(text, Culture, DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AssumeUniversal);
-                }
-                else
-                {
-                    try
-                    {
-                        var temp = text.Substring(0, Math.Min(Pattern.Length, text.Length));
-                        dt = DateTime.ParseExact(temp, Pattern, Culture, DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AssumeUniversal);
-                        dt = dt.ToUniversalTime();
-                    }
-                    catch (FormatException)
+                    // Ignore this error and try again with System.DateTime
+                    DateTime dt;
+                    if (Pattern == null || !IsLenient)
                     {
                         dt = DateTime.Parse(text, Culture, DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AssumeUniversal);
                     }
+                    else
+                    {
+                        try
+                        {
+                            var temp = text.Substring(0, Math.Min(Pattern.Length, text.Length));
+                            dt = DateTime.ParseExact(temp, Pattern, Culture, DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AssumeUniversal);
+                            dt = dt.ToUniversalTime();
+                        }
+                        catch (FormatException)
+                        {
+                            dt = DateTime.Parse(text, Culture, DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AssumeUniversal);
+                        }
+                    }
+                    var utcOffset = tz.GetUtcOffset(Instant.FromDateTimeUtc(dt));
+                    result = ZonedDateTime.FromDateTimeOffset(new DateTimeOffset(dt, utcOffset.ToTimeSpan()));
                 }
-                var utcOffset = tz.GetUtcOffset(Instant.FromDateTimeUtc(dt));
-                result = ZonedDateTime.FromDateTimeOffset(new DateTimeOffset(dt, utcOffset.ToTimeSpan()));
+                catch (FormatException ex)
+                {
+                    throw new TypeConversionException(ex.Message, ex);
+                }
             }
             return result;
         }

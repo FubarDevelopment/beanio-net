@@ -28,12 +28,7 @@ namespace BeanIO.Parser.Validation
                 TestValid(info, "requiredWithTrim", "value");
                 TestInvalid(info, "requiredWithTrim", "     ", "required at line 8");
                 TestValid(info, "typeHandler", new DateTime(1970, 1, 1));
-
-                // TODO: Fix the following test part
-                info.Reader.Skip(1);
-                info.LineNumber = info.LineNumber + 1;
-                ////TestInvalid(info, "typeHandler", "010170a", "type at line 10");
-
+                TestInvalid(info, "typeHandler", "010170a", "type at line 10");
                 TestValid(info, "requiredWithoutTrim", " ");
                 TestInvalid(info, "requiredWithoutTrim", string.Empty, "required at line 12");
                 TestValid(info, "literal", "value");
