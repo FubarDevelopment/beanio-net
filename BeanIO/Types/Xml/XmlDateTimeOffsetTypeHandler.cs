@@ -30,9 +30,13 @@ namespace BeanIO.Types.Xml
             string pattern;
             if (Pattern == null)
             {
-                var formatString = new StringBuilder("yyyy-MM-ddTHH:mm:ss");
-                if (OutputMilliseconds)
-                    formatString.Append(".fff");
+                var formatString = new StringBuilder("yyyy-MM-dd");
+                if (OutputMilliseconds || dto.Value.TimeOfDay != TimeSpan.Zero)
+                {
+                    formatString.Append("THH:mm:ss");
+                    if (OutputMilliseconds)
+                        formatString.Append(".fff");
+                }
                 if (TimeZone != null)
                     formatString.Append("K");
                 pattern = formatString.ToString();

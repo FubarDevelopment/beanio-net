@@ -15,6 +15,38 @@ namespace BeanIO.Types.Xml
     /// </summary>
     public abstract class AbstractXmlDateTypeHandler : DateTypeHandlerSupport
     {
+        private static readonly string[] _defaultTimeFormats =
+            {
+                "H:mm",
+                "H:mm",
+                "H:mm:ss",
+                "H:mm:ss.f",
+                "H:mm:ss.ff",
+                "H:mm:ss.fff",
+                "H:mm:ss.ffff",
+                "H:mm:ss.fffff",
+                "H:mm:ss.ffffff",
+                "HH:mm",
+                "HH:mm:ss",
+                "HH:mm:ss.f",
+                "HH:mm:ss.ff",
+                "HH:mm:ss.fff",
+                "HH:mm:ss.ffff",
+                "HH:mm:ss.fffff",
+                "HH:mm:ss.ffffff",
+            };
+
+        private static readonly string[] _defaultTimeZoneFormats =
+            {
+                "z",
+                "zz",
+                "zzz",
+                "zzzz",
+                "zzzzz",
+                "zzzzzz",
+                "zzzzzzz",
+            };
+
         private string[] _dateTimeOffsetFormats;
 
         /// <summary>
@@ -38,11 +70,21 @@ namespace BeanIO.Types.Xml
             get { return typeof(DateTimeOffset); }
         }
 
+        protected static IEnumerable<string> DefaultTimeZoneFormats
+        {
+            get { return _defaultTimeZoneFormats; }
+        }
+
+        protected static IEnumerable<string> DefaultTimeFormats
+        {
+            get { return _defaultTimeFormats; }
+        }
+
         protected abstract string DatatypeQName { get; }
 
         private string[] DateTimeOffsetFormats
         {
-            get { return _dateTimeOffsetFormats ?? (_dateTimeOffsetFormats = CreateFormats(IsLenient).ToArray()); }
+            get { return _dateTimeOffsetFormats ?? (_dateTimeOffsetFormats = CreateDefaultFormats(IsLenient).ToArray()); }
         }
 
         /// <summary>
@@ -99,7 +141,7 @@ namespace BeanIO.Types.Xml
         public override void Configure(Properties properties)
         {
             base.Configure(properties);
-            _dateTimeOffsetFormats = CreateFormats(IsLenient).ToArray();
+            _dateTimeOffsetFormats = CreateDefaultFormats(IsLenient).ToArray();
         }
 
         /// <summary>
@@ -115,55 +157,48 @@ namespace BeanIO.Types.Xml
             return TimeSpan.FromMilliseconds(date.Zone.GetUtcOffset(date.ToInstant()).Milliseconds);
         }
 
-        private static IEnumerable<string> CreateFormats(bool lenient)
+        protected virtual IEnumerable<string> CreateDefaultFormats(bool lenient)
         {
-            var timeComponents = new[]
-                {
-                    string.Empty,
-                    "H:mm",
-                    "HH:mm",
-                    "HH:mm:ss",
-                    "HH:mm:ss.f",
-                    "HH:mm:ss.ff",
-                    "HH:mm:ss.fff",
-                    "HH:mm:ss.ffff",
-                    "HH:mm:ss.fffff",
-                    "HH:mm:ss.ffffff",
-                };
-            var timezoneComponents = new[]
-                {
-                    string.Empty,
-                    "z",
-                    "zz",
-                    "zzz",
-                    "zzzz",
-                    "zzzzz",
-                    "zzzzzz",
-                    "zzzzzzz",
-                };
-            foreach (var timeComponent in timeComponents)
+            foreach (var timeComponent in _defaultTimeFormats)
             {
-                foreach (var timezoneComponent in timezoneComponents)
+                foreach (var timezoneComponent in _defaultTimeZoneFormats)
                 {
                     yield return string.Format(
-                        "yyyy-MM-dd{2}{0}{1}",
+                        "yyyy-MM-ddT{0}{1}",
                         timeComponent,
-                        timezoneComponent,
-                        !string.IsNullOrEmpty(timeComponent) ? "T" : string.Empty);
+                        timezoneComponent);
                 }
             }
+            foreach (var timeComponent in _defaultTimeFormats)
+            {
+                yield return string.Format(
+                    "yyyy-MM-ddT{0}",
+                    timeComponent);
+            }
+            foreach (var timezoneComponent in _defaultTimeZoneFormats)
+            {
+                yield return string.Format(
+                    "yyyy-MM-dd{0}",
+                    timezoneComponent);
+            }
+            yield return "yyyy-MM-dd";
             if (lenient)
             {
-                foreach (var timeComponent in timeComponents.Where(x => !string.IsNullOrEmpty(x)))
+                foreach (var timeComponent in _defaultTimeFormats)
                 {
-                    foreach (var timezoneComponent in timezoneComponents)
+                    foreach (var timezoneComponent in _defaultTimeZoneFormats)
                     {
-                        var formatString = string.Format(
+                        yield return string.Format(
                             "{0}{1}",
                             timeComponent,
                             timezoneComponent);
-                        yield return formatString;
                     }
+                }
+                foreach (var timeComponent in _defaultTimeFormats)
+                {
+                    yield return string.Format(
+                        "{0}",
+                        timeComponent);
                 }
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 
@@ -68,7 +69,7 @@ namespace BeanIO.Types.Xml
             {
                 var formatString = new StringBuilder("HH:mm:ss");
                 if (OutputMilliseconds)
-                    formatString.Append(".fffffff");
+                    formatString.Append(".fff");
                 if (TimeZone != null)
                     formatString.Append("K");
                 pattern = formatString.ToString();
@@ -79,6 +80,21 @@ namespace BeanIO.Types.Xml
             }
 
             return XmlConvert.ToString(dto, pattern);
+        }
+
+        protected override IEnumerable<string> CreateDefaultFormats(bool lenient)
+        {
+            foreach (var defaultTimeFormat in DefaultTimeFormats)
+            {
+                foreach (var defaultTimeZoneFormat in DefaultTimeZoneFormats)
+                {
+                    yield return string.Format("{0}{1}", defaultTimeFormat, defaultTimeZoneFormat);
+                }
+            }
+            foreach (var defaultTimeFormat in DefaultTimeFormats)
+            {
+                yield return defaultTimeFormat;
+            }
         }
     }
 }

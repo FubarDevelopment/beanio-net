@@ -31,6 +31,8 @@ namespace BeanIO.Types.Xml
             var dto = (DateTimeOffset?)base.Parse(text);
             if (dto == null)
                 return null;
+            if (dto.Value.TimeOfDay != TimeSpan.Zero)
+                throw new TypeConversionException(string.Format("Invalid XML {0} - no time component allowed", DatatypeQName));
             return ZonedDateTime.FromDateTimeOffset(dto.Value).Date;
         }
 
