@@ -150,6 +150,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>v1_messages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Parser\WriteMode\IPerson.cs" />
+    <Compile Include="Parser\WriteMode\WriteModeParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamFactoryTest.cs" />
     <Compile Include="Types\CharacterTypeHandlerTest.cs" />
@@ -372,6 +374,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Parser\Validation\v1.txt" />
     <EmbeddedResource Include="Parser\Validation\validation.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\WriteMode\writemode_mapping.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

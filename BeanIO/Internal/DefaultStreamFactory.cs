@@ -64,7 +64,7 @@ namespace BeanIO.Internal
                 case AccessMode.Read:
                     return stream.CreateBeanReader(input, culture);
                 default:
-                    throw new BeanIOConfigurationException(string.Format("Write mode not supported for stream mapping '{0}'", name));
+                    throw new BeanIOException(string.Format("Write mode not supported for stream mapping '{0}'", name));
             }
         }
 
@@ -86,7 +86,7 @@ namespace BeanIO.Internal
                 case AccessMode.Read:
                     return stream.CreateUnmarshaller(culture);
                 default:
-                    throw new BeanIOConfigurationException(string.Format("Write mode not supported for stream mapping '{0}'", name));
+                    throw new BeanIOException(string.Format("Write mode not supported for stream mapping '{0}'", name));
             }
         }
 
@@ -105,7 +105,7 @@ namespace BeanIO.Internal
                 case AccessMode.Write:
                     return stream.CreateBeanWriter(output);
                 default:
-                    throw new BeanIOConfigurationException(string.Format("Read mode not supported for stream mapping '{0}'", name));
+                    throw new BeanIOException(string.Format("Read mode not supported for stream mapping '{0}'", name));
             }
         }
 
@@ -123,7 +123,7 @@ namespace BeanIO.Internal
                 case AccessMode.Write:
                     return stream.CreateMarshaller();
                 default:
-                    throw new BeanIOConfigurationException(string.Format("Read mode not supported for stream mapping '{0}'", name));
+                    throw new BeanIOException(string.Format("Read mode not supported for stream mapping '{0}'", name));
             }
         }
 
@@ -176,7 +176,7 @@ namespace BeanIO.Internal
         {
             Parser.Stream stream;
             if (!_contextMap.TryGetValue(name, out stream))
-                throw new BeanIOConfigurationException(string.Format("No stream mapping configured for name '{0}'", name));
+                throw new BeanIOException(string.Format("No stream mapping configured for name '{0}'", name));
             return stream;
         }
     }

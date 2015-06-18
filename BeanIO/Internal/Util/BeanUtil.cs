@@ -140,8 +140,27 @@ namespace BeanIO.Internal.Util
 
             public PropertyDescriptor Create()
             {
-                _getterInfo = LoadMethodInfo(_getter, "Getter");
-                _setterInfo = LoadMethodInfo(_setter, "Setter");
+                if (!string.IsNullOrEmpty(_getter))
+                {
+                    _getterInfo = LoadMethodInfo(_getter);
+                    if (_getterInfo == null)
+                    {
+                        _getterInfo = FindGetter(RemovePrefixForGetter(_getter));
+                        if (_getterInfo == null)
+                            ThrowMethodMissingException("Getter", _getter);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(_setter))
+                {
+                    _setterInfo = LoadMethodInfo(_setter);
+                    if (_setterInfo == null)
+                    {
+                        _setterInfo = FindSetter(RemovePrefixForSetter(_setter));
+                        if (_setterInfo == null)
+                            ThrowMethodMissingException("Setter", _setter);
+                    }
+                }
 
                 var propertyNamesToTest = new[]
                     {
@@ -232,7 +251,7 @@ namespace BeanIO.Internal.Util
                 return null;
             }
 
-            private MethodInfo FindSetterForGetter(string getterName)
+            private string RemovePrefixForGetter(string getterName)
             {
                 var name = getterName;
                 if (name.StartsWith("get", StringComparison.Ordinal) || name.StartsWith("Get", StringComparison.Ordinal))
@@ -243,16 +262,28 @@ namespace BeanIO.Internal.Util
                 {
                     name = name.Substring(2);
                 }
-                return FindSetter(name);
+                return name;
             }
 
-            private MethodInfo FindGetterForSetter(string setterName)
+            private string RemovePrefixForSetter(string setterName)
             {
                 var name = setterName;
                 if (name.StartsWith("set", StringComparison.Ordinal) || name.StartsWith("Set", StringComparison.Ordinal))
                 {
                     name = name.Substring(3);
                 }
+                return name;
+            }
+
+            private MethodInfo FindSetterForGetter(string getterName)
+            {
+                var name = RemovePrefixForGetter(getterName);
+                return FindSetter(name);
+            }
+
+            private MethodInfo FindGetterForSetter(string setterName)
+            {
+                var name = RemovePrefixForSetter(setterName);
                 return FindGetter(name);
             }
 
@@ -262,10 +293,12 @@ namespace BeanIO.Internal.Util
                     {
                         Introspector.Capitalize(name),
                         "Get" + Introspector.Capitalize(name),
+                        "get_" + Introspector.Capitalize(name),
+                        "get_" + name,
                     };
                 foreach (var getterName in probableGetterNames)
                 {
-                    var info = _typeInfo.GetDeclaredMethod(getterName);
+                    var info = LoadMethodInfo(getterName);
                     if (info != null && info.GetParameters().Length == 0)
                     {
                         return info;
@@ -280,10 +313,12 @@ namespace BeanIO.Internal.Util
                     {
                         Introspector.Capitalize(name),
                         "Set" + Introspector.Capitalize(name),
+                        "set_" + Introspector.Capitalize(name),
+                        "set_" + name,
                     };
                 foreach (var setterName in probableSetterNames)
                 {
-                    var info = _typeInfo.GetDeclaredMethod(setterName);
+                    var info = LoadMethodInfo(setterName);
                     if (info != null && info.GetParameters().Length == 1)
                     {
                         return info;
@@ -292,7 +327,7 @@ namespace BeanIO.Internal.Util
                 return null;
             }
 
-            private MethodInfo LoadMethodInfo(string name, string getterOrSetter)
+            private MethodInfo LoadMethodInfo(string name)
             {
                 if (string.IsNullOrEmpty(name))
                     return null;
@@ -307,15 +342,26 @@ namespace BeanIO.Internal.Util
                         break;
                     typeInfo = typeInfo.BaseType.GetTypeInfo();
                 }
-                if (methodInfo == null)
+                return methodInfo;
+            }
+
+            [ContractAnnotation("=> halt")]
+            private void ThrowMethodMissingException(string getterOrSetter, string name)
+            {
+                if (string.IsNullOrEmpty(_property))
                     throw new BeanIOConfigurationException(
                         string.Format(
-                            "{3} '{0}' not found for property/field '{1}' of type '{2}'",
-                            _getter,
-                            _property,
-                            _typeInfo.AssemblyQualifiedName,
+                            "{2} '{0}' not found in type '{1}'",
+                            name,
+                            _typeInfo.GetType().GetAssemblyQualifiedName(),
                             getterOrSetter));
-                return methodInfo;
+                throw new BeanIOConfigurationException(
+                    string.Format(
+                        "{3} '{0}' not found for property/field '{1}' of type '{2}'",
+                        name,
+                        _property,
+                        _typeInfo.GetType().GetAssemblyQualifiedName(),
+                        getterOrSetter));
             }
         }
 
