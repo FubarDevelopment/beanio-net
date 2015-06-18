@@ -154,6 +154,15 @@
     <Compile Include="Parser\WriteMode\WriteModeParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamFactoryTest.cs" />
+    <Compile Include="Stream\CsvReaderTest.cs" />
+    <Compile Include="Stream\CsvRecordParserTest.cs" />
+    <Compile Include="Stream\CsvWriterTest.cs" />
+    <Compile Include="Stream\DelimitedReaderTest.cs" />
+    <Compile Include="Stream\DelimitedRecordParserTest.cs" />
+    <Compile Include="Stream\DelimitedWriterTest.cs" />
+    <Compile Include="Stream\FixedLengthReaderTest.cs" />
+    <Compile Include="Stream\FixedLengthWriterTest.cs" />
+    <Compile Include="Stream\StrictStringReader.cs" />
     <Compile Include="Types\CharacterTypeHandlerTest.cs" />
     <Compile Include="Types\DateTypeHandlerTest.cs" />
     <Compile Include="Types\NumberTypeHandlerTest.cs" />
