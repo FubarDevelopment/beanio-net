@@ -493,7 +493,9 @@ namespace BeanIO.Internal.Compiler
         {
             var property = FinalizeRecordMain(config);
             if (config.IsBound && config.IsRepeating)
+            {
                 FinalizeRecordIteration(config, property);
+            }
         }
 
         protected virtual IProperty FinalizeRecordMain(RecordConfig config)

@@ -145,7 +145,7 @@ namespace BeanIO.Internal.Parser
                 return false;
             if (value == null)
                 return IsMatchNull;
-            if (PropertyType.IsAssignableFrom(value.GetType()))
+            if (!PropertyType.IsAssignableFrom(value.GetType()))
                 return false;
             if (!IsIdentifier)
                 return true;
@@ -199,7 +199,7 @@ namespace BeanIO.Internal.Parser
         /// <returns>the new bean object</returns>
         protected virtual object NewInstance()
         {
-            return PropertyType.NewInstance();
+            return PropertyType.Instantiate(null).NewInstance();
         }
 
         private void Backfill(IList collection, Component to)

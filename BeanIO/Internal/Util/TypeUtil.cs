@@ -411,9 +411,19 @@ namespace BeanIO.Internal.Util
         /// <returns>The constructed generic type from <paramref name="type"/></returns>
         public static Type Instantiate(this Type type, Type with)
         {
-            if (!with.IsConstructedGenericType)
-                return type;
             var typeInfo = type.GetTypeInfo();
+            if (!type.IsConstructedGenericType && typeInfo.IsGenericTypeDefinition && (with == null || with == typeof(object)))
+            {
+                if (type.IsMap())
+                    return type.MakeGenericType(typeof(string), typeof(object));
+                return type.MakeGenericType(typeof(object));
+            }
+            
+            if (with == null || !with.IsConstructedGenericType)
+            {
+                return type;
+            }
+            
             var withInfo = with.GetTypeInfo();
             if (typeInfo.GenericTypeParameters.Length != withInfo.GenericTypeArguments.Length)
                 throw new InvalidOperationException("The number of type arguments must match");
