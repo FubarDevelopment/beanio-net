@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -141,19 +142,24 @@ namespace BeanIO.Internal.Parser.Format.Xml
             // create an element for this node
             var ns = Namespace ?? (IsNamespaceAware ? string.Empty : (parentElement == null ? string.Empty : parentElement.Name.NamespaceName));
             var element = new XElement(XNamespace.Get(ns) + LocalName.ToConvertedName(ctx.NameConversionMode));
+            var annotations = new List<object>();
+
             if (!IsNamespaceAware)
             {
-                element.SetAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.IgnoreNamespace));
+                annotations.Add(new NamespaceModeAnnotation(NamespaceHandlingMode.IgnoreNamespace));
             }
             else if (string.IsNullOrEmpty(Prefix))
             {
-                element.SetAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.DefaultNamespace));
+                annotations.Add(new NamespaceModeAnnotation(NamespaceHandlingMode.DefaultNamespace));
             }
             else
             {
                 element.SetAttributeValue(XNamespace.Xmlns + Prefix, Namespace);
             }
+
             element = XElement.Parse(element.ToString());
+            foreach (var annotation in annotations)
+                element.SetAnnotation(annotation);
 
             // append the new element to its parent
             parent.Add(element);
