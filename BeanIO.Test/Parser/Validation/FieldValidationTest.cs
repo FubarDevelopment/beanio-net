@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 using JetBrains.Annotations;
@@ -15,7 +14,7 @@ namespace BeanIO.Parser.Validation
         public void TestFieldValidation()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Validation.validation.xml");
-            var reader = factory.CreateReader("v1", LoadStream("v1.txt"));
+            var reader = factory.CreateReader("v1", LoadReader("v1.txt"));
             try
             {
                 var info = new ValidationInfo(reader);
@@ -38,16 +37,6 @@ namespace BeanIO.Parser.Validation
             {
                 reader.Close();
             }
-        }
-
-        private static TextReader LoadStream(string fileName)
-        {
-            var resourceName = string.Format("BeanIO.Parser.Validation.{0}", fileName);
-            var asm = typeof(FieldValidationTest).Assembly;
-            var resStream = asm.GetManifestResourceStream(resourceName);
-            if (resStream == null)
-                throw new ArgumentOutOfRangeException("fileName");
-            return new StreamReader(resStream);
         }
 
         private void TestValid(ValidationInfo info, [UsedImplicitly] string recordName, object expected)

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System;
 
 using Xunit;
 
@@ -139,15 +138,6 @@ namespace BeanIO.Parser.Groups
             Test("g8", "g8_repeatingStream.txt");
         }
 
-        private static TextReader LoadStream(string fileName)
-        {
-            var resourceName = string.Format("BeanIO.Parser.Groups.{0}", fileName);
-            var asm = typeof(GroupParserTest).Assembly;
-            var resStream = asm.GetManifestResourceStream(resourceName);
-            Debug.Assert(resStream != null, "resStream != null");
-            return new StreamReader(resStream);
-        }
-
         /// <summary>
         /// Fully parses the given file.
         /// </summary>
@@ -167,7 +157,7 @@ namespace BeanIO.Parser.Groups
         private void Test(string name, string fileName, int errorLineNumber)
         {
             var factory = NewStreamFactory("BeanIO.Parser.Groups.group.xml");
-            var reader = factory.CreateReader(name, LoadStream(fileName));
+            var reader = factory.CreateReader(name, LoadReader(fileName));
             try
             {
                 while (reader.Read() != null)

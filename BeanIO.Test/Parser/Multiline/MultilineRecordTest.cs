@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 
 using BeanIO.Beans;
@@ -15,7 +14,7 @@ namespace BeanIO.Parser.Multiline
         public void TestRecordGroup()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Multiline.multiline_mapping.xml");
-            var reader = factory.CreateReader("ml1", LoadStream("ml1.txt"));
+            var reader = factory.CreateReader("ml1", LoadReader("ml1.txt"));
             try
             {
                 // read a valid multi-line record
@@ -102,7 +101,7 @@ namespace BeanIO.Parser.Multiline
         public void TestNestedRecordGroup()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Multiline.multiline_mapping.xml");
-            var reader = factory.CreateReader("ml2", LoadStream("ml2.txt"));
+            var reader = factory.CreateReader("ml2", LoadReader("ml2.txt"));
             try
             {
                 // read batch #1
@@ -142,7 +141,7 @@ namespace BeanIO.Parser.Multiline
         public void TestNestedRecordGroupCollections()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Multiline.multiline_mapping.xml");
-            var reader = factory.CreateReader("ml3", LoadStream("ml3.txt"));
+            var reader = factory.CreateReader("ml3", LoadReader("ml3.txt"));
             try
             {
                 // read batch #1
@@ -188,7 +187,7 @@ namespace BeanIO.Parser.Multiline
         public void TestRecordMap()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Multiline.multiline_mapping.xml");
-            var reader = factory.CreateReader("ml4", LoadStream("ml4.txt"));
+            var reader = factory.CreateReader("ml4", LoadReader("ml4.txt"));
             try
             {
                 // read order #1
@@ -243,7 +242,7 @@ namespace BeanIO.Parser.Multiline
         public void TestNestedRecordGroupNonCollection()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Multiline.multiline_mapping.xml");
-            var reader = factory.CreateReader("ml5", LoadStream("ml5.txt"));
+            var reader = factory.CreateReader("ml5", LoadReader("ml5.txt"));
             try
             {
                 var batch = Assert.IsType<OrderBatch>(reader.Read());
@@ -275,7 +274,7 @@ namespace BeanIO.Parser.Multiline
         public void TestEmptyRecordList()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Multiline.multiline_mapping.xml");
-            var reader = factory.CreateReader("ml6", LoadStream("ml6.txt"));
+            var reader = factory.CreateReader("ml6", LoadReader("ml6.txt"));
             try
             {
                 // read a valid multi-line record
@@ -296,7 +295,7 @@ namespace BeanIO.Parser.Multiline
         public void TestInlineRecordMap()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Multiline.multiline_mapping.xml");
-            var reader = factory.CreateReader("ml7", LoadStream("ml7.txt"));
+            var reader = factory.CreateReader("ml7", LoadReader("ml7.txt"));
             try
             {
                 var record = Assert.IsType<Dictionary<string, string>>(reader.Read());
@@ -346,15 +345,6 @@ namespace BeanIO.Parser.Multiline
             var output = new StringWriter();
             factory.CreateWriter("ml8", output).Write(order);
             Assert.Equal(text, output.ToString());
-        }
-
-        private static TextReader LoadStream(string fileName)
-        {
-            var resourceName = string.Format("BeanIO.Parser.Multiline.{0}", fileName);
-            var asm = typeof(MultilineRecordTest).Assembly;
-            var resStream = asm.GetManifestResourceStream(resourceName);
-            Debug.Assert(resStream != null, "resStream != null");
-            return new StreamReader(resStream);
         }
     }
 }

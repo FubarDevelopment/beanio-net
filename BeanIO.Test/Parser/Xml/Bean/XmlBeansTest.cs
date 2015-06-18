@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 
 using Xunit;
@@ -21,7 +20,7 @@ namespace BeanIO.Parser.Xml.Bean
         [Fact]
         public void TestNillableBean()
         {
-            var reader = _factory.CreateReader("stream", LoadStream("b1_in.xml"));
+            var reader = _factory.CreateReader("stream", LoadReader("b1_in.xml"));
 
             StringWriter s = new StringWriter();
             var writer = _factory.CreateWriter("stream", s);
@@ -54,7 +53,7 @@ namespace BeanIO.Parser.Xml.Bean
         [Fact]
         public void TestOptionalBeanWithNamespace()
         {
-            var reader = _factory.CreateReader("stream2", LoadStream("b2_in.xml"));
+            var reader = _factory.CreateReader("stream2", LoadReader("b2_in.xml"));
 
             StringWriter s = new StringWriter();
             var writer = _factory.CreateWriter("stream2", s);
@@ -91,7 +90,7 @@ namespace BeanIO.Parser.Xml.Bean
         [Fact]
         public void TestBeanCollection()
         {
-            var reader = _factory.CreateReader("stream3", LoadStream("b3_in.xml"));
+            var reader = _factory.CreateReader("stream3", LoadReader("b3_in.xml"));
 
             StringWriter s = new StringWriter();
             var writer = _factory.CreateWriter("stream3", s);
@@ -138,7 +137,7 @@ namespace BeanIO.Parser.Xml.Bean
         [Fact]
         public void TestXmlTypeNoneBean()
         {
-            var reader = _factory.CreateReader("stream4", LoadStream("b4_in.xml"));
+            var reader = _factory.CreateReader("stream4", LoadReader("b4_in.xml"));
 
             StringWriter s = new StringWriter();
             var writer = _factory.CreateWriter("stream4", s);
@@ -175,7 +174,7 @@ namespace BeanIO.Parser.Xml.Bean
         [Fact]
         public void TestUnboundNillableSegment()
         {
-            var reader = _factory.CreateReader("stream5", LoadStream("b5_in.xml"));
+            var reader = _factory.CreateReader("stream5", LoadReader("b5_in.xml"));
 
             StringWriter s = new StringWriter();
             var writer = _factory.CreateWriter("stream5", s);
@@ -203,15 +202,6 @@ namespace BeanIO.Parser.Xml.Bean
             {
                 reader.Close();
             }
-        }
-
-        private static TextReader LoadStream(string fileName)
-        {
-            var resourceName = string.Format("BeanIO.Parser.Xml.Bean.{0}", fileName);
-            var asm = typeof(XmlBeansTest).Assembly;
-            var resStream = asm.GetManifestResourceStream(resourceName);
-            Debug.Assert(resStream != null, "resStream != null");
-            return new StreamReader(resStream);
         }
     }
 }

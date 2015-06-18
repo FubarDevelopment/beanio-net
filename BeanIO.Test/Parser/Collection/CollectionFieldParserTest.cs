@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
-
-using BeanIO.Parser.Bean;
 
 using Xunit;
 
@@ -14,7 +11,7 @@ namespace BeanIO.Parser.Collection
         public void TestCollectionDelimited()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Collection.collection.xml");
-            var reader = factory.CreateReader("dc1", LoadStream("dc1_valid.txt"));
+            var reader = factory.CreateReader("dc1", LoadReader("dc1_valid.txt"));
             try
             {
                 var bean = (CollectionBean)reader.Read();
@@ -35,7 +32,7 @@ namespace BeanIO.Parser.Collection
         public void TestNullPrimitive()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Collection.collection.xml");
-            var reader = factory.CreateReader("dc2", LoadStream("dc2_nullPrimitive.txt"));
+            var reader = factory.CreateReader("dc2", LoadReader("dc2_nullPrimitive.txt"));
             try
             {
                 var bean = (CollectionBean)reader.Read();
@@ -55,7 +52,7 @@ namespace BeanIO.Parser.Collection
         public void TestCollectionFixedLength()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Collection.collection.xml");
-            var reader = factory.CreateReader("fc1", LoadStream("fc1_valid.txt"));
+            var reader = factory.CreateReader("fc1", LoadReader("fc1_valid.txt"));
             try
             {
                 var bean = (CollectionBean)reader.Read();
@@ -82,15 +79,6 @@ namespace BeanIO.Parser.Collection
             {
                 reader.Close();
             }
-        }
-
-        private static TextReader LoadStream(string fileName)
-        {
-            var resourceName = string.Format("BeanIO.Parser.Collection.{0}", fileName);
-            var asm = typeof(BeanParserTest).Assembly;
-            var resStream = asm.GetManifestResourceStream(resourceName);
-            Debug.Assert(resStream != null, "resStream != null");
-            return new StreamReader(resStream);
         }
     }
 }

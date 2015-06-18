@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.IO;
 
 using Xunit;
 
@@ -12,7 +10,7 @@ namespace BeanIO.Parser.IgnoreUnidentifiedRecords
         public void TestIgnoreUnidentifiedRecords()
         {
             var factory = NewStreamFactory("BeanIO.Parser.IgnoreUnidentifiedRecords.ignore_mapping.xml");
-            var reader = factory.CreateReader("stream1", LoadStream("ignoreUnidentifiedRecords1.txt"));
+            var reader = factory.CreateReader("stream1", LoadReader("ignoreUnidentifiedRecords1.txt"));
             try
             {
                 reader.Read();
@@ -35,15 +33,6 @@ namespace BeanIO.Parser.IgnoreUnidentifiedRecords
             {
                 reader.Close();
             }
-        }
-
-        private static TextReader LoadStream(string fileName)
-        {
-            var resourceName = string.Format("BeanIO.Parser.IgnoreUnidentifiedRecords.{0}", fileName);
-            var asm = typeof(IgnoreUnidentifiedRecordsParserTest).Assembly;
-            var resStream = asm.GetManifestResourceStream(resourceName);
-            Debug.Assert(resStream != null, "resStream != null");
-            return new StreamReader(resStream);
         }
     }
 }

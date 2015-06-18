@@ -14,7 +14,7 @@ namespace BeanIO.Parser.Types
         public void TestObjectHandlers()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Types.types.xml");
-            var reader = factory.CreateReader("t1", LoadStream("t1_valid.txt"));
+            var reader = factory.CreateReader("t1", LoadReader("t1_valid.txt"));
             try
             {
                 var record = Assert.IsType<ObjectRecord>(reader.Read());
@@ -74,7 +74,7 @@ namespace BeanIO.Parser.Types
         public void TestPrimitiveHandlers()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Types.types.xml");
-            var reader = factory.CreateReader("t2", LoadStream("t2_valid.txt"));
+            var reader = factory.CreateReader("t2", LoadReader("t2_valid.txt"));
             try
             {
                 var record = Assert.IsType<PrimitiveRecord>(reader.Read());
@@ -121,7 +121,7 @@ namespace BeanIO.Parser.Types
         public void TestStreamTypeHandler()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Types.types.xml");
-            var reader = factory.CreateReader("t3", LoadStream("t3_valid.txt"));
+            var reader = factory.CreateReader("t3", LoadReader("t3_valid.txt"));
             try
             {
                 var record = Assert.IsType<ObjectRecord>(reader.Read());
@@ -143,7 +143,7 @@ namespace BeanIO.Parser.Types
         public void TestNamedTypeHandler()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Types.types.xml");
-            var reader = factory.CreateReader("t4", LoadStream("t4_valid.txt"));
+            var reader = factory.CreateReader("t4", LoadReader("t4_valid.txt"));
             try
             {
                 var map = Assert.IsType<Dictionary<string, object>>(reader.Read());
@@ -165,7 +165,7 @@ namespace BeanIO.Parser.Types
         public void TestStringTypeHandler()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Types.types.xml");
-            var reader = factory.CreateReader("t5", LoadStream("t5_valid.txt"));
+            var reader = factory.CreateReader("t5", LoadReader("t5_valid.txt"));
             try
             {
                 var map = Assert.IsType<Dictionary<string, object>>(reader.Read());
@@ -199,7 +199,7 @@ namespace BeanIO.Parser.Types
         public void TestFormats()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Types.types.xml");
-            var reader = factory.CreateReader("t7", LoadStream("t7_valid.txt"));
+            var reader = factory.CreateReader("t7", LoadReader("t7_valid.txt"));
             try
             {
                 var record = Assert.IsType<ObjectRecord>(reader.Read());
@@ -228,7 +228,7 @@ namespace BeanIO.Parser.Types
         public void TestFormatSpecificTypeHandler()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Types.types.xml");
-            var reader = factory.CreateReader("t8", LoadStream("t8_valid.txt"));
+            var reader = factory.CreateReader("t8", LoadReader("t8_valid.txt"));
             try
             {
                 var record = Assert.IsType<ObjectRecord>(reader.Read());
@@ -244,16 +244,6 @@ namespace BeanIO.Parser.Types
             {
                 reader.Close();
             }
-        }
-
-        private static TextReader LoadStream(string fileName)
-        {
-            var resourceName = string.Format("BeanIO.Parser.Types.{0}", fileName);
-            var asm = typeof(TypesParserTest).Assembly;
-            var resStream = asm.GetManifestResourceStream(resourceName);
-            if (resStream == null)
-                throw new ArgumentOutOfRangeException("fileName");
-            return new StreamReader(resStream);
         }
     }
 }

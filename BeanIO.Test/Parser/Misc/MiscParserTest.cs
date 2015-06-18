@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 
 using Xunit;
@@ -13,7 +12,7 @@ namespace BeanIO.Parser.Misc
         public void TestRecordWithoutFieldsClassNotSet()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Misc.misc_mapping.xml");
-            var reader = factory.CreateReader("stream1", LoadStream("m1.txt"));
+            var reader = factory.CreateReader("stream1", LoadReader("m1.txt"));
             try
             {
                 var map = Assert.IsType<Dictionary<string, object>>(reader.Read());
@@ -34,7 +33,7 @@ namespace BeanIO.Parser.Misc
         public void TestRecordWithoutFieldsClassSet()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Misc.misc_mapping.xml");
-            var reader = factory.CreateReader("stream2", LoadStream("m1.txt"));
+            var reader = factory.CreateReader("stream2", LoadReader("m1.txt"));
             try
             {
                 var text = new StringWriter();
@@ -64,7 +63,7 @@ namespace BeanIO.Parser.Misc
         public void TestRecordWithPropertyOnlyClassSet()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Misc.misc_mapping.xml");
-            var reader = factory.CreateReader("stream3", LoadStream("m1.txt"));
+            var reader = factory.CreateReader("stream3", LoadReader("m1.txt"));
             try
             {
                 var map = Assert.IsType<Dictionary<string, object>>(reader.Read());
@@ -85,7 +84,7 @@ namespace BeanIO.Parser.Misc
         public void TestTypeValidationClassNotSet()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Misc.misc_mapping.xml");
-            var reader = factory.CreateReader("stream4", LoadStream("m1.txt"));
+            var reader = factory.CreateReader("stream4", LoadReader("m1.txt"));
             try
             {
                 AssertFieldError(reader, 1, "header", "field1", "FirstName", "Type conversion error: Invalid date");
@@ -104,7 +103,7 @@ namespace BeanIO.Parser.Misc
         public void TestRecordWithPropertyOnlyClassNotSet()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Misc.misc_mapping.xml");
-            var reader = factory.CreateReader("stream5", LoadStream("m1.txt"));
+            var reader = factory.CreateReader("stream5", LoadReader("m1.txt"));
             try
             {
                 var map = Assert.IsType<Dictionary<string, object>>(reader.Read());
@@ -143,15 +142,6 @@ namespace BeanIO.Parser.Misc
 
             var m = factory.CreateMarshaller("stream6");
             Assert.Equal("Header1,Header2,Header3", m.Marshal("header", null).ToString());
-        }
-
-        private static TextReader LoadStream(string fileName)
-        {
-            var resourceName = string.Format("BeanIO.Parser.Misc.{0}", fileName);
-            var asm = typeof(MiscParserTest).Assembly;
-            var resStream = asm.GetManifestResourceStream(resourceName);
-            Debug.Assert(resStream != null, "resStream != null");
-            return new StreamReader(resStream);
         }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading;
+﻿using System.Linq;
 
 using Xunit;
 
@@ -13,7 +10,7 @@ namespace BeanIO.Parser.Strict
         public void TestRecordLengthStrict()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Strict.strict_mapping.xml");
-            var reader = factory.CreateReader("s1_strict", LoadStream("s1_invalidRecordLength.txt"));
+            var reader = factory.CreateReader("s1_strict", LoadReader("s1_invalidRecordLength.txt"));
             try
             {
                 AssertRecordError(reader, 3, "detail", "Too many fields, expected 3 maximum");
@@ -28,7 +25,7 @@ namespace BeanIO.Parser.Strict
         public void TestRecordLengthNotStrict()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Strict.strict_mapping.xml");
-            var reader = factory.CreateReader("s1_not_strict", LoadStream("s1_invalidRecordLength.txt"));
+            var reader = factory.CreateReader("s1_not_strict", LoadReader("s1_invalidRecordLength.txt"));
             try
             {
                 reader.Read();
@@ -43,7 +40,7 @@ namespace BeanIO.Parser.Strict
         public void TestRecordSequenceStrict()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Strict.strict_mapping.xml");
-            var reader = factory.CreateReader("s1_strict", LoadStream("s1_invalidSequence.txt"));
+            var reader = factory.CreateReader("s1_strict", LoadReader("s1_invalidSequence.txt"));
             try
             {
                 var ex = Assert.Throws<UnexpectedRecordException>(() => reader.Read());
@@ -63,7 +60,7 @@ namespace BeanIO.Parser.Strict
         public void TestRecordSequenceNotStrict()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Strict.strict_mapping.xml");
-            var reader = factory.CreateReader("s1_not_strict", LoadStream("s1_invalidSequence.txt"));
+            var reader = factory.CreateReader("s1_not_strict", LoadReader("s1_invalidSequence.txt"));
             try
             {
                 reader.Read();
@@ -72,15 +69,6 @@ namespace BeanIO.Parser.Strict
             {
                 reader.Close();
             }
-        }
-
-        private static TextReader LoadStream(string fileName)
-        {
-            var resourceName = string.Format("BeanIO.Parser.Strict.{0}", fileName);
-            var asm = typeof(StrictTest).Assembly;
-            var resStream = asm.GetManifestResourceStream(resourceName);
-            Debug.Assert(resStream != null, "resStream != null");
-            return new StreamReader(resStream);
         }
     }
 }

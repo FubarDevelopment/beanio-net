@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.IO;
 
 using Xunit;
 
@@ -12,7 +11,7 @@ namespace BeanIO.Parser.Comments
         public void TestCsvComments()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Comments.comments_mapping.xml");
-            var reader = factory.CreateReader("c1", LoadStream("c1.txt"));
+            var reader = factory.CreateReader("c1", LoadReader("c1.txt"));
             try
             {
                 var map = (IDictionary)reader.Read();
@@ -37,14 +36,6 @@ namespace BeanIO.Parser.Comments
             {
                 reader.Close();
             }
-        }
-
-        private static TextReader LoadStream(string fileName)
-        {
-            var resourceName = string.Format("BeanIO.Parser.Comments.{0}", fileName);
-            var asm = typeof(CommentsParserTest).Assembly;
-            var resStream = asm.GetManifestResourceStream(resourceName);
-            return new StreamReader(resStream);
         }
     }
 }

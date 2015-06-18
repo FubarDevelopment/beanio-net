@@ -13,7 +13,7 @@ namespace BeanIO.Parser.Bean
         public void TestDelimitedPositions()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Bean.widget.xml");
-            var reader = factory.CreateReader("w1", LoadStream("w1_position.txt"));
+            var reader = factory.CreateReader("w1", LoadReader("w1_position.txt"));
             try
             {
                 var w = (Widget)reader.Read();
@@ -40,7 +40,7 @@ namespace BeanIO.Parser.Bean
         public void TestCollectionsAndDefaultDelmitedPositions()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Bean.widget.xml");
-            var reader = factory.CreateReader("w2", LoadStream("w2_collections.txt"));
+            var reader = factory.CreateReader("w2", LoadReader("w2_collections.txt"));
             try
             {
                 var w = (Widget)reader.Read();
@@ -63,7 +63,7 @@ namespace BeanIO.Parser.Bean
         public void TestFixedLengthAndOptionalFields()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Bean.widget.xml");
-            var reader = factory.CreateReader("w3", LoadStream("w3_fixedLength.txt"));
+            var reader = factory.CreateReader("w3", LoadReader("w3_fixedLength.txt"));
             try
             {
                 var w = (Widget)reader.Read();
@@ -117,7 +117,7 @@ namespace BeanIO.Parser.Bean
         public void TestFixedLengthMap()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Bean.widget.xml");
-            var reader = factory.CreateReader("w4", LoadStream("w4_map.txt"));
+            var reader = factory.CreateReader("w4", LoadReader("w4_map.txt"));
             try
             {
                 var w = (Widget)reader.Read();
@@ -152,7 +152,7 @@ namespace BeanIO.Parser.Bean
         public void TestFixedLengthOutOfOrder()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Bean.widget.xml");
-            var reader = factory.CreateReader("w5", LoadStream("w5_outOfOrder.txt"));
+            var reader = factory.CreateReader("w5", LoadReader("w5_outOfOrder.txt"));
             try
             {
                 var map = (IDictionary)reader.Read();
@@ -174,7 +174,7 @@ namespace BeanIO.Parser.Bean
         public void TestFieldError()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Bean.widget.xml");
-            var reader = factory.CreateReader("w6", LoadStream("w6_fieldError.txt"));
+            var reader = factory.CreateReader("w6", LoadReader("w6_fieldError.txt"));
             try
             {
                 AssertFieldError(reader, 1, "record1", "Id", 2, "A", "Type conversion error: Invalid Integer value 'A'");
@@ -280,7 +280,7 @@ namespace BeanIO.Parser.Bean
         public void TestFixedLengthCollection()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Bean.widget.xml");
-            var reader = factory.CreateReader("w9", LoadStream("w9_flcollections.txt"));
+            var reader = factory.CreateReader("w9", LoadReader("w9_flcollections.txt"));
             try
             {
                 var w = (Widget)reader.Read();
@@ -301,7 +301,7 @@ namespace BeanIO.Parser.Bean
         public void TestNestedBeans()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Bean.widget.xml");
-            var reader = factory.CreateReader("w10", LoadStream("w10_nestedBeans.txt"));
+            var reader = factory.CreateReader("w10", LoadReader("w10_nestedBeans.txt"));
             try
             {
                 reader.Read();
@@ -361,14 +361,6 @@ namespace BeanIO.Parser.Bean
             {
                 reader.Close();
             }
-        }
-
-        private static TextReader LoadStream(string fileName)
-        {
-            var resourceName = string.Format("BeanIO.Parser.Bean.{0}", fileName);
-            var asm = typeof(BeanParserTest).Assembly;
-            var resStream = asm.GetManifestResourceStream(resourceName);
-            return new StreamReader(resStream);
         }
     }
 }

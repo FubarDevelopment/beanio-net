@@ -18,6 +18,16 @@ namespace BeanIO.Parser
             get { return _lineSeparator; }
         }
 
+        public static System.IO.Stream LoadStream(string fileName)
+        {
+            return LoadStreamInternal(fileName);
+        }
+
+        public static TextReader LoadReader(string fileName)
+        {
+            return new StreamReader(LoadStreamInternal(fileName));
+        }
+
         /// <summary>
         /// Loads the contents of a resource into a String.
         /// </summary>
@@ -98,6 +108,22 @@ namespace BeanIO.Parser
                     Assert.Equal(message, s);
                 }
             }
+        }
+
+        private static System.IO.Stream LoadStreamInternal(string fileName)
+        {
+            var asm = typeof(AbstractParserTest).Assembly;
+            var resStream = asm.GetManifestResourceStream(fileName);
+            if (resStream == null)
+            {
+                var frame = new StackFrame(2, true);
+                var method = frame.GetMethod();
+                var resourceName = string.Format("{0}.{1}", method.DeclaringType.Namespace, fileName);
+                resStream = asm.GetManifestResourceStream(resourceName);
+            }
+            if (resStream == null)
+                throw new ArgumentOutOfRangeException("fileName");
+            return resStream;
         }
     }
 }

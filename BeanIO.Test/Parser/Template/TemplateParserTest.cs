@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 
 using Xunit;
 
@@ -12,7 +10,7 @@ namespace BeanIO.Parser.Template
         public void TestRecordTemplate()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Template.template_mapping.xml");
-            var reader = factory.CreateReader("stream1", LoadStream("t1.txt"));
+            var reader = factory.CreateReader("stream1", LoadReader("t1.txt"));
             try
             {
                 var map = Assert.IsType<Dictionary<string, object>>(reader.Read());
@@ -30,7 +28,7 @@ namespace BeanIO.Parser.Template
         public void TestBeanTemplate()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Template.template_mapping.xml");
-            var reader = factory.CreateReader("stream2", LoadStream("t1.txt"));
+            var reader = factory.CreateReader("stream2", LoadReader("t1.txt"));
             try
             {
                 var map = Assert.IsType<Dictionary<string, object>>(reader.Read());
@@ -50,7 +48,7 @@ namespace BeanIO.Parser.Template
         public void TestIncludeTemplateFromRecord()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Template.template_mapping.xml");
-            var reader = factory.CreateReader("stream3", LoadStream("t3.txt"));
+            var reader = factory.CreateReader("stream3", LoadReader("t3.txt"));
             try
             {
                 var map = Assert.IsType<Dictionary<string, object>>(reader.Read());
@@ -63,15 +61,6 @@ namespace BeanIO.Parser.Template
             {
                 reader.Close();
             }
-        }
-
-        private static TextReader LoadStream(string fileName)
-        {
-            var resourceName = string.Format("BeanIO.Parser.Template.{0}", fileName);
-            var asm = typeof(TemplateParserTest).Assembly;
-            var resStream = asm.GetManifestResourceStream(resourceName);
-            Debug.Assert(resStream != null, "resStream != null");
-            return new StreamReader(resStream);
         }
     }
 }

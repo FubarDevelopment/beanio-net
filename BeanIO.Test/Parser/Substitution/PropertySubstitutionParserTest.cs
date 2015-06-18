@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 
 using BeanIO.Config;
 
@@ -53,15 +51,6 @@ namespace BeanIO.Parser.Substitution
         {
             var factory = StreamFactory.NewInstance();
             Assert.Throws<BeanIOConfigurationException>(() => factory.Load(LoadStream("substitution_mapping.xml")));
-        }
-
-        private static System.IO.Stream LoadStream(string fileName)
-        {
-            var resourceName = string.Format("BeanIO.Parser.Substitution.{0}", fileName);
-            var asm = typeof(PropertySubstitutionParserTest).Assembly;
-            var resStream = asm.GetManifestResourceStream(resourceName);
-            Debug.Assert(resStream != null, "resStream != null");
-            return resStream;
         }
     }
 }

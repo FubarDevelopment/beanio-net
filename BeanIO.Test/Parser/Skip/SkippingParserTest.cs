@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
+﻿using System;
 
 using Xunit;
 
@@ -12,7 +10,7 @@ namespace BeanIO.Parser.Skip
         public void TestSkip()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Skip.skip_mapping.xml");
-            var reader = factory.CreateReader("s1", LoadStream("s1.txt"));
+            var reader = factory.CreateReader("s1", LoadReader("s1.txt"));
             try
             {
                 Assert.Equal(0, reader.Skip(0));
@@ -33,7 +31,7 @@ namespace BeanIO.Parser.Skip
         public void TestSkipPastEOF()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Skip.skip_mapping.xml");
-            var reader = factory.CreateReader("s1", LoadStream("s1.txt"));
+            var reader = factory.CreateReader("s1", LoadReader("s1.txt"));
             try
             {
                 Assert.Equal(6, reader.Skip(10));
@@ -42,15 +40,6 @@ namespace BeanIO.Parser.Skip
             {
                 reader.Close();
             }
-        }
-
-        private static TextReader LoadStream(string fileName)
-        {
-            var resourceName = string.Format("BeanIO.Parser.Skip.{0}", fileName);
-            var asm = typeof(SkippingParserTest).Assembly;
-            var resStream = asm.GetManifestResourceStream(resourceName);
-            Debug.Assert(resStream != null, "resStream != null");
-            return new StreamReader(resStream);
         }
     }
 }

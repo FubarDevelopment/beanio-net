@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Diagnostics;
 using System.IO;
 
 using Xunit;
@@ -13,7 +12,7 @@ namespace BeanIO.Parser.Delimited
         public void TestRequiredField()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Delimited.delimited.xml");
-            var reader = factory.CreateReader("d1", LoadStream("d1_recordErrors.txt"));
+            var reader = factory.CreateReader("d1", LoadReader("d1_recordErrors.txt"));
             try
             {
                 AssertRecordError(reader, 1, "record1", "Too few fields 2");
@@ -31,7 +30,7 @@ namespace BeanIO.Parser.Delimited
         public void TestOptionalField()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Delimited.delimited.xml");
-            var reader = factory.CreateReader("d2", LoadStream("d2_optionalField.txt"));
+            var reader = factory.CreateReader("d2", LoadReader("d2_optionalField.txt"));
             try
             {
                 var map = (IDictionary)reader.Read();
@@ -50,7 +49,7 @@ namespace BeanIO.Parser.Delimited
         public void TestPadding()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Delimited.delimited.xml");
-            var reader = factory.CreateReader("d3", LoadStream("d3_padding.txt"));
+            var reader = factory.CreateReader("d3", LoadReader("d3_padding.txt"));
             try
             {
                 var map = (IDictionary)reader.Read();
@@ -64,15 +63,6 @@ namespace BeanIO.Parser.Delimited
             {
                 reader.Close();
             }
-        }
-
-        private static TextReader LoadStream(string fileName)
-        {
-            var resourceName = string.Format("BeanIO.Parser.Delimited.{0}", fileName);
-            var asm = typeof(DelimitedParserTest).Assembly;
-            var resStream = asm.GetManifestResourceStream(resourceName);
-            Debug.Assert(resStream != null, "resStream != null");
-            return new StreamReader(resStream);
         }
     }
 }

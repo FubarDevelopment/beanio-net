@@ -1,9 +1,5 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-
-using BeanIO.Parser.Property;
 
 using Xunit;
 
@@ -15,7 +11,7 @@ namespace BeanIO.Parser.RidLength
         public void TestRidLength()
         {
             var factory = NewStreamFactory("BeanIO.Parser.RidLength.ridlength_mapping.xml");
-            var reader = factory.CreateReader("r1", LoadStream("r1.txt"));
+            var reader = factory.CreateReader("r1", LoadReader("r1.txt"));
             try
             {
                 var map = Assert.IsType<Dictionary<string, object>>(reader.Read());
@@ -38,15 +34,6 @@ namespace BeanIO.Parser.RidLength
             {
                 reader.Close();
             }
-        }
-
-        private static TextReader LoadStream(string fileName)
-        {
-            var resourceName = string.Format("BeanIO.Parser.RidLength.{0}", fileName);
-            var asm = typeof(RidLengthTest).Assembly;
-            var resStream = asm.GetManifestResourceStream(resourceName);
-            Debug.Assert(resStream != null, "resStream != null");
-            return new StreamReader(resStream);
         }
     }
 }

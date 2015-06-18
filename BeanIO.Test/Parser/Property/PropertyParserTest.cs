@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 using Xunit;
@@ -12,7 +12,7 @@ namespace BeanIO.Parser.Property
         public void TestBasic()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Property.property_mapping.xml");
-            var reader = factory.CreateReader("p1", LoadStream("p1.txt"));
+            var reader = factory.CreateReader("p1", LoadReader("p1.txt"));
             try
             {
                 var map = Assert.IsType<Dictionary<string, object>>(reader.Read());
@@ -46,15 +46,6 @@ namespace BeanIO.Parser.Property
             {
                 reader.Close();
             }
-        }
-
-        private static TextReader LoadStream(string fileName)
-        {
-            var resourceName = string.Format("BeanIO.Parser.Property.{0}", fileName);
-            var asm = typeof(PropertyParserTest).Assembly;
-            var resStream = asm.GetManifestResourceStream(resourceName);
-            Debug.Assert(resStream != null, "resStream != null");
-            return new StreamReader(resStream);
         }
     }
 }

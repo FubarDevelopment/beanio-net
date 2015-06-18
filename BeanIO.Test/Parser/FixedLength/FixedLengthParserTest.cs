@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-
-using BeanIO.Parser.Bean;
 
 using Xunit;
 
@@ -15,7 +12,7 @@ namespace BeanIO.Parser.FixedLength
         public void TestFieldDefinitions()
         {
             var factory = NewStreamFactory("BeanIO.Parser.FixedLength.fixedlength.xml");
-            var reader = factory.CreateReader("f1", LoadStream("f1_valid.txt"));
+            var reader = factory.CreateReader("f1", LoadReader("f1_valid.txt"));
             try
             {
                 var map = Assert.IsType<Dictionary<string, object>>(reader.Read());
@@ -41,7 +38,7 @@ namespace BeanIO.Parser.FixedLength
         public void TestDefaultMinLengthValidation()
         {
             var factory = NewStreamFactory("BeanIO.Parser.FixedLength.fixedlength.xml");
-            var reader = factory.CreateReader("f1", LoadStream("f1_minLength.txt"));
+            var reader = factory.CreateReader("f1", LoadReader("f1_minLength.txt"));
             try
             {
                 Assert.ThrowsAny<InvalidRecordException>(() => reader.Read());
@@ -56,7 +53,7 @@ namespace BeanIO.Parser.FixedLength
         public void TestDefaultMaxLengthValidation()
         {
             var factory = NewStreamFactory("BeanIO.Parser.FixedLength.fixedlength.xml");
-            var reader = factory.CreateReader("f1", LoadStream("f1_maxLength.txt"));
+            var reader = factory.CreateReader("f1", LoadReader("f1_maxLength.txt"));
             try
             {
                 Assert.ThrowsAny<InvalidRecordException>(() => reader.Read());
@@ -71,7 +68,7 @@ namespace BeanIO.Parser.FixedLength
         public void TestOptionalField()
         {
             var factory = NewStreamFactory("BeanIO.Parser.FixedLength.fixedlength.xml");
-            var reader = factory.CreateReader("f2", LoadStream("f2_valid.txt"));
+            var reader = factory.CreateReader("f2", LoadReader("f2_valid.txt"));
             try
             {
                 var map = Assert.IsType<Dictionary<string, object>>(reader.Read());
@@ -99,7 +96,7 @@ namespace BeanIO.Parser.FixedLength
         public void TestValidation()
         {
             var factory = NewStreamFactory("BeanIO.Parser.FixedLength.fixedlength.xml");
-            var reader = factory.CreateReader("f2", LoadStream("f2_invalid.txt"));
+            var reader = factory.CreateReader("f2", LoadReader("f2_invalid.txt"));
             try
             {
                 AssertRecordError(reader, 1, "record", "minLength, 1, Record Label, 12345, 10, 20");
@@ -116,7 +113,7 @@ namespace BeanIO.Parser.FixedLength
         public void TestReader()
         {
             var factory = NewStreamFactory("BeanIO.Parser.FixedLength.fixedlength.xml");
-            var reader = factory.CreateReader("f3", LoadStream("f3_valid.txt"));
+            var reader = factory.CreateReader("f3", LoadReader("f3_valid.txt"));
             try
             {
                 var map = Assert.IsType<Dictionary<string, object>>(reader.Read());
@@ -153,7 +150,7 @@ namespace BeanIO.Parser.FixedLength
         public void TestPadding()
         {
             var factory = NewStreamFactory("BeanIO.Parser.FixedLength.fixedlength.xml");
-            var reader = factory.CreateReader("f4", LoadStream("f4_padding.txt"));
+            var reader = factory.CreateReader("f4", LoadReader("f4_padding.txt"));
             try
             {
                 var map = Assert.IsType<Dictionary<string, object>>(reader.Read());
@@ -198,7 +195,7 @@ namespace BeanIO.Parser.FixedLength
         public void TestIgnoredField()
         {
             var factory = NewStreamFactory("BeanIO.Parser.FixedLength.fixedlength.xml");
-            var reader = factory.CreateReader("f5", LoadStream("f5_valid.txt"));
+            var reader = factory.CreateReader("f5", LoadReader("f5_valid.txt"));
             try
             {
                 var map = Assert.IsType<Dictionary<string, object>>(reader.Read());
@@ -237,7 +234,7 @@ namespace BeanIO.Parser.FixedLength
         {
             var factory = NewStreamFactory("BeanIO.Parser.FixedLength.fixedlength.xml");
             var m = factory.CreateMarshaller("f7");
-            var reader = factory.CreateReader("f7", LoadStream("f7.txt"));
+            var reader = factory.CreateReader("f7", LoadReader("f7.txt"));
             try
             {
                 var map = Assert.IsType<Dictionary<string, object>>(reader.Read());
@@ -274,15 +271,6 @@ namespace BeanIO.Parser.FixedLength
             writer.Flush();
 
             Assert.Equal("003LAUREN1\n0005\n", output.ToString());
-        }
-
-        private static TextReader LoadStream(string fileName)
-        {
-            var resourceName = string.Format("BeanIO.Parser.FixedLength.{0}", fileName);
-            var asm = typeof(BeanParserTest).Assembly;
-            var resStream = asm.GetManifestResourceStream(resourceName);
-            Debug.Assert(resStream != null, "resStream != null");
-            return new StreamReader(resStream);
         }
     }
 }
