@@ -54,7 +54,7 @@ namespace BeanIO.Parser.Delimited
             try
             {
                 var map = (IDictionary)reader.Read();
-                Assert.Equal(new[] { "1", "2", "3", string.Empty }, (string[])map["field1"]);
+                Assert.Equal(new[] { "1", "2", "3", string.Empty }, Assert.IsType<string[]>(map["field1"]));
 
                 var text = new StringWriter();
                 factory.CreateWriter("d3", text).Write(map);

@@ -64,7 +64,7 @@ namespace BeanIO.Parser.InlineMaps
             var job = Assert.IsType<Job>(u.Unmarshal(text));
 
             Assert.Equal("1", job.Id);
-            
+
             var map = Assert.IsType<Dictionary<string, string>>(job.Codes);
             Assert.Equal(2, map.Count);
             Assert.True(map.ContainsKey("key1"));

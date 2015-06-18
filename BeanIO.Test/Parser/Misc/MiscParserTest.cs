@@ -61,7 +61,7 @@ namespace BeanIO.Parser.Misc
         }
 
         [Fact]
-        private void TestRecordWithPropertyOnlyClassSet()
+        public void TestRecordWithPropertyOnlyClassSet()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Misc.misc_mapping.xml");
             var reader = factory.CreateReader("stream3", LoadStream("m1.txt"));
@@ -89,7 +89,7 @@ namespace BeanIO.Parser.Misc
             try
             {
                 AssertFieldError(reader, 1, "header", "field1", "FirstName", "Type conversion error: Invalid date");
-                
+
                 var map = Assert.IsType<Dictionary<string, object>>(reader.Read());
                 Assert.True(map.ContainsKey("field1"));
                 Assert.Equal("Joe", map["field1"]);
