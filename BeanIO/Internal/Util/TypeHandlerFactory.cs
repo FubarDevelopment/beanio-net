@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 using BeanIO.Config;
 using BeanIO.Types;
@@ -65,6 +66,9 @@ namespace BeanIO.Internal.Util
             _defaultFactory.RegisterHandlerFor(typeof(bool), () => new BooleanTypeHandler());
             _defaultFactory.RegisterHandlerFor(typeof(Guid), () => new GuidTypeHandler());
             _defaultFactory.RegisterHandlerFor(typeof(Uri), () => new UrlTypeHandler());
+
+            _defaultFactory.RegisterHandlerFor(typeof(Version), () => new VersionTypeHandler());
+            _defaultFactory.RegisterHandlerFor(typeof(Encoding), () => new EncodingTypeHandler());
 
             _defaultFactory.RegisterHandlerFor("datetime", () => new DateTimeTypeHandler());
             _defaultFactory.RegisterHandlerFor("datetimeoffset", () => new DateTimeOffsetTypeHandler());

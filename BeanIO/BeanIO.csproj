@@ -284,6 +284,8 @@
     <Compile Include="Types\NumberTypeHandler.cs" />
     <Compile Include="Types\StringTypeHandler.cs" />
     <Compile Include="Types\UrlTypeHandler.cs" />
+    <Compile Include="Types\EncodingTypeHandler.cs" />
+    <Compile Include="Types\VersionTypeHandler.cs" />
     <Compile Include="Types\Xml\AbstractXmlDateTypeHandler.cs" />
     <Compile Include="Types\Xml\XmlBooleanTypeHandler.cs" />
     <Compile Include="Types\Xml\XmlConvertTypeHandler.cs" />
