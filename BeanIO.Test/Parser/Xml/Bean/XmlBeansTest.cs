@@ -190,7 +190,7 @@ namespace BeanIO.Parser.Xml.Bean
                 person = Assert.IsType<Dictionary<string, object>>(reader.Read());
                 Assert.Equal("Mary", person["firstName"]);
                 Assert.False(person.ContainsKey("state"));
-                Assert.Null(person["zip"]);
+                Assert.False(person.ContainsKey("zip"));
                 writer.Write(person);
 
                 AssertFieldError(reader, 13, "person", "zip", null, "Expected minimum 1 occurrences");

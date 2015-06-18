@@ -114,6 +114,7 @@ namespace BeanIO.Stream.Xml
                         OmitXmlDeclaration = config.SuppressHeader,
                         NewLineChars = config.LineSeparator ?? DEFAULT_LINE_SEPARATOR,
                         Encoding = _encoding,
+                        NamespaceHandling = NamespaceHandling.OmitDuplicates,
                     });
             _outputHeader = !_config.SuppressHeader;
         }
@@ -412,9 +413,6 @@ namespace BeanIO.Stream.Xml
                 }
             }
 
-            // flag indicating if the element is empty or not
-            var empty = false;
-
             // flag for lazily appending to stack
             var pendingStackUpdate = true;
 
@@ -448,20 +446,11 @@ namespace BeanIO.Stream.Xml
             }
             else
             {
-                empty = !element.Nodes().Any();
-
                 if (ignoreNamespace || (_elementStack.IsDefaultNamespace(ns) && string.IsNullOrEmpty(prefix)))
                 {
+                    _out.WriteStartElement(name);
                     ns = _elementStack.DefaultNamespace;
                     prefix = null;
-                    if (empty)
-                    {
-                        _out.WriteElementString(name, ns, null);
-                    }
-                    else
-                    {
-                        _out.WriteStartElement(name, ns);
-                    }
                 }
                 else
                 {
@@ -474,25 +463,11 @@ namespace BeanIO.Stream.Xml
 
                     if (string.IsNullOrEmpty(prefix))
                     {
-                        if (empty)
-                        {
-                            _out.WriteElementString(name, ns, null);
-                        }
-                        else
-                        {
-                            _out.WriteStartElement(name, ns);
-                        }
+                        _out.WriteStartElement(name, ns);
                     }
                     else
                     {
-                        if (empty)
-                        {
-                            _out.WriteElementString(prefix, name, ns, null);
-                        }
-                        else
-                        {
-                            _out.WriteStartElement(prefix, name, ns);
-                        }
+                        _out.WriteStartElement(prefix, name, ns);
                     }
                 }
             }
@@ -552,6 +527,7 @@ namespace BeanIO.Stream.Xml
                             attPrefixSet = new HashSet<string>();
                         }
                         attPrefixSet.Add(attPrefix);
+                        _out.WriteAttributeString("xmlns", attPrefix, XNamespace.Xmlns.NamespaceName, attNamespace);
                     }
 
                     _out.WriteAttributeString(attPrefix, attName, attNamespace, att.Value);
@@ -593,10 +569,7 @@ namespace BeanIO.Stream.Xml
                 {
                     Pop();
                 }
-                if (!empty)
-                {
-                    _out.WriteEndElement();
-                }
+                _out.WriteEndElement();
             }
         }
 

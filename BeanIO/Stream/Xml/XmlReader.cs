@@ -137,6 +137,7 @@ namespace BeanIO.Stream.Xml
                     if (_recordNode != null)
                     {
                         _recordNode.Remove();
+                        _recordNode = null;
                     }
                 }
 
@@ -175,9 +176,11 @@ namespace BeanIO.Stream.Xml
 
             while (_in.Read())
             {
+                bool closeElement = false;
                 switch (_in.NodeType)
                 {
                     case XmlNodeType.Element:
+                        closeElement = _in.IsEmptyElement;
                         if (recordPosition < 0)
                         {
                             // handle the root element of the document
@@ -215,6 +218,8 @@ namespace BeanIO.Stream.Xml
                         for (int i = 0, j = _in.AttributeCount; i < j; i++)
                         {
                             _in.MoveToAttribute(i);
+                            if (_in.NamespaceURI == XNamespace.Xmlns.NamespaceName && _in.LocalName == "xmlns")
+                                continue;
                             var attrName = XNamespace.Get(_in.NamespaceURI) + _in.LocalName;
                             e.SetAttributeValue(attrName, _in.GetAttribute(i));
                         }
@@ -235,25 +240,30 @@ namespace BeanIO.Stream.Xml
                             node.Add(new XText(_in.Value));
                         break;
                     case XmlNodeType.EndElement:
-                        var parent = node.Parent;
-                        if (parent.NodeType == XmlNodeType.Element)
-                        {
-                            node = parent;
-                        }
-                        else
-                        {
-                            node = null;
-                        }
-
-                        if (recordPosition < 0)
-                            continue;
-
-                        // if the record position reaches 0, the record is complete
-                        if (recordPosition-- == 0)
-                        {
-                            return true;
-                        }
+                        closeElement = true;
                         break;
+                }
+
+                if (closeElement)
+                {
+                    var parent = node.Parent;
+                    if (parent.NodeType == XmlNodeType.Element)
+                    {
+                        node = parent;
+                    }
+                    else
+                    {
+                        node = null;
+                    }
+
+                    if (recordPosition < 0)
+                        continue;
+
+                    // if the record position reaches 0, the record is complete
+                    if (recordPosition-- == 0)
+                    {
+                        return true;
+                    }
                 }
             }
 

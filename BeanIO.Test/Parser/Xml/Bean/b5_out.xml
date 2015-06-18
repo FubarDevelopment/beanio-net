@@ -8,6 +8,6 @@
   </person>
   <person>
     <firstName>Mary</firstName>
-    <address xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+    <address xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
   </person>
 </stream>
