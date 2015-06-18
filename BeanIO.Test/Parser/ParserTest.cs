@@ -20,12 +20,12 @@ namespace BeanIO.Parser
 
         public static System.IO.Stream LoadStream(string fileName)
         {
-            return LoadStreamInternal(fileName);
+            return LoadStreamInternal(fileName, 2);
         }
 
         public static TextReader LoadReader(string fileName)
         {
-            return new StreamReader(LoadStreamInternal(fileName));
+            return new StreamReader(LoadStreamInternal(fileName, 2));
         }
 
         /// <summary>
@@ -35,9 +35,8 @@ namespace BeanIO.Parser
         /// <returns>the resource contents</returns>
         public virtual string Load(string resourceName)
         {
-            using (var resStream = typeof(ParserTest).Assembly.GetManifestResourceStream(resourceName))
+            using (var resStream = LoadStreamInternal(resourceName, 2))
             {
-                Debug.Assert(resStream != null, "resStream != null");
                 var reader = new StreamReader(resStream);
                 return reader.ReadToEnd();
             }
@@ -46,13 +45,16 @@ namespace BeanIO.Parser
         protected virtual StreamFactory NewStreamFactory(string resourceName)
         {
             var factory = StreamFactory.NewInstance();
-            LoadMappingFile(factory, resourceName);
+            using (var resStream = LoadStreamInternal(resourceName, 2))
+            {
+                factory.Load(resStream);
+            }
             return factory;
         }
 
         protected virtual void LoadMappingFile(StreamFactory factory, string resourceName)
         {
-            using (var resStream = typeof(ParserTest).Assembly.GetManifestResourceStream(resourceName))
+            using (var resStream = LoadStreamInternal(resourceName, 2))
             {
                 factory.Load(resStream);
             }
@@ -110,13 +112,13 @@ namespace BeanIO.Parser
             }
         }
 
-        private static System.IO.Stream LoadStreamInternal(string fileName)
+        private static System.IO.Stream LoadStreamInternal(string fileName, int levels)
         {
             var asm = typeof(AbstractParserTest).Assembly;
             var resStream = asm.GetManifestResourceStream(fileName);
             if (resStream == null)
             {
-                var frame = new StackFrame(2, true);
+                var frame = new StackFrame(levels, true);
                 var method = frame.GetMethod();
                 var resourceName = string.Format("{0}.{1}", method.DeclaringType.Namespace, fileName);
                 resStream = asm.GetManifestResourceStream(resourceName);

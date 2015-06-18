@@ -154,6 +154,8 @@
     <Compile Include="Parser\WriteMode\WriteModeParserTest.cs" />
     <Compile Include="Parser\Xml\Address.cs" />
     <Compile Include="Parser\Xml\Bean\XmlBeansTest.cs" />
+    <Compile Include="Parser\Xml\Collection\XmlCollectionTest.cs" />
+    <Compile Include="Parser\Xml\Field\XmlFieldTest.cs" />
     <Compile Include="Parser\Xml\Male.cs" />
     <Compile Include="Parser\Xml\Person.cs" />
     <Compile Include="Parser\Xml\TestXmlWriterFactory.cs" />
@@ -406,6 +408,17 @@
     <EmbeddedResource Include="Parser\Xml\Bean\b5_in.xml" />
     <EmbeddedResource Include="Parser\Xml\Bean\b5_out.xml" />
     <EmbeddedResource Include="Parser\Xml\Bean\beans_mapping.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Xml\Collection\c1_in.xml" />
+    <EmbeddedResource Include="Parser\Xml\Collection\collection_mapping.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Xml\Field\f1_in.xml" />
+    <EmbeddedResource Include="Parser\Xml\Field\f2_in.xml" />
+    <EmbeddedResource Include="Parser\Xml\Field\f2_out.xml" />
+    <EmbeddedResource Include="Parser\Xml\Field\f3_in.xml" />
+    <EmbeddedResource Include="Parser\Xml\Field\field_mapping.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

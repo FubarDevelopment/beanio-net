@@ -6,6 +6,16 @@ namespace BeanIO.Parser.Xml
 {
     public class Person
     {
+        public const string DefaultName = "";
+
+        public const int DefaultAge = -1;
+
+        public Person()
+        {
+            LastName = DefaultName;
+            Age = DefaultAge;
+        }
+
         public string Type { get; set; }
 
         public string Gender { get; set; }
@@ -20,7 +30,7 @@ namespace BeanIO.Parser.Xml
 
         public List<Address> AddressList { get; set; }
 
-        public int Age { get; set; }
+        public int? Age { get; set; }
 
         public override string ToString()
         {
