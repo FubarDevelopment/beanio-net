@@ -160,6 +160,7 @@
     <Compile Include="Types\StringTypeHandlerTest.cs" />
     <Compile Include="Types\TypeHandlerFactoryTest.cs" />
     <Compile Include="Types\XmlBooleanTypeHandlerTest.cs" />
+    <Compile Include="Types\XmlDateTimeTypeHandlerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Parser\Delimited\d1_messages.resx">

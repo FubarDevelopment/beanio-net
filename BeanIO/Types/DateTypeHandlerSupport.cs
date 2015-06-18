@@ -18,6 +18,8 @@ namespace BeanIO.Types
     {
         private readonly Func<CultureInfo, string> _getDefaultPatternFunc;
 
+        private OffsetPattern[] _offsetPatterns;
+
         private string _pattern;
 
         private LocalDateTimePattern _format;
@@ -78,8 +80,32 @@ namespace BeanIO.Types
         /// </remarks>
         public string TimeZoneId
         {
-            get { return TimeZone == null ? null : TimeZone.Id; }
-            set { TimeZone = string.IsNullOrEmpty(value) ? null : DateTimeZoneProviders.Tzdb[value]; }
+            get
+            {
+                return TimeZone == null ? null : TimeZone.Id;
+            }
+            set
+            {
+                var timeZoneId = value;
+                if (timeZoneId.StartsWith("GMT", StringComparison.OrdinalIgnoreCase))
+                    timeZoneId = "UTC" + timeZoneId.Substring(3);
+                if (timeZoneId.IndexOfAny(new[] { '+', '-' }) != -1)
+                {
+                    var offset = timeZoneId.Substring(3).Trim();
+                    ParseResult<Offset> lastResult = null;
+                    foreach (var offsetPattern in OffsetPatterns)
+                    {
+                        lastResult = offsetPattern.Parse(offset);
+                        if (lastResult.Success)
+                            break;
+                    }
+                    TimeZone = DateTimeZone.ForOffset(lastResult.GetValueOrThrow());
+                }
+                else
+                {
+                    TimeZone = string.IsNullOrEmpty(value) ? null : DateTimeZoneProviders.Tzdb[timeZoneId];
+                }
+            }
         }
 
         /// <summary>
@@ -119,6 +145,20 @@ namespace BeanIO.Types
         private LocalDateTimePattern DateFormat
         {
             get { return _format ?? (_format = CreateDateFormat()); }
+        }
+
+        private OffsetPattern[] OffsetPatterns
+        {
+            get
+            {
+                return _offsetPatterns ?? (_offsetPatterns = new[]
+                    {
+                        OffsetPattern.Create("g", Culture),
+                        OffsetPattern.Create("+H:mm:ss", Culture),
+                        OffsetPattern.Create("+H:mm", Culture),
+                        OffsetPattern.Create("+H", Culture),
+                    });
+            }
         }
 
         /// <summary>

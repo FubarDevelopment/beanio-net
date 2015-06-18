@@ -32,7 +32,7 @@ namespace BeanIO.Types.Xml
             {
                 var formatString = new StringBuilder("yyyy-MM-ddTHH:mm:ss");
                 if (OutputMilliseconds)
-                    formatString.Append(".fffffff");
+                    formatString.Append(".fff");
                 if (TimeZone != null)
                     formatString.Append("K");
                 pattern = formatString.ToString();

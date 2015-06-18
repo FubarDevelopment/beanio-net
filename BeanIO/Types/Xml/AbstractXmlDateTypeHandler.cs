@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
+
+using BeanIO.Config;
 
 using NodaTime;
 
@@ -11,6 +15,8 @@ namespace BeanIO.Types.Xml
     /// </summary>
     public abstract class AbstractXmlDateTypeHandler : DateTypeHandlerSupport
     {
+        private string[] _dateTimeOffsetFormats;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AbstractXmlDateTypeHandler"/> class.
         /// </summary>
@@ -34,6 +40,11 @@ namespace BeanIO.Types.Xml
 
         protected abstract string DatatypeQName { get; }
 
+        private string[] DateTimeOffsetFormats
+        {
+            get { return _dateTimeOffsetFormats ?? (_dateTimeOffsetFormats = CreateFormats(IsLenient).ToArray()); }
+        }
+
         /// <summary>
         /// Parses field text into an object.
         /// </summary>
@@ -43,9 +54,27 @@ namespace BeanIO.Types.Xml
         {
             if (string.IsNullOrEmpty(text))
                 return null;
-            if (Pattern != null)
-                return XmlConvert.ToDateTimeOffset(text, Pattern);
-            return XmlConvert.ToDateTimeOffset(text);
+            DateTimeOffset dto;
+            try
+            {
+                if (Pattern != null)
+                {
+                    dto = XmlConvert.ToDateTimeOffset(text, Pattern);
+                }
+                else
+                {
+                    dto = XmlConvert.ToDateTimeOffset(text, DateTimeOffsetFormats);
+                }
+                if (!text.Contains("-"))
+                    dto = new DateTimeOffset(new DateTime(1970, 1, 1) + dto.TimeOfDay, dto.Offset);
+            }
+            catch (FormatException ex)
+            {
+                throw new TypeConversionException(string.Format("Invalid XML {0}", DatatypeQName), ex);
+            }
+            if (!IsTimeZoneAllowed && dto.Offset != TimeSpan.Zero)
+                throw new TypeConversionException(string.Format("Invalid XML {0}, time zone not allowed", DatatypeQName));
+            return dto;
         }
 
         /// <summary>
@@ -64,6 +93,16 @@ namespace BeanIO.Types.Xml
         }
 
         /// <summary>
+        /// Configures this type handler.
+        /// </summary>
+        /// <param name="properties">The properties for customizing the instance</param>
+        public override void Configure(Properties properties)
+        {
+            base.Configure(properties);
+            _dateTimeOffsetFormats = CreateFormats(IsLenient).ToArray();
+        }
+
+        /// <summary>
         /// Returns the time zone offset in minutes for the given date,
         /// or <code>null</code> if a time zone was not configured.
         /// </summary>
@@ -74,6 +113,59 @@ namespace BeanIO.Types.Xml
             if (TimeZone == null)
                 return null;
             return TimeSpan.FromMilliseconds(date.Zone.GetUtcOffset(date.ToInstant()).Milliseconds);
+        }
+
+        private static IEnumerable<string> CreateFormats(bool lenient)
+        {
+            var timeComponents = new[]
+                {
+                    string.Empty,
+                    "H:mm",
+                    "HH:mm",
+                    "HH:mm:ss",
+                    "HH:mm:ss.f",
+                    "HH:mm:ss.ff",
+                    "HH:mm:ss.fff",
+                    "HH:mm:ss.ffff",
+                    "HH:mm:ss.fffff",
+                    "HH:mm:ss.ffffff",
+                };
+            var timezoneComponents = new[]
+                {
+                    string.Empty,
+                    "z",
+                    "zz",
+                    "zzz",
+                    "zzzz",
+                    "zzzzz",
+                    "zzzzzz",
+                    "zzzzzzz",
+                };
+            foreach (var timeComponent in timeComponents)
+            {
+                foreach (var timezoneComponent in timezoneComponents)
+                {
+                    yield return string.Format(
+                        "yyyy-MM-dd{2}{0}{1}",
+                        timeComponent,
+                        timezoneComponent,
+                        !string.IsNullOrEmpty(timeComponent) ? "T" : string.Empty);
+                }
+            }
+            if (lenient)
+            {
+                foreach (var timeComponent in timeComponents.Where(x => !string.IsNullOrEmpty(x)))
+                {
+                    foreach (var timezoneComponent in timezoneComponents)
+                    {
+                        var formatString = string.Format(
+                            "{0}{1}",
+                            timeComponent,
+                            timezoneComponent);
+                        yield return formatString;
+                    }
+                }
+            }
         }
     }
 }
