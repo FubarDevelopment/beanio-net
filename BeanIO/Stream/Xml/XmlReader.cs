@@ -83,7 +83,7 @@ namespace BeanIO.Stream.Xml
                     DtdProcessing = DtdProcessing.Ignore,
                     IgnoreComments = true,
                     IgnoreProcessingInstructions = true,
-                    IgnoreWhitespace = false,
+                    IgnoreWhitespace = true,
                 });
             _document = baseDocument ?? new XDocument();
             if (_document.Root == null)
@@ -232,7 +232,7 @@ namespace BeanIO.Stream.Xml
                     case XmlNodeType.Text:
                     case XmlNodeType.CDATA:
                         if (recordPosition >= 0)
-                            node.Add(new XText(_in.ReadContentAsString()));
+                            node.Add(new XText(_in.Value));
                         break;
                     case XmlNodeType.EndElement:
                         var parent = node.Parent;

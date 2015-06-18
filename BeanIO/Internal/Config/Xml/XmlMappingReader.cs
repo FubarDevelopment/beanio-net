@@ -20,7 +20,7 @@ namespace BeanIO.Internal.Config.Xml
                     IgnoreComments = true,
                 };
             var reader = XmlReader.Create(input, readerSettings);
-            return XDocument.Load(reader);
+            return XDocument.Load(reader, LoadOptions.SetLineInfo);
         }
     }
 }

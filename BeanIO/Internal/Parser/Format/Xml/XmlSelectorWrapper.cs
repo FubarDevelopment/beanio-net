@@ -195,23 +195,26 @@ namespace BeanIO.Internal.Parser.Format.Xml
 
             var parent = ctx.Parent;
             var node = new XElement(this.ToXName(true).ToConvertedName(ctx.NameConversionMode));
+            var annotations = new List<object>();
             if (IsGroup && ctx.IsStreaming)
             {
-                node.AddAnnotation(new IsGroupElementAnnotation(true));
+                annotations.Add(new IsGroupElementAnnotation(true));
             }
             if (!IsNamespaceAware)
             {
-                node.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.IgnoreNamespace));
+                annotations.Add(new NamespaceModeAnnotation(NamespaceHandlingMode.IgnoreNamespace));
             }
             else if (string.IsNullOrEmpty(Prefix))
             {
-                node.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.DefaultNamespace));
+                annotations.Add(new NamespaceModeAnnotation(NamespaceHandlingMode.DefaultNamespace));
             }
             else
             {
                 node.SetAttributeValue(XNamespace.Xmlns + Prefix, Namespace);
             }
             node = XElement.Parse(node.ToString());
+            foreach (var annotation in annotations)
+                node.SetAnnotation(annotation);
             parent.Add(node);
 
             ctx.Parent = node;

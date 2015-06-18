@@ -435,17 +435,20 @@ namespace BeanIO.Stream.Xml
                 }
 
                 Push(ns, prefix, name);
-                foreach (var entry in _config.NamespaceMap)
+                if (_config.NamespaceMap != null)
                 {
-                    _out.WriteAttributeString("xmlns", entry.Key, XNamespace.Xmlns.NamespaceName, entry.Value);
-                    _elementStack.AddNamespace(entry.Key, entry.Value);
+                    foreach (var entry in _config.NamespaceMap)
+                    {
+                        _out.WriteAttributeString("xmlns", entry.Key, XNamespace.Xmlns.NamespaceName, entry.Value);
+                        _elementStack.AddNamespace(entry.Key, entry.Value);
+                    }
                 }
 
                 pendingStackUpdate = false;
             }
             else
             {
-                empty = !element.HasElements;
+                empty = !element.Nodes().Any();
 
                 if (ignoreNamespace || (_elementStack.IsDefaultNamespace(ns) && string.IsNullOrEmpty(prefix)))
                 {
@@ -551,7 +554,7 @@ namespace BeanIO.Stream.Xml
                         attPrefixSet.Add(attPrefix);
                     }
 
-                    _out.WriteAttributeString(attPrefix, attNamespace, attName, att.Value);
+                    _out.WriteAttributeString(attPrefix, attName, attNamespace, att.Value);
                 }
             }
 

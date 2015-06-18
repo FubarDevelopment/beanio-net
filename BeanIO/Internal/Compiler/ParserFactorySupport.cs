@@ -1413,10 +1413,8 @@ namespace BeanIO.Internal.Compiler
                 else
                 {
                     factory = BeanUtil.CreateBean(parserFactoryBean.ClassName) as IRecordParserFactory;
-                    if (factory != null)
-                    {
+                    if (factory == null)
                         throw new BeanIOConfigurationException(string.Format("Configured writer factory class '{0}' does not implement RecordWriterFactory", parserFactoryBean.ClassName));
-                    }
                 }
 
                 BeanUtil.Configure(factory, parserFactoryBean.Properties);

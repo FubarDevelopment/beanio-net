@@ -94,7 +94,7 @@ namespace BeanIO.Internal.Compiler.Xml
             }
             else
             {
-                if (type != XmlNodeType.Element)
+                if (type != XmlNodeType.Element && type != XmlNodeType.None)
                     throw new BeanIOConfigurationException(string.Format("Invalid xmlType '{0}'", type));
             }
 

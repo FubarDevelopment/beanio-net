@@ -82,6 +82,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
                         var element = new XElement(xml.ToXName(false).ToConvertedName(NameConversionMode));
                         if (!string.IsNullOrEmpty(xml.Prefix))
                             element.SetAttributeValue(XNamespace.Xmlns + xml.Prefix, xml.Namespace);
+                        element = XElement.Parse(element.ToString());
                         element.AddAnnotation(new IsGroupElementAnnotation(true));
                         if (!xml.IsNamespaceAware)
                         {
@@ -91,7 +92,6 @@ namespace BeanIO.Internal.Parser.Format.Xml
                         {
                             element.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.DefaultNamespace));
                         }
-                        element = XElement.Parse(element.ToString());
 
                         _parent.Add(element);
 

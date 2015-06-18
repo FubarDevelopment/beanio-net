@@ -18,7 +18,7 @@ namespace BeanIO.Stream.Xml
         {
             try
             {
-                return XDocument.Load(new StringReader(text));
+                return XDocument.Load(new StringReader(text), LoadOptions.SetLineInfo);
             }
             catch (Exception ex)
             {
