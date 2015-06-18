@@ -26,9 +26,15 @@ namespace BeanIO.Builder
             return this;
         }
 
-        public XmlParserBuilder HeaderEncoding(Encoding encoding)
+        public XmlParserBuilder HeaderEncoding(string encoding)
         {
             _parser.Encoding = encoding;
+            return this;
+        }
+
+        public XmlParserBuilder HeaderEncoding(Encoding encoding)
+        {
+            _parser.Encoding = encoding.WebName;
             return this;
         }
 

@@ -148,11 +148,15 @@ namespace BeanIO.Internal.Parser.Format.Xml
             {
                 annotations.Add(new NamespaceModeAnnotation(NamespaceHandlingMode.IgnoreNamespace));
             }
-            else if (string.IsNullOrEmpty(Prefix))
+            else if (string.IsNullOrEmpty(Namespace))
             {
                 annotations.Add(new NamespaceModeAnnotation(NamespaceHandlingMode.DefaultNamespace));
             }
-            else
+            else if (string.Equals(Prefix, string.Empty))
+            {
+                annotations.Add(new NamespaceModeAnnotation(NamespaceHandlingMode.NoPrefix));
+            }
+            else if (Prefix != null)
             {
                 element.SetAttributeValue(XNamespace.Xmlns + Prefix, Namespace);
             }

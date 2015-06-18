@@ -103,7 +103,7 @@ namespace BeanIO.Stream.Xml
                 throw new ArgumentNullException("writer");
 
             _config = config ?? new XmlParserConfiguration();
-            _encoding = _config.Encoding ?? writer.Encoding ?? Encoding.UTF8;
+            _encoding = _config.GetEncoding();
             _writer = new FilterWriter(writer);
             _out = System.Xml.XmlWriter.Create(
                 _writer,
@@ -113,7 +113,7 @@ namespace BeanIO.Stream.Xml
                         IndentChars = new string(' ', config.Indentation.GetValueOrDefault()),
                         OmitXmlDeclaration = config.SuppressHeader,
                         NewLineChars = config.LineSeparator ?? DEFAULT_LINE_SEPARATOR,
-                        Encoding = _encoding,
+                        Encoding = _encoding ?? Encoding.UTF8,
                         NamespaceHandling = NamespaceHandling.OmitDuplicates,
                     });
             _outputHeader = !_config.SuppressHeader;
@@ -130,8 +130,9 @@ namespace BeanIO.Stream.Xml
             {
                 var pi = new StringBuilder();
                 if (_config.Version != null)
-                    pi.AppendFormat(" version='{0}'", _config.Version);
-                pi.AppendFormat(" encoding='{0}'", _encoding.WebName);
+                    pi.AppendFormat(" version=\"{0}\"", _config.Version);
+                if (_encoding != null)
+                    pi.AppendFormat(" encoding=\"{0}\"", _config.Encoding);
                 _out.WriteProcessingInstruction("xml", pi.ToString().TrimStart());
                 _outputHeader = false;
             }
@@ -388,10 +389,19 @@ namespace BeanIO.Stream.Xml
         private void Write(XElement element)
         {
             var name = element.Name.LocalName;
-            var prefix = element.GetPrefixOfNamespace(element.Name.Namespace);
+            string prefix;
             var ns = element.Name.NamespaceName;
 
             var nsHandling = NamespaceAwareElementComparer.GetHandlingModeFor(element);
+
+            if (nsHandling == NamespaceHandlingMode.NoPrefix)
+            {
+                prefix = null;
+            }
+            else
+            {
+                prefix = element.GetPrefixOfNamespace(element.Name.Namespace);
+            }
 
             var ignoreNamespace = false;
             if (string.IsNullOrEmpty(ns))
@@ -416,6 +426,8 @@ namespace BeanIO.Stream.Xml
             // flag for lazily appending to stack
             var pendingStackUpdate = true;
 
+            var namespacesToAdd = new List<Tuple<string, string>>();
+
             // start the element
             if (_elementStack == null)
             {
@@ -429,7 +441,7 @@ namespace BeanIO.Stream.Xml
                 }
                 else
                 {
-                    _out.WriteStartElement(name, XNamespace.None.NamespaceName);
+                    _out.WriteStartElement(string.Empty, name, ns ?? string.Empty);
                 }
 
                 Push(ns, prefix, name);
@@ -437,7 +449,7 @@ namespace BeanIO.Stream.Xml
                 {
                     foreach (var entry in _config.NamespaceMap)
                     {
-                        _out.WriteAttributeString("xmlns", entry.Key, XNamespace.Xmlns.NamespaceName, entry.Value);
+                        namespacesToAdd.Add(Tuple.Create(entry.Key, entry.Value));
                         _elementStack.AddNamespace(entry.Key, entry.Value);
                     }
                 }
@@ -456,14 +468,14 @@ namespace BeanIO.Stream.Xml
                 {
                     var p = _elementStack.FindPrefix(ns);
 
-                    if (!string.IsNullOrEmpty(p) && string.IsNullOrEmpty(prefix) && !setDefaultNamespace)
+                    if (!string.IsNullOrEmpty(p) && string.IsNullOrEmpty(prefix) && !setDefaultNamespace && nsHandling != NamespaceHandlingMode.NoPrefix)
                     {
                         prefix = p;
                     }
 
                     if (string.IsNullOrEmpty(prefix))
                     {
-                        _out.WriteStartElement(name, ns);
+                        _out.WriteStartElement(string.Empty, name, ns);
                     }
                     else
                     {
@@ -472,8 +484,12 @@ namespace BeanIO.Stream.Xml
                 }
             }
 
+            var namespaceInsertIndex = 0;
+            var attributesToAdd = new List<Tuple<string, XName, string>>();
+
             // write attributes
             ISet<string> attPrefixSet = null;
+
             var map = element.Attributes().ToList();
             if (map.Count > 0)
             {
@@ -483,18 +499,21 @@ namespace BeanIO.Stream.Xml
                     pendingStackUpdate = false;
                 }
             }
+
             for (int i = 0, j = map.Count; i < j; i++)
             {
                 var att = map[i];
                 var attName = att.Name.LocalName;
+                if (attName == "xmlns")
+                    continue;
                 var attNamespace = att.Name.NamespaceName;
                 var attPrefix = element.GetPrefixOfNamespace(attNamespace);
 
                 if (string.IsNullOrEmpty(attNamespace))
                 {
-                    _out.WriteAttributeString(attName, att.Value);
+                    attributesToAdd.Add(new Tuple<string, XName, string>(null, attName, att.Value));
                 }
-                else
+                else if (nsHandling != NamespaceHandlingMode.NoPrefix || !string.Equals(attPrefix, "xmlns") || !string.Equals(attNamespace, ns, StringComparison.Ordinal))
                 {
                     var p = _elementStack.FindPrefix(attNamespace);
 
@@ -510,7 +529,7 @@ namespace BeanIO.Stream.Xml
                             }
                         }
 
-                        if (attPrefixSet == null || !attPrefixSet.Contains(attPrefix))
+                        if (attPrefix != "xmlns" && (attPrefixSet == null || !attPrefixSet.Contains(attPrefix)))
                         {
                             declareNamespace = true;
                         }
@@ -527,10 +546,37 @@ namespace BeanIO.Stream.Xml
                             attPrefixSet = new HashSet<string>();
                         }
                         attPrefixSet.Add(attPrefix);
-                        _out.WriteAttributeString("xmlns", attPrefix, XNamespace.Xmlns.NamespaceName, attNamespace);
+                        namespacesToAdd.Insert(namespaceInsertIndex++, Tuple.Create(attPrefix, attNamespace));
                     }
 
-                    _out.WriteAttributeString(attPrefix, attName, attNamespace, att.Value);
+                    if (attPrefix == "xmlns")
+                    {
+                        namespacesToAdd.Insert(namespaceInsertIndex++, Tuple.Create(attName, att.Value));
+                    }
+                    else
+                    {
+                        attributesToAdd.Add(new Tuple<string, XName, string>(attPrefix, XName.Get(attName, attNamespace), att.Value));
+                    }
+                }
+            }
+
+            foreach (var namespaceToAdd in namespacesToAdd)
+            {
+                _out.WriteAttributeString("xmlns", namespaceToAdd.Item1, XNamespace.Xmlns.NamespaceName, namespaceToAdd.Item2);
+            }
+
+            foreach (var attributeToAdd in attributesToAdd)
+            {
+                var attPrefix = attributeToAdd.Item1;
+                var attName = attributeToAdd.Item2;
+                var attValue = attributeToAdd.Item3;
+                if (attPrefix != null)
+                {
+                    _out.WriteAttributeString(attPrefix, attName.LocalName, attName.NamespaceName, attValue);
+                }
+                else
+                {
+                    _out.WriteAttributeString(attName.LocalName, attName.NamespaceName, attValue);
                 }
             }
 

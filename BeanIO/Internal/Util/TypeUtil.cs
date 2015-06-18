@@ -97,6 +97,11 @@ namespace BeanIO.Internal.Util
         }
 #endif
 
+        public static bool CanSetTo(this object value, Type type)
+        {
+            return value != null || !type.GetTypeInfo().IsPrimitive || Nullable.GetUnderlyingType(type) != null;
+        }
+
         /// <summary>
         /// Returns the type object for a class name or type alias.  A type alias is not case sensitive.
         /// </summary>

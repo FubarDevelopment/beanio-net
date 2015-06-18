@@ -21,11 +21,11 @@ namespace BeanIO.Stream.Xml
 
             if (prefix == null)
             {
-                DefaultNamespace = ns;
+                DefaultNamespace = ns ?? string.Empty;
             }
             else
             {
-                DefaultNamespace = parent == null ? null : parent.DefaultNamespace;
+                DefaultNamespace = parent == null ? string.Empty : parent.DefaultNamespace;
                 AddNamespace(prefix, DefaultNamespace);
             }
         }

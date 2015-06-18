@@ -14,6 +14,8 @@ namespace BeanIO.Stream.Xml
     /// </remarks>
     public class XmlParserConfiguration
     {
+        private static readonly Encoding _defaultEncoding = new UTF8Encoding(false);
+
         private Dictionary<string, string> _namespaceMap;
 
         /// <summary>
@@ -22,7 +24,7 @@ namespace BeanIO.Stream.Xml
         public XmlParserConfiguration()
         {
             Version = new Version(1, 0);
-            Encoding = new UTF8Encoding(false);
+            Encoding = _defaultEncoding.WebName;
         }
 
         /// <summary>
@@ -61,7 +63,7 @@ namespace BeanIO.Stream.Xml
         /// <summary>
         /// Gets or sets the XML character encoding to include in the document header
         /// </summary>
-        public Encoding Encoding { get; set; }
+        public string Encoding { get; set; }
 
         /// <summary>
         /// Gets a map of namespace URI's to prefixes to be set on the root element
@@ -111,6 +113,16 @@ namespace BeanIO.Stream.Xml
 
             for (var i = 0; i != s.Length; i += 2)
                 AddNamespace(s[i + 1], s[i]);
+        }
+
+        public Encoding GetEncoding()
+        {
+            if (string.IsNullOrEmpty(Encoding))
+                return null;
+            var result = System.Text.Encoding.GetEncoding(Encoding);
+            if (result.WebName == "utf-8")
+                return _defaultEncoding;
+            return result;
         }
     }
 }

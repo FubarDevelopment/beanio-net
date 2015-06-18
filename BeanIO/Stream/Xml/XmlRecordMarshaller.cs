@@ -50,8 +50,7 @@ namespace BeanIO.Stream.Xml
             if (!_config.SuppressHeader)
             {
                 var version = _config.Version != null ? _config.Version.ToString() : null;
-                var encoding = _config.Encoding != null ? _config.Encoding.WebName : null;
-                document.Declaration = new XDeclaration(version, encoding, null);
+                document.Declaration = new XDeclaration(version, _config.Encoding, null);
             }
 
             var outputEncoding = _writerSettings.Encoding;
@@ -79,7 +78,7 @@ namespace BeanIO.Stream.Xml
                     IndentChars = new string(' ', _config.Indentation.GetValueOrDefault()),
                     NamespaceHandling = NamespaceHandling.OmitDuplicates,
                     OmitXmlDeclaration = _config.SuppressHeader,
-                    Encoding = _config.Encoding ?? new UTF8Encoding(false),
+                    Encoding = _config.GetEncoding() ?? new UTF8Encoding(false),
                 };
             return settings;
         }

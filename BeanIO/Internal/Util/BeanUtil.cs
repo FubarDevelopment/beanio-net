@@ -93,7 +93,7 @@ namespace BeanIO.Internal.Util
                 try
                 {
                     var value = handler.Parse(property.Value);
-                    if (value != null)
+                    if (value.CanSetTo(descriptor.PropertyType))
                         descriptor.SetValue(bean, value);
                 }
                 catch (FormatException ex)

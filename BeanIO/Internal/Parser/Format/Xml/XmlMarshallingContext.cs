@@ -89,9 +89,13 @@ namespace BeanIO.Internal.Parser.Format.Xml
                         {
                             element.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.IgnoreNamespace));
                         }
-                        else if (string.Equals(xml.Prefix, string.Empty))
+                        else if (string.IsNullOrEmpty(xml.Namespace))
                         {
                             element.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.DefaultNamespace));
+                        }
+                        else if (string.Equals(xml.Prefix, string.Empty))
+                        {
+                            element.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.NoPrefix));
                         }
 
                         _parent.Add(element);

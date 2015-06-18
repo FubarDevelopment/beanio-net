@@ -19,5 +19,10 @@
         /// Use the default namespace
         /// </summary>
         DefaultNamespace,
+
+        /// <summary>
+        /// Apply namespace without prefix
+        /// </summary>
+        NoPrefix,
     }
 }
