@@ -110,7 +110,7 @@ namespace BeanIO.Internal.Parser
         /// </summary>
         /// <param name="node">The <see cref="XElement"/> to unmarshal</param>
         /// <returns>The unmarshalled bean object</returns>
-        public object Unmarshal(XElement node)
+        public object Unmarshal(XContainer node)
         {
             if (node == null)
                 throw new ArgumentNullException("node");

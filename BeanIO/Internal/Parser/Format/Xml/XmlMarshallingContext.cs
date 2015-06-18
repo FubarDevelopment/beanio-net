@@ -158,7 +158,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <returns>the <see cref="XDocument"/> result, or null if not supported</returns>
         public override XDocument ToXDocument(object record)
         {
-            return Document;
+            return (XDocument)record;
         }
 
         /// <summary>

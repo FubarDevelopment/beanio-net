@@ -150,7 +150,7 @@ namespace BeanIO.Internal.Parser
         /// </summary>
         /// <param name="element">The <see cref="XElement"/> to convert</param>
         /// <returns>the record value, or null if not supported</returns>
-        public virtual object ToRecordValue(XElement element)
+        public virtual object ToRecordValue(XContainer element)
         {
             return null;
         }

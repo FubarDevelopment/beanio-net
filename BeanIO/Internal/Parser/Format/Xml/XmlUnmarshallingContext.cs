@@ -237,7 +237,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// </summary>
         /// <param name="element">The <see cref="XElement"/> to convert</param>
         /// <returns>the record value, or null if not supported</returns>
-        public override object ToRecordValue(XElement element)
+        public override object ToRecordValue(XContainer element)
         {
             return element;
         }

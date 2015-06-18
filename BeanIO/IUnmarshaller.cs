@@ -64,6 +64,6 @@ namespace BeanIO
         /// </summary>
         /// <param name="node">The <see cref="XElement"/> to unmarshal</param>
         /// <returns>The unmarshalled bean object</returns>
-        object Unmarshal(XElement node);
+        object Unmarshal(XContainer node);
     }
 }
