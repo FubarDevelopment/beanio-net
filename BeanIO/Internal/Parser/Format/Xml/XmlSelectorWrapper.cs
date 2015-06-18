@@ -501,21 +501,25 @@ namespace BeanIO.Internal.Parser.Format.Xml
                     return;
 
                 var element = new XElement(wrapper.ToXName(true).ToConvertedName(nameConversionMode));
-                parent.Add(element);
-
+                var annotations = new List<object>();
                 if (!wrapper.IsNamespaceAware)
                 {
-                    element.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.IgnoreNamespace));
+                    annotations.Add(new NamespaceModeAnnotation(NamespaceHandlingMode.IgnoreNamespace));
                 }
                 else if (string.IsNullOrEmpty(Prefix))
                 {
-                    element.AddAnnotation(new NamespaceModeAnnotation(NamespaceHandlingMode.DefaultNamespace));
+                    annotations.Add(new NamespaceModeAnnotation(NamespaceHandlingMode.DefaultNamespace));
                 }
                 else
                 {
                     element.SetAttributeValue(XNamespace.Xmlns + wrapper.Prefix, wrapper.Namespace);
                 }
+
                 element = XElement.Parse(element.ToString());
+                parent.Add(element);
+
+                foreach (var annotation in annotations)
+                    element.SetAnnotation(annotation);
 
                 parent = element;
             }

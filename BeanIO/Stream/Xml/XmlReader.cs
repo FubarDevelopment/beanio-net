@@ -247,7 +247,7 @@ namespace BeanIO.Stream.Xml
                 if (closeElement)
                 {
                     var parent = node.Parent;
-                    if (parent.NodeType == XmlNodeType.Element)
+                    if (parent != null && parent.NodeType == XmlNodeType.Element)
                     {
                         node = parent;
                     }
