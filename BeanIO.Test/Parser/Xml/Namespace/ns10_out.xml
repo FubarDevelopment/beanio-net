@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:stream xmlns:s="stream" xmlns:xi="http://www.w3.org/2001/XMLSchema-instance" xmlns:g="group">
+<s:stream xmlns:s="stream" xmlns:g="group" xmlns:xi="http://www.w3.org/2001/XMLSchema-instance">
   <g:group>
     <g:person>
       <g:firstName xi:nil="true"/>

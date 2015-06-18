@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:stream xmlns:s="stream" xmlns:xi="http://www.w3.org/2001/XMLSchema-instance" xmlns:r="urn:record" xmlns:g="urn:group">
+<s:stream xmlns:s="stream" xmlns:g="urn:group" xmlns:r="urn:record" xmlns:xi="http://www.w3.org/2001/XMLSchema-instance">
   <g:group>
     <person xmlns="urn:record">
       <firstName>Joe</firstName>

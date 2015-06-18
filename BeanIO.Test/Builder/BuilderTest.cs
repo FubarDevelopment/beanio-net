@@ -28,7 +28,7 @@ namespace BeanIO.Builder
             Assert.NotNull(p.Version);
             Assert.Equal(new Version(1, 0), p.Version);
             Assert.NotNull(p.Encoding);
-            Assert.Equal("utf-8", p.Encoding.WebName);
+            Assert.Equal("utf-8", p.GetEncoding().WebName);
             Assert.False(p.SuppressHeader);
             Assert.Null(p.NamespaceMap);
 
@@ -42,7 +42,7 @@ namespace BeanIO.Builder
             p = (XmlRecordParserFactory)b.Build().Create();
             Assert.Equal(2, p.Indentation);
             Assert.Equal(new Version(2, 0), p.Version);
-            Assert.Equal(Encoding.ASCII, p.Encoding);
+            Assert.Equal(Encoding.ASCII, p.GetEncoding());
             Assert.Equal("\n", p.LineSeparator);
             Assert.Collection(
                 p.NamespaceMap,
