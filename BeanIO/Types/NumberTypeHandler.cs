@@ -116,6 +116,8 @@ namespace BeanIO.Types
                             styles |= NumberStyles.AllowLeadingSign;
                         if (format.IndexOfAny(new[] { '(', ')' }) != -1)
                             styles |= NumberStyles.AllowParentheses;
+                        if (format.IndexOf('$') != -1 || format.IndexOf(Culture.NumberFormat.CurrencySymbol, StringComparison.CurrentCultureIgnoreCase) != -1)
+                            styles |= NumberStyles.Currency;
                         var hasDigitPlaceholders = format.IndexOfAny(new[] { '0', '#' }) != -1;
                         if (!hasDigitPlaceholders && styles == NumberStyles.Number && format.IndexOfAny(new[] { 'x', 'X' }) != -1)
                             styles |= NumberStyles.AllowHexSpecifier;
