@@ -47,7 +47,9 @@ namespace BeanIO.Types.Xml
                 "zzzzzzz",
             };
 
-        private string[] _dateTimeOffsetFormats;
+        private string[] _dateTimeOffsetFormatsNonLenient;
+
+        private string[] _dateTimeOffsetFormatsLenient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AbstractXmlDateTypeHandler"/> class.
@@ -82,9 +84,40 @@ namespace BeanIO.Types.Xml
 
         protected abstract string DatatypeQName { get; }
 
-        private string[] DateTimeOffsetFormats
+        protected bool IsDatePattern
         {
-            get { return _dateTimeOffsetFormats ?? (_dateTimeOffsetFormats = CreateDefaultFormats(IsLenient).ToArray()); }
+            get
+            {
+                if (Pattern == null)
+                    return DatatypeQName != "time";
+                return Pattern.Contains("y")
+                       || Pattern.Contains("d")
+                       || Pattern.Contains("M")
+                       || Pattern.Contains("/")
+                       || Pattern.Contains("D")
+                       || Pattern == "F"
+                       || Pattern == "f"
+                       || Pattern == "g"
+                       || Pattern == "G"
+                       || Pattern == "m"
+                       || Pattern == "O"
+                       || Pattern == "o"
+                       || Pattern == "r"
+                       || Pattern == "R"
+                       || Pattern == "U"
+                       || Pattern == "u"
+                       || Pattern == "Y";
+            }
+        }
+
+        private string[] DateTimeOffsetFormatsNonLenient
+        {
+            get { return _dateTimeOffsetFormatsNonLenient ?? (_dateTimeOffsetFormatsNonLenient = CreateNonLenientFormats().ToArray()); }
+        }
+
+        private string[] DateTimeOffsetFormatsLenient
+        {
+            get { return _dateTimeOffsetFormatsLenient ?? (_dateTimeOffsetFormatsLenient = CreateLenientFormats().ToArray()); }
         }
 
         /// <summary>
@@ -96,24 +129,38 @@ namespace BeanIO.Types.Xml
         {
             if (string.IsNullOrEmpty(text))
                 return null;
+            var replaceDate = false;
             DateTimeOffset dto;
             try
             {
                 if (Pattern != null)
                 {
                     dto = XmlConvert.ToDateTimeOffset(text, Pattern);
+                    replaceDate = !IsDatePattern;
                 }
                 else
                 {
-                    dto = XmlConvert.ToDateTimeOffset(text, DateTimeOffsetFormats);
+                    try
+                    {
+                        dto = XmlConvert.ToDateTimeOffset(text, DateTimeOffsetFormatsNonLenient);
+                    }
+                    catch (FormatException)
+                    {
+                        // TODO: Use C# 6 exception filters
+                        var formats = DateTimeOffsetFormatsLenient;
+                        if (!IsLenient || formats == null || formats.Length == 0)
+                            throw;
+                        dto = XmlConvert.ToDateTimeOffset(text, formats);
+                        replaceDate = true;
+                    }
                 }
-                if (string.Equals(DatatypeQName, "time", StringComparison.Ordinal))
-                    dto = new DateTimeOffset(new DateTime(1970, 1, 1) + dto.TimeOfDay, dto.Offset);
             }
             catch (FormatException ex)
             {
                 throw new TypeConversionException(string.Format("Invalid XML {0}", DatatypeQName), ex);
             }
+            if (replaceDate || string.Equals(DatatypeQName, "time", StringComparison.Ordinal))
+                dto = new DateTimeOffset(new DateTime(1970, 1, 1) + dto.TimeOfDay, dto.Offset);
             if (!IsTimeZoneAllowed && dto.Offset != TimeSpan.Zero)
                 throw new TypeConversionException(string.Format("Invalid XML {0}, time zone not allowed", DatatypeQName));
             return dto;
@@ -141,7 +188,8 @@ namespace BeanIO.Types.Xml
         public override void Configure(Properties properties)
         {
             base.Configure(properties);
-            _dateTimeOffsetFormats = CreateDefaultFormats(IsLenient).ToArray();
+            _dateTimeOffsetFormatsNonLenient = CreateNonLenientFormats().ToArray();
+            _dateTimeOffsetFormatsLenient = CreateLenientFormats().ToArray();
         }
 
         /// <summary>
@@ -157,7 +205,7 @@ namespace BeanIO.Types.Xml
             return TimeSpan.FromMilliseconds(date.Zone.GetUtcOffset(date.ToInstant()).Milliseconds);
         }
 
-        protected virtual IEnumerable<string> CreateDefaultFormats(bool lenient)
+        protected virtual IEnumerable<string> CreateNonLenientFormats()
         {
             foreach (var timeComponent in _defaultTimeFormats)
             {
@@ -182,24 +230,25 @@ namespace BeanIO.Types.Xml
                     timezoneComponent);
             }
             yield return "yyyy-MM-dd";
-            if (lenient)
+        }
+
+        protected virtual IEnumerable<string> CreateLenientFormats()
+        {
+            foreach (var timeComponent in _defaultTimeFormats)
             {
-                foreach (var timeComponent in _defaultTimeFormats)
-                {
-                    foreach (var timezoneComponent in _defaultTimeZoneFormats)
-                    {
-                        yield return string.Format(
-                            "{0}{1}",
-                            timeComponent,
-                            timezoneComponent);
-                    }
-                }
-                foreach (var timeComponent in _defaultTimeFormats)
+                foreach (var timezoneComponent in _defaultTimeZoneFormats)
                 {
                     yield return string.Format(
-                        "{0}",
-                        timeComponent);
+                        "{0}{1}",
+                        timeComponent,
+                        timezoneComponent);
                 }
+            }
+            foreach (var timeComponent in _defaultTimeFormats)
+            {
+                yield return string.Format(
+                    "{0}",
+                    timeComponent);
             }
         }
     }

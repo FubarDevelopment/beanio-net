@@ -82,7 +82,7 @@ namespace BeanIO.Types.Xml
             return XmlConvert.ToString(dto, pattern);
         }
 
-        protected override IEnumerable<string> CreateDefaultFormats(bool lenient)
+        protected override IEnumerable<string> CreateNonLenientFormats()
         {
             foreach (var defaultTimeFormat in DefaultTimeFormats)
             {
@@ -95,6 +95,11 @@ namespace BeanIO.Types.Xml
             {
                 yield return defaultTimeFormat;
             }
+        }
+
+        protected override IEnumerable<string> CreateLenientFormats()
+        {
+            return new string[0];
         }
     }
 }
