@@ -216,6 +216,7 @@
     <Compile Include="Internal\Util\IStatefulWriter.cs" />
     <Compile Include="Internal\Util\MarkableTextReader.cs" />
     <Compile Include="Internal\Util\PropertyDescriptor.cs" />
+    <Compile Include="Internal\Util\RecordFilterReader.cs" />
     <Compile Include="Internal\Util\SetProxyList.cs" />
     <Compile Include="Internal\Util\Settings.cs" />
     <Compile Include="Internal\Util\StringUtil.cs" />
@@ -246,6 +247,12 @@
     <Compile Include="Stream\FixedLength\FixedLengthWriter.cs" />
     <Compile Include="Stream\IRecordMarshaller.cs" />
     <Compile Include="Stream\IRecordParserFactory.cs" />
+    <Compile Include="Stream\Json\JsonParserConfiguration.cs" />
+    <Compile Include="Stream\Json\JsonReader.cs" />
+    <Compile Include="Stream\Json\JsonRecordMarshaller.cs" />
+    <Compile Include="Stream\Json\JsonRecordParserFactory.cs" />
+    <Compile Include="Stream\Json\JsonRecordUnmarshaller.cs" />
+    <Compile Include="Stream\Json\JsonWriter.cs" />
     <Compile Include="Stream\RecordParserFactorySupport.cs" />
     <Compile Include="Stream\IRecordReader.cs" />
     <Compile Include="Stream\IRecordUnmarshaller.cs" />

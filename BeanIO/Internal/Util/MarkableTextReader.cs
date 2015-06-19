@@ -60,13 +60,13 @@ namespace BeanIO.Internal.Util
             return result;
         }
 
-        public void Mark(int readAheadLimit)
+        public virtual void Mark(int readAheadLimit)
         {
             _markBuffer = new int[readAheadLimit];
             _markBufferSize = _markBufferPosition = 0;
         }
 
-        public void Reset()
+        public virtual void Reset()
         {
             if (_markBuffer == null)
                 throw new InvalidOperationException("Reset without Mark");
