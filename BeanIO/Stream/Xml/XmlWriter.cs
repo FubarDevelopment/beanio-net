@@ -560,9 +560,11 @@ namespace BeanIO.Stream.Xml
                 }
             }
 
+            var addedNamespacePrefixes = new HashSet<string>();
             foreach (var namespaceToAdd in namespacesToAdd)
             {
-                _out.WriteAttributeString("xmlns", namespaceToAdd.Item1, XNamespace.Xmlns.NamespaceName, namespaceToAdd.Item2);
+                if (addedNamespacePrefixes.Add(namespaceToAdd.Item1))
+                    _out.WriteAttributeString("xmlns", namespaceToAdd.Item1, XNamespace.Xmlns.NamespaceName, namespaceToAdd.Item2);
             }
 
             foreach (var attributeToAdd in attributesToAdd)
