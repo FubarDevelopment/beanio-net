@@ -141,7 +141,7 @@ namespace BeanIO.Internal.Config
         /// <summary>
         /// Gets or sets the JSON type.
         /// </summary>
-        public JTokenType JsonType { get; set; }
+        public string JsonType { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the property is mapped to a JSON array.

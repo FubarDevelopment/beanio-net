@@ -69,6 +69,8 @@
     <Compile Include="Internal\Compiler\Flat\FlatPreprocessor.cs" />
     <Compile Include="Internal\Compiler\IParserFactory.cs" />
     <Compile Include="Internal\Compiler\IPropertyAccessorFactory.cs" />
+    <Compile Include="Internal\Compiler\Json\JsonParserFactory.cs" />
+    <Compile Include="Internal\Compiler\Json\JsonPreprocessor.cs" />
     <Compile Include="Internal\Compiler\ParserFactorySupport.cs" />
     <Compile Include="Internal\Compiler\Preprocessor.cs" />
     <Compile Include="Internal\Compiler\ProcessorSupport.cs" />

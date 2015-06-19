@@ -392,7 +392,7 @@ namespace BeanIO.Internal.Config.Xml
                     XmlNamespace = GetOptionalAttribute(element, "xmlNamespace"),
                     XmlPrefix = GetOptionalAttribute(element, "xmlPrefix"),
                     JsonName = GetAttribute(element, "jsonName"),
-                    JsonType = GetEnumAttribute<JTokenType>(element, "jsonType") ?? JTokenType.None,
+                    JsonType = GetAttribute(element, "jsonType"),
                 };
 
             PopulatePropertyConfig(config, element);
@@ -577,7 +577,7 @@ namespace BeanIO.Internal.Config.Xml
                     XmlPrefix = GetOptionalAttribute(element, "xmlPrefix"),
                     XmlType = GetOptionalEnumAttribute<XmlNodeType>(element, "xmlType"),
                     JsonName = GetAttribute(element, "jsonName"),
-                    JsonType = GetEnumAttribute<JTokenType>(element, "jsonType") ?? JTokenType.None,
+                    JsonType = GetAttribute(element, "jsonType"),
                 };
             PopulatePropertyConfig(config, element);
             config.SetKey(GetAttribute(element, "key"));
@@ -624,7 +624,7 @@ namespace BeanIO.Internal.Config.Xml
                     XmlPrefix = GetOptionalAttribute(element, "xmlPrefix"),
                     XmlType = GetOptionalEnumAttribute<XmlNodeType>(element, "xmlType"),
                     JsonName = GetAttribute(element, "jsonName"),
-                    JsonType = GetEnumAttribute<JTokenType>(element, "jsonType") ?? JTokenType.None,
+                    JsonType = GetAttribute(element, "jsonType"),
                 };
 
             PopulatePropertyConfig(config, element);
