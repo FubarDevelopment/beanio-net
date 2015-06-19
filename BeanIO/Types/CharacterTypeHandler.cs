@@ -9,7 +9,7 @@ namespace BeanIO.Types
             get { return typeof(char); }
         }
 
-        public object Parse(string text)
+        public virtual object Parse(string text)
         {
             if (string.IsNullOrEmpty(text))
                 return null;
@@ -20,7 +20,7 @@ namespace BeanIO.Types
             return text[0];
         }
 
-        public string Format(object value)
+        public virtual string Format(object value)
         {
             if (value == null)
                 return null;

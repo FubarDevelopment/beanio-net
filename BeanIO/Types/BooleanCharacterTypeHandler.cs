@@ -21,7 +21,7 @@ namespace BeanIO.Types
             get { return typeof(bool); }
         }
 
-        public object Parse(string text)
+        public virtual object Parse(string text)
         {
             if (string.IsNullOrEmpty(text))
                 return null;
@@ -38,7 +38,7 @@ namespace BeanIO.Types
             throw new FormatException(string.Format("Invalid value '{0}' for type '{1}'", text, TargetType.Name));
         }
 
-        public string Format(object value)
+        public virtual string Format(object value)
         {
             if (value == null)
                 return string.Format("{0}", NullValue);

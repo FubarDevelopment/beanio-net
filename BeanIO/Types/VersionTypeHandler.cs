@@ -19,7 +19,7 @@ namespace BeanIO.Types
         /// </summary>
         /// <param name="text">The field text to parse, which may be null if the field was not passed in the record</param>
         /// <returns>The parsed object</returns>
-        public object Parse(string text)
+        public virtual object Parse(string text)
         {
             if (string.IsNullOrEmpty(text))
                 return null;
@@ -31,7 +31,7 @@ namespace BeanIO.Types
         /// </summary>
         /// <param name="value">The value to format, which may be null</param>
         /// <returns>The formatted field text, or <code>null</code> to indicate the value is not present</returns>
-        public string Format(object value)
+        public virtual string Format(object value)
         {
             if (value == null)
                 return null;

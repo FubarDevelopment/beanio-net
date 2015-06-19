@@ -36,7 +36,7 @@ namespace BeanIO.Types.Xml
         /// Configures this type handler.
         /// </summary>
         /// <param name="properties">The properties for customizing the instance</param>
-        public void Configure(Properties properties)
+        public virtual void Configure(Properties properties)
         {
             var v = properties["numeric"];
             IsNumericFormatEnabled = !string.IsNullOrEmpty(v) && XmlConvert.ToBoolean(v);
