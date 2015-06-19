@@ -304,11 +304,10 @@ namespace BeanIO.Internal.Parser
                 try
                 {
                     text = Handler.Format(value);
-                    if (text == null || ReferenceEquals(text, Value.Nil))
+                    if (ReferenceEquals(text, Value.Nil))
                     {
-                        if (Format.IsNillable)
-                            return Value.Nil;
-                        text = null;
+                        if (!Format.IsNillable)
+                            text = null;
                     }
                 }
                 catch (Exception ex)
