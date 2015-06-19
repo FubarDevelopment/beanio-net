@@ -167,6 +167,8 @@
     <Compile Include="Parser\Xml\TypeHandler\XmlTypeHandlerTest.cs" />
     <Compile Include="Parser\Xml\Types\NillableStringTypeHandler.cs" />
     <Compile Include="Parser\Xml\Types\XmlTypesTest.cs" />
+    <Compile Include="Parser\Xml\Validation\XmlValidationTest.cs" />
+    <Compile Include="Parser\Xml\Wrapper\XmlWrapperTest.cs" />
     <Compile Include="Parser\Xml\XmlParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamFactoryTest.cs" />
@@ -484,6 +486,17 @@
     <EmbeddedResource Include="Parser\Xml\Types\t6_in.xml" />
     <EmbeddedResource Include="Parser\Xml\Types\t7_out.xml" />
     <EmbeddedResource Include="Parser\Xml\Types\types_mapping.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Xml\Validation\v1_in.xml" />
+    <EmbeddedResource Include="Parser\Xml\Validation\v2_in.xml" />
+    <EmbeddedResource Include="Parser\Xml\Validation\validation_mapping.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Xml\Wrapper\w1_in.xml" />
+    <EmbeddedResource Include="Parser\Xml\Wrapper\w2_in.xml" />
+    <EmbeddedResource Include="Parser\Xml\Wrapper\w3_in.xml" />
+    <EmbeddedResource Include="Parser\Xml\Wrapper\wrapper_mapping.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
