@@ -120,6 +120,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DefaultMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Internal\Parser\Format\Json\IJsonNode.cs" />
+    <Compile Include="Internal\Parser\Format\Json\JsonFieldFormat.cs" />
+    <Compile Include="Internal\Parser\Format\Json\JsonMarshallingContext.cs" />
+    <Compile Include="Internal\Parser\Format\Json\JsonStreamFormat.cs" />
+    <Compile Include="Internal\Parser\Format\Json\JsonUnmarshallingContext.cs" />
+    <Compile Include="Internal\Parser\Format\Json\JsonWrapper.cs" />
     <Compile Include="Internal\Parser\Format\Xml\Annotations\GroupCountAnnotation.cs" />
     <Compile Include="Internal\Parser\Format\Xml\Annotations\IsGroupElementAnnotation.cs" />
     <Compile Include="Internal\Parser\Format\Xml\Annotations\NamespaceModeAnnotation.cs" />
@@ -192,6 +198,7 @@
     <Compile Include="Internal\Parser\RecordCollection.cs" />
     <Compile Include="Internal\Parser\RecordMap.cs" />
     <Compile Include="Internal\Util\DomUtil.cs" />
+    <Compile Include="Internal\Parser\Format\Json\JsonNodeUtil.cs" />
     <Compile Include="Internal\Util\NamespaceAwareElementComparer.cs" />
     <Compile Include="Internal\Util\ObjectUtils.cs" />
     <Compile Include="Internal\Parser\ParserComponent.cs" />
