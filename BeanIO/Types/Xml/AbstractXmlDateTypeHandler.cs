@@ -107,7 +107,7 @@ namespace BeanIO.Types.Xml
                 {
                     dto = XmlConvert.ToDateTimeOffset(text, DateTimeOffsetFormats);
                 }
-                if (!text.Contains("-"))
+                if (string.Equals(DatatypeQName, "time", StringComparison.Ordinal))
                     dto = new DateTimeOffset(new DateTime(1970, 1, 1) + dto.TimeOfDay, dto.Offset);
             }
             catch (FormatException ex)
