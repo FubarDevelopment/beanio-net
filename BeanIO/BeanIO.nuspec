@@ -2,7 +2,7 @@
 <package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <metadata>
     <id>FubarDev.$id$</id>
-    <version>$version$</version>
+    <version>2.1.2</version>
     <title>BeanIO</title>
     <authors>Mark Junker</authors>
     <owners>FubarCoder</owners>
