@@ -7,11 +7,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeanIO", "BeanIO\BeanIO.csp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other", "Other", "{715770C9-DF4E-4F00-BC10-BBFE18C00C6E}"
 	ProjectSection(SolutionItems) = preProject
+		beanio-logo.png = beanio-logo.png
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeanIO.Test", "BeanIO.Test\BeanIO.Test.csproj", "{F3C4A4F6-9A91-430E-8E03-63F0D60052CD}"
+EndProject
+Project("{FF286327-C783-4F7A-AB73-9BCBAD0D4460}") = "BeanIO.NuGet", "BeanIO.NuGet\BeanIO.NuGet.nuproj", "{EB981B82-B5C3-4816-A2E7-477FC7423425}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +30,10 @@ Global
 		{F3C4A4F6-9A91-430E-8E03-63F0D60052CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3C4A4F6-9A91-430E-8E03-63F0D60052CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3C4A4F6-9A91-430E-8E03-63F0D60052CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB981B82-B5C3-4816-A2E7-477FC7423425}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB981B82-B5C3-4816-A2E7-477FC7423425}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB981B82-B5C3-4816-A2E7-477FC7423425}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB981B82-B5C3-4816-A2E7-477FC7423425}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
