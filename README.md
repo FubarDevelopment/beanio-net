@@ -1,4 +1,4 @@
-# ![BeanIO .NET](beanio-logo.png "BeanIO") - .NET port of the [BeanIO](http://beanio.org) java library
+# ![BeanIO .NET](beanio-logo.png "BeanIO") A .NET port of the [BeanIO](http://beanio.org) java library
 
 # Advantages over IKVM converted java BeanIO
 
