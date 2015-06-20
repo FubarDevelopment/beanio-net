@@ -32,7 +32,7 @@ Supported platforms:
     <tags>BeanIO PCL CSV XML JSON fixed length file parse serialize deserialize serialization deserialization parsing marshal marshalling unmarshal unmarshalling</tags>
   </metadata>
   <files>
-    <file src="C:\Users\fubar\Source\Repos\beanio-net\BeanIO\bin\Debug\BeanIO.dll" target="lib\net45-win8-wp81-ios-android" />
-    <file src="C:\Users\fubar\Source\Repos\beanio-net\BeanIO\bin\Debug\BeanIO.pdb" target="lib\net45-win8-wp81-ios-android" />
+    <file src="C:\Users\fubar\Source\Repos\beanio-net\BeanIO\bin\Debug\BeanIO.dll" target="lib\portable-net45+win+wpa81+MonoAndroid10+Xamarin.iOS10+MonoTouch10" />
+    <file src="C:\Users\fubar\Source\Repos\beanio-net\BeanIO\bin\Debug\BeanIO.pdb" target="lib\portable-net45+win+wpa81+MonoAndroid10+Xamarin.iOS10+MonoTouch10" />
   </files>
 </package>
