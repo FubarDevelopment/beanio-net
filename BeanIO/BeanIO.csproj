@@ -363,6 +363,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Internal\Config\beanio.properties" />
+    <None Include="BeanIO.nuspec" />
+    <None Include="nuget-spec.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
