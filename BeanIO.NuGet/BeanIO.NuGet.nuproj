@@ -33,12 +33,11 @@ Supported platforms:
 - Xamarin.Android
 - Portable Class Libraries</Description>
     <ReleaseNotes>First version</ReleaseNotes>
-    <ProjectUrl>
-    </ProjectUrl>
-    <LicenseUrl>
-    </LicenseUrl>
+    <ProjectUrl>https://github.com/FubarDevelopment/beanio-net</ProjectUrl>
+    <LicenseUrl>http://opensource.org/licenses/MIT</LicenseUrl>
     <Copyright>Copyright © Fubar Development, Kevin Seim 2015</Copyright>
     <Tags>BeanIO PCL CSV XML JSON fixed length file parse serialize deserialize serialization deserialization parsing marshal marshalling unmarshal unmarshalling</Tags>
+    <IconUrl>https://github.com/FubarDevelopment/beanio-net/raw/master/beanio-logo.png</IconUrl>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="Readme.txt" />
