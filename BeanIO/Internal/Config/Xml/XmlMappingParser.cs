@@ -256,8 +256,8 @@ namespace BeanIO.Internal.Config.Xml
                 throw new BeanIOConfigurationException(string.Format("No scheme specified for resource '{0}'", resource));
 
             var url = new Uri(resource);
-            ISchemeHandler handler;
-            if (!Settings.Instance.SchemeHandlers.TryGetValue(url.Scheme, out handler))
+            var handler = Settings.Instance.GetSchemeHandler(url, false);
+            if (handler == null)
                 throw new BeanIOConfigurationException(
                     string.Format(
                         "Scheme of import resource name {0} must one of: {1}",

@@ -102,6 +102,27 @@ namespace BeanIO
         }
 
         /// <summary>
+        /// Loads a BeanIO mapping, and adds the configured streams to this factory.
+        /// </summary>
+        /// <param name="source">The source to read the mapping file from</param>
+        public virtual void Load(Uri source)
+        {
+            Load(source, null);
+        }
+
+        /// <summary>
+        /// Loads a BeanIO mapping file, and adds the configured streams to this factory.
+        /// </summary>
+        /// <param name="source">The source to read the mapping file from</param>
+        /// <param name="properties">user <see cref="Properties"/> for property substitution</param>
+        public virtual void Load(Uri source, Properties properties)
+        {
+            var handler = Settings.Instance.GetSchemeHandler(source, true);
+            using (var input = handler.Open(source))
+                Load(input, properties);
+        }
+
+        /// <summary>
         /// Loads a BeanIO mapping file, and adds the configured streams to this factory.
         /// </summary>
         /// <param name="input">The input stream to read the mapping file from</param>

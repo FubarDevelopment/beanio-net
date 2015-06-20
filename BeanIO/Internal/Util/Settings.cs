@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 using BeanIO.Config;
@@ -255,6 +256,27 @@ namespace BeanIO.Internal.Util
         public void Add(ISchemeHandler handler)
         {
             _schemeHandlers[handler.Scheme] = handler;
+        }
+
+        public ISchemeHandler GetSchemeHandler(Uri url, bool throwIfMissing)
+        {
+            return GetSchemeHandler(url.Scheme, throwIfMissing);
+        }
+
+        public ISchemeHandler GetSchemeHandler(string scheme, bool throwIfMissing)
+        {
+            ISchemeHandler handler;
+            if (!SchemeHandlers.TryGetValue(scheme, out handler))
+            {
+                if (!throwIfMissing)
+                    return null;
+                throw new BeanIOConfigurationException(
+                    string.Format(
+                        "Scheme '{0}' must one of: {1}",
+                        scheme,
+                        string.Join(", ", SchemeHandlers.Keys.Select(x => string.Format("'{0}'", x)))));
+            }
+            return handler;
         }
 
         private static IPropertiesProvider CreateDefaultProvider()
