@@ -47,6 +47,9 @@ namespace BeanIO.Internal.Parser.Format.Json
         /// Gets or sets the index of this node in its parent array, or -1 if not applicable
         /// (i.e. its parent is an object).
         /// </summary>
+        /// <remarks>
+        /// Set to the index of this field in a JSON array, or -1 if the field itself repeats
+        /// </remarks>
         public virtual int JsonArrayIndex { get; set; }
 
         /// <summary>

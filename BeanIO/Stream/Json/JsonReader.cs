@@ -76,6 +76,10 @@ namespace BeanIO.Stream.Json
                     throw new RecordIOException(string.Format("Unexpected token {0}", _reader.TokenType));
                 }
             }
+            catch (NJ.JsonReaderException ex)
+            {
+                throw new RecordIOException(ex.Message, ex);
+            }
             catch (Exception ex)
             {
                 throw new RecordIOException(string.Format("{0} at line {1}, near position {2}", ex.Message, _reader.LineNumber, _reader.LinePosition), ex);

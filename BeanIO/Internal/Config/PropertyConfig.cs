@@ -3,8 +3,6 @@ using System.Xml;
 
 using BeanIO.Internal.Util;
 
-using Newtonsoft.Json.Linq;
-
 namespace BeanIO.Internal.Config
 {
     /// <summary>
@@ -20,6 +18,14 @@ namespace BeanIO.Internal.Config
     /// </remarks>
     public abstract class PropertyConfig : ComponentConfig
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PropertyConfig"/> class.
+        /// </summary>
+        protected PropertyConfig()
+        {
+            JsonArrayIndex = -1;
+        }
+
         /// <summary>
         /// Gets or sets the component name used for identification in error handling
         /// </summary>
@@ -154,7 +160,7 @@ namespace BeanIO.Internal.Config
         /// <summary>
         /// Gets or sets the index of this property in its parent JSON array.
         /// </summary>
-        public int? JsonArrayIndex { get; set; }
+        public int JsonArrayIndex { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this component is used to identify a record during

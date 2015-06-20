@@ -148,14 +148,22 @@ namespace BeanIO.Internal.Compiler.Json
                     throw new BeanIOConfigurationException(string.Format("Invalid jsonType '{0}', expected array", field.JsonType));
                 }
 
+                switch (type.ToLowerInvariant())
+                {
+                    case "number":
+                        type = "Integer";
+                        break;
+                }
+
                 JTokenType tokenType;
                 if (!Enum.TryParse(type, true, out tokenType))
                     tokenType = JTokenType.Undefined;
                 switch (tokenType)
                 {
-                    case JTokenType.Object:
-                    case JTokenType.Array:
-                    case JTokenType.None:
+                    case JTokenType.String:
+                    case JTokenType.Integer:
+                    case JTokenType.Boolean:
+                    case JTokenType.Float:
                         break;
                     default:
                         throw new BeanIOConfigurationException(string.Format("Invalid jsonType '{0}'", field.JsonType));

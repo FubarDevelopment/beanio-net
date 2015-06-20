@@ -123,7 +123,7 @@ namespace BeanIO.Internal.Parser.Format.Json
                         JsonArray.Add(value);
                         break;
                     case JTokenType.Object:
-                        JsonObject[type.JsonType] = value;
+                        JsonObject[type.JsonName] = value;
                         break;
                 }
             }

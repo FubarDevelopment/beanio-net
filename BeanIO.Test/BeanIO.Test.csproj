@@ -121,6 +121,9 @@
     <Compile Include="Parser\InlineMaps\InlineMapParserTest.cs" />
     <Compile Include="Parser\InlineMaps\InlineMapsTest.cs" />
     <Compile Include="Parser\InlineMaps\Job.cs" />
+    <Compile Include="Parser\Json\Field\JsonFieldParserTest.cs" />
+    <Compile Include="Parser\Json\JsonTestRecordParserFactory.cs" />
+    <Compile Include="Parser\Json\Segment\JsonSegmentParserTest.cs" />
     <Compile Include="Parser\Lazy\Account.cs" />
     <Compile Include="Parser\Lazy\LazyTest.cs" />
     <Compile Include="Parser\Lazy\LazyUser.cs" />
@@ -180,6 +183,8 @@
     <Compile Include="Stream\DelimitedWriterTest.cs" />
     <Compile Include="Stream\FixedLengthReaderTest.cs" />
     <Compile Include="Stream\FixedLengthWriterTest.cs" />
+    <Compile Include="Stream\JsonReaderTest.cs" />
+    <Compile Include="Stream\JsonWriterTest.cs" />
     <Compile Include="Stream\StrictStringReader.cs" />
     <Compile Include="Types\CharacterTypeHandlerTest.cs" />
     <Compile Include="Types\DateTypeHandlerTest.cs" />
@@ -497,6 +502,19 @@
     <EmbeddedResource Include="Parser\Xml\Wrapper\w2_in.xml" />
     <EmbeddedResource Include="Parser\Xml\Wrapper\w3_in.xml" />
     <EmbeddedResource Include="Parser\Xml\Wrapper\wrapper_mapping.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Json\Field\jf1.txt" />
+    <EmbeddedResource Include="Parser\Json\Field\jsonField_mapping.xml" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Parser\Json\Segment\js1.txt" />
+    <EmbeddedResource Include="Parser\Json\Segment\js2.txt" />
+    <EmbeddedResource Include="Parser\Json\Segment\js3.txt" />
+    <EmbeddedResource Include="Parser\Json\Segment\js4.txt" />
+    <EmbeddedResource Include="Parser\Json\Segment\jsonSegment_mapping.xml" />
+    <Content Include="Parser\Json\Segment\notes.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
