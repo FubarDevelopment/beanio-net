@@ -5,6 +5,7 @@ using System.IO;
 using NodaTime;
 
 using Xunit;
+
 namespace BeanIO.Parser.Xml.TypeHandler
 {
     public sealed class XmlTypeHandlerTest : XmlParserTest

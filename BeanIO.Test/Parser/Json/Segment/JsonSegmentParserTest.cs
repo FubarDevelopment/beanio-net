@@ -17,7 +17,7 @@ namespace BeanIO.Parser.Json.Segment
         }
 
         [Fact]
-        public void TestSegment_JsonTypeObject()
+        public void TestSegmentJsonTypeObject()
         {
             var reader = _factory.CreateReader("stream1", LoadReader("js1.txt"));
 
@@ -41,7 +41,7 @@ namespace BeanIO.Parser.Json.Segment
         }
 
         [Fact]
-        public void TestSegment_JsonTypeObjectList()
+        public void TestSegmentJsonTypeObjectList()
         {
             var reader = _factory.CreateReader("stream2", LoadReader("js2.txt"));
 
@@ -75,7 +75,7 @@ namespace BeanIO.Parser.Json.Segment
         }
 
         [Fact]
-        public void TestSegment_JsonTypeArray()
+        public void TestSegmentJsonTypeArray()
         {
             var reader = _factory.CreateReader("stream3", LoadReader("js3.txt"));
 
@@ -99,7 +99,7 @@ namespace BeanIO.Parser.Json.Segment
         }
 
         [Fact]
-        public void TestSegment_JsonTypeNone()
+        public void TestSegmentJsonTypeNone()
         {
             var reader = _factory.CreateReader("stream4", LoadReader("js4.txt"));
 

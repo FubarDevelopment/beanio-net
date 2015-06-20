@@ -58,7 +58,7 @@ namespace BeanIO.Parser.Xml.Field
                 Assert.Equal(25, person.Age);
                 writer.Write(person);
 
-                AssertFieldError(reader, 5, "record", "age", "", "Required field not set");
+                AssertFieldError(reader, 5, "record", "age", string.Empty, "Required field not set");
                 person.Age = null;
                 writer.Write(person);
 

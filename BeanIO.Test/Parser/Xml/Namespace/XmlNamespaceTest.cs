@@ -269,7 +269,7 @@ namespace BeanIO.Parser.Xml.Namespace
 
         /// <summary>
         /// Test a namespace prefix set at the stream level.  Also test XML header
-        /// with overriden values.
+        /// with overridden values.
         /// </summary>
         [Fact]
         public void TestNamespacePrefixStream()

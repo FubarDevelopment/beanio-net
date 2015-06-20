@@ -418,12 +418,12 @@ namespace BeanIO.Internal.Util
                     return type.MakeGenericType(typeof(string), typeof(object));
                 return type.MakeGenericType(typeof(object));
             }
-            
+
             if (with == null || !with.IsConstructedGenericType)
             {
                 return type;
             }
-            
+
             var withInfo = with.GetTypeInfo();
             if (typeInfo.GenericTypeParameters.Length != withInfo.GenericTypeArguments.Length)
                 throw new InvalidOperationException("The number of type arguments must match");

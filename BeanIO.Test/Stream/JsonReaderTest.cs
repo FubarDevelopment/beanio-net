@@ -16,7 +16,6 @@ namespace BeanIO.Stream
     /// </summary>
     public class JsonReaderTest
     {
-
         [Fact]
         public void TestReadString()
         {
@@ -43,8 +42,7 @@ namespace BeanIO.Stream
                 "{ \"double3\" : 5E10 }\n" +
                 "{\"int1\":" + int1 + "}\n" +
                 "{\"int2\":10}\n" +
-                "{ \"long1\" : " + long1 + " }\n"
-                );
+                "{ \"long1\" : " + long1 + " }\n");
 
             var map = Assert.IsType<JObject>(reader.Read());
             Assert.Equal(5e10d, map["double1"]);
@@ -67,8 +65,7 @@ namespace BeanIO.Stream
         {
             var reader = NewReader(
                 "{\"field1\":null}\n" +
-                "{ \"field2\" : null }\n"
-                );
+                "{ \"field2\" : null }\n");
 
             var map = Assert.IsType<JObject>(reader.Read());
             Assert.Equal(JValue.CreateNull(), map["field1"]);
@@ -83,8 +80,7 @@ namespace BeanIO.Stream
         {
             var reader = NewReader(
                 "{\"field1\":true}\n" +
-                "{ \"field2\" : false }\n"
-                );
+                "{ \"field2\" : false }\n");
 
             var map = Assert.IsType<JObject>(reader.Read());
             Assert.Equal(true, map["field1"]);
@@ -100,8 +96,7 @@ namespace BeanIO.Stream
             var reader = NewReader(
                 "{\"o1\":{\"field1\":\"value1\"}, \"field2\":20}" +
                 "{ \"o1\" : { \"field1\" : \"value1\" } }" +
-                "{ \"o1\" : { \"field1\" : \"value1\", \"field2\" : 10} }"
-                );
+                "{ \"o1\" : { \"field1\" : \"value1\", \"field2\" : 10} }");
 
             var map = Assert.IsType<JObject>(reader.Read());
             Assert.Equal(20, map["field2"]);
@@ -125,8 +120,7 @@ namespace BeanIO.Stream
         {
             var reader = NewReader(
                 "{\"array1\":[1,2,3]}" +
-                "{ \"array2\" : [ \"10\" , null , true , { \"field1\" : \"value1\" } ] }"
-                );
+                "{ \"array2\" : [ \"10\" , null , true , { \"field1\" : \"value1\" } ] }");
 
             var map = Assert.IsType<JObject>(reader.Read());
             var list = Assert.IsType<JArray>(map["array1"]);
@@ -152,8 +146,7 @@ namespace BeanIO.Stream
         public void TestEscapedString()
         {
             var reader = NewReader(
-                "{ \"field1\" : \" \\\\ \\/ \\b \\f \\n \\r \\t \\\" \\u004B \" } "
-                );
+                "{ \"field1\" : \" \\\\ \\/ \\b \\f \\n \\r \\t \\\" \\u004B \" } ");
 
             var map = Assert.IsType<JObject>(reader.Read());
             Assert.Equal(" \\ / \b \f \n \r \t \" K ", map["field1"]);

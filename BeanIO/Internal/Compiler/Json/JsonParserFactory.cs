@@ -17,7 +17,7 @@ namespace BeanIO.Internal.Compiler.Json
     internal class JsonParserFactory : ParserFactorySupport
     {
         /// <summary>
-        /// depth starts at one to accomodate the root JSON object
+        /// depth starts at one to accommodate the root JSON object
         /// </summary>
         private int _maxDepth = 1;
 
@@ -184,20 +184,6 @@ namespace BeanIO.Internal.Compiler.Json
             return false;
         }
 
-        private bool IsWrappingRequired(SegmentConfig config)
-        {
-            return !string.IsNullOrEmpty(config.JsonType)
-                   && !string.Equals(config.JsonType, JTokenType.None.ToString(), StringComparison.OrdinalIgnoreCase);
-        }
-
-        private JTokenType ConvertJsonType(string type)
-        {
-            var tokenType = (JTokenType)Enum.Parse(typeof(JTokenType), type, true);
-            if (tokenType != JTokenType.Array && tokenType != JTokenType.Object)
-                throw new BeanIOConfigurationException(string.Format("Invalid jsonType '{0}'", type));
-            return tokenType;
-        }
-
         private static JTokenType DetermineTokenType(Type type)
         {
             if (!type.GetTypeInfo().IsPrimitive)
@@ -212,6 +198,20 @@ namespace BeanIO.Internal.Compiler.Json
                 return JTokenType.Float;
             }
             return JTokenType.Integer;
+        }
+
+        private bool IsWrappingRequired(SegmentConfig config)
+        {
+            return !string.IsNullOrEmpty(config.JsonType)
+                   && !string.Equals(config.JsonType, JTokenType.None.ToString(), StringComparison.OrdinalIgnoreCase);
+        }
+
+        private JTokenType ConvertJsonType(string type)
+        {
+            var tokenType = (JTokenType)Enum.Parse(typeof(JTokenType), type, true);
+            if (tokenType != JTokenType.Array && tokenType != JTokenType.Object)
+                throw new BeanIOConfigurationException(string.Format("Invalid jsonType '{0}'", type));
+            return tokenType;
         }
     }
 }

@@ -559,7 +559,6 @@ namespace BeanIO.Internal.Compiler
                 recordMap.KeyProperty = keyProperty;
             }
 
-
             if (recordMap != null)
             {
                 var propertyTypeInfo = recordMap.PropertyType.GetTypeInfo();
