@@ -1,4 +1,4 @@
- ![BeanIO .NET][beanio-logo.png "BeanIO"]beanio
+ ![BeanIO .NET](beanio-logo.png "BeanIO")beanio
 
 .NET port of the [BeanIO](http://beanio.org) java library
 
