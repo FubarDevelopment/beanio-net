@@ -40,6 +40,7 @@
     <Compile Include="Annotation\RecordAttribute.cs" />
     <Compile Include="Annotation\GroupAttribute.cs" />
     <Compile Include="Annotation\SegmentAttribute.cs" />
+    <Compile Include="Annotation\ValidationMode.cs" />
     <Compile Include="BeanReader.cs" />
     <Compile Include="BeanReaderErrorEventArgs.cs" />
     <Compile Include="Builder\AccessMode.cs" />
@@ -233,6 +234,7 @@
     <Compile Include="Internal\Util\TypeHandlerFactory.cs" />
     <Compile Include="Internal\Util\TypeUtil.cs" />
     <Compile Include="Introspector.cs" />
+    <Compile Include="InvalidBeanException.cs" />
     <Compile Include="IUnmarshaller.cs" />
     <Compile Include="JetBrains.Annotations.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
@@ -365,6 +367,9 @@
     <EmbeddedResource Include="Internal\Config\beanio.properties" />
     <None Include="BeanIO.nuspec" />
     <None Include="packages.config" />
+    <EmbeddedResource Include="Xsd\2015\06\mapping.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

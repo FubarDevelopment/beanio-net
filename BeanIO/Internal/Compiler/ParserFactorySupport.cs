@@ -777,6 +777,9 @@ namespace BeanIO.Internal.Compiler
                     IsBound = config.IsBound,
                 };
 
+            if (config.ValidateOnMarshal != null)
+                field.ValidateOnMarshal = config.ValidateOnMarshal.Value;
+
             try
             {
                 field.Regex = config.RegEx;

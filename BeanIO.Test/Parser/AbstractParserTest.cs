@@ -35,7 +35,7 @@ namespace BeanIO.Parser
             StreamFactory factory = StreamFactory.NewInstance();
             if (xml != null)
             {
-                xml = "<beanio xmlns=\"http://www.beanio.org/2012/03\">\n" + xml + "\n</beanio>";
+                xml = "<beanio xmlns=\"http://www.beanio.org/2015/06\">\n" + xml + "\n</beanio>";
                 factory.Load(new MemoryStream(Encoding.UTF8.GetBytes(xml)));
             }
             return factory;

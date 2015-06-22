@@ -31,6 +31,10 @@ namespace BeanIO
         /// </summary>
         /// <param name="bean">The bean object to marshal</param>
         /// <returns>This <see cref="IMarshaller"/></returns>
+        /// <exception cref="BeanWriterException">if a record is not matched for the given bean object,
+        /// or in some other rare (but fatal) conditions</exception>
+        /// <exception cref="InvalidBeanException">if BeanIO is configured to validate fields during marshalling,
+        /// and a field does not meet the configured validation rules</exception>
         IMarshaller Marshal(object bean);
 
         /// <summary>
@@ -39,6 +43,10 @@ namespace BeanIO
         /// <param name="recordName">The name of the record to marshal</param>
         /// <param name="bean">The bean object to marshal</param>
         /// <returns>This <see cref="IMarshaller"/></returns>
+        /// <exception cref="BeanWriterException">if a record is not matched for the given bean object,
+        /// or in some other rare (but fatal) conditions</exception>
+        /// <exception cref="InvalidBeanException">if BeanIO is configured to validate fields during marshalling,
+        /// and a field does not meet the configured validation rules</exception>
         IMarshaller Marshal(string recordName, object bean);
 
         /// <summary>

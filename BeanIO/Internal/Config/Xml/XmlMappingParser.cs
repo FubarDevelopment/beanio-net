@@ -13,8 +13,6 @@ using BeanIO.Stream;
 
 using JetBrains.Annotations;
 
-using Newtonsoft.Json.Linq;
-
 namespace BeanIO.Internal.Config.Xml
 {
     /// <summary>
@@ -481,6 +479,7 @@ namespace BeanIO.Internal.Config.Xml
                     Name = GetAttribute(element, "name"),
                     Format = GetAttribute(element, "format"),
                     Mode = GetEnumAttribute<AccessMode>(element, "mode"),
+                    ValidateOnMarshal = GetBoolAttribute(element, "validateOnMarshal"),
                     XmlName = GetAttribute(element, "xmlName"),
                     XmlNamespace = GetOptionalAttribute(element, "xmlNamespace"),
                     XmlPrefix = GetOptionalAttribute(element, "xmlPrefix"),
@@ -875,6 +874,7 @@ namespace BeanIO.Internal.Config.Xml
         private void PopulatePropertyConfig(PropertyConfig config, XElement element)
         {
             config.Name = GetAttribute(element, "name");
+            config.ValidateOnMarshal = GetBoolAttribute(element, "validateOnMarshal");
             config.Getter = GetAttribute(element, "getter");
             config.Setter = GetAttribute(element, "setter");
             config.Collection = GetAttribute(element, "collection");

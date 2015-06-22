@@ -136,6 +136,8 @@ namespace BeanIO.Internal.Config.Annotation
                     MinOccurs = minOccurs,
                     MaxOccurs = maxOccurs,
 
+                    ValidateOnMarshal = ToValue(group.ValidationMode),
+
                     XmlType = group.XmlType.ToValue(),
                     XmlName = group.XmlName.ToValue(),
                     XmlNamespace = group.XmlNamespace.ToValue(),
@@ -173,6 +175,8 @@ namespace BeanIO.Internal.Config.Annotation
                 MaxLength = record.MaxLength.ToUnboundedValue(),
                 MinMatchLength = record.MinRecordIdentificationLength.ToValue(),
                 MaxMatchLength = record.MaxRecordIdentificationLength.ToUnboundedValue(),
+
+                ValidateOnMarshal = ToValue(record.ValidationMode),
 
                 XmlType = record.XmlType.ToValue(),
                 XmlName = record.XmlName.ToValue(),
@@ -239,6 +243,7 @@ namespace BeanIO.Internal.Config.Annotation
             if (string.IsNullOrEmpty(fc.Name))
                 throw new BeanIOConfigurationException("name is required");
 
+            fc.ValidateOnMarshal = ToValue(fa.ValidationMode);
             fc.Literal = fa.Literal.ToValue();
             fc.Position = fa.At.ToValue();
             fc.Until = fa.Until.ToValue();
@@ -301,6 +306,7 @@ namespace BeanIO.Internal.Config.Annotation
                     MaxOccurs = sa.MaxOccurs.ToUnboundedValue(),
                     OccursRef = sa.OccursRef.ToValue(),
                     IsLazy = sa.IsLazy,
+                    ValidateOnMarshal = ToValue(sa.ValidationMode),
                     XmlType = sa.XmlType.ToValue(),
                     XmlName = sa.XmlName.ToValue(),
                     XmlNamespace = sa.XmlNamespace.ToValue(),
@@ -754,6 +760,15 @@ namespace BeanIO.Internal.Config.Annotation
         private static int? ToUnboundedValue(this int n)
         {
             return ToUnboundedValue((int?)n);
+        }
+
+        private static bool? ToValue(ValidationMode mode)
+        {
+            if (mode == ValidationMode.NoValidateOnMarshal)
+                return false;
+            if (mode == ValidationMode.ValidateOnMarshal)
+                return true;
+            return null;
         }
 
         private class TypeInfo

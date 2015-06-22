@@ -217,5 +217,10 @@ namespace BeanIO.Annotation
         /// Gets or sets a value indicating whether the element is nillable.
         /// </summary>
         public bool IsNullable { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value which specifies the validation mode when marshalling fields.
+        /// </summary>
+        public ValidationMode ValidationMode { get; set; }
     }
 }

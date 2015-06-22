@@ -127,6 +127,26 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
+        /// Sets the default validation mode for fields during marshalling.
+        /// </summary>
+        /// <returns>The value of <see cref="Me"/></returns>
+        public T Validate()
+        {
+            return Validate(true);
+        }
+
+        /// <summary>
+        /// Sets the default validation mode for fields during marshalling.
+        /// </summary>
+        /// <param name="validate">true to enable field validation during marshalling</param>
+        /// <returns>The value of <see cref="Me"/></returns>
+        public T Validate(bool validate)
+        {
+            Config.ValidateOnMarshal = validate;
+            return Me;
+        }
+
+        /// <summary>
         /// Sets the XML type of this component.
         /// </summary>
         /// <param name="xmlType">The <see cref="XmlNodeType"/>.</param>

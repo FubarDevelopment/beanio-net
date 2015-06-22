@@ -152,6 +152,7 @@
     <Compile Include="Parser\Types\TypeHandlerLocaleTest.cs" />
     <Compile Include="Parser\Types\TypesParserTest.cs" />
     <Compile Include="Parser\Validation\FieldValidationTest.cs" />
+    <Compile Include="Parser\Validation\MarshalledFieldValidationTest.cs" />
     <Compile Include="Parser\Validation\v1_messages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

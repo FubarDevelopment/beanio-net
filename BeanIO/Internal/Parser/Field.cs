@@ -27,6 +27,7 @@ namespace BeanIO.Internal.Parser
             ErrorIfNullPrimitive = Settings.Instance.GetBoolean(Settings.ERROR_IF_NULL_PRIMITIVE);
             UseDefaultIfMissing = Settings.Instance.GetBoolean(Settings.USE_DEFAULT_IF_MISSING);
             MarshalDefault = Settings.Instance.GetBoolean(Settings.DEFAULT_MARSHALLING_ENABLED);
+            ValidateOnMarshal = Settings.Instance.GetBoolean(Settings.VALIDATE_ON_MARSHAL);
             MaxLength = int.MaxValue;
         }
 
@@ -109,6 +110,11 @@ namespace BeanIO.Internal.Parser
 
         public bool MarshalDefault { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the field(s) should be validated during marshalling.
+        /// </summary>
+        public bool ValidateOnMarshal { get; set; }
+
         protected Regex RegexPattern
         {
             get { return _regex; }
@@ -187,6 +193,48 @@ namespace BeanIO.Internal.Parser
                     return true;
 
                 text = FormatValue(value);
+            }
+
+            if (ValidateOnMarshal)
+            {
+                if (ReferenceEquals(text, Value.Nil))
+                {
+                    if (!Format.IsNillable)
+                    {
+                        throw new InvalidBeanException(string.Format("Invalid field '{0}', the value is not nillable", Name));
+                    }
+                    if (IsRequired)
+                    {
+                        throw new InvalidBeanException(string.Format("Invalid field '{0}', a value is required", Name));
+                    }
+                }
+                else if (text == null)
+                {
+                    if (IsRequired)
+                    {
+                        throw new InvalidBeanException(string.Format("Invalid field '{0}', a value is required", Name));
+                    }
+                }
+                else
+                {
+                    // validate minimum length
+                    if (text.Length < MinLength)
+                    {
+                        throw new InvalidBeanException(string.Format("Invalid field '{0}', '{1}' does not meet minimum length of {2}", Name, text, MinLength));
+                    }
+
+                    // validate maximum length
+                    if (text.Length > MaxLength)
+                    {
+                        throw new InvalidBeanException(string.Format("Invalid field '{0}', '{1}' exceeds maximum length of {2}", Name, text, MaxLength));
+                    }
+
+                    // validate the regular expression
+                    if (RegexPattern != null && !RegexPattern.IsMatch(text))
+                    {
+                        throw new InvalidBeanException(string.Format("Invalid field '{0}', '{1}' does not match pattern '{2}'", Name, text, Regex));
+                    }
+                }
             }
 
             Format.InsertField(context, text);

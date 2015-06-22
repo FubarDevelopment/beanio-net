@@ -99,6 +99,9 @@ namespace BeanIO.Internal.Compiler
 
             if (PropertyRoot == null && (group.Type != null || group.Target != null))
                 PropertyRoot = group;
+
+            if (Parent != null && group.ValidateOnMarshal == null)
+                group.ValidateOnMarshal = Parent.ValidateOnMarshal;
         }
 
         /// <summary>
@@ -228,6 +231,9 @@ namespace BeanIO.Internal.Compiler
             if (segment.Collection != null && segment.Type == null && segment.Target == null)
                 throw new BeanIOConfigurationException("Class or value required if collection is set");
 
+            if (Parent != null && segment.ValidateOnMarshal == null)
+                segment.ValidateOnMarshal = Parent.ValidateOnMarshal;
+
             if (PropertyRoot == null || PropertyRoot != segment)
             {
                 segment.IsBound = true;
@@ -313,6 +319,9 @@ namespace BeanIO.Internal.Compiler
 
             if (field.IsBound && field.IsRepeating && field.Collection == null)
                 throw new BeanIOConfigurationException("collection not set");
+
+            if (Parent != null && field.ValidateOnMarshal == null)
+                field.ValidateOnMarshal = Parent.ValidateOnMarshal;
 
             if (field.IsIdentifier)
                 ValidateRecordIdentifyingCriteria(field);

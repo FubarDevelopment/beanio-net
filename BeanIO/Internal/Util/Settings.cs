@@ -133,6 +133,11 @@ namespace BeanIO.Internal.Util
         public static readonly string USE_DEFAULT_IF_MISSING = "org.beanio.useDefaultIfMissing";
 
         /// <summary>
+        /// Whether to validate marshalled fields
+        /// </summary>
+        public static readonly string VALIDATE_ON_MARSHAL = "org.beanio.validateOnMarshal";
+
+        /// <summary>
         /// Whether XML components should be sorted by position. Helpful for use with annotations
         /// where fields and methods may not be ordered by their position in the stream.
         /// </summary>

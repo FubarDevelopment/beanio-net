@@ -89,6 +89,11 @@ namespace BeanIO.Annotation
         public string Value { get; set; }
 
         /// <summary>
+        /// Gets or sets a value which specifies the validation mode when marshalling fields.
+        /// </summary>
+        public ValidationMode ValidationMode { get; set; }
+
+        /// <summary>
         /// Gets or sets the XML type of this record.
         /// </summary>
         public XmlNodeType XmlType { get; set; }

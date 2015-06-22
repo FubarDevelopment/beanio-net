@@ -42,6 +42,11 @@ namespace BeanIO.Internal.Config
         public int? Ordinal { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to validate marshalled fields.
+        /// </summary>
+        public bool? ValidateOnMarshal { get; set; }
+
+        /// <summary>
         /// Gets or sets the XML element or attribute name of this component
         /// </summary>
         /// <remarks>
