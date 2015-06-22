@@ -18,6 +18,10 @@ This port is in most parts compatbile with 2.1.0 of BeanIO.
 * Exists as PCL for .NET 4.5, Windows 8, WP 8.1, Xamarin.iOS, Xamarin.MonoTouch, and Xamarin.Android.
 * Contains support for generics.
 * Contains support for customer provided scheme handlers (to be able to provide direct file access).
+* New mapping file to enable field validation while marshalling (2015-06)
+* Added mapping files to NuGet package
+* Support for ```ICollection<>``` interfaces
+* New At() function for StreamBuilder
 
 ### Changed
 

@@ -346,12 +346,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>DefaultMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Content Include="Xsd\2011\01\mapping.xsd">
+    <None Include="Xsd\2011\01\mapping.xsd">
       <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Xsd\2012\03\mapping.xsd">
+    </None>
+    <None Include="Xsd\2012\03\mapping.xsd">
       <SubType>Designer</SubType>
-    </Content>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -367,9 +367,9 @@
     <EmbeddedResource Include="Internal\Config\beanio.properties" />
     <None Include="BeanIO.nuspec" />
     <None Include="packages.config" />
-    <Content Include="Xsd\2015\06\mapping.xsd">
+    <None Include="Xsd\2015\06\mapping.xsd">
       <SubType>Designer</SubType>
-    </Content>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

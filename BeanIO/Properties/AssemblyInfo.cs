@@ -25,8 +25,8 @@ using System.Runtime.CompilerServices;
 // Sie können alle Werte angeben oder die standardmäßigen Build- und Revisionsnummern
 // durch Einsatz von '*', wie in nachfolgendem Beispiel:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.1.0")]
-[assembly: AssemblyFileVersion("2.1.2")]
-[assembly: AssemblyInformationalVersion("2.1.0")]
+[assembly: AssemblyVersion("2.2.0")]
+[assembly: AssemblyFileVersion("2.2.0")]
+[assembly: AssemblyInformationalVersion("2.2.0")]
 
 [assembly: InternalsVisibleTo("BeanIO.Test")]

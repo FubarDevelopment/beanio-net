@@ -2,7 +2,7 @@
 <package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <metadata>
     <id>FubarDev.$id$</id>
-    <version>2.1.2</version>
+    <version>2.2.0</version>
     <title>BeanIO</title>
     <authors>Mark Junker</authors>
     <owners>FubarCoder</owners>
@@ -21,8 +21,14 @@ Supported platforms:
     <iconUrl>https://github.com/FubarDevelopment/beanio-net/raw/master/beanio-logo.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <developmentDependency>false</developmentDependency>
-    <releaseNotes>First version</releaseNotes>
+    <releaseNotes>- Added configuration to enable validation while marshalling
+- New mapping schema
+- New At() function for StreamBuilder
+- Support for ICollection<> fields/properties</releaseNotes>
     <copyright>Copyright © Fubar Development, Kevin Seim 2015</copyright>
     <tags>BeanIO PCL CSV XML JSON fixed length file parse serialize deserialize serialization deserialization parsing marshal marshalling unmarshal unmarshalling</tags>
   </metadata>
+  <files>
+    <file src="Xsd\**\*.xsd" target="src\Xsd" />
+  </files>
 </package>
