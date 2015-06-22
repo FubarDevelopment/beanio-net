@@ -59,6 +59,17 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
+        /// Sets the position of the field.
+        /// </summary>
+        /// <param name="position">the position</param>
+        /// <returns>The value of <see cref="Me"/></returns>
+        public SegmentBuilder At(int position)
+        {
+            Config.Position = position;
+            return Me;
+        }
+
+        /// <summary>
         /// Builds the segment configuration.
         /// </summary>
         /// <returns>The segment configuration</returns>
