@@ -51,4 +51,35 @@
     </record>
   </stream>
 
+  <stream name="o6" format="fixedlength">
+    <record name="record" class="BeanIO.Parser.DynamicOccurs.TestRecord, BeanIO.Test">
+      <field name="itemCount" length="1" />
+      <field name="otherItemCount" length="1" />
+      <segment name="items" class="BeanIO.Parser.DynamicOccurs.TestItem, BeanIO.Test" collection="list" occursRef="itemCount">
+        <field name="id" literal="t1" length="2" />
+        <field name="text" length="10" />
+      </segment>
+      <segment name="otherItems" class="BeanIO.Parser.DynamicOccurs.TestOtherItem, BeanIO.Test" collection="list" occursRef="otherItemCount">
+        <field name="id" literal="t2" length="2" />
+        <field name="text" length="10" />
+      </segment>
+    </record>
+  </stream>
+
+  <stream name="o7" format="fixedlength">
+    <typeHandler name="yn" class="BeanIO.Types.BooleanCharacterTypeHandler, BeanIO" />
+    <record name="record" class="BeanIO.Parser.DynamicOccurs.TestRecordBool, BeanIO.Test">
+      <field name="hasItem" length="1" typeHandler="yn" />
+      <field name="hasOtherItem" length="1" typeHandler="yn" />
+      <segment name="items" class="BeanIO.Parser.DynamicOccurs.TestItem, BeanIO.Test" collection="list" occursRef="hasItem">
+        <field name="id" literal="t1" length="2" />
+        <field name="text" length="10" />
+      </segment>
+      <segment name="otherItems" class="BeanIO.Parser.DynamicOccurs.TestOtherItem, BeanIO.Test" collection="list" occursRef="hasOtherItem">
+        <field name="id" literal="t2" length="2" />
+        <field name="text" length="10" />
+      </segment>
+    </record>
+  </stream>
+
 </beanio>

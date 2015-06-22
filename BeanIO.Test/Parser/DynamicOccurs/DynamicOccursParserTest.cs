@@ -167,5 +167,61 @@ namespace BeanIO.Parser.DynamicOccurs
             exception = Assert.ThrowsAny<InvalidRecordException>(() => u.Unmarshal("3,one,two,three"));
             Assert.Equal(new[] { "Expected maximum 2 occurrences" }, exception.RecordContext.GetFieldErrors("values").AsEnumerable());
         }
+
+        [Fact]
+        public void TestDynamicOccurrencesMultiple()
+        {
+            var factory = NewStreamFactory("dynamicOccurs_mapping.xml");
+            var u = factory.CreateUnmarshaller("o6");
+            var m = factory.CreateMarshaller("o6");
+
+            var text = "10t1test      ";
+            var record = Assert.IsType<TestRecord>(u.Unmarshal(text));
+            Assert.NotNull(record.Item);
+            Assert.Null(record.OtherItem);
+            Assert.Equal(1, record.ItemCount);
+            Assert.Equal(0, record.OtherItemCount);
+            Assert.Equal("t1", record.Item.Id);
+            Assert.Equal("test", record.Item.Text);
+            Assert.Equal(text, m.Marshal(record).ToString());
+
+            text = "01t2test      ";
+            record = Assert.IsType<TestRecord>(u.Unmarshal(text));
+            Assert.Null(record.Item);
+            Assert.NotNull(record.OtherItem);
+            Assert.Equal(0, record.ItemCount);
+            Assert.Equal(1, record.OtherItemCount);
+            Assert.Equal("t2", record.OtherItem.Id);
+            Assert.Equal("test", record.OtherItem.Text);
+            Assert.Equal(text, m.Marshal(record).ToString());
+        }
+
+        [Fact]
+        public void TestDynamicOccurrencesMultipleWithBool()
+        {
+            var factory = NewStreamFactory("dynamicOccurs_mapping.xml");
+            var u = factory.CreateUnmarshaller("o7");
+            var m = factory.CreateMarshaller("o7");
+
+            var text = "YNt1test      ";
+            var record = Assert.IsType<TestRecordBool>(u.Unmarshal(text));
+            Assert.True(record.HasItem);
+            Assert.False(record.HasOtherItem);
+            Assert.NotNull(record.Item);
+            Assert.Null(record.OtherItem);
+            Assert.Equal("t1", record.Item.Id);
+            Assert.Equal("test", record.Item.Text);
+            Assert.Equal(text, m.Marshal(record).ToString());
+
+            text = "NYt2test      ";
+            record = Assert.IsType<TestRecordBool>(u.Unmarshal(text));
+            Assert.False(record.HasItem);
+            Assert.True(record.HasOtherItem);
+            Assert.Null(record.Item);
+            Assert.NotNull(record.OtherItem);
+            Assert.Equal("t2", record.OtherItem.Id);
+            Assert.Equal("test", record.OtherItem.Text);
+            Assert.Equal(text, m.Marshal(record).ToString());
+        }
     }
 }

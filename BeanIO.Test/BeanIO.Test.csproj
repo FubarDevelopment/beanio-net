@@ -108,6 +108,10 @@
     <Compile Include="Parser\Direct\DirectParserTest.cs" />
     <Compile Include="Parser\Direct\DirectUser.cs" />
     <Compile Include="Parser\DynamicOccurs\DynamicOccursParserTest.cs" />
+    <Compile Include="Parser\DynamicOccurs\TestOtherItem.cs" />
+    <Compile Include="Parser\DynamicOccurs\TestRecordBool.cs" />
+    <Compile Include="Parser\DynamicOccurs\TestRecord.cs" />
+    <Compile Include="Parser\DynamicOccurs\TestItem.cs" />
     <Compile Include="Parser\FixedLength\f2_messages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
