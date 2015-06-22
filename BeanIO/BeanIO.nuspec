@@ -24,7 +24,7 @@ Supported platforms:
     <releaseNotes>- Added configuration to enable validation while marshalling
 - New mapping schema
 - New At() function for StreamBuilder
-- Support for ICollection<> fields/properties</releaseNotes>
+- Support for ICollection&lt;&gt; fields/properties</releaseNotes>
     <copyright>Copyright © Fubar Development, Kevin Seim 2015</copyright>
     <tags>BeanIO PCL CSV XML JSON fixed length file parse serialize deserialize serialization deserialization parsing marshal marshalling unmarshal unmarshalling</tags>
   </metadata>
