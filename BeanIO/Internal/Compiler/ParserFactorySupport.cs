@@ -1487,15 +1487,11 @@ namespace BeanIO.Internal.Compiler
                 return null;
             if (!type.IsArray() && (type.GetTypeInfo().IsInterface || type.GetTypeInfo().IsAbstract))
             {
-                if (typeof(ISet<>).IsAssignableFrom(type))
+                if (type.IsSet())
                     return typeof(HashSet<>).Instantiate(type);
-                if (typeof(IDictionary<,>).IsAssignableFrom(type))
+                if (type.IsMap())
                     return typeof(Dictionary<,>).Instantiate(type);
-                if (typeof(IList<>).IsAssignableFrom(type))
-                    return typeof(List<>).Instantiate(type);
-                if (typeof(IDictionary).IsAssignableFrom(type))
-                    return typeof(Dictionary<,>).Instantiate(type);
-                if (typeof(IList).IsAssignableFrom(type))
+                if (type.IsList())
                     return typeof(List<>).Instantiate(type);
                 return typeof(List<object>);
             }

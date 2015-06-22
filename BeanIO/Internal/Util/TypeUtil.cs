@@ -372,7 +372,10 @@ namespace BeanIO.Internal.Util
         public static Type GetElementType(this ICollection list)
         {
             var listType = list.GetType();
-            if (listType.IsInstanceOf(typeof(IList<>)))
+            if (listType.IsInstanceOf(typeof(IList<>))
+                || listType.IsInstanceOf(typeof(ICollection<>))
+                || listType.IsInstanceOf(typeof(IReadOnlyList<>))
+                || listType.IsInstanceOf(typeof(IReadOnlyCollection<>)))
                 return listType.GenericTypeArguments[0];
             if (listType.IsArray)
                 return listType.GetElementType();
@@ -386,16 +389,26 @@ namespace BeanIO.Internal.Util
             return type.IsArray || type == typeof(Array);
         }
 
+        public static bool IsCollection(this Type type)
+        {
+            return typeof(ICollection).IsAssignableFrom(type)
+                   || typeof(ICollection<>).IsAssignableFrom(type)
+                   || typeof(IReadOnlyCollection<>).IsAssignableFrom(type);
+        }
+
         public static bool IsList(this Type type)
         {
             return typeof(IList).IsAssignableFrom(type)
-                   || typeof(IList<>).IsAssignableFrom(type);
+                   || typeof(IList<>).IsAssignableFrom(type)
+                   || typeof(IReadOnlyList<>).IsAssignableFrom(type)
+                   || (type.IsCollection() && !type.IsMap());
         }
 
         public static bool IsMap(this Type type)
         {
             return typeof(IDictionary).IsAssignableFrom(type)
-                   || typeof(IDictionary<,>).IsAssignableFrom(type);
+                   || typeof(IDictionary<,>).IsAssignableFrom(type)
+                   || typeof(IReadOnlyDictionary<,>).IsAssignableFrom(type);
         }
 
         public static bool IsSet(this Type type)
