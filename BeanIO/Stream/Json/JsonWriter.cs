@@ -43,8 +43,14 @@ namespace BeanIO.Stream.Json
                 };
         }
 
+        /// <summary>
+        /// Gets the line separator used while indenting the JSON data.
+        /// </summary>
         protected string LineSeparator { get; private set; }
 
+        /// <summary>
+        /// Gets the <see cref="NJ.JsonTextWriter"/>
+        /// </summary>
         protected NJ.JsonTextWriter Writer
         {
             get { return _writer; }

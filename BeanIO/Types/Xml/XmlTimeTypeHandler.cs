@@ -7,6 +7,9 @@ using NodaTime;
 
 namespace BeanIO.Types.Xml
 {
+    /// <summary>
+    /// XML type handler for the <see cref="LocalTime"/> type.
+    /// </summary>
     public class XmlTimeTypeHandler : AbstractXmlDateTypeHandler
     {
         /// <summary>
@@ -22,6 +25,9 @@ namespace BeanIO.Types.Xml
             get { return typeof(LocalTime); }
         }
 
+        /// <summary>
+        /// Gets the XML data type name
+        /// </summary>
         protected override string DatatypeQName
         {
             get { return "time"; }
@@ -82,6 +88,10 @@ namespace BeanIO.Types.Xml
             return XmlConvert.ToString(dto, pattern);
         }
 
+        /// <summary>
+        /// Creates a sequence of non-lenient XML date (time) formats.
+        /// </summary>
+        /// <returns>a sequence of non-lenient XML date (time) formats</returns>
         protected override IEnumerable<string> CreateNonLenientFormats()
         {
             foreach (var defaultTimeFormat in DefaultTimeFormats)
@@ -97,6 +107,10 @@ namespace BeanIO.Types.Xml
             }
         }
 
+        /// <summary>
+        /// Returns a sequence of lenient XML date (time) formats
+        /// </summary>
+        /// <returns>a sequence of lenient XML date (time) formats</returns>
         protected override IEnumerable<string> CreateLenientFormats()
         {
             return new string[0];

@@ -2,12 +2,21 @@
 
 namespace BeanIO.Types.Xml
 {
+    /// <summary>
+    /// An type handler that uses the <see cref="System.Xml.XmlConvert"/> function.
+    /// </summary>
     public class XmlConvertTypeHandler : ITypeHandler
     {
         private readonly Func<object, string> _formatFunc;
 
         private readonly Func<string, object> _parseFunc;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlConvertTypeHandler"/> class.
+        /// </summary>
+        /// <param name="targetType">the target type of this type handler</param>
+        /// <param name="formatFunc">the function to format the value to a <see cref="string"/></param>
+        /// <param name="parseFunc">the function that parses a <see cref="string"/></param>
         public XmlConvertTypeHandler(Type targetType, Func<object, string> formatFunc, Func<string, object> parseFunc)
         {
             TargetType = targetType;

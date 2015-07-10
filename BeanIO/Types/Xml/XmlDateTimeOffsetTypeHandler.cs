@@ -4,6 +4,9 @@ using System.Xml;
 
 namespace BeanIO.Types.Xml
 {
+    /// <summary>
+    /// XML type handler for the <see cref="DateTimeOffset"/> type.
+    /// </summary>
     public class XmlDateTimeOffsetTypeHandler : AbstractXmlDateTypeHandler
     {
         /// <summary>
@@ -11,6 +14,9 @@ namespace BeanIO.Types.Xml
         /// </summary>
         public bool OutputMilliseconds { get; set; }
 
+        /// <summary>
+        /// Gets the XML data type name
+        /// </summary>
         protected override string DatatypeQName
         {
             get { return "dateTime"; }

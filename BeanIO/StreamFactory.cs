@@ -15,6 +15,12 @@ namespace BeanIO
     /// </summary>
     public abstract class StreamFactory
     {
+        /// <summary>
+        /// Creates a new instance of the configured <see cref="StreamFactory"/>.
+        /// </summary>
+        /// <returns>The new <see cref="StreamFactory"/></returns>
+        /// <exception cref="BeanIOConfigurationException">Will be thrown when the <see cref="StreamFactory"/>
+        /// instance isn't configured or cannot be instantiated</exception>
         public static StreamFactory NewInstance()
         {
             var className = Settings.Instance[Settings.STREAM_FACTORY_CLASS];

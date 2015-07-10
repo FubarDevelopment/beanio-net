@@ -6,6 +6,9 @@ using NodaTime;
 
 namespace BeanIO.Types.Xml
 {
+    /// <summary>
+    /// XML type handler for the <see cref="LocalDate"/> type.
+    /// </summary>
     public class XmlDateTypeHandler : AbstractXmlDateTypeHandler
     {
         /// <summary>
@@ -16,6 +19,9 @@ namespace BeanIO.Types.Xml
             get { return typeof(LocalDate); }
         }
 
+        /// <summary>
+        /// Gets the XML data type name
+        /// </summary>
         protected override string DatatypeQName
         {
             get { return "date"; }

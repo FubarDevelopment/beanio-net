@@ -2,8 +2,14 @@
 
 namespace BeanIO.Stream.Csv
 {
+    /// <summary>
+    /// Stores configuration settings for parsing CSV formatted streams
+    /// </summary>
     public class CsvParserConfiguration
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvParserConfiguration"/> class.
+        /// </summary>
         public CsvParserConfiguration()
         {
             Delimiter = ',';

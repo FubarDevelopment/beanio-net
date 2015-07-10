@@ -5,8 +5,14 @@ using BeanIO.Config;
 
 namespace BeanIO.Types.Xml
 {
+    /// <summary>
+    /// XML type handler for the <see cref="bool"/> type.
+    /// </summary>
     public class XmlBooleanTypeHandler : XmlConvertTypeHandler, IConfigurableTypeHandler
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlBooleanTypeHandler"/> class.
+        /// </summary>
         public XmlBooleanTypeHandler()
             : base(typeof(bool), null, t => XmlConvert.ToBoolean(t))
         {

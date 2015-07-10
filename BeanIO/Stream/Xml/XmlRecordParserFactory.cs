@@ -3,6 +3,9 @@ using System.Xml.Linq;
 
 namespace BeanIO.Stream.Xml
 {
+    /// <summary>
+    /// Default <see cref="IRecordParserFactory"/> for the XML stream format.
+    /// </summary>
     public class XmlRecordParserFactory : XmlParserConfiguration, IRecordParserFactory, IXmlStreamConfigurationAware
     {
         private IXmlStreamConfiguration _source;

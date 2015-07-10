@@ -9,6 +9,9 @@ using NJ = Newtonsoft.Json;
 
 namespace BeanIO.Stream.Json
 {
+    /// <summary>
+    /// A <see cref="IRecordMarshaller"/> implementation for JSON formatted records.
+    /// </summary>
     public class JsonRecordMarshaller : IRecordMarshaller
     {
         private readonly JsonParserConfiguration _config;
@@ -17,11 +20,18 @@ namespace BeanIO.Stream.Json
 
         private NJ.JsonTextWriter _writer;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonRecordMarshaller"/> class.
+        /// </summary>
         public JsonRecordMarshaller()
             : this(new JsonParserConfiguration())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonRecordMarshaller"/> class.
+        /// </summary>
+        /// <param name="config">The JSON record marshaller configuration</param>
         public JsonRecordMarshaller([CanBeNull] JsonParserConfiguration config)
         {
             _config = config ?? new JsonParserConfiguration();

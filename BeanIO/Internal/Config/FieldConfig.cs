@@ -9,7 +9,7 @@ namespace BeanIO.Internal.Config
     /// Fields are combined to form segments and records.
     /// </summary>
     /// <remarks>
-    /// <para>Unless <see cref="FieldConfig.IsBound"/> is set to false, a field is bound to a property of
+    /// <para>Unless <see cref="P:FieldConfig.IsBound"/> is set to false, a field is bound to a property of
     /// its closest parent bean object.</para>
     /// <para>Position must be set for all fields in record, or for none of them.  If not
     /// set, position is determined based on the order in which the fields are added to

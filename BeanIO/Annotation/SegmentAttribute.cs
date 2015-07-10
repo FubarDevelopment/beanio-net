@@ -4,6 +4,9 @@ using System.Xml;
 
 namespace BeanIO.Annotation
 {
+    /// <summary>
+    /// Segment annotation applied to class members or methods
+    /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
     public class SegmentAttribute : Attribute
     {

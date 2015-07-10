@@ -16,7 +16,7 @@ namespace BeanIO.Builder
         /// inline map bound to this record or segment.
         /// </summary>
         /// <param name="name">the component name</param>
-        /// <returns>The value of <see cref="SegmentBuilderSupport{T,TConfig}.Me"/></returns>
+        /// <returns>The value of <see cref="P:SegmentBuilderSupport{T,TConfig}.Me"/></returns>
         public T Key(string name)
         {
             Config.SetKey(name);
@@ -28,7 +28,7 @@ namespace BeanIO.Builder
         /// record or segment in lieu of a bound class.
         /// </summary>
         /// <param name="name">the component name</param>
-        /// <returns>The value of <see cref="SegmentBuilderSupport{T,TConfig}.Me"/></returns>
+        /// <returns>The value of <see cref="P:SegmentBuilderSupport{T,TConfig}.Me"/></returns>
         public T Value(string name)
         {
             Config.Target = name;
@@ -39,7 +39,7 @@ namespace BeanIO.Builder
         /// Adds a segment to this component.
         /// </summary>
         /// <param name="segment">the segment to add</param>
-        /// <returns>The value of <see cref="SegmentBuilderSupport{T,TConfig}.Me"/></returns>
+        /// <returns>The value of <see cref="P:SegmentBuilderSupport{T,TConfig}.Me"/></returns>
         public T AddSegment(SegmentBuilder segment)
         {
             Config.Add(segment.Build());
@@ -50,7 +50,7 @@ namespace BeanIO.Builder
         /// Adds a field to this component.
         /// </summary>
         /// <param name="field">the field to add</param>
-        /// <returns>The value of <see cref="SegmentBuilderSupport{T,TConfig}.Me"/></returns>
+        /// <returns>The value of <see cref="P:SegmentBuilderSupport{T,TConfig}.Me"/></returns>
         public T AddField(FieldBuilder field)
         {
             Config.Add(field.Build());

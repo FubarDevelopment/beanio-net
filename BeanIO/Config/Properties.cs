@@ -19,21 +19,35 @@ namespace BeanIO.Config
             _dictionary = dictionary;
         }
 
+        /// <summary>
+        /// Gets the number of entries
+        /// </summary>
         public int Count
         {
             get { return _dictionary.Count; }
         }
 
+        /// <summary>
+        /// Gets all keys
+        /// </summary>
         public IEnumerable<string> Keys
         {
             get { return _dictionary.Keys; }
         }
 
+        /// <summary>
+        /// Gets all values
+        /// </summary>
         public IEnumerable<string> Values
         {
             get { return _dictionary.Values; }
         }
 
+        /// <summary>
+        /// Gets the property for the given key
+        /// </summary>
+        /// <param name="key">The key to query</param>
+        /// <returns>the value of the key or null if not found</returns>
         public string this[string key]
         {
             get
@@ -45,6 +59,10 @@ namespace BeanIO.Config
             }
         }
 
+        /// <summary>
+        /// Returns the enumerator for the properties
+        /// </summary>
+        /// <returns>the enumerator for the properties</returns>
         public IEnumerator<KeyValuePair<string, string>> GetEnumerator()
         {
             return _dictionary.GetEnumerator();
@@ -55,11 +73,22 @@ namespace BeanIO.Config
             return GetEnumerator();
         }
 
+        /// <summary>
+        /// Is there a property with the given key?
+        /// </summary>
+        /// <param name="key">The key to search for</param>
+        /// <returns>true when the key exists</returns>
         public bool ContainsKey(string key)
         {
             return _dictionary.ContainsKey(key);
         }
 
+        /// <summary>
+        /// Try to get a property using the given key
+        /// </summary>
+        /// <param name="key">the key to search for</param>
+        /// <param name="value">the value to set when the key was found</param>
+        /// <returns>true when the key was found</returns>
         public bool TryGetValue(string key, out string value)
         {
             return _dictionary.TryGetValue(key, out value);

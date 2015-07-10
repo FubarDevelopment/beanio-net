@@ -44,6 +44,10 @@ namespace BeanIO.Builder
             return this;
         }
 
+        /// <summary>
+        /// Builds the configuration about the record parser factory.
+        /// </summary>
+        /// <returns>The configuration for the record parser factory.</returns>
         public BeanConfig<IRecordParserFactory> Build()
         {
             var config = new BeanConfig<IRecordParserFactory>(() => _parser);

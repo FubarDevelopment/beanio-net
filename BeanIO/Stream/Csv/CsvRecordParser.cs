@@ -5,6 +5,9 @@ using System.Text;
 
 namespace BeanIO.Stream.Csv
 {
+    /// <summary>
+    /// A combined <see cref="IRecordMarshaller"/> and <see cref="IRecordUnmarshaller"/> implementation for CSV formatted records.
+    /// </summary>
     public class CsvRecordParser : IRecordMarshaller, IRecordUnmarshaller
     {
         private readonly char _delim;
@@ -23,11 +26,18 @@ namespace BeanIO.Stream.Csv
 
         private readonly IList<string> _fieldList = new List<string>();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvRecordParser"/> class.
+        /// </summary>
         public CsvRecordParser()
             : this(null)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvRecordParser"/> class.
+        /// </summary>
+        /// <param name="config">The parser configuration</param>
         public CsvRecordParser(CsvParserConfiguration config)
         {
             if (config == null)

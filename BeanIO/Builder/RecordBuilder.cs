@@ -5,6 +5,9 @@ using BeanIO.Internal.Util;
 
 namespace BeanIO.Builder
 {
+    /// <summary>
+    /// Builds a new record configuration
+    /// </summary>
     public class RecordBuilder : SegmentBuilderSupport<RecordBuilder, RecordConfig>
     {
         private RecordConfig _config;

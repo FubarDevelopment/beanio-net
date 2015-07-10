@@ -67,23 +67,38 @@ namespace BeanIO.Types.Xml
         /// </remarks>
         public bool IsTimeZoneAllowed { get; set; }
 
+        /// <summary>
+        /// Gets the class type supported by this handler.
+        /// </summary>
         public override Type TargetType
         {
             get { return typeof(DateTimeOffset); }
         }
 
+        /// <summary>
+        /// Gets the sequence of default time zone formats
+        /// </summary>
         protected static IEnumerable<string> DefaultTimeZoneFormats
         {
             get { return _defaultTimeZoneFormats; }
         }
 
+        /// <summary>
+        /// Gets the sequence of default time formats
+        /// </summary>
         protected static IEnumerable<string> DefaultTimeFormats
         {
             get { return _defaultTimeFormats; }
         }
 
+        /// <summary>
+        /// Gets the XML data type name
+        /// </summary>
         protected abstract string DatatypeQName { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether the pattern contains a date.
+        /// </summary>
         protected bool IsDatePattern
         {
             get
@@ -205,6 +220,10 @@ namespace BeanIO.Types.Xml
             return TimeSpan.FromMilliseconds(date.Zone.GetUtcOffset(date.ToInstant()).Milliseconds);
         }
 
+        /// <summary>
+        /// Creates a sequence of non-lenient XML date (time) formats.
+        /// </summary>
+        /// <returns>a sequence of non-lenient XML date (time) formats</returns>
         protected virtual IEnumerable<string> CreateNonLenientFormats()
         {
             foreach (var timeComponent in _defaultTimeFormats)
@@ -232,6 +251,10 @@ namespace BeanIO.Types.Xml
             yield return "yyyy-MM-dd";
         }
 
+        /// <summary>
+        /// Returns a sequence of lenient XML date (time) formats
+        /// </summary>
+        /// <returns>a sequence of lenient XML date (time) formats</returns>
         protected virtual IEnumerable<string> CreateLenientFormats()
         {
             foreach (var timeComponent in _defaultTimeFormats)

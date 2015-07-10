@@ -54,6 +54,10 @@ namespace BeanIO
             }
         }
 
+        /// <summary>
+        /// Returns a textual representation of this exception.
+        /// </summary>
+        /// <returns>the textual representation of this exception</returns>
         public override string ToString()
         {
             var message = base.ToString();

@@ -53,6 +53,9 @@ namespace BeanIO
             _groupName = groupName;
         }
 
+        /// <summary>
+        /// Gets the record group name.
+        /// </summary>
         public override string RecordName
         {
             get { return _groupName; }

@@ -2,6 +2,9 @@
 
 namespace BeanIO.Types
 {
+    /// <summary>
+    /// Type handler for the <see cref="Version"/> type.
+    /// </summary>
     public class VersionTypeHandler : ITypeHandler
     {
         /// <summary>
@@ -12,6 +15,9 @@ namespace BeanIO.Types
             get { return typeof(Version); }
         }
 
+        /// <summary>
+        /// Gets or sets the number of fields to be used for the version.
+        /// </summary>
         public int? FieldCount { get; set; }
 
         /// <summary>

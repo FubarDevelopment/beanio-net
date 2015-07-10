@@ -8,11 +8,11 @@ namespace BeanIO.Internal.Config
     /// A segment is used to combine fields, constants and other segments. A Wrapper component may also be added to segment.
     /// </summary>
     /// <remarks>
-    /// <para>A segment can be bound to a bean object by setting <see cref="SegmentConfig.Type"/>.
-    /// (The <see cref="SegmentConfig.IsBound"/> attribute is ignored for segments- setting <see cref="SegmentConfig.Type"/>
-    /// to null has the same effect as setting <see cref="SegmentConfig.IsBound"/> to false.)</para>
+    /// <para>A segment can be bound to a bean object by setting <see cref="P:SegmentConfig.Type"/>.
+    /// (The <see cref="P:SegmentConfig.IsBound"/> attribute is ignored for segments- setting <see cref="P:SegmentConfig.Type"/>
+    /// to null has the same effect as setting <see cref="P:SegmentConfig.IsBound"/> to false.)</para>
     /// <para>A segment may repeat if its maximum occurrences is greater than one, and be
-    /// bound to a collection or array by setting <see cref="SegmentConfig.Collection"/>.</para>
+    /// bound to a collection or array by setting <see cref="P:SegmentConfig.Collection"/>.</para>
     /// <para>Segments will have their position calculated automatically during compilation.</para>
     /// <para>The <see cref="SegmentConfig.IsConstant"/> attribute is set during compilation, and is meant for
     /// internal use only.</para>
@@ -71,7 +71,7 @@ namespace BeanIO.Internal.Config
 
         /// <summary>
         /// Sets the name of the property descendant to use for the
-        /// Map key when <see cref="SegmentConfig.Collection"/> is set to
+        /// Map key when <see cref="P:SegmentConfig.Collection"/> is set to
         /// <see cref="Dictionary{TKey,TValue}"/> (map).
         /// </summary>
         /// <param name="key">The key property name</param>

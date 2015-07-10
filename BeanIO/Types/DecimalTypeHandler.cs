@@ -2,6 +2,9 @@
 
 namespace BeanIO.Types
 {
+    /// <summary>
+    /// Type handler for the <see cref="decimal"/> type.
+    /// </summary>
     public class DecimalTypeHandler : NumberTypeHandler
     {
         /// <summary>

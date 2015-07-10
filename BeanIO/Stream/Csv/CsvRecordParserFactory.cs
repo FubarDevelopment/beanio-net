@@ -2,6 +2,9 @@
 
 namespace BeanIO.Stream.Csv
 {
+    /// <summary>
+    /// Default <see cref="IRecordParserFactory"/> for the CSV stream format.
+    /// </summary>
     public class CsvRecordParserFactory : CsvParserConfiguration, IRecordParserFactory
     {
         /// <summary>

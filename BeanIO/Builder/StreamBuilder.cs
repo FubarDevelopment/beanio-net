@@ -164,6 +164,11 @@ namespace BeanIO.Builder
             return Me;
         }
 
+        /// <summary>
+        /// Sets the resource type name.
+        /// </summary>
+        /// <param name="name">The type name of the resource</param>
+        /// <returns>The value of <see cref="Me"/></returns>
         public StreamBuilder ResourceBundle(string name)
         {
             Config.ResourceBundle = name;

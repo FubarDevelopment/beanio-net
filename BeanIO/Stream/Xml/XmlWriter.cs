@@ -21,7 +21,7 @@ namespace BeanIO.Stream.Xml
     /// <remarks>
     /// <para>A document object model (DOM) is used to represent a record.  Group elements,
     /// as indicated by a user data key (see below), are not closed when a record is written.
-    /// When <see cref="Write"/> with <code>null</code> is called, an open group element is closed.
+    /// When <see cref="Write(object)"/> with <code>null</code> is called, an open group element is closed.
     /// Finally, calling <see cref="Flush"/> will close all remaining group elements and complete the document.</para>
     /// <para>A <see cref="XmlWriter"/> makes use of the DOM user data feature to pass additional
     /// information to and from the parser.  The <see cref="IsGroupElementAnnotation"/> user data is

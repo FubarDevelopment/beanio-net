@@ -16,21 +16,39 @@ namespace BeanIO.Internal.Util
 
         private int _mark = -1;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RecordFilterReader"/> class.
+        /// </summary>
+        /// <param name="innerReader">The reader to read from</param>
         public RecordFilterReader(TextReader innerReader)
             : base(innerReader)
         {
             LineNumber = 1;
         }
 
+        /// <summary>
+        /// Gets the current line number
+        /// </summary>
         public int LineNumber { get; private set; }
 
+        /// <summary>
+        /// Gets the current line position
+        /// </summary>
         public int Position { get; private set; }
 
+        /// <summary>
+        /// Called when a new record was started
+        /// </summary>
+        /// <param name="text">The text the record was started with</param>
         public void RecordStarted(string text = null)
         {
             _record = new StringBuilder(text ?? string.Empty);
         }
 
+        /// <summary>
+        /// Called when the current record was completed
+        /// </summary>
+        /// <returns>The text the record was made of</returns>
         public string RecordCompleted()
         {
             if (_record == null)
@@ -40,6 +58,11 @@ namespace BeanIO.Internal.Util
             return text;
         }
 
+        /// <summary>
+        /// Reads the next character
+        /// </summary>
+        /// <returns>The next character that was read from the <see cref="MarkableTextReader.BaseReader"/>,
+        /// or -1 if the end of the stream was reached.</returns>
         public override int Read()
         {
             var n = base.Read();
@@ -77,12 +100,19 @@ namespace BeanIO.Internal.Util
             return n;
         }
 
+        /// <summary>
+        /// Marks the position and initializes a buffer to be read from after a <see cref="MarkableTextReader.Reset"/>.
+        /// </summary>
+        /// <param name="readAheadLimit">The buffer size</param>
         public override void Mark(int readAheadLimit)
         {
             base.Mark(readAheadLimit);
             _mark = _record == null ? -1 : _record.Length;
         }
 
+        /// <summary>
+        /// Resets the read position
+        /// </summary>
         public override void Reset()
         {
             base.Reset();

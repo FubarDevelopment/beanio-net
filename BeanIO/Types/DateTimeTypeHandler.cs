@@ -4,6 +4,9 @@ using NodaTime;
 
 namespace BeanIO.Types
 {
+    /// <summary>
+    /// Type handler for the <see cref="DateTime"/> type.
+    /// </summary>
     public class DateTimeTypeHandler : DateTypeHandlerSupport
     {
         /// <summary>

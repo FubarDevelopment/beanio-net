@@ -5,10 +5,22 @@ using BeanIO.Stream;
 
 namespace BeanIO.Internal.Config
 {
+    /// <summary>
+    /// A stream is the root (a.k.a top or parent) group of a stream mapping configuration.
+    /// As such, it contains other attributes that apply to the entire stream.
+    /// </summary>
+    /// <remarks>
+    /// By default, a stream can be used for both marshalling (write) and unmarshalling
+    /// (read).  Calling {@link #setMode(String)} can restrict the use of the stream, but
+    /// will relax some validations on the types of objects that can be read or written.
+    /// </remarks>
     public class StreamConfig : GroupConfig
     {
         private readonly List<TypeHandlerConfig> _typeHandlerConfigs = new List<TypeHandlerConfig>();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StreamConfig"/> class.
+        /// </summary>
         public StreamConfig()
         {
             MinOccurs = 0;

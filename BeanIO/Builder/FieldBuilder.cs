@@ -6,10 +6,17 @@ using BeanIO.Types;
 
 namespace BeanIO.Builder
 {
+    /// <summary>
+    /// Builds the field configuration
+    /// </summary>
     public class FieldBuilder : PropertyBuilderSupport<FieldBuilder, FieldConfig>
     {
         private FieldConfig _config;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FieldBuilder"/> class.
+        /// </summary>
+        /// <param name="name">The field name</param>
         public FieldBuilder(string name)
         {
             _config = new FieldConfig()

@@ -3,6 +3,9 @@ using System.Reflection;
 
 namespace BeanIO.Config.SchemeHandlers
 {
+    /// <summary>
+    /// Handles loading from a <code>resource:</code> URI.
+    /// </summary>
     public class ResourceSchemeHandler : ISchemeHandler
     {
         /// <summary>

@@ -2,6 +2,9 @@
 
 namespace BeanIO
 {
+    /// <summary>
+    /// Default bean reader interface
+    /// </summary>
     public interface IBeanReader : IDisposable
     {
         /// <summary>

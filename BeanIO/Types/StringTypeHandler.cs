@@ -2,10 +2,19 @@
 
 namespace BeanIO.Types
 {
+    /// <summary>
+    /// Type handler for the <see cref="string"/> type.
+    /// </summary>
     public class StringTypeHandler : ITypeHandler
     {
+        /// <summary>
+        /// Gets or sets a value indicating whether to remove white spaces around the string value
+        /// </summary>
         public bool Trim { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to return <code>null</code> when the string value is empty
+        /// </summary>
         public bool NullIfEmpty { get; set; }
 
         /// <summary>

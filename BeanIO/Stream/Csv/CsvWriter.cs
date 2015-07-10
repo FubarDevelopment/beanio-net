@@ -3,6 +3,24 @@ using System.IO;
 
 namespace BeanIO.Stream.Csv
 {
+    /// <summary>
+    /// A <see cref="CsvWriter"/> is used to format and write records, of <see cref="String"/> arrays,
+    /// to a CSV output stream.
+    /// </summary>
+    /// <remarks>
+    /// <para>Using default settings, the CSV format supported is defined by specification RFC 4180.</para>
+    /// <para>
+    /// The writer also supports the following customizations:
+    /// <list type="bullet">
+    /// <item>The default field delimiter, ',', may be overridden.</item>
+    /// <item>The default quotation mark, '"', may be overridden.</item>
+    /// <item>The default escape character, '"', may be overridden.</item>
+    /// <item>The writer can be configured to qutoe every field. Otherwise a
+    /// field is only quoted if it contains a quotation mark, delimiter,
+    /// line feed or carriage return.</item>
+    /// </list>
+    /// </para>
+    /// </remarks>
     public class CsvWriter : IRecordWriter
     {
         private readonly char _delim;

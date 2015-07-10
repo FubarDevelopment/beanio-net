@@ -6,17 +6,27 @@ using System.Xml.Linq;
 
 namespace BeanIO.Stream.Xml
 {
+    /// <summary>
+    /// A <see cref="IRecordMarshaller"/> implementation for XML formatted records.
+    /// </summary>
     public class XmlRecordMarshaller : IRecordMarshaller
     {
         private readonly XmlParserConfiguration _config;
 
         private readonly XmlWriterSettings _writerSettings;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlRecordMarshaller"/> class.
+        /// </summary>
         public XmlRecordMarshaller()
             : this(new XmlParserConfiguration())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlRecordMarshaller"/> class.
+        /// </summary>
+        /// <param name="config">the <see cref="XmlRecordMarshaller"/> configuration</param>
         public XmlRecordMarshaller(XmlParserConfiguration config)
         {
             _config = config ?? new XmlParserConfiguration();

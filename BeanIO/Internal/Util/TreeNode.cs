@@ -5,6 +5,10 @@ using System.Text;
 
 namespace BeanIO.Internal.Util
 {
+    /// <summary>
+    /// The node for a tree structure.
+    /// </summary>
+    /// <typeparam name="T">The tree node type</typeparam>
     public class TreeNode<T> : IEnumerable<T> where T : TreeNode<T>
     {
         private readonly List<T> _children;

@@ -3,6 +3,9 @@ using System.Text;
 
 namespace BeanIO.Types
 {
+    /// <summary>
+    /// Type handler for the <see cref="Encoding"/> type.
+    /// </summary>
     public class EncodingTypeHandler : ITypeHandler
     {
         /// <summary>

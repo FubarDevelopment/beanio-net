@@ -9,6 +9,9 @@ using NJ = Newtonsoft.Json;
 
 namespace BeanIO.Stream.Json
 {
+    /// <summary>
+    /// A <see cref="IRecordReader"/> implementation for JSON formatted records.
+    /// </summary>
     public class JsonReader : IRecordReader
     {
         private readonly RecordFilterReader _filter;

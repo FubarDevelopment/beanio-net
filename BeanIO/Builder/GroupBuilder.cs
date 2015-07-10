@@ -2,6 +2,9 @@
 
 namespace BeanIO.Builder
 {
+    /// <summary>
+    /// Builds a new group configuration
+    /// </summary>
     public class GroupBuilder : GroupBuilderSupport<GroupBuilder, GroupConfig>
     {
         private GroupConfig _config;

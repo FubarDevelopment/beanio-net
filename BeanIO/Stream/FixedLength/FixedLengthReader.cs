@@ -7,6 +7,21 @@ using BeanIO.Stream.Util;
 
 namespace BeanIO.Stream.FixedLength
 {
+    /// <summary>
+    /// A <see cref="FixedLengthReader"/> is used to read records from a fixed length file or input stream.
+    /// </summary>
+    /// <remarks>
+    /// <para>A fixed length record is represented using the <see cref="String"/> class.
+    /// Records must be terminated by a single configurable character, or by
+    /// default, any of the following: line feed (LF), carriage return (CR), or
+    /// CRLF combination.</para>
+    /// <para>
+    /// If a record may span multiple lines, a single line continuation
+    /// character may be configured.  The line continuation character must immediately
+    /// precede the record termination character.  Note that line continuation characters
+    /// are not included in the record text.
+    /// </para>
+    /// </remarks>
     public class FixedLengthReader : IRecordReader
     {
         private readonly char _lineContinuationChar = '\\';

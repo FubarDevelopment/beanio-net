@@ -2,6 +2,9 @@
 
 namespace BeanIO.Types
 {
+    /// <summary>
+    /// Type handler for the <see cref="Uri"/> type.
+    /// </summary>
     public class UrlTypeHandler : ITypeHandler
     {
         /// <summary>

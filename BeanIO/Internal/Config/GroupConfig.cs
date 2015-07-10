@@ -4,6 +4,15 @@ using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Config
 {
+    /// <summary>
+    /// A group is used to organize records and the overall structure of a stream.
+    /// </summary>
+    /// <remarks>
+    /// <para>A group may contain records and/or other groups.
+    /// In many cases, a group does not map to any physical aspect of a stream.</para>
+    /// <para>The <see cref="P:GroupConfig.MinSize"/>, <see cref="P:GroupConfig.MaxSize"/>,
+    /// and <see cref="P:GroupConfig.IsNillable"/> attributes do not apply to groups.</para>
+    /// </remarks>
     public class GroupConfig : PropertyConfig, ISelectorConfig
     {
         private string _key;
@@ -42,7 +51,7 @@ namespace BeanIO.Internal.Config
 
         /// <summary>
         /// Gets or sets the name of the target property for this group, which can be used
-        /// in lieu of <see cref="GroupConfig.Type"/> to return descendant property types.
+        /// in lieu of <see cref="P:GroupConfig.Type"/> to return descendant property types.
         /// </summary>
         public string Target { get; set; }
 
@@ -68,7 +77,7 @@ namespace BeanIO.Internal.Config
 
         /// <summary>
         /// Sets the name of the property descendant to use for the
-        /// Map key when <see cref="GroupConfig.Collection"/> is set to
+        /// Map key when <see cref="P:GroupConfig.Collection"/> is set to
         /// <see cref="Dictionary{TKey,TValue}"/> (map).
         /// </summary>
         /// <param name="key">The key property name</param>

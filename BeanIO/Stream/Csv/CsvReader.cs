@@ -8,6 +8,26 @@ using BeanIO.Stream.Util;
 
 namespace BeanIO.Stream.Csv
 {
+    /// <summary>
+    /// A <see cref="CsvReader"/> is used to parse CSV formatted flat files into records of <see cref="System.String"/> arrays.
+    /// </summary>
+    /// <remarks>
+    /// <para>The CSV format supported is defined by specification RFC 4180.
+    /// By default, there is one exception: lines that span multiple records will
+    /// throw an exception.  To allow quoted multi-line fields, simply set
+    /// <see cref="P:CsvParserConfiguration.IsMultilineEnabled"/> to <code>true</code> when constructing the reader.</para>
+    /// <para>
+    /// The reader also supports the following customizations:
+    /// <list type="bullet">
+    /// <item>The default quotation mark character, '"', can be overridden.</item>
+    /// <item>The default escape character, '"', can be overridden or disabled altogether.</item>
+    /// <item>Whitespace can be allowed outside of quoted values.</item>
+    /// <item>Quotation marks can be allowed in unquoted fields (as long as the quotation
+    /// mark is not the first character in the field</item>
+    /// </list>
+    /// </para>
+    /// <para>The reader will not recognize an escape character used outside of a quoted field.</para>
+    /// </remarks>
     public class CsvReader : IRecordReader
     {
         private readonly string _delim;

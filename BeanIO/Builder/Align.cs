@@ -2,6 +2,9 @@
 
 namespace BeanIO.Builder
 {
+    /// <summary>
+    /// The text alignment
+    /// </summary>
     public enum Align
     {
         /// <summary>

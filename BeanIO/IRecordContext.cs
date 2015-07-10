@@ -3,6 +3,13 @@ using System.Linq;
 
 namespace BeanIO
 {
+    /// <summary>
+    /// Provides information about a record parsed by a <see cref="IBeanReader"/> or <see cref="IUnmarshaller"/>.
+    /// </summary>
+    /// <remarks>
+    /// Depending on the current state of the <see cref="IBeanReader"/> or <see cref="IUnmarshaller"/>, some
+    /// information may not be available.
+    /// </remarks>
     public interface IRecordContext
     {
         /// <summary>

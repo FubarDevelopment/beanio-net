@@ -2,6 +2,9 @@
 
 namespace BeanIO.Types
 {
+    /// <summary>
+    /// Type handler for <see cref="bool"/>
+    /// </summary>
     public class BooleanTypeHandler : ITypeHandler
     {
         /// <summary>

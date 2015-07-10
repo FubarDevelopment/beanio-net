@@ -115,6 +115,10 @@ namespace BeanIO.Stream.Xml
                 AddNamespace(s[i + 1], s[i]);
         }
 
+        /// <summary>
+        /// Gets the XML encoding
+        /// </summary>
+        /// <returns>The <see cref="Encoding"/> to be used for XML reading/writing</returns>
         public Encoding GetEncoding()
         {
             if (string.IsNullOrEmpty(Encoding))

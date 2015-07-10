@@ -2,6 +2,9 @@
 
 namespace BeanIO.Stream.Delimited
 {
+    /// <summary>
+    /// Default <see cref="IRecordParserFactory"/> for the delimited stream format.
+    /// </summary>
     public class DelimitedRecordParserFactory : DelimitedParserConfiguration, IRecordParserFactory
     {
         /// <summary>
