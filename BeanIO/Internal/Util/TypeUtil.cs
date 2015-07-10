@@ -282,7 +282,15 @@ namespace BeanIO.Internal.Util
             }
             else if (!testType.IsConstructedGenericType && refType.IsConstructedGenericType)
             {
-                refType = refType.GetGenericTypeDefinition();
+                var nonNullableType = Nullable.GetUnderlyingType(refType);
+                if (nonNullableType == null)
+                {
+                    refType = refType.GetGenericTypeDefinition();
+                }
+                else
+                {
+                    refType = nonNullableType;
+                }
             }
 
             var refTypeInfo = refType.GetTypeInfo();
