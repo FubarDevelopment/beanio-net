@@ -62,8 +62,20 @@ namespace BeanIO.Internal.Util
 
         public virtual void Mark(int readAheadLimit)
         {
-            _markBuffer = new int[readAheadLimit];
-            _markBufferSize = _markBufferPosition = 0;
+            var oldBuffer = _markBuffer;
+            if (oldBuffer != null && _markBufferPosition != _markBufferSize)
+            {
+                var remainingSize = _markBufferSize - _markBufferPosition;
+                _markBuffer = new int[Math.Max(readAheadLimit, remainingSize)];
+                Array.Copy(oldBuffer, _markBufferPosition, _markBuffer, 0, remainingSize);
+                _markBufferSize = remainingSize;
+            }
+            else
+            {
+                _markBuffer = new int[readAheadLimit];
+                _markBufferSize = 0;
+            }
+            _markBufferPosition = 0;
         }
 
         public virtual void Reset()

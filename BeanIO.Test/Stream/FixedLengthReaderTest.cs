@@ -124,7 +124,7 @@ namespace BeanIO.Stream
                 "/+" +
                 "+" +
                 "// ignored+" +
-                "//++");
+                "//");
 
             var reader = new FixedLengthReader(input, config);
             Assert.Equal("one", reader.Read());
