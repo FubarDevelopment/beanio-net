@@ -21,7 +21,8 @@ This port is in most parts compatbile with 2.1.0 of BeanIO.
 * New mapping file to enable field validation while marshalling (2015-06)
 * Added mapping files to NuGet package
 * Support for ```ICollection<>``` interfaces
-* New At() function for StreamBuilder
+* New ```At()``` function for StreamBuilder
+* Added the ability to use templates from the ```RecordBuilder``` and ```SegmentBuilder```
 
 ### Changed
 
