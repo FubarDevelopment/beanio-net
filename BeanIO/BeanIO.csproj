@@ -36,6 +36,9 @@
     <DocumentationFile>bin\Release\BeanIO.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Annotation\FieldAttribute.cs" />
     <Compile Include="Annotation\UnboundFieldAttribute.cs" />
     <Compile Include="Annotation\RecordAttribute.cs" />
