@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
-using System.Text;
 
 using Xunit;
 
@@ -42,10 +41,8 @@ namespace BeanIO.Parser
         {
             using (var resStream = LoadStreamInternal(resourceName, 2))
             {
-                var temp = new MemoryStream();
-                resStream.CopyTo(temp);
-                var text = Encoding.UTF8.GetString(temp.ToArray());
-                return text;
+                var reader = new StreamReader(resStream);
+                return reader.ReadToEnd();
             }
         }
 
