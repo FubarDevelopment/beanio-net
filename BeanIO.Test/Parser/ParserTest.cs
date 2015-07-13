@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 using Xunit;
 
@@ -18,11 +19,13 @@ namespace BeanIO.Parser
             get { return _lineSeparator; }
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static System.IO.Stream LoadStream(string fileName)
         {
             return LoadStreamInternal(fileName, 2);
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static TextReader LoadReader(string fileName)
         {
             return new StreamReader(LoadStreamInternal(fileName, 2));
@@ -33,6 +36,7 @@ namespace BeanIO.Parser
         /// </summary>
         /// <param name="resourceName">the name of the resource to load</param>
         /// <returns>the resource contents</returns>
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public virtual string Load(string resourceName)
         {
             using (var resStream = LoadStreamInternal(resourceName, 2))
@@ -42,6 +46,7 @@ namespace BeanIO.Parser
             }
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         protected virtual StreamFactory NewStreamFactory(string resourceName)
         {
             var factory = StreamFactory.NewInstance();
@@ -52,6 +57,7 @@ namespace BeanIO.Parser
             return factory;
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         protected virtual void LoadMappingFile(StreamFactory factory, string resourceName)
         {
             using (var resStream = LoadStreamInternal(resourceName, 2))
@@ -112,6 +118,7 @@ namespace BeanIO.Parser
             }
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         private static System.IO.Stream LoadStreamInternal(string fileName, int levels)
         {
             var asm = typeof(AbstractParserTest).Assembly;
