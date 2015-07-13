@@ -98,7 +98,7 @@ namespace BeanIO.Internal.Config.Xml
         /// <param name="input">the input stream to read from</param>
         /// <param name="properties">the <see cref="Properties"/> to use for property substitution</param>
         /// <returns>the collection of parsed BeanIO configuration objects</returns>
-        public ICollection<BeanIOConfig> LoadConfiguration(System.IO.Stream input, Properties properties)
+        public ICollection<BeanIOConfig> LoadConfiguration([NotNull] System.IO.Stream input, [CanBeNull] Properties properties)
         {
             _properties = properties;
             _mapping = new XmlMapping();
@@ -157,6 +157,48 @@ namespace BeanIO.Internal.Config.Xml
                 }
             }
             return value;
+        }
+
+        /// <summary>
+        /// Includes a template
+        /// </summary>
+        /// <param name="config">the parent bean configuration</param>
+        /// <param name="element">the <code>include</code> DOM element to parse</param>
+        public void IncludeTemplate(ComponentConfig config, XElement element)
+        {
+            var template = GetAttribute(element, "template");
+            var offset = GetIntAttribute(element, "offset") ?? 0;
+            IncludeTemplate(config, template, offset);
+        }
+
+        /// <summary>
+        /// Includes a template
+        /// </summary>
+        /// <param name="config">the parent bean configuration</param>
+        /// <param name="template">the name of the template to include</param>
+        /// <param name="offset">the value to offset configured positions by</param>
+        public void IncludeTemplate(ComponentConfig config, string template, int offset)
+        {
+            var element = _mapping.FindTemplate(template);
+
+            // validate the template was declared
+            if (element == null)
+                throw new BeanIOConfigurationException(string.Format("Template '{0}' not found", template));
+
+            // validate there is no circular reference
+            foreach (var include in _includes)
+            {
+                if (string.Equals(template, include.Template, StringComparison.Ordinal))
+                    throw new BeanIOConfigurationException(string.Format("Circular reference detected in template '{0}'", template));
+            }
+
+            // adjust the configured offset by any previous offset
+            offset += PositionOffset;
+
+            Include inc = new Include(template, offset);
+            _includes.Push(inc);
+            AddProperties(config, element);
+            _includes.Pop();
         }
 
         /// <summary>
@@ -679,48 +721,6 @@ namespace BeanIO.Internal.Config.Xml
                         break;
                 }
             }
-        }
-
-        /// <summary>
-        /// Includes a template
-        /// </summary>
-        /// <param name="config">the parent bean configuration</param>
-        /// <param name="element">the <code>include</code> DOM element to parse</param>
-        protected void IncludeTemplate(ComponentConfig config, XElement element)
-        {
-            var template = GetAttribute(element, "template");
-            var offset = GetIntAttribute(element, "offset") ?? 0;
-            IncludeTemplate(config, template, offset);
-        }
-
-        /// <summary>
-        /// Includes a template
-        /// </summary>
-        /// <param name="config">the parent bean configuration</param>
-        /// <param name="template">the name of the template to include</param>
-        /// <param name="offset">the value to offset configured positions by</param>
-        protected void IncludeTemplate(ComponentConfig config, string template, int offset)
-        {
-            var element = _mapping.FindTemplate(template);
-
-            // validate the template was declared
-            if (element == null)
-                throw new BeanIOConfigurationException(string.Format("Template '{0}' not found", template));
-
-            // validate there is no circular reference
-            foreach (var include in _includes)
-            {
-                if (string.Equals(template, include.Template, StringComparison.Ordinal))
-                    throw new BeanIOConfigurationException(string.Format("Circular reference detected in template '{0}'", template));
-            }
-
-            // adjust the configured offset by any previous offset
-            offset += PositionOffset;
-
-            Include inc = new Include(template, offset);
-            _includes.Push(inc);
-            AddProperties(config, element);
-            _includes.Pop();
         }
 
         private string GetTypeHandler(XElement element, string name)

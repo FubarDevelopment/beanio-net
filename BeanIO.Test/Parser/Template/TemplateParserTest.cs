@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+
+using BeanIO.Builder;
 
 using Xunit;
 
@@ -48,6 +51,33 @@ namespace BeanIO.Parser.Template
         public void TestIncludeTemplateFromRecord()
         {
             var factory = NewStreamFactory("BeanIO.Parser.Template.template_mapping.xml");
+            var reader = factory.CreateReader("stream3", LoadReader("t3.txt"));
+            try
+            {
+                var map = Assert.IsType<Dictionary<string, object>>(reader.Read());
+                Assert.Equal(1, map["id"]);
+                Assert.Equal("joe", map["firstName"]);
+                Assert.Equal("smith", map["lastName"]);
+                Assert.Equal('M', map["gender"]);
+            }
+            finally
+            {
+                reader.Close();
+            }
+        }
+
+        [Fact]
+        public void TestIncludeTemplateFromRecordBuilder()
+        {
+            var b = new StreamBuilder("stream3", "csv")
+                .AddRecord(
+                    new RecordBuilder("record", typeof(Dictionary<string, object>))
+                        .AddField(new FieldBuilder("id").Type(typeof(int)).At(0))
+                        .LoadMapping(new Uri("resource:BeanIO.Parser.Template.template_mapping.xml, BeanIO.Test"))
+                        .Include("t3", 1)
+                        .AddField(new FieldBuilder("gender").Type(typeof(char)).At(3)));
+            var factory = StreamFactory.NewInstance();
+            factory.Define(b);
             var reader = factory.CreateReader("stream3", LoadReader("t3.txt"));
             try
             {

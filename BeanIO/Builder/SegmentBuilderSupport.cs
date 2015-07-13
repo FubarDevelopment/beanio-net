@@ -1,4 +1,9 @@
-﻿using BeanIO.Internal.Config;
+﻿using System;
+
+using BeanIO.Config;
+using BeanIO.Internal.Config;
+using BeanIO.Internal.Config.Xml;
+using BeanIO.Internal.Util;
 
 namespace BeanIO.Builder
 {
@@ -11,6 +16,13 @@ namespace BeanIO.Builder
         where T : SegmentBuilderSupport<T, TConfig>
         where TConfig : SegmentConfig
     {
+        private XmlMappingParser _mappingParser;
+
+        internal XmlMappingParser MappingParser
+        {
+            get { return _mappingParser ?? (_mappingParser = new XmlMappingParser(new XmlMappingReader())); }
+        }
+
         /// <summary>
         /// Sets the name of a child component to use as the key for an
         /// inline map bound to this record or segment.
@@ -54,6 +66,42 @@ namespace BeanIO.Builder
         public T AddField(FieldBuilder field)
         {
             Config.Add(field.Build());
+            return Me;
+        }
+
+        /// <summary>
+        /// Resets the mapping parser which allows loading a fresh set of mappings (and templates)
+        /// </summary>
+        /// <returns>The value of <see cref="P:SegmentBuilderSupport{T,TConfig}.Me"/></returns>
+        public T ResetMapping()
+        {
+            _mappingParser = null;
+            return Me;
+        }
+
+        /// <summary>
+        /// Loads the data from a resource whose templates can be accessed using <see cref="Include"/>.
+        /// </summary>
+        /// <param name="resource">The resource to load that gives access to a template</param>
+        /// <param name="properties">The optional properties to use while loading data from the resource</param>
+        /// <returns>The value of <see cref="P:SegmentBuilderSupport{T,TConfig}.Me"/></returns>
+        public T LoadMapping(Uri resource, Properties properties = null)
+        {
+            var handler = Settings.Instance.GetSchemeHandler(resource, true);
+            using (var input = handler.Open(resource))
+                MappingParser.LoadConfiguration(input, properties);
+            return Me;
+        }
+
+        /// <summary>
+        /// Includes the data from a given template
+        /// </summary>
+        /// <param name="templateName">The name of the template to apply to this builder.</param>
+        /// <param name="offset">the value to offset configured positions by</param>
+        /// <returns>The value of <see cref="P:SegmentBuilderSupport{T,TConfig}.Me"/></returns>
+        public T Include(string templateName, int offset = 0)
+        {
+            MappingParser.IncludeTemplate(Config, templateName, offset);
             return Me;
         }
     }
