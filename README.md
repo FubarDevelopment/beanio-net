@@ -1,6 +1,6 @@
 # ![BeanIO .NET](beanio-logo.png "BeanIO") A .NET port of the [BeanIO](http://beanio.org) java library
 
-[![Build-Status](https://img.shields.io/teamcity/https/build.service-dataline.de:8081/s/OpenSource_BeanIO.svg?label=TeamCity)](https://build.service-dataline.de:8081/viewType.html?buildTypeId=OpenSource_BeanIO&guest=1)
+[![Build-Status](https://img.shields.io/teamcity/https/build.fubar-dev.com/s/BeanIONet_ReleaseBuild.svg?label=TeamCity)](https://build.fubar-dev.com/viewType.html?buildTypeId=BeanIONet_ReleaseBuild&guest=1)
 
 # Advantages over IKVM converted java BeanIO
 
