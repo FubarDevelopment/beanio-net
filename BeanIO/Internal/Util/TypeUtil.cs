@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -67,6 +68,8 @@ namespace BeanIO.Internal.Util
                 //// { "zdatetime", typeof(ZonedDateTime) },
                 //// { "zdt", typeof(ZonedDateTime) },
             };
+
+        private static readonly ConcurrentDictionary<string, bool> _isInstanceOfCache = new ConcurrentDictionary<string, bool>();
 
 #if ALIAS_SUPPORT
         /// <summary>
@@ -276,63 +279,9 @@ namespace BeanIO.Internal.Util
         /// <returns>true, if <paramref name="testType"/> is an instance of <paramref name="refType"/></returns>
         public static bool IsInstanceOf(this Type testType, Type refType)
         {
-            if (testType.IsConstructedGenericType && !refType.IsConstructedGenericType)
-            {
-                testType = testType.GetGenericTypeDefinition();
-            }
-            else if (!testType.IsConstructedGenericType && refType.IsConstructedGenericType)
-            {
-                var nonNullableType = Nullable.GetUnderlyingType(refType);
-                if (nonNullableType == null)
-                {
-                    refType = refType.GetGenericTypeDefinition();
-                }
-                else
-                {
-                    refType = nonNullableType;
-                }
-            }
-
-            var refTypeInfo = refType.GetTypeInfo();
-            var testTypeInfo = testType.GetTypeInfo();
-            if (refTypeInfo.IsAssignableFrom(testTypeInfo))
-                return true;
-
-            var comparer = new TypeComparer();
-
-            if (comparer.Compare(refType, testType) == 0)
-                return true;
-
-            foreach (var implementedInterface in testTypeInfo.ImplementedInterfaces)
-            {
-                if (comparer.Compare(refType, implementedInterface) == 0)
-                    return true;
-
-                if (!testTypeInfo.IsInterface)
-                {
-                    var ifMap = testTypeInfo.GetRuntimeInterfaceMap(implementedInterface);
-                    if (ifMap.InterfaceType != null)
-                    {
-                        if (comparer.Compare(refType, ifMap.InterfaceType) == 0)
-                            return true;
-                    }
-                }
-            }
-            if (testTypeInfo.ImplementedInterfaces.Any(x => comparer.Compare(refType, x) == 0))
-                return true;
-
-            testType = testTypeInfo.BaseType;
-            while (testType != null)
-            {
-                if (comparer.Compare(refType, testType) == 0)
-                    return true;
-                testTypeInfo = testType.GetTypeInfo();
-                if (refTypeInfo.IsAssignableFrom(testTypeInfo))
-                    return true;
-                testType = testTypeInfo.BaseType;
-            }
-
-            return false;
+            var key = string.Concat(testType.GetAssemblyQualifiedName(), "|", refType.GetAssemblyQualifiedName());
+            bool result = _isInstanceOfCache.GetOrAdd(key, _ => testType.IsInstanceOfInternal(refType));
+            return result;
         }
 
         /// <summary>
@@ -449,6 +398,73 @@ namespace BeanIO.Internal.Util
             if (typeInfo.GenericTypeParameters.Length != withInfo.GenericTypeArguments.Length)
                 throw new InvalidOperationException("The number of type arguments must match");
             return type.MakeGenericType(with.GenericTypeArguments);
+        }
+
+        /// <summary>
+        /// Is the <paramref name="testType"/> an instance of <paramref name="refType"/>?
+        /// </summary>
+        /// <param name="testType">The type to test for being an instance of <paramref name="refType"/></param>
+        /// <param name="refType">The reference type to test against</param>
+        /// <returns>true, if <paramref name="testType"/> is an instance of <paramref name="refType"/></returns>
+        private static bool IsInstanceOfInternal(this Type testType, Type refType)
+        {
+            if (testType.IsConstructedGenericType && !refType.IsConstructedGenericType)
+            {
+                testType = testType.GetGenericTypeDefinition();
+            }
+            else if (!testType.IsConstructedGenericType && refType.IsConstructedGenericType)
+            {
+                var nonNullableType = Nullable.GetUnderlyingType(refType);
+                if (nonNullableType == null)
+                {
+                    refType = refType.GetGenericTypeDefinition();
+                }
+                else
+                {
+                    refType = nonNullableType;
+                }
+            }
+
+            var refTypeInfo = refType.GetTypeInfo();
+            var testTypeInfo = testType.GetTypeInfo();
+            if (refTypeInfo.IsAssignableFrom(testTypeInfo))
+                return true;
+
+            var comparer = new TypeComparer();
+
+            if (comparer.Compare(refType, testType) == 0)
+                return true;
+
+            foreach (var implementedInterface in testTypeInfo.ImplementedInterfaces)
+            {
+                if (comparer.Compare(refType, implementedInterface) == 0)
+                    return true;
+
+                if (!testTypeInfo.IsInterface)
+                {
+                    var ifMap = testTypeInfo.GetRuntimeInterfaceMap(implementedInterface);
+                    if (ifMap.InterfaceType != null)
+                    {
+                        if (comparer.Compare(refType, ifMap.InterfaceType) == 0)
+                            return true;
+                    }
+                }
+            }
+            if (testTypeInfo.ImplementedInterfaces.Any(x => comparer.Compare(refType, x) == 0))
+                return true;
+
+            testType = testTypeInfo.BaseType;
+            while (testType != null)
+            {
+                if (comparer.Compare(refType, testType) == 0)
+                    return true;
+                testTypeInfo = testType.GetTypeInfo();
+                if (refTypeInfo.IsAssignableFrom(testTypeInfo))
+                    return true;
+                testType = testTypeInfo.BaseType;
+            }
+
+            return false;
         }
 
         /// <summary>
