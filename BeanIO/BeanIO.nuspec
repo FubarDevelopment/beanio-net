@@ -21,12 +21,7 @@ Supported platforms:
     <iconUrl>https://github.com/FubarDevelopment/beanio-net/raw/master/beanio-logo.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <developmentDependency>false</developmentDependency>
-    <releaseNotes>- Added configuration to enable validation while marshalling
-- New mapping schema
-- New At() function for StreamBuilder
-- Support for ICollection&lt;&gt; fields/properties
-- Added better support for nullable value types
-- Added the ability to use templates from the RecordBuilder and SegmentBuilder</releaseNotes>
+    <releaseNotes>Performance optimization</releaseNotes>
     <copyright>Copyright © Fubar Development, Kevin Seim 2015</copyright>
     <tags>BeanIO PCL CSV XML JSON fixed length file parse serialize deserialize serialization deserialization parsing marshal marshalling unmarshal unmarshalling</tags>
   </metadata>
