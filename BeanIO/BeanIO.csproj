@@ -35,6 +35,12 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\BeanIO.XML</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\BeanIO.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
@@ -350,6 +356,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>DefaultMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="..\BeanIO.snk">
+      <Link>BeanIO.snk</Link>
+    </None>
     <None Include="Xsd\2011\01\mapping.xsd">
       <SubType>Designer</SubType>
     </None>
