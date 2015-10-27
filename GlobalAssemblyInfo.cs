@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Resources;
 
 [assembly: AssemblyConfiguration("")]
@@ -9,5 +10,9 @@ using System.Resources;
 [assembly: NeutralResourcesLanguage("en")]
 
 [assembly: AssemblyVersion("2.2.0")]
-[assembly: AssemblyFileVersion("2.2.1")]
-[assembly: AssemblyInformationalVersion("2.2.1")]
+[assembly: AssemblyFileVersion("2.2.3")]
+[assembly: AssemblyInformationalVersion("2.2.3")]
+
+#if !TEST
+[assembly: CLSCompliant(true)]
+#endif
