@@ -7,6 +7,8 @@ using System.Text.RegularExpressions;
 using BeanIO.Internal.Util;
 using BeanIO.Types;
 
+using JetBrains.Annotations;
+
 namespace BeanIO.Internal.Parser
 {
     /// <summary>
@@ -371,7 +373,7 @@ namespace BeanIO.Internal.Parser
             return text;
         }
 
-        protected virtual object ParseValue(UnmarshallingContext context, string fieldText)
+        protected virtual object ParseValue(UnmarshallingContext context, [CanBeNull] string fieldText)
         {
             var valid = true;
             var text = fieldText;

@@ -1,4 +1,6 @@
-﻿namespace BeanIO.Internal.Parser
+﻿using JetBrains.Annotations;
+
+namespace BeanIO.Internal.Parser
 {
     /// <summary>
     /// A <see cref="IFieldFormat"/> provides format specific processing for a <see cref="Field"/> parser.
@@ -38,6 +40,7 @@
         /// <param name="context">the <see cref="UnmarshallingContext"/> holding the record</param>
         /// <param name="reportErrors">report the errors?</param>
         /// <returns>the field text or null if the field was not present in the record</returns>
+        [CanBeNull]
         string Extract(UnmarshallingContext context, bool reportErrors);
 
         /// <summary>

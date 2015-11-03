@@ -110,6 +110,7 @@ namespace BeanIO.Internal.Util
         /// </summary>
         /// <param name="typeName">the fully qualified class name or type alias</param>
         /// <returns>the class, or null if the type name is invalid</returns>
+        [CanBeNull]
         public static Type ToType(this string typeName)
         {
             Type result;

@@ -1,5 +1,7 @@
 ﻿using System;
 
+using JetBrains.Annotations;
+
 namespace BeanIO.Internal.Parser
 {
     /// <summary>
@@ -70,7 +72,7 @@ namespace BeanIO.Internal.Parser
         /// </summary>
         /// <param name="context">the <see cref="ParsingContext"/></param>
         /// <param name="value">the property value</param>
-        void SetValue(ParsingContext context, object value);
+        void SetValue(ParsingContext context, [CanBeNull] object value);
 
         bool Defines(object value);
     }

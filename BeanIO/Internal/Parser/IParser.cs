@@ -1,4 +1,6 @@
-﻿namespace BeanIO.Internal.Parser
+﻿using JetBrains.Annotations;
+
+namespace BeanIO.Internal.Parser
 {
     /// <summary>
     /// A <see cref="IParser"/> is used marshal and unmarshal record components.
@@ -72,7 +74,7 @@
         /// </summary>
         /// <param name="context">The <see cref="ParsingContext"/></param>
         /// <param name="value">the property value</param>
-        void SetValue(ParsingContext context, object value);
+        void SetValue(ParsingContext context, [CanBeNull] object value);
 
         /// <summary>
         /// Returns the unmarshalled property value.

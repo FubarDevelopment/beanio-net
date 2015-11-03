@@ -2,6 +2,8 @@
 
 using BeanIO.Internal.Util;
 
+using JetBrains.Annotations;
+
 namespace BeanIO.Internal.Parser.Format.Flat
 {
     internal abstract class FlatFieldFormatSupport : IFlatFieldFormat
@@ -126,7 +128,7 @@ namespace BeanIO.Internal.Parser.Format.Flat
         /// </summary>
         /// <param name="context">the <see cref="MarshallingContext"/> holding the record</param>
         /// <param name="text">the field text to insert into the record</param>
-        public virtual void InsertField(MarshallingContext context, string text)
+        public virtual void InsertField(MarshallingContext context, [CanBeNull] string text)
         {
             var commit = text != null || !IsLazy;
 
@@ -173,6 +175,7 @@ namespace BeanIO.Internal.Parser.Format.Flat
         /// <param name="context">the <see cref="UnmarshallingContext"/> holding the record</param>
         /// <param name="reporting">report the errors?</param>
         /// <returns>the field text or null if the field was not present in the record</returns>
+        [CanBeNull]
         protected abstract string ExtractFieldText(UnmarshallingContext context, bool reporting);
     }
 }
