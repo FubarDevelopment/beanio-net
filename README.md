@@ -25,6 +25,7 @@ This port is in most parts compatbile with 2.1.0 of BeanIO.
 * Support for ```ICollection<>``` interfaces
 * New ```At()``` function for StreamBuilder
 * Added the ability to use templates from the ```RecordBuilder``` and ```SegmentBuilder```
+* New ```parseDefault``` configuration to allow default values that don't match the unterlying fields type (e.g. ```00000000``` as ```LocalDate``` with format ```yyyyMMdd```)
 
 ### Changed
 
