@@ -130,5 +130,11 @@ namespace BeanIO.Internal.Config
         /// referenced by another component.
         /// </summary>
         public bool IsRef { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this fields default value
+        /// gets unmarshalled during configuration.
+        /// </summary>
+        public bool? ParseDefault { get; set; }
     }
 }

@@ -1,5 +1,8 @@
 ﻿using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+
+using NodaTime;
+
 #pragma warning disable 169
 
 namespace BeanIO.Beans
@@ -16,6 +19,7 @@ namespace BeanIO.Beans
         public string field1;
         private string field2;
         public string field3;
+        public LocalDate? date;
         #endregion
 
         #region collection properties

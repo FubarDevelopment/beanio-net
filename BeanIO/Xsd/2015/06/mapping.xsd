@@ -851,6 +851,14 @@
         </documentation>
       </annotation>
     </attribute>
+    <attribute name="parseDefault" type="xsd:boolean" use="optional">
+      <annotation>
+        <documentation>
+          Set to false if the default value must not be marshalled to the underlying fields
+          type. This is useful when the default value is e.g. '00000000' for a LocalDate.
+        </documentation>
+      </annotation>
+    </attribute>
     <attribute name="minOccurs" type="xsd:nonNegativeInteger" use="optional">
       <annotation>
         <documentation>

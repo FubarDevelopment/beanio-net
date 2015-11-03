@@ -265,6 +265,8 @@ namespace BeanIO.Internal.Config.Annotation
             fc.Padding = (fa.Padding >= char.MinValue && fa.Padding <= char.MaxValue) ? char.ConvertFromUtf32(fa.Padding)[0] : (char?)null;
             fc.Justify = fa.Align;
             fc.KeepPadding = fa.KeepPadding;
+            if (fa.ParseDefault != ParseDefaultBehavior.Default)
+                fc.ParseDefault = fa.ParseDefault == ParseDefaultBehavior.Parse;
             fc.IsLenientPadding = fa.LenientPadding;
 
             fc.TypeHandler = fa.HandlerName.ToValue();

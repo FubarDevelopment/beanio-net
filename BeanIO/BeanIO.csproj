@@ -50,6 +50,7 @@
     <Compile Include="Annotation\RecordAttribute.cs" />
     <Compile Include="Annotation\GroupAttribute.cs" />
     <Compile Include="Annotation\SegmentAttribute.cs" />
+    <Compile Include="Annotation\ParseDefaultBehavior.cs" />
     <Compile Include="Annotation\ValidationMode.cs" />
     <Compile Include="BeanReader.cs" />
     <Compile Include="BeanReaderErrorEventArgs.cs" />

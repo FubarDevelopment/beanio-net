@@ -777,6 +777,9 @@ namespace BeanIO.Internal.Compiler
                     IsBound = config.IsBound,
                 };
 
+            if (config.ParseDefault.HasValue)
+                field.ParseDefault = config.ParseDefault.Value;
+
             if (config.ValidateOnMarshal != null)
                 field.ValidateOnMarshal = config.ValidateOnMarshal.Value;
 
@@ -1377,6 +1380,9 @@ namespace BeanIO.Internal.Compiler
 
             var handler = field.Handler;
             if (handler == null)
+                return text;
+
+            if (!field.ParseDefault)
                 return text;
 
             try

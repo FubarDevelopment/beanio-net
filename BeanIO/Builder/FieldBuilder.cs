@@ -253,6 +253,17 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
+        /// Indicates that the default value should not be parsed during configuration when set to <code>true</code>
+        /// </summary>
+        /// <param name="parseDefault">should the default value be parsed?</param>
+        /// <returns>The value of <see cref="Me"/></returns>
+        public FieldBuilder ParseDefault(bool parseDefault = true)
+        {
+            Config.ParseDefault = parseDefault;
+            return Me;
+        }
+
+        /// <summary>
         /// Sets the type handler used for parsing and formatting field text.
         /// </summary>
         /// <param name="name">The type handler type name</param>

@@ -463,6 +463,7 @@ namespace BeanIO.Internal.Config.Xml
             config.KeepPadding = GetBoolAttribute(element, "keepPadding") ?? config.KeepPadding;
             config.IsLenientPadding = GetBoolAttribute(element, "lenientPadding") ?? config.IsLenientPadding;
             config.IsNillable = GetBoolAttribute(element, "nillable") ?? config.IsNillable;
+            config.ParseDefault = GetBoolAttribute(element, "parseDefault") ?? config.ParseDefault;
 
             if (HasAttribute(element, "justify"))
             {

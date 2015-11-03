@@ -92,6 +92,15 @@ namespace BeanIO.Internal.Util
         public static readonly string DEFAULT_MARSHALLING_ENABLED = "org.beanio.marshalDefaultEnabled";
 
         /// <summary>
+        /// Whether a configured field default is unmarshalled on initialization. The default configuration
+        /// sets this property to <code>true</code>.
+        /// </summary>
+        /// <remarks>
+        /// This is useful when the default value cannot be represented using the underlying type.
+        /// </remarks>
+        public static readonly string DEFAULT_PARSING_ENABLED = "org.beanio.parseDefaultEnabled";
+
+        /// <summary>
         /// The default minOccurs setting for a group.
         /// </summary>
         public static readonly string DEFAULT_GROUP_MIN_OCCURS = "org.beanio.group.minOccurs";

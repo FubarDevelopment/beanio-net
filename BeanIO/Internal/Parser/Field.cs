@@ -28,6 +28,7 @@ namespace BeanIO.Internal.Parser
         {
             ErrorIfNullPrimitive = Settings.Instance.GetBoolean(Settings.ERROR_IF_NULL_PRIMITIVE);
             UseDefaultIfMissing = Settings.Instance.GetBoolean(Settings.USE_DEFAULT_IF_MISSING);
+            ParseDefault = Settings.Instance.GetBoolean(Settings.DEFAULT_PARSING_ENABLED);
             MarshalDefault = Settings.Instance.GetBoolean(Settings.DEFAULT_MARSHALLING_ENABLED);
             ValidateOnMarshal = Settings.Instance.GetBoolean(Settings.VALIDATE_ON_MARSHAL);
             MaxLength = int.MaxValue;
@@ -110,6 +111,8 @@ namespace BeanIO.Internal.Parser
 
         public bool UseDefaultIfMissing { get; set; }
 
+        public bool ParseDefault { get; set; }
+
         public bool MarshalDefault { get; set; }
 
         /// <summary>
@@ -145,10 +148,30 @@ namespace BeanIO.Internal.Parser
             if (text == null)
             {
                 object value = Value.Missing;
-                if (UseDefaultIfMissing && DefaultValue != null)
+                if (UseDefaultIfMissing && DefaultValue != null && ParseDefault)
                     value = DefaultValue;
                 SetValue(context, value);
                 return false;
+            }
+
+            if (!ParseDefault)
+            {
+                var defaultValueAsString = (string)DefaultValue;
+                if (defaultValueAsString != null && string.Equals(text, defaultValueAsString))
+                {
+                    text = null;
+
+                    // collections are not further validated
+                    if (IsRequired)
+                    {
+                        context.AddFieldError(Name, null, "required");
+                        text = Value.Invalid;
+                    }
+
+                    _value.Set(context, text);
+
+                    return true;
+                }
             }
 
             if (ReferenceEquals(text, Value.Invalid))
@@ -194,7 +217,14 @@ namespace BeanIO.Internal.Parser
                 if (Format.InsertValue(context, value))
                     return true;
 
-                text = FormatValue(value);
+                if (ParseDefault)
+                {
+                    text = FormatValue(value);
+                }
+                else
+                {
+                    text = (string)value;
+                }
             }
 
             if (ValidateOnMarshal)

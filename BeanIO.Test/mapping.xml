@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<beanio xmlns="http://www.beanio.org/2012/03" 
+<beanio xmlns="http://www.beanio.org/2015/06" 
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.beanio.org/2011/01 http://www.beanio.org/2011/01/mapping.xsd">
+  xsi:schemaLocation="http://www.beanio.org/2015/06 ../BeanIO/Xsd/2015/06/mapping.xsd">
 
   <stream name="stream1" format="csv">
     <record name="header" order="1" minOccurs="1" maxOccurs="1">

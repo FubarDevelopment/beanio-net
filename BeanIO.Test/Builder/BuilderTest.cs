@@ -379,6 +379,7 @@ namespace BeanIO.Builder
             Assert.Null(c.XmlPrefix);
             Assert.Null(c.XmlNamespace);
             Assert.Null(c.TypeHandler);
+            Assert.Null(c.ParseDefault);
 
             b.Type(typeof(int))
              .Collection(typeof(List<object>))
@@ -405,6 +406,7 @@ namespace BeanIO.Builder
              .LenientPadding()
              .RegEx(".*")
              .Nillable()
+             .ParseDefault(false)
              .XmlType(XmlNodeType.Attribute)
              .XmlName("xmlName")
              .XmlPrefix("prefix")
@@ -442,6 +444,7 @@ namespace BeanIO.Builder
             Assert.Equal("prefix", c.XmlPrefix);
             Assert.Equal("namespace", c.XmlNamespace);
             Assert.Equal("typeHandler", c.TypeHandler);
+            Assert.False(c.ParseDefault);
 
             b = new FieldBuilder("field")
                 .TypeHandler<StringTypeHandler>();
