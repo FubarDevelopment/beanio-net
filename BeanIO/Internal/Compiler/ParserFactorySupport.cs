@@ -1383,6 +1383,10 @@ namespace BeanIO.Internal.Compiler
             {
                 return handler.Parse(text);
             }
+            catch (TypeConversionException ex)
+            {
+                throw new BeanIOConfigurationException(string.Format("Type conversion failed for configured default '{0}': {1}", text, ex.Message), ex);
+            }
             catch (FormatException ex)
             {
                 throw new BeanIOConfigurationException(string.Format("Type conversion failed for configured default '{0}': {1}", text, ex.Message), ex);
