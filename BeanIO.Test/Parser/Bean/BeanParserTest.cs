@@ -362,5 +362,25 @@ namespace BeanIO.Parser.Bean
                 reader.Close();
             }
         }
+
+        [Fact]
+        public void TestParseDefaultFalse()
+        {
+            var factory = NewStreamFactory("BeanIO.Parser.Bean.widget.xml");
+
+            var u = factory.CreateUnmarshaller("w11");
+            var m = factory.CreateMarshaller("w11");
+
+            var bean = (Beans.Bean)u.Unmarshal("value1,00000000");
+            Assert.Equal("value1", bean.field1);
+            Assert.Null(bean.date);
+            Assert.Equal("value1,00000000", m.Marshal(bean).ToString());
+
+            bean = (Beans.Bean)u.Unmarshal("value1,19901231");
+            Assert.Equal("value1", bean.field1);
+            Assert.NotNull(bean.date);
+            Assert.Equal(new NodaTime.LocalDate(1990, 12, 31), bean.date.Value);
+            Assert.Equal("value1,19901231", m.Marshal(bean).ToString());
+        }
     }
 }

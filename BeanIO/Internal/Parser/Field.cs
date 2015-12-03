@@ -217,13 +217,14 @@ namespace BeanIO.Internal.Parser
                 if (Format.InsertValue(context, value))
                     return true;
 
-                if (ParseDefault)
+                var stringValue = value as string;
+                if (ParseDefault || stringValue == null)
                 {
                     text = FormatValue(value);
                 }
                 else
                 {
-                    text = (string)value;
+                    text = stringValue;
                 }
             }
 

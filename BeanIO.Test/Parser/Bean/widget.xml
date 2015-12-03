@@ -140,4 +140,11 @@
     </record>
   </stream>
 
+  <stream name="w11" format="csv" strict="true">
+    <record name="record" class="BeanIO.Beans.Bean, BeanIO.Test">
+      <field name="field1" default="default1" minOccurs="1" />
+      <field name="date" default="00000000" minOccurs="1" format="yyyyMMdd" parseDefault="false" />
+    </record>
+  </stream>
+
 </beanio>
