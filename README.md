@@ -2,6 +2,12 @@
 
 [![Build-Status](https://build.fubar-dev.de/guestAuth/app/rest/builds/buildType:%28id:BeanIONet_ReleaseBuild%29/statusIcon)](https://build.fubar-dev.com/viewType.html?buildTypeId=BeanIONet_ReleaseBuild&guest=1)
 
+# Latest changes
+
+## 3.1.2
+
+* Fixed ```parseDefault==false``` when serializing non-null value
+
 # Advantages over IKVM converted java BeanIO
 
 * Also usable in mobile (Windows Phone, Android, iOS) and Windows Store applications
