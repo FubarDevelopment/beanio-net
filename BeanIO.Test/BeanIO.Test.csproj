@@ -111,6 +111,7 @@
     <Compile Include="Parser\Bean\Widget.cs" />
     <Compile Include="Parser\Collection\CollectionBean.cs" />
     <Compile Include="Parser\Collection\CollectionFieldParserTest.cs" />
+    <Compile Include="Parser\Collection\DerivedPerson.cs" />
     <Compile Include="Parser\Comments\CommentsParserTest.cs" />
     <Compile Include="Parser\Constructor\AnnotatedColor.cs" />
     <Compile Include="Parser\Constructor\Color.cs" />
@@ -539,6 +540,7 @@
     <EmbeddedResource Include="Parser\Json\Segment\js3.txt" />
     <EmbeddedResource Include="Parser\Json\Segment\js4.txt" />
     <EmbeddedResource Include="Parser\Json\Segment\jsonSegment_mapping.xml" />
+    <EmbeddedResource Include="Parser\Collection\fc2_valid.txt" />
     <Content Include="Parser\Json\Segment\notes.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

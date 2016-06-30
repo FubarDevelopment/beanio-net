@@ -80,5 +80,54 @@ namespace BeanIO.Parser.Collection
                 reader.Close();
             }
         }
+
+        [Fact]
+        public void TestCollectionFixedLengthWithDerivedClass()
+        {
+            var factory = NewStreamFactory("BeanIO.Parser.Collection.collection.xml");
+            var reader = factory.CreateReader("fc2", LoadReader("fc2_valid.txt"));
+            try
+            {
+                StringWriter text;
+                var bean = (CollectionBean)reader.Read();
+                Assert.Collection(
+                    bean.ObjectList,
+                    person =>
+                    {
+                        var dp = Assert.IsType<DerivedPerson>(person);
+                        Assert.Equal("firs1", dp.FirstName);
+                        Assert.Equal("last1", dp.LastName);
+                        Assert.Equal("nick1", dp.NickName);
+                    });
+                text = new StringWriter();
+                factory.CreateWriter("fc2", text).Write(bean);
+                Assert.Equal("01firs1last1nick1" + LineSeparator, text.ToString());
+
+                bean = (CollectionBean)reader.Read();
+                Assert.Collection(
+                    bean.ObjectList,
+                    person =>
+                    {
+                        var dp = Assert.IsType<DerivedPerson>(person);
+                        Assert.Equal("firs2", dp.FirstName);
+                        Assert.Equal("last2", dp.LastName);
+                        Assert.Equal("nick2", dp.NickName);
+                    },
+                    person =>
+                    {
+                        var dp = Assert.IsType<DerivedPerson>(person);
+                        Assert.Equal("firs3", dp.FirstName);
+                        Assert.Equal("last3", dp.LastName);
+                        Assert.Equal("nick3", dp.NickName);
+                    });
+                text = new StringWriter();
+                factory.CreateWriter("fc2", text).Write(bean);
+                Assert.Equal("02firs2last2nick203firs3last3nick3" + LineSeparator, text.ToString());
+            }
+            finally
+            {
+                reader.Close();
+            }
+        }
     }
 }

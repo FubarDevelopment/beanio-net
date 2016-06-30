@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using BeanIO.Beans;
+
 namespace BeanIO.Parser.Collection
 {
     /// <summary>
@@ -12,5 +14,7 @@ namespace BeanIO.Parser.Collection
         public ISet<char?> Set { get; set; }
 
         public int[] Array { get; set; }
+
+        public List<Person> ObjectList { get; set; }
     }
 }

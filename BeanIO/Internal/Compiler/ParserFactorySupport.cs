@@ -1001,9 +1001,10 @@ namespace BeanIO.Internal.Compiler
                             arrayType = reflectedType.GenericTypeArguments[0];
                         }
 
-                        if (arrayType != null)
+                        if (arrayType != null && !arrayType.IsAssignableFrom(property.PropertyType))
                         {
-                            // override target type if we were able to reflect its value
+                            // override target type if we were able to reflect its value and the property type
+                            // cannot be cast to the array type
                             property.PropertyType = arrayType;
                         }
                     }
