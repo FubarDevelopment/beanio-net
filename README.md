@@ -4,6 +4,10 @@
 
 # Latest changes
 
+## 3.1.3
+
+* Support for adding derived types to collections
+
 ## 3.1.2
 
 * Fixed ```parseDefault==false``` when serializing non-null value

@@ -4,7 +4,7 @@ using System.Resources;
 
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Fubar Development")]
-[assembly: AssemblyCopyright("Copyright © Fubar Development, Kevin Seim 2015")]
+[assembly: AssemblyCopyright("Copyright © Fubar Development, Kevin Seim 2015-2016")]
 //// [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en")]

@@ -21,9 +21,8 @@ Supported platforms:
     <iconUrl>https://github.com/FubarDevelopment/beanio-net/raw/master/beanio-logo.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <developmentDependency>false</developmentDependency>
-    <releaseNotes>- Performance optimization
-- Allows default values that cannot be represented using the underlying fields type</releaseNotes>
-    <copyright>Copyright © Fubar Development, Kevin Seim 2015</copyright>
+    <releaseNotes>- Support for derived types in collections</releaseNotes>
+    <copyright>Copyright © Fubar Development, Kevin Seim 2015-2016</copyright>
     <tags>BeanIO PCL CSV XML JSON fixed length file parse serialize deserialize serialization deserialization parsing marshal marshalling unmarshal unmarshalling</tags>
   </metadata>
   <files>
