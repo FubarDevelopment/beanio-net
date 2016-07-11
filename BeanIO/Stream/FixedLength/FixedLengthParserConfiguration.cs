@@ -1,4 +1,9 @@
-﻿namespace BeanIO.Stream.FixedLength
+// <copyright file="FixedLengthParserConfiguration.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace BeanIO.Stream.FixedLength
 {
     /// <summary>
     /// Stores configuration settings for parsing fixed length formatted streams.
@@ -32,23 +37,11 @@
         /// <summary>
         /// Gets a value indicating whether whether one or more comment prefixes have been configured.
         /// </summary>
-        public bool IsCommentEnabled
-        {
-            get
-            {
-                return Comments != null && Comments.Length > 0;
-            }
-        }
+        public bool IsCommentEnabled => Comments != null && Comments.Length > 0;
 
         /// <summary>
         /// Gets a value indicating whether the line continuation character is enabled
         /// </summary>
-        public bool IsLineContinationEnabled
-        {
-            get
-            {
-                return LineContinuationCharacter != null;
-            }
-        }
+        public bool IsLineContinationEnabled => LineContinuationCharacter != null;
     }
 }

@@ -1,4 +1,9 @@
-﻿namespace BeanIO.Stream.Delimited
+// <copyright file="DelimitedParserConfiguration.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace BeanIO.Stream.Delimited
 {
     /// <summary>
     /// Stores configuration settings for parsing delimited formatted streams
@@ -62,25 +67,16 @@
         /// <summary>
         /// Gets a value indicating whether an escape character is enabled
         /// </summary>
-        public bool IsEscapeEnabled
-        {
-            get { return Escape != null; }
-        }
+        public bool IsEscapeEnabled => Escape != null;
 
         /// <summary>
         /// Gets a value indicating whether the line continuation character is enabled
         /// </summary>
-        public bool IsLineContinuationCharacter
-        {
-            get { return LineContinuationCharacter != null; }
-        }
+        public bool IsLineContinuationCharacter => LineContinuationCharacter != null;
 
         /// <summary>
         /// Gets a value indicating whether one or more comment prefixes have been configured
         /// </summary>
-        public bool IsCommentEnabled
-        {
-            get { return Comments != null && Comments.Length > 0; }
-        }
+        public bool IsCommentEnabled => Comments != null && Comments.Length > 0;
     }
 }

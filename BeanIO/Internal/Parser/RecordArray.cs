@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="RecordArray.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -16,10 +21,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets the <see cref="IProperty"/> implementation type
         /// </summary>
-        public override PropertyType Type
-        {
-            get { return Internal.Parser.PropertyType.AggregationArray; }
-        }
+        public override PropertyType Type => Internal.Parser.PropertyType.AggregationArray;
 
         /// <summary>
         /// Gets or sets the class type of the array
@@ -71,6 +73,7 @@ namespace BeanIO.Internal.Parser
                         list.Add(array.GetValue(i));
                 }
             }
+
             base.SetValue(context, collection);
         }
 

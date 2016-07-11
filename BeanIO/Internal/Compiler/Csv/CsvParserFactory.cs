@@ -1,4 +1,9 @@
-﻿using BeanIO.Internal.Compiler.Delimited;
+// <copyright file="CsvParserFactory.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using BeanIO.Internal.Compiler.Delimited;
 using BeanIO.Internal.Config;
 using BeanIO.Internal.Parser;
 using BeanIO.Internal.Parser.Format.Csv;

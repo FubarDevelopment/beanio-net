@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="TimeTypeHandler.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 
 using NodaTime;
 
@@ -29,10 +34,7 @@ namespace BeanIO.Types
         /// <summary>
         /// Gets the class type supported by this handler.
         /// </summary>
-        public override Type TargetType
-        {
-            get { return typeof(LocalTime); }
-        }
+        public override Type TargetType => typeof(LocalTime);
 
         /// <summary>
         /// Parses field text into an object.
@@ -42,9 +44,7 @@ namespace BeanIO.Types
         public override object Parse(string text)
         {
             var dt = ParseDate(text);
-            if (dt == null)
-                return null;
-            return dt.Value.TimeOfDay;
+            return dt?.TimeOfDay;
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace BeanIO.Types
             if (value == null)
                 return null;
             var t = (LocalTime)value;
-            return FormatDate(new LocalDate().At(t));
+            return FormatDate(LocalDate.FromDateTime(DateTime.Now).At(t));
         }
     }
 }

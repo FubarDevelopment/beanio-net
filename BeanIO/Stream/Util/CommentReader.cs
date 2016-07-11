@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="CommentReader.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Linq;
 
 using BeanIO.Internal.Util;
@@ -41,9 +46,9 @@ namespace BeanIO.Stream.Util
         public CommentReader(MarkableTextReader reader, string[] comments, char? recordTerminator)
         {
             if (comments == null)
-                throw new ArgumentNullException("comments", "Comments not set");
+                throw new ArgumentNullException(nameof(comments), "Comments not set");
             if (reader == null)
-                throw new ArgumentNullException("reader", "Reader not set");
+                throw new ArgumentNullException(nameof(reader), "Reader not set");
 
             _in = reader;
             _comments = comments;

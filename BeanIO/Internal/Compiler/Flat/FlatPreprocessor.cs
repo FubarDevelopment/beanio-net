@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="FlatPreprocessor.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -55,10 +60,7 @@ namespace BeanIO.Internal.Compiler.Flat
         /// <summary>
         /// Gets a value indicating whether the stream format is fixed length.
         /// </summary>
-        protected virtual bool IsFixedLength
-        {
-            get { return false; }
-        }
+        protected virtual bool IsFixedLength => false;
 
         private int SegmentOffset
         {
@@ -186,16 +188,19 @@ namespace BeanIO.Internal.Compiler.Flat
                 {
                     maxSize = int.MaxValue;
                 }
+
                 var n = config.Position;
                 if (first == null || ComparePosition(n, first.Position) < 0)
                 {
                     first = config;
                 }
+
                 if (last == null || ComparePosition(n, last.Position) > 0)
                 {
                     last = config;
                 }
             }
+
             if (last == null)
             {
                 if (segment.ComponentType == ComponentType.Record)
@@ -217,6 +222,7 @@ namespace BeanIO.Internal.Compiler.Flat
                     {
                         throw new BeanIOConfigurationException("A repeating segment may not contain components of indeterminate size");
                     }
+
                     maxSize = int.MaxValue;
                 }
                 else if (last.MaxOccurs == null || last.MaxOccurs == int.MaxValue)
@@ -248,6 +254,7 @@ namespace BeanIO.Internal.Compiler.Flat
                     {
                         first = config;
                     }
+
                     if (config.MinOccurs.GetValueOrDefault() > 0)
                     {
                         if (last == null || ComparePosition(n, last.Position) > 0)
@@ -291,6 +298,7 @@ namespace BeanIO.Internal.Compiler.Flat
                         {
                             c.Position = c.Position + offset;
                         }
+
                         segment.Position = offset + segment.Position;
                         _endComponents.Add(segment);
 
@@ -309,6 +317,7 @@ namespace BeanIO.Internal.Compiler.Flat
                     {
                         _unboundedComponent = segment;
                     }
+
                     _defaultPosition = int.MaxValue;
                 }
                 else
@@ -328,8 +337,10 @@ namespace BeanIO.Internal.Compiler.Flat
                         continue;
                     }
                 }
+
                 defaultExistence = false;
             }
+
             segment.IsDefaultExistence = defaultExistence;
 
             if (segment.IsDefaultExistence && segment.MinOccurs != segment.MaxOccurs)
@@ -424,10 +435,12 @@ namespace BeanIO.Internal.Compiler.Flat
                     "in a record, or for none of them (in which case, all fields must be configured in the " +
                     "order they will appear in the stream)");
             }
+
             if (field.Position != null)
             {
                 field.Position = field.Position + SegmentOffset;
             }
+
             if (field.Position == null)
             {
                 CalculateDefaultPosition(field);
@@ -439,6 +452,7 @@ namespace BeanIO.Internal.Compiler.Flat
                     throw new BeanIOConfigurationException("until should not be specified for " +
                         "fields of determinate occurences and length");
                 }
+
                 if (field.Until >= 0)
                 {
                     throw new BeanIOConfigurationException("until must be less than 0 (i.e. " +
@@ -505,22 +519,29 @@ namespace BeanIO.Internal.Compiler.Flat
             // search in reverse to find the most recent field in case multiple
             // fields share the same name (gc0080)
             FieldConfig occurs = _fieldComponents.FirstOrDefault(fc => string.Equals(fc.Name, config.OccursRef));
-            if (occurs == null) {
+            if (occurs == null)
+            {
                 throw new BeanIOConfigurationException(string.Format("Referenced field '{0}' not found", config.OccursRef));
             }
-            if (occurs.Collection != null) {
+
+            if (occurs.Collection != null)
+            {
                 throw new BeanIOConfigurationException(string.Format("Referenced field '{0}' may not repeat", config.OccursRef));
             }
-            if (occurs.Position >= config.Position) {
+
+            if (occurs.Position >= config.Position)
+            {
                 throw new BeanIOConfigurationException(string.Format("Referenced field '{0}' must precede this field", config.OccursRef));
             }
 
             // default occurs to an Integer if not set...
-            if (occurs.Type == null && occurs.TypeHandler == null && occurs.TypeHandlerInstance == null) {
+            if (occurs.Type == null && occurs.TypeHandler == null && occurs.TypeHandlerInstance == null)
+            {
                 occurs.Type = typeof(int).GetAssemblyQualifiedName();
             }
 
-            if (occurs.IsRef && !occurs.IsBound) {
+            if (occurs.IsRef && !occurs.IsBound)
+            {
                 throw new BeanIOConfigurationException(string.Format("Unbound field '{0}' cannot be referenced more than once", occurs.Name));
             }
 
@@ -562,6 +583,7 @@ namespace BeanIO.Internal.Compiler.Flat
                 {
                     c.Position = c.Position + offset;
                 }
+
                 config.Position = offset;
                 _endComponents.Add(config);
 

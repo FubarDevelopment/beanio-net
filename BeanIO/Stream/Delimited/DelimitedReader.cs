@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="DelimitedReader.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -139,10 +144,7 @@ namespace BeanIO.Stream.Delimited
         /// <returns>
         /// The record value, or null if the end of the stream was reached.
         /// </returns>
-        public int RecordLineNumber
-        {
-            get { return _recordLineNumber < 0 ? -1 : (_recordTerminator == null ? _recordLineNumber : 0); }
-        }
+        public int RecordLineNumber => _recordLineNumber < 0 ? -1 : (_recordTerminator == null ? _recordLineNumber : 0);
 
         /// <summary>
         /// Gets the unparsed record text of the last record read.

@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+// <copyright file="NamespaceAwareElementComparer.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Collections.Generic;
 using System.Xml.Linq;
 
 using BeanIO.Internal.Parser.Format.Xml.Annotations;
@@ -34,7 +39,7 @@ namespace BeanIO.Internal.Util
         public static NamespaceHandlingMode GetHandlingModeFor(XElement element)
         {
             var nsHandlingModeAttr = element.Annotation<NamespaceModeAnnotation>();
-            return nsHandlingModeAttr != null ? nsHandlingModeAttr.HandlingMode : NamespaceHandlingMode.UseNamespace;
+            return nsHandlingModeAttr?.HandlingMode ?? NamespaceHandlingMode.UseNamespace;
         }
 
         public int Compare(XElement x, XElement y)

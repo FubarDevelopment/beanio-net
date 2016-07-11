@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="NumberTypeHandler.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Globalization;
 using System.Reflection;
 
@@ -24,9 +29,9 @@ namespace BeanIO.Types
         public NumberTypeHandler(Type numberType)
         {
             if (numberType == null)
-                throw new ArgumentNullException("numberType");
+                throw new ArgumentNullException(nameof(numberType));
             if (!numberType.GetTypeInfo().IsValueType)
-                throw new ArgumentOutOfRangeException("numberType");
+                throw new ArgumentOutOfRangeException(nameof(numberType));
             TargetType = numberType;
         }
 
@@ -42,7 +47,7 @@ namespace BeanIO.Types
             set
             {
                 if (value != null && string.IsNullOrEmpty(value.Item2))
-                    throw new ArgumentOutOfRangeException("value");
+                    throw new ArgumentOutOfRangeException(nameof(value));
                 _pattern = value;
             }
         }
@@ -85,6 +90,7 @@ namespace BeanIO.Types
                 var dec = Convert.ToDecimal(value);
                 return dec.ToString(Culture);
             }
+
             return fmt.ToString(Pattern.Item2, Culture);
         }
 
@@ -126,6 +132,7 @@ namespace BeanIO.Types
                     {
                         styles = (NumberStyles)Enum.Parse(typeof(NumberStyles), stylesAsString, true);
                     }
+
                     Pattern = Tuple.Create(styles, format);
                 }
             }

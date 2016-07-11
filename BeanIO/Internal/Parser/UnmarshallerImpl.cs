@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="UnmarshallerImpl.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
 
@@ -37,10 +42,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets record information for the most recent unmarshalled bean object.
         /// </summary>
-        public IRecordContext RecordContext
-        {
-            get { return _context.GetRecordContext(0); }
-        }
+        public IRecordContext RecordContext => _context.GetRecordContext(0);
 
         /// <summary>
         /// Unmarshals a bean object from the given record text.
@@ -53,7 +55,7 @@ namespace BeanIO.Internal.Parser
         public object Unmarshal(string record)
         {
             if (record == null)
-                throw new ArgumentNullException("record");
+                throw new ArgumentNullException(nameof(record));
 
             RecordName = null;
             _recordText = record;
@@ -72,7 +74,7 @@ namespace BeanIO.Internal.Parser
         public object Unmarshal(IList<string> fields)
         {
             if (fields == null)
-                throw new ArgumentNullException("fields");
+                throw new ArgumentNullException(nameof(fields));
 
             RecordName = null;
             _recordValue = _context.ToRecordValue(fields);
@@ -94,7 +96,7 @@ namespace BeanIO.Internal.Parser
         public object Unmarshal(string[] fields)
         {
             if (fields == null)
-                throw new ArgumentNullException("fields");
+                throw new ArgumentNullException(nameof(fields));
 
             RecordName = null;
             _recordValue = _context.ToRecordValue(fields);
@@ -113,7 +115,7 @@ namespace BeanIO.Internal.Parser
         public object Unmarshal(XContainer node)
         {
             if (node == null)
-                throw new ArgumentNullException("node");
+                throw new ArgumentNullException(nameof(node));
 
             RecordName = null;
             _recordValue = _context.ToRecordValue(node);
@@ -204,10 +206,7 @@ namespace BeanIO.Internal.Parser
             /// <returns>
             /// The record value, or null if the end of the stream was reached.
             /// </returns>
-            public int RecordLineNumber
-            {
-                get { return 0; }
-            }
+            public int RecordLineNumber => 0;
 
             /// <summary>
             /// Gets the unparsed record text of the last record read.
@@ -215,10 +214,7 @@ namespace BeanIO.Internal.Parser
             /// <returns>
             /// The unparsed text of the last record read
             /// </returns>
-            public string RecordText
-            {
-                get { return _unmarshaller._recordText; }
-            }
+            public string RecordText => _unmarshaller._recordText;
 
             /// <summary>
             /// Reads a single record from this input stream.

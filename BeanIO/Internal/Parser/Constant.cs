@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="Constant.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 
 namespace BeanIO.Internal.Parser
 {
@@ -10,10 +15,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets the <see cref="IProperty"/> implementation type
         /// </summary>
-        public PropertyType Type
-        {
-            get { return Parser.PropertyType.Simple; }
-        }
+        public PropertyType Type => Parser.PropertyType.Simple;
 
         /// <summary>
         /// Gets or sets a value indicating whether this property or any of its descendants are used to identify a bean object.

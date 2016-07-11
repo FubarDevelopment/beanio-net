@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+// <copyright file="BeanIOConfig.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Collections.Generic;
 
 namespace BeanIO.Internal.Config
 {
@@ -22,10 +27,7 @@ namespace BeanIO.Internal.Config
         /// <summary>
         /// Gets the list of stream mappings for this configuration
         /// </summary>
-        public IReadOnlyList<StreamConfig> StreamConfigurations
-        {
-            get { return _streamList; }
-        }
+        public IReadOnlyList<StreamConfig> StreamConfigurations => _streamList;
 
         /// <summary>
         /// Gets or sets the list of custom type handlers for this configuration

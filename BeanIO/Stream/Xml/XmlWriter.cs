@@ -1,5 +1,11 @@
-﻿using System;
+// <copyright file="XmlWriter.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -29,6 +35,7 @@ namespace BeanIO.Stream.Xml
     /// And the <see cref="NamespaceModeAnnotation"/> with <see cref="NamespaceHandlingMode.IgnoreNamespace"/> set on
     /// elements where the XML namespace should be ignored when writing to the output stream.</para>
     /// </remarks>
+    [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:DoNotUseRegions", Justification = "Reviewed.")]
     public class XmlWriter : IRecordWriter, IStatefulWriter
     {
         private static readonly bool DELTA_ENABLED = Settings.Instance.GetBoolean(Settings.XML_WRITER_UPDATE_STATE_USING_DELTA);
@@ -100,22 +107,23 @@ namespace BeanIO.Stream.Xml
         public XmlWriter([NotNull] TextWriter writer, XmlParserConfiguration config)
         {
             if (writer == null)
-                throw new ArgumentNullException("writer");
+                throw new ArgumentNullException(nameof(writer));
 
             _config = config ?? new XmlParserConfiguration();
             _encoding = _config.GetEncoding();
             _writer = new FilterWriter(writer);
-            _out = System.Xml.XmlWriter.Create(
-                _writer,
-                new XmlWriterSettings()
-                    {
-                        Indent = config.IsIndentionEnabled,
-                        IndentChars = new string(' ', config.Indentation.GetValueOrDefault()),
-                        OmitXmlDeclaration = config.SuppressHeader,
-                        NewLineChars = config.LineSeparator ?? DEFAULT_LINE_SEPARATOR,
-                        Encoding = _encoding ?? Encoding.UTF8,
-                        NamespaceHandling = NamespaceHandling.OmitDuplicates,
-                    });
+
+            var writerSettings = new XmlWriterSettings()
+            {
+                Indent = _config.IsIndentionEnabled,
+                IndentChars = new string(' ', _config.Indentation.GetValueOrDefault()),
+                OmitXmlDeclaration = _config.SuppressHeader,
+                NewLineChars = _config.LineSeparator ?? DEFAULT_LINE_SEPARATOR,
+                Encoding = _encoding ?? Encoding.UTF8,
+                NamespaceHandling = NamespaceHandling.OmitDuplicates,
+            };
+
+            _out = System.Xml.XmlWriter.Create(_writer, writerSettings);
             _outputHeader = !_config.SuppressHeader;
         }
 
@@ -225,6 +233,7 @@ namespace BeanIO.Stream.Xml
 
                 e = _elementStack.Parent;
             }
+
             _dirtyLevel = _level;
 
             state[GetKey(ns, LEVEL_KEY)] = _level;
@@ -295,6 +304,8 @@ namespace BeanIO.Stream.Xml
                         {
                             throw new InvalidOperationException(string.Format("Invalid state information for key '{0}'", GetKey(stackPrefix, STACK_NS_MAP_KEY)));
                         }
+
+                        Debug.Assert(_elementStack != null, "_elementStack != null");
                         for (var n = 0; n < s.Length; n += 2)
                         {
                             _elementStack.AddNamespace(s[n + 1], s[n]);
@@ -376,8 +387,10 @@ namespace BeanIO.Stream.Xml
                 {
                     token.Append(' ');
                 }
+
                 token.AppendFormat("{0} {1}", entry.Key, entry.Value);
             }
+
             return token.ToString();
         }
 
@@ -411,6 +424,7 @@ namespace BeanIO.Stream.Xml
                     prefix = null;
                     ignoreNamespace = true;
                 }
+
                 ns = string.Empty;
             }
 
@@ -447,6 +461,7 @@ namespace BeanIO.Stream.Xml
                 Push(ns, prefix, name);
                 if (_config.NamespaceMap != null)
                 {
+                    Debug.Assert(_elementStack != null, "_elementStack != null");
                     foreach (var entry in _config.NamespaceMap)
                     {
                         namespacesToAdd.Add(Tuple.Create(entry.Key, entry.Value));
@@ -545,6 +560,7 @@ namespace BeanIO.Stream.Xml
                         {
                             attPrefixSet = new HashSet<string>();
                         }
+
                         attPrefixSet.Add(attPrefix);
                         namespacesToAdd.Insert(namespaceInsertIndex++, Tuple.Create(attPrefix, attNamespace));
                     }
@@ -605,6 +621,7 @@ namespace BeanIO.Stream.Xml
                         _out.WriteCData(((XCData)child).Value);
                         break;
                 }
+
                 child = child.NextNode;
             }
 
@@ -617,6 +634,7 @@ namespace BeanIO.Stream.Xml
                 {
                     Pop();
                 }
+
                 _out.WriteEndElement();
             }
         }
@@ -678,10 +696,7 @@ namespace BeanIO.Stream.Xml
 
             public bool SuppressOutput { private get; set; }
 
-            public override Encoding Encoding
-            {
-                get { return _baseWriter.Encoding; }
-            }
+            public override Encoding Encoding => _baseWriter.Encoding;
 
             public override void Write(char value)
             {

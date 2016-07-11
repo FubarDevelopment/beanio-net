@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="JsonMarshallingContext.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 
 using BeanIO.Stream;
 
@@ -23,20 +28,11 @@ namespace BeanIO.Internal.Parser.Format.Json
             _typeStack = new JTokenType[maxDepth];
         }
 
-        private JObject JsonObject
-        {
-            get { return (JObject)_valueStack[_depth]; }
-        }
+        private JObject JsonObject => (JObject)_valueStack[_depth];
 
-        private JArray JsonArray
-        {
-            get { return (JArray)_valueStack[_depth]; }
-        }
+        private JArray JsonArray => (JArray)_valueStack[_depth];
 
-        private JTokenType JsonType
-        {
-            get { return _typeStack[_depth]; }
-        }
+        private JTokenType JsonType => _typeStack[_depth];
 
         /// <summary>
         /// Clear is invoked after each bean object (record or group) is marshalled
@@ -113,6 +109,7 @@ namespace BeanIO.Internal.Parser.Format.Json
                         list = (JArray)token;
                     }
                 }
+
                 list.Add(value);
             }
             else

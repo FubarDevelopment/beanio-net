@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="StringUtil.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Text;
 
 using BeanIO.Config;
@@ -73,10 +78,11 @@ namespace BeanIO.Internal.Util
                             valueBegin = 0;
                             state = 1;
                         }
-                        else if (s != null)
+                        else
                         {
-                            s.Append(c);
+                            s?.Append(c);
                         }
+
                         break;
 
                     case 1:
@@ -87,10 +93,10 @@ namespace BeanIO.Internal.Util
                         }
                         else
                         {
-                            if (s != null)
-                                s.Append('$').Append(c);
+                            s?.Append('$').Append(c);
                             state = 0;
                         }
+
                         break;
 
                     case 2:
@@ -115,6 +121,7 @@ namespace BeanIO.Internal.Util
                         {
                             valueBegin = i;
                         }
+
                         break;
                 }
             }

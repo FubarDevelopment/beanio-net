@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="Field.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -44,18 +49,12 @@ namespace BeanIO.Internal.Parser
         /// stream formats calculate size based on the number of fields.  Some stream formats,
         /// such as XML, may ignore size settings.
         /// </remarks>
-        public override int? Size
-        {
-            get { return Format.Size; }
-        }
+        public override int? Size => Format.Size;
 
         /// <summary>
         /// Gets the <see cref="IProperty"/> implementation type
         /// </summary>
-        public PropertyType Type
-        {
-            get { return Parser.PropertyType.Simple; }
-        }
+        public PropertyType Type => Parser.PropertyType.Simple;
 
         /// <summary>
         /// Gets or sets the property accessor
@@ -76,10 +75,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets a value indicating whether this node must exist during unmarshalling.
         /// </summary>
-        public override bool IsOptional
-        {
-            get { return Format.IsLazy; }
-        }
+        public override bool IsOptional => Format.IsLazy;
 
         public IFieldFormat Format { get; set; }
 
@@ -87,7 +83,7 @@ namespace BeanIO.Internal.Parser
 
         public string Regex
         {
-            get { return _regex == null ? null : _regex.ToString(); }
+            get { return _regex?.ToString(); }
             set { _regex = value == null ? null : new Regex(value); }
         }
 
@@ -120,10 +116,7 @@ namespace BeanIO.Internal.Parser
         /// </summary>
         public bool ValidateOnMarshal { get; set; }
 
-        protected Regex RegexPattern
-        {
-            get { return _regex; }
-        }
+        protected Regex RegexPattern => _regex;
 
         /// <summary>
         /// Returns whether this parser and its children match a record being unmarshalled.
@@ -236,6 +229,7 @@ namespace BeanIO.Internal.Parser
                     {
                         throw new InvalidBeanException(string.Format("Invalid field '{0}', the value is not nillable", Name));
                     }
+
                     if (IsRequired)
                     {
                         throw new InvalidBeanException(string.Format("Invalid field '{0}', a value is required", Name));

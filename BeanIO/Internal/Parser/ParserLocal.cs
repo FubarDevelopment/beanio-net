@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="ParserLocal.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 
 namespace BeanIO.Internal.Parser
 {
@@ -46,7 +51,7 @@ namespace BeanIO.Internal.Parser
         public void Init(int index, ParsingContext context)
         {
             if (index < 0)
-                throw new ArgumentOutOfRangeException("index");
+                throw new ArgumentOutOfRangeException(nameof(index));
             _index = index;
             Set(context, CreateDefaultValue());
         }

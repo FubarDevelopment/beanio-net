@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="Bean.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -45,18 +50,12 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets the <see cref="IProperty"/> implementation type
         /// </summary>
-        public override PropertyType Type
-        {
-            get { return IsMap ? Parser.PropertyType.Map : Parser.PropertyType.Complex; }
-        }
+        public override PropertyType Type => IsMap ? Parser.PropertyType.Map : Parser.PropertyType.Complex;
 
         /// <summary>
         /// Gets a value indicating whether the bean object implements <see cref="IDictionary"/>
         /// </summary>
-        protected virtual bool IsMap
-        {
-            get { return PropertyType.IsMap(); }
-        }
+        protected virtual bool IsMap => PropertyType.IsMap();
 
         /// <summary>
         /// Clears the property value.
@@ -240,7 +239,7 @@ namespace BeanIO.Internal.Parser
                 return IsMatchNull;
             }
 
-            if (!PropertyType.IsAssignableFrom(bean.GetType()))
+            if (!TypeUtil.IsAssignableFrom(PropertyType, bean.GetType()))
             {
                 if (PropertyType == typeof(Dictionary<,>))
                 {

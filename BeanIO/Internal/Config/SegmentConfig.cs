@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+// <copyright file="SegmentConfig.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
-using BeanIO.Internal.Util;
+using System.Collections.Generic;
 
 namespace BeanIO.Internal.Config
 {
@@ -30,19 +33,13 @@ namespace BeanIO.Internal.Config
         /// <see cref="F:ComponentType.Field"/>, <see cref="F:ComponentType.Constant"/>,
         /// <see cref="F:ComponentType.Wrapper"/>, or <see cref="F:ComponentType.Stream"/>
         /// </returns>
-        public override ComponentType ComponentType
-        {
-            get { return ComponentType.Segment; }
-        }
+        public override ComponentType ComponentType => ComponentType.Segment;
 
         /// <summary>
         /// Gets a list of all immediate children including segments, fields and
         /// constants and the immediate children of any wrapper child.
         /// </summary>
-        public IEnumerable<PropertyConfig> PropertyList
-        {
-            get { return GetPropertyList(this); }
-        }
+        public IEnumerable<PropertyConfig> PropertyList => GetPropertyList(this);
 
         /// <summary>
         /// Gets or sets a value indicating whether this segment is used to define a bean constant.
@@ -64,10 +61,7 @@ namespace BeanIO.Internal.Config
         /// Gets the name of the property descendant to use for the Map key when
         /// <see cref="PropertyConfig.Collection"/> is set to <see cref="Dictionary{TKey,TValue}"/> (map).
         /// </summary>
-        public override string Key
-        {
-            get { return _key; }
-        }
+        public override string Key => _key;
 
         /// <summary>
         /// Sets the name of the property descendant to use for the

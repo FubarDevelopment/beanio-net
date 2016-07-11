@@ -1,4 +1,9 @@
-﻿using System.IO;
+// <copyright file="XmlRecordParserFactory.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.IO;
 using System.Xml.Linq;
 
 namespace BeanIO.Stream.Xml
@@ -29,7 +34,7 @@ namespace BeanIO.Stream.Xml
         /// <returns>The created <see cref="IRecordReader"/></returns>
         public IRecordReader CreateReader(TextReader reader)
         {
-            XDocument doc = _source != null ? _source.Document : null;
+            XDocument doc = _source?.CreateDocument();
             return new XmlReader(reader, doc);
         }
 

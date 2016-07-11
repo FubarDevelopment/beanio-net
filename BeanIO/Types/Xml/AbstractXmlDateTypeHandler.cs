@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="AbstractXmlDateTypeHandler.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
@@ -16,36 +21,35 @@ namespace BeanIO.Types.Xml
     public abstract class AbstractXmlDateTypeHandler : DateTypeHandlerSupport
     {
         private static readonly string[] _defaultTimeFormats =
-            {
-                "H:mm",
-                "H:mm",
-                "H:mm:ss",
-                "H:mm:ss.f",
-                "H:mm:ss.ff",
-                "H:mm:ss.fff",
-                "H:mm:ss.ffff",
-                "H:mm:ss.fffff",
-                "H:mm:ss.ffffff",
-                "HH:mm",
-                "HH:mm:ss",
-                "HH:mm:ss.f",
-                "HH:mm:ss.ff",
-                "HH:mm:ss.fff",
-                "HH:mm:ss.ffff",
-                "HH:mm:ss.fffff",
-                "HH:mm:ss.ffffff",
-            };
+        {
+            "H:mm",
+            "H:mm",
+            "H:mm:ss",
+            "H:mm:ss.f",
+            "H:mm:ss.ff",
+            "H:mm:ss.fff",
+            "H:mm:ss.ffff",
+            "H:mm:ss.fffff",
+            "H:mm:ss.ffffff",
+            "HH:mm",
+            "HH:mm:ss",
+            "HH:mm:ss.f",
+            "HH:mm:ss.ff",
+            "HH:mm:ss.fff",
+            "HH:mm:ss.ffff",
+            "HH:mm:ss.fffff",
+            "HH:mm:ss.ffffff",
+        };
 
         private static readonly string[] _defaultTimeZoneFormats =
-            {
-                "z",
-                "zz",
-                "zzz",
-                "zzzz",
-                "zzzzz",
-                "zzzzzz",
-                "zzzzzzz",
-            };
+        {
+            "z",
+            "zz",
+            "zzz",
+            "zzzz",
+            "zzzzz",
+            "zzzzzz",
+        };
 
         private string[] _dateTimeOffsetFormatsNonLenient;
 
@@ -70,26 +74,17 @@ namespace BeanIO.Types.Xml
         /// <summary>
         /// Gets the class type supported by this handler.
         /// </summary>
-        public override Type TargetType
-        {
-            get { return typeof(DateTimeOffset); }
-        }
+        public override Type TargetType => typeof(DateTimeOffset);
 
         /// <summary>
         /// Gets the sequence of default time zone formats
         /// </summary>
-        protected static IEnumerable<string> DefaultTimeZoneFormats
-        {
-            get { return _defaultTimeZoneFormats; }
-        }
+        protected static IEnumerable<string> DefaultTimeZoneFormats => _defaultTimeZoneFormats;
 
         /// <summary>
         /// Gets the sequence of default time formats
         /// </summary>
-        protected static IEnumerable<string> DefaultTimeFormats
-        {
-            get { return _defaultTimeFormats; }
-        }
+        protected static IEnumerable<string> DefaultTimeFormats => _defaultTimeFormats;
 
         /// <summary>
         /// Gets the XML data type name
@@ -125,15 +120,9 @@ namespace BeanIO.Types.Xml
             }
         }
 
-        private string[] DateTimeOffsetFormatsNonLenient
-        {
-            get { return _dateTimeOffsetFormatsNonLenient ?? (_dateTimeOffsetFormatsNonLenient = CreateNonLenientFormats().ToArray()); }
-        }
+        private string[] DateTimeOffsetFormatsNonLenient => _dateTimeOffsetFormatsNonLenient ?? (_dateTimeOffsetFormatsNonLenient = CreateNonLenientFormats().ToArray());
 
-        private string[] DateTimeOffsetFormatsLenient
-        {
-            get { return _dateTimeOffsetFormatsLenient ?? (_dateTimeOffsetFormatsLenient = CreateLenientFormats().ToArray()); }
-        }
+        private string[] DateTimeOffsetFormatsLenient => _dateTimeOffsetFormatsLenient ?? (_dateTimeOffsetFormatsLenient = CreateLenientFormats().ToArray());
 
         /// <summary>
         /// Parses field text into an object.
@@ -161,7 +150,6 @@ namespace BeanIO.Types.Xml
                     }
                     catch (FormatException)
                     {
-                        // TODO: Use C# 6 exception filters
                         var formats = DateTimeOffsetFormatsLenient;
                         if (!IsLenient || formats == null || formats.Length == 0)
                             throw;
@@ -172,12 +160,13 @@ namespace BeanIO.Types.Xml
             }
             catch (FormatException ex)
             {
-                throw new TypeConversionException(string.Format("Invalid XML {0}", DatatypeQName), ex);
+                throw new TypeConversionException($"Invalid XML {DatatypeQName}", ex);
             }
+
             if (replaceDate || string.Equals(DatatypeQName, "time", StringComparison.Ordinal))
                 dto = new DateTimeOffset(new DateTime(1970, 1, 1) + dto.TimeOfDay, dto.Offset);
             if (!IsTimeZoneAllowed && dto.Offset != TimeSpan.Zero)
-                throw new TypeConversionException(string.Format("Invalid XML {0}, time zone not allowed", DatatypeQName));
+                throw new TypeConversionException($"Invalid XML {DatatypeQName}, time zone not allowed");
             return dto;
         }
 
@@ -230,24 +219,20 @@ namespace BeanIO.Types.Xml
             {
                 foreach (var timezoneComponent in _defaultTimeZoneFormats)
                 {
-                    yield return string.Format(
-                        "yyyy-MM-ddT{0}{1}",
-                        timeComponent,
-                        timezoneComponent);
+                    yield return $"yyyy-MM-ddT{timeComponent}{timezoneComponent}";
                 }
             }
+
             foreach (var timeComponent in _defaultTimeFormats)
             {
-                yield return string.Format(
-                    "yyyy-MM-ddT{0}",
-                    timeComponent);
+                yield return $"yyyy-MM-ddT{timeComponent}";
             }
+
             foreach (var timezoneComponent in _defaultTimeZoneFormats)
             {
-                yield return string.Format(
-                    "yyyy-MM-dd{0}",
-                    timezoneComponent);
+                yield return $"yyyy-MM-dd{timezoneComponent}";
             }
+
             yield return "yyyy-MM-dd";
         }
 
@@ -261,17 +246,13 @@ namespace BeanIO.Types.Xml
             {
                 foreach (var timezoneComponent in _defaultTimeZoneFormats)
                 {
-                    yield return string.Format(
-                        "{0}{1}",
-                        timeComponent,
-                        timezoneComponent);
+                    yield return $"{timeComponent}{timezoneComponent}";
                 }
             }
+
             foreach (var timeComponent in _defaultTimeFormats)
             {
-                yield return string.Format(
-                    "{0}",
-                    timeComponent);
+                yield return $"{timeComponent}";
             }
         }
     }

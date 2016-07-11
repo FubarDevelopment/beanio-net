@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="FixedLengthReader.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.IO;
 using System.Text;
 
@@ -78,7 +83,7 @@ namespace BeanIO.Stream.FixedLength
                 }
                 else if (s.Length > 1)
                 {
-                    throw new ArgumentOutOfRangeException("config", "Record terminator must be a single character");
+                    throw new ArgumentOutOfRangeException(nameof(config), "Record terminator must be a single character");
                 }
             }
 
@@ -126,10 +131,7 @@ namespace BeanIO.Stream.FixedLength
         /// <returns>
         /// The unparsed text of the last record read
         /// </returns>
-        public string RecordText
-        {
-            get { return _recordText; }
-        }
+        public string RecordText => _recordText;
 
         /// <summary>
         /// Reads a single record from this input stream.

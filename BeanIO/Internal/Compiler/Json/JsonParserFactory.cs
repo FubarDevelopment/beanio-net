@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="JsonParserFactory.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Reflection;
 
 using BeanIO.Internal.Config;
@@ -170,6 +175,7 @@ namespace BeanIO.Internal.Compiler.Json
             {
                 PopParser(); // pop the wrapper
             }
+
             return property;
         }
 
@@ -193,10 +199,12 @@ namespace BeanIO.Internal.Compiler.Json
             {
                 return JTokenType.Boolean;
             }
+
             if (baseType == typeof(float) || baseType == typeof(double) || baseType == typeof(decimal))
             {
                 return JTokenType.Float;
             }
+
             return JTokenType.Integer;
         }
 

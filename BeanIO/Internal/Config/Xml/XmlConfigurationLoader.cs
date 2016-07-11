@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+// <copyright file="XmlConfigurationLoader.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Collections.Generic;
 
 using BeanIO.Config;
 
@@ -25,7 +30,7 @@ namespace BeanIO.Internal.Config.Xml
         /// <summary>
         /// Gets the <see cref="XmlMappingReader"/> for reading XML mapping files into a document object model (DOM).
         /// </summary>
-        protected virtual XmlMappingReader Reader { get; private set; }
+        protected virtual XmlMappingReader Reader { get; }
 
         /// <summary>
         /// Loads a BeanIO configuration from an input stream

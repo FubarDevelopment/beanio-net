@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="Segment.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -40,10 +45,7 @@ namespace BeanIO.Internal.Parser
         /// stream formats calculate size based on the number of fields.  Some stream formats,
         /// such as XML, may ignore size settings.
         /// </remarks>
-        public override int? Size
-        {
-            get { return _size; }
-        }
+        public override int? Size => _size;
 
         /// <summary>
         /// Gets or sets a value indicating whether this parser or any descendant of this parser is used to identify
@@ -54,10 +56,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets a value indicating whether this node must exist during unmarshalling.
         /// </summary>
-        public override bool IsOptional
-        {
-            get { return _optional; }
-        }
+        public override bool IsOptional => _optional;
 
         /// <summary>
         /// Returns whether this parser and its children match a record being unmarshalled.
@@ -102,8 +101,7 @@ namespace BeanIO.Internal.Parser
                 if (missing.Count == 0)
                 {
                     // if the segment valid and bound to a property, create the property value
-                    if (Property != null)
-                        Property.CreateValue(context);
+                    Property?.CreateValue(context);
                 }
                 else
                 {
@@ -160,8 +158,7 @@ namespace BeanIO.Internal.Parser
         /// <param name="context">The <see cref="ParsingContext"/></param>
         public override void ClearValue(ParsingContext context)
         {
-            if (Property != null)
-                Property.ClearValue(context);
+            Property?.ClearValue(context);
         }
 
         /// <summary>
@@ -171,8 +168,7 @@ namespace BeanIO.Internal.Parser
         /// <param name="value">the property value</param>
         public override void SetValue(ParsingContext context, object value)
         {
-            if (Property != null)
-                Property.SetValue(context, value);
+            Property?.SetValue(context, value);
         }
 
         /// <summary>
@@ -182,9 +178,7 @@ namespace BeanIO.Internal.Parser
         /// <returns>the property value</returns>
         public override object GetValue(ParsingContext context)
         {
-            if (Property == null)
-                return null;
-            return Property.GetValue(context);
+            return Property?.GetValue(context);
         }
 
         /// <summary>
@@ -197,8 +191,7 @@ namespace BeanIO.Internal.Parser
         /// <param name="locals">set of local variables</param>
         public override void RegisterLocals(ISet<IParserLocal> locals)
         {
-            if (Property != null)
-                ((Component)Property).RegisterLocals(locals);
+            ((Component)Property)?.RegisterLocals(locals);
 
             if (locals.Add(_missing))
                 base.RegisterLocals(locals);

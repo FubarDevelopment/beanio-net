@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="DebugUtil.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -55,6 +60,7 @@ namespace BeanIO.Internal.Util
                 {
                     writer.Append(", ");
                 }
+
                 var debuggable = item as IDebuggable;
                 if (debuggable != null)
                 {
@@ -65,6 +71,7 @@ namespace BeanIO.Internal.Util
                     writer.Append(item);
                 }
             }
+
             writer.Append("]");
             return writer.ToString();
         }

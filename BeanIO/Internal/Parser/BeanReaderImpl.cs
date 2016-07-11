@@ -1,4 +1,10 @@
-﻿using System;
+// <copyright file="BeanReaderImpl.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
+using System.Diagnostics;
 using System.IO;
 
 using JetBrains.Annotations;
@@ -30,10 +36,7 @@ namespace BeanIO.Internal.Parser
         /// unless a bean object was mapped to a record group which may span
         /// multiple records.
         /// </summary>
-        public override int RecordCount
-        {
-            get { return _context == null ? 0 : _context.RecordCount; }
-        }
+        public override int RecordCount => _context?.RecordCount ?? 0;
 
         /// <summary>
         /// Gets or sets a value indicating whether to ignore unidentified records
@@ -64,6 +67,7 @@ namespace BeanIO.Internal.Parser
         public override object Read()
         {
             EnsureOpen();
+            Debug.Assert(_context != null, "_context != null");
 
             while (true)
             {
@@ -142,6 +146,7 @@ namespace BeanIO.Internal.Parser
         public override void Close()
         {
             EnsureOpen();
+            Debug.Assert(_context != null, "_context != null");
 
             try
             {
@@ -165,6 +170,8 @@ namespace BeanIO.Internal.Parser
 
         private object InternalRead()
         {
+            Debug.Assert(_context != null, "_context != null");
+
             ISelector parser = null;
             try
             {
@@ -194,8 +201,7 @@ namespace BeanIO.Internal.Parser
             }
             finally
             {
-                if (parser != null)
-                    parser.ClearValue(_context);
+                parser?.ClearValue(_context);
             }
         }
 
@@ -205,6 +211,9 @@ namespace BeanIO.Internal.Parser
         /// <returns>the next matching record node, or <code>null</code> if the end of the stream was reached</returns>
         private ISelector NextRecord()
         {
+            Debug.Assert(_context != null, "_context != null");
+            Debug.Assert(_layout != null, "_layout != null");
+
             ISelector parser = null;
 
             // clear the current record name
@@ -228,6 +237,7 @@ namespace BeanIO.Internal.Parser
                                 throw _context.NewUnsatisfiedGroupException(unsatisfied.Name);
                             throw _context.NewUnsatisfiedRecordException(unsatisfied.Name);
                         }
+
                         return null;
                     }
                     finally

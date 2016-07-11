@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+// <copyright file="XmlUnmarshallingContext.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -40,19 +45,13 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Gets the XML document object model (DOM) for the current record.
         /// </summary>
-        public XDocument Document
-        {
-            get { return _document; }
-        }
+        public XDocument Document => _document;
 
         /// <summary>
         /// Gets the current unmarshalled position in the DOM tree, or null
         /// if a node has not been matched yet.
         /// </summary>
-        public XElement Position
-        {
-            get { return _position; }
-        }
+        public XElement Position => _position;
 
         /// <summary>
         /// Gets or sets the last parsed DOM element for a field or bean collection.
@@ -213,6 +212,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
                 {
                     element = XmlNodeUtil.FindChild(parent, node, index, node.GetNameVariants());
                 }
+
                 if (element != null)
                 {
                     PreviousElement = element;
@@ -229,6 +229,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
                     element = XmlNodeUtil.FindChild(parent, node, 0, node.GetNameVariants());
                 }
             }
+
             return element;
         }
 

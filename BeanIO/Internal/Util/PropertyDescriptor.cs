@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="PropertyDescriptor.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Reflection;
 
 using JetBrains.Annotations;
@@ -7,8 +12,6 @@ namespace BeanIO.Internal.Util
 {
     internal class PropertyDescriptor
     {
-        private readonly string _name;
-
         private readonly PropertyInfo _property;
 
         private readonly FieldInfo _field;
@@ -21,7 +24,7 @@ namespace BeanIO.Internal.Util
 
         public PropertyDescriptor([NotNull] string constructorArgument, MethodInfo getter = null, MethodInfo setter = null)
         {
-            _name = constructorArgument;
+            Name = constructorArgument;
             _field = null;
             _property = null;
             _getter = getter;
@@ -30,7 +33,7 @@ namespace BeanIO.Internal.Util
 
         public PropertyDescriptor([NotNull] PropertyInfo property, MethodInfo getter = null, MethodInfo setter = null)
         {
-            _name = property.Name;
+            Name = property.Name;
             _field = null;
             _property = getter != null && setter != null && !ReferenceEquals(property.GetMethod, getter) && !ReferenceEquals(property.SetMethod, setter)
                             ? null
@@ -41,27 +44,18 @@ namespace BeanIO.Internal.Util
 
         public PropertyDescriptor([NotNull] FieldInfo field, MethodInfo getter = null, MethodInfo setter = null)
         {
-            _name = field.Name;
+            Name = field.Name;
             _field = field;
             _property = null;
             _getter = getter;
             _setter = setter;
         }
 
-        public bool HasGetter
-        {
-            get { return _getter != null || _field != null; }
-        }
+        public bool HasGetter => _getter != null || _field != null;
 
-        public bool HasSetter
-        {
-            get { return _setter != null || (_field != null && !_field.IsInitOnly); }
-        }
+        public bool HasSetter => _setter != null || (_field != null && !_field.IsInitOnly);
 
-        public string Name
-        {
-            get { return _name; }
-        }
+        public string Name { get; }
 
         public bool? IsPublic
         {
@@ -73,9 +67,7 @@ namespace BeanIO.Internal.Util
                     return _getter.IsPublic;
                 if (_getter != null)
                     return _getter.IsPublic;
-                if (_setter != null)
-                    return _setter.IsPublic;
-                return null;
+                return _setter?.IsPublic;
             }
         }
 
@@ -118,9 +110,7 @@ namespace BeanIO.Internal.Util
                 return _property.PropertyType;
             if (_getter != null)
                 return _getter.ReturnType;
-            if (_setter != null)
-                return _setter.GetParameters()[0].ParameterType;
-            return null;
+            return _setter?.GetParameters()[0].ParameterType;
         }
     }
 }

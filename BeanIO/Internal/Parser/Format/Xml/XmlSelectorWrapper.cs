@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="XmlSelectorWrapper.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -41,10 +46,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// stream formats calculate size based on the number of fields.  Some stream formats,
         /// such as XML, may ignore size settings.
         /// </remarks>
-        public override int? Size
-        {
-            get { return ChildSelector.Size; }
-        }
+        public override int? Size => ChildSelector.Size;
 
         /// <summary>
         /// Gets a value indicating whether this parser or any descendant of this parser is used to identify
@@ -59,58 +61,37 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Gets a value indicating whether this node must exist during unmarshalling.
         /// </summary>
-        public override bool IsOptional
-        {
-            get { return ChildSelector.IsOptional; }
-        }
+        public override bool IsOptional => ChildSelector.IsOptional;
 
         /// <summary>
         /// Gets the minimum number of occurrences of this component (within the context of its parent).
         /// </summary>
-        public int MinOccurs
-        {
-            get { return ChildSelector.MinOccurs; }
-        }
+        public int MinOccurs => ChildSelector.MinOccurs;
 
         /// <summary>
         /// Gets the maximum number of occurrences of this component (within the context of its parent).
         /// </summary>
-        public int? MaxOccurs
-        {
-            get { return ChildSelector.MaxOccurs; }
-        }
+        public int? MaxOccurs => ChildSelector.MaxOccurs;
 
         /// <summary>
         /// Gets the order of this component (within the context of its parent).
         /// </summary>
-        public int Order
-        {
-            get { return ChildSelector.Order; }
-        }
+        public int Order => ChildSelector.Order;
 
         /// <summary>
         /// Gets the <see cref="IProperty"/> mapped to this component, or null if there is no property mapping.
         /// </summary>
-        public IProperty Property
-        {
-            get { return ChildSelector.Property; }
-        }
+        public IProperty Property => ChildSelector.Property;
 
         /// <summary>
         /// Gets a value indicating whether this component is a record group.
         /// </summary>
-        public bool IsRecordGroup
-        {
-            get { return false; }
-        }
+        public bool IsRecordGroup => false;
 
         /// <summary>
         /// Gets the XML node type
         /// </summary>
-        public XmlNodeType Type
-        {
-            get { return XmlNodeType.Element; }
-        }
+        public XmlNodeType Type => XmlNodeType.Element;
 
         /// <summary>
         /// Gets or sets the XML local name for this node.
@@ -138,26 +119,17 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Gets a value indicating whether this node is nillable.
         /// </summary>
-        public bool IsNillable
-        {
-            get { return false; }
-        }
+        public bool IsNillable => false;
 
         /// <summary>
         /// Gets a value indicating whether this node may repeat in the context of its immediate parent.
         /// </summary>
-        public bool IsRepeating
-        {
-            get { return false; }
-        }
+        public bool IsRepeating => false;
 
         /// <summary>
         /// Gets the child selector of this component wraps
         /// </summary>
-        public ISelector ChildSelector
-        {
-            get { return (ISelector)First; }
-        }
+        public ISelector ChildSelector => (ISelector)First;
 
         public bool IsGroup { get; set; }
 
@@ -200,6 +172,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
             {
                 annotations.Add(new IsGroupElementAnnotation(true));
             }
+
             if (!IsNamespaceAware)
             {
                 annotations.Add(new NamespaceModeAnnotation(NamespaceHandlingMode.IgnoreNamespace));
@@ -216,6 +189,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
             {
                 node.SetAttributeValue(XNamespace.Xmlns + Prefix, Namespace);
             }
+
             node = XElement.Parse(node.ToString());
             foreach (var annotation in annotations)
                 node.SetAnnotation(annotation);
@@ -325,6 +299,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
                     _written.Set(context, false);
                     ctx.CloseGroup(this);
                 }
+
                 return null;
             }
 
@@ -342,6 +317,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
                         _written.Set(context, false);
                         w = false;
                     }
+
                     if (!w)
                     {
                         ctx.OpenGroup(this);
@@ -352,8 +328,10 @@ namespace BeanIO.Internal.Parser.Format.Xml
                 {
                     ctx.OpenGroup(this);
                 }
+
                 return match;
             }
+
             return this;
         }
 
@@ -573,6 +551,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
                         {
                             return null;
                         }
+
                         SetCount(context, n.Count);
                         Reset(context);
                     }

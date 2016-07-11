@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="JsonUnmarshallingContext.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 
 using BeanIO.Stream;
 
@@ -26,15 +31,9 @@ namespace BeanIO.Internal.Parser.Format.Json
             _typeStack = new JTokenType[maxDepth];
         }
 
-        private JObject JsonObject
-        {
-            get { return (JObject)_valueStack[_depth]; }
-        }
+        private JObject JsonObject => (JObject)_valueStack[_depth];
 
-        private JArray JsonArray
-        {
-            get { return (JArray)_valueStack[_depth]; }
-        }
+        private JArray JsonArray => (JArray)_valueStack[_depth];
 
         /// <summary>
         /// Sets the value of the record returned from the <see cref="IRecordReader"/>
@@ -60,6 +59,7 @@ namespace BeanIO.Internal.Parser.Format.Json
                         if (value == null)
                             return Value.Nil;
                     }
+
                     break;
                 case JTokenType.Array:
                     {
@@ -78,10 +78,12 @@ namespace BeanIO.Internal.Parser.Format.Json
                                 return Value.Nil;
                         }
                     }
+
                     break;
                 default:
                     throw new InvalidOperationException();
             }
+
             return value;
         }
 
@@ -95,6 +97,7 @@ namespace BeanIO.Internal.Parser.Format.Json
                     AddFieldError(node.Name, null, "nillable");
                     return Value.Invalid;
                 }
+
                 return value;
             }
 
@@ -112,8 +115,10 @@ namespace BeanIO.Internal.Parser.Format.Json
                             AddFieldError(node.Name, null, "jsontype", JTokenType.Array);
                             return Value.Invalid;
                         }
+
                         return null;
                     }
+
                     break;
                 case JTokenType.Object:
                     if (!(value is JObject))
@@ -123,8 +128,10 @@ namespace BeanIO.Internal.Parser.Format.Json
                             AddFieldError(node.Name, null, "jsontype", JTokenType.Object);
                             return Value.Invalid;
                         }
+
                         return null;
                     }
+
                     break;
                 default:
                     throw new InvalidOperationException(string.Format("Invalid json type: {0}", node.JsonType));

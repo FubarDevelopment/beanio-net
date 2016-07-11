@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="ParsingContext.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -26,10 +31,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets a value indicating whether a repeating segment or field is being parsed.
         /// </summary>
-        public bool IsRepeating
-        {
-            get { return _iterations.Count != 0; }
-        }
+        public bool IsRepeating => _iterations.Count != 0;
 
         /// <summary>
         /// Pushes an <see cref="IIteration"/> onto a stack for adjusting

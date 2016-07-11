@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+// <copyright file="MarshallerImpl.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
 
@@ -28,10 +33,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets the current record value
         /// </summary>
-        protected virtual object RecordValue
-        {
-            get { return _recordValue; }
-        }
+        protected virtual object RecordValue => _recordValue;
 
         /// <summary>
         /// Marshals a single bean object.

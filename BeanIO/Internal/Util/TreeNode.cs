@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="TreeNode.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -9,7 +14,8 @@ namespace BeanIO.Internal.Util
     /// The node for a tree structure.
     /// </summary>
     /// <typeparam name="T">The tree node type</typeparam>
-    public class TreeNode<T> : IEnumerable<T> where T : TreeNode<T>
+    public class TreeNode<T> : IEnumerable<T>
+        where T : TreeNode<T>
     {
         private readonly List<T> _children;
 
@@ -41,21 +47,12 @@ namespace BeanIO.Internal.Util
         /// <summary>
         /// Gets the immediate children of this node
         /// </summary>
-        public IReadOnlyCollection<T> Children
-        {
-            get { return _children; }
-        }
+        public IReadOnlyCollection<T> Children => _children;
 
         /// <summary>
         /// Gets the first child of this node
         /// </summary>
-        public T First
-        {
-            get
-            {
-                return _children[0];
-            }
-        }
+        public T First => _children[0];
 
         /// <summary>
         /// Adds a child to this node

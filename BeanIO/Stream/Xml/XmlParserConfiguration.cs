@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="XmlParserConfiguration.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -36,10 +41,7 @@ namespace BeanIO.Stream.Xml
         /// <summary>
         /// Gets a value indicating whether XML output will be indented
         /// </summary>
-        public bool IsIndentionEnabled
-        {
-            get { return Indentation != null && Indentation >= 0; }
-        }
+        public bool IsIndentionEnabled => Indentation != null && Indentation >= 0;
 
         /// <summary>
         /// Gets or sets the text used to terminate a line when indentation is enabled
@@ -68,10 +70,7 @@ namespace BeanIO.Stream.Xml
         /// <summary>
         /// Gets a map of namespace URI's to prefixes to be set on the root element
         /// </summary>
-        public IDictionary<string, string> NamespaceMap
-        {
-            get { return _namespaceMap; }
-        }
+        public IDictionary<string, string> NamespaceMap => _namespaceMap;
 
         /// <summary>
         /// Adds a namespace to be set on the root element
@@ -81,9 +80,9 @@ namespace BeanIO.Stream.Xml
         public void AddNamespace([NotNull] string prefix, [NotNull] string uri)
         {
             if (prefix == null)
-                throw new ArgumentNullException("prefix");
+                throw new ArgumentNullException(nameof(prefix));
             if (uri == null)
-                throw new ArgumentNullException("uri");
+                throw new ArgumentNullException(nameof(uri));
             if (_namespaceMap == null)
                 _namespaceMap = new Dictionary<string, string>();
             _namespaceMap[uri] = prefix;

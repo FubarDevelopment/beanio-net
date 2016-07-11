@@ -1,4 +1,9 @@
-﻿using BeanIO.Internal.Compiler.Flat;
+// <copyright file="FixedLengthPreprocessor.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using BeanIO.Internal.Compiler.Flat;
 using BeanIO.Internal.Config;
 
 namespace BeanIO.Internal.Compiler.FixedLength
@@ -20,10 +25,7 @@ namespace BeanIO.Internal.Compiler.FixedLength
         /// <summary>
         /// Gets a value indicating whether the stream format is fixed length.
         /// </summary>
-        protected override bool IsFixedLength
-        {
-            get { return true; }
-        }
+        protected override bool IsFixedLength => true;
 
         /// <summary>
         /// Returns the size of a field.

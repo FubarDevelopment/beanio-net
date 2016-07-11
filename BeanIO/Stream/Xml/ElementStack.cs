@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="ElementStack.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -33,28 +38,28 @@ namespace BeanIO.Stream.Xml
         /// <summary>
         /// Gets the parent element in this stack
         /// </summary>
-        public ElementStack Parent { get; private set; }
+        public ElementStack Parent { get; }
 
         /// <summary>
         /// Gets the XML namespace of this element
         /// </summary>
-        public string Namespace { get; private set; }
+        public string Namespace { get; }
 
         /// <summary>
         /// Gets the XML namespace prefix of this element, or <code>null</code>
         /// if no prefix was assigned
         /// </summary>
-        public string Prefix { get; private set; }
+        public string Prefix { get; }
 
         /// <summary>
         /// Gets the XML element name
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the default XML namespace for a child element
         /// </summary>
-        public string DefaultNamespace { get; private set; }
+        public string DefaultNamespace { get; }
 
         /// <summary>
         /// Gets or sets the XML namespaces declared by this element
@@ -71,7 +76,7 @@ namespace BeanIO.Stream.Xml
         public static ElementStack FromToken([CanBeNull] ElementStack parent, [NotNull] string token)
         {
             if (string.IsNullOrWhiteSpace(token))
-                throw new ArgumentNullException("token");
+                throw new ArgumentNullException(nameof(token));
 
             string ns = null;
             string prefix = null;
@@ -149,9 +154,8 @@ namespace BeanIO.Stream.Xml
                 if (Namespaces.TryGetValue(ns, out prefix))
                     return prefix;
             }
-            if (Parent != null)
-                return Parent.FindPrefix(ns);
-            return null;
+
+            return Parent?.FindPrefix(ns);
         }
 
         /// <summary>

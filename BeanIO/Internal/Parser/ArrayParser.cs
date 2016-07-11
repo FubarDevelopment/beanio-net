@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="ArrayParser.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,18 +21,12 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets the <see cref="IProperty"/> implementation type
         /// </summary>
-        public override PropertyType Type
-        {
-            get { return Internal.Parser.PropertyType.AggregationArray; }
-        }
+        public override PropertyType Type => Internal.Parser.PropertyType.AggregationArray;
 
         /// <summary>
         /// Gets a value indicating whether this aggregation is a property of its parent bean object.
         /// </summary>
-        public override bool IsProperty
-        {
-            get { return true; }
-        }
+        public override bool IsProperty => true;
 
         /// <summary>
         /// Returns the unmarshalled property value.
@@ -51,6 +50,7 @@ namespace BeanIO.Internal.Parser
                     array.SetValue(obj, index);
                 ++index;
             }
+
             return array;
         }
 

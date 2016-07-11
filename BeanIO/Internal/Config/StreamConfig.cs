@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+// <copyright file="StreamConfig.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Collections.Generic;
 
 using BeanIO.Builder;
 using BeanIO.Stream;
@@ -38,10 +43,7 @@ namespace BeanIO.Internal.Config
         /// <see cref="F:ComponentType.Field"/>, <see cref="F:ComponentType.Constant"/>,
         /// <see cref="F:ComponentType.Wrapper"/>, or <see cref="F:ComponentType.Stream"/>
         /// </returns>
-        public override ComponentType ComponentType
-        {
-            get { return ComponentType.Stream; }
-        }
+        public override ComponentType ComponentType => ComponentType.Stream;
 
         /// <summary>
         /// Gets or sets the format of this stream.
@@ -66,10 +68,7 @@ namespace BeanIO.Internal.Config
         /// <summary>
         /// Gets a list of customized type handlers configured for this stream.
         /// </summary>
-        public IReadOnlyList<TypeHandlerConfig> Handlers
-        {
-            get { return _typeHandlerConfigs; }
-        }
+        public IReadOnlyList<TypeHandlerConfig> Handlers => _typeHandlerConfigs;
 
         /// <summary>
         /// Gets or sets the record parser factory configuration bean.

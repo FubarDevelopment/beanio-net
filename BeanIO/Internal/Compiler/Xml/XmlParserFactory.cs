@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="XmlParserFactory.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Xml;
 
 using BeanIO.Internal.Config;
@@ -144,6 +149,7 @@ namespace BeanIO.Internal.Compiler.Xml
                 PushParser(wrapper);
                 _maxGroupDepth = Math.Max(_groupDepth, _maxGroupDepth);
             }
+
             base.InitializeGroupMain(config, property);
         }
 
@@ -155,6 +161,7 @@ namespace BeanIO.Internal.Compiler.Xml
                 PopParser();
                 --_groupDepth;
             }
+
             return property;
         }
 
@@ -231,6 +238,7 @@ namespace BeanIO.Internal.Compiler.Xml
                     };
                 PushParser(wrapper);
             }
+
             base.InitializeSegmentMain(config, property);
         }
 
@@ -247,6 +255,7 @@ namespace BeanIO.Internal.Compiler.Xml
                 // pop the wrapper
                 PopParser();
             }
+
             return property;
         }
 

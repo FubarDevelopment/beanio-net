@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="XmlDateTimeTypeHandler.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Text;
 using System.Xml;
 
@@ -19,18 +24,12 @@ namespace BeanIO.Types.Xml
         /// <summary>
         /// Gets the class type supported by this handler.
         /// </summary>
-        public override Type TargetType
-        {
-            get { return typeof(DateTime); }
-        }
+        public override Type TargetType => typeof(DateTime);
 
         /// <summary>
         /// Gets the XML data type name
         /// </summary>
-        protected override string DatatypeQName
-        {
-            get { return "dateTime"; }
-        }
+        protected override string DatatypeQName => "dateTime";
 
         /// <summary>
         /// Parses field text into an object.
@@ -40,9 +39,7 @@ namespace BeanIO.Types.Xml
         public override object Parse(string text)
         {
             var dto = (DateTimeOffset?)base.Parse(text);
-            if (dto == null)
-                return null;
-            return dto.Value.DateTime;
+            return dto?.DateTime;
         }
 
         /// <summary>

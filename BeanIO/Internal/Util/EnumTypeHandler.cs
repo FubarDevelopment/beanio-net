@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="EnumTypeHandler.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 
 using BeanIO.Config;
 using BeanIO.Types;
@@ -34,7 +39,7 @@ namespace BeanIO.Internal.Util
         /// <summary>
         /// Gets the class type supported by this handler.
         /// </summary>
-        public Type TargetType { get; private set; }
+        public Type TargetType { get; }
 
         /// <summary>
         /// Parses field text into an object.
@@ -74,6 +79,7 @@ namespace BeanIO.Internal.Util
                 case EnumFormatMode.String:
                     return value.ToString();
             }
+
             return Enum.Format(TargetType, value, _enumFormat);
         }
 

@@ -1,4 +1,9 @@
-﻿using System.Text;
+// <copyright file="XmlFieldFormat.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Text;
 using System.Xml;
 
 using BeanIO.Internal.Util;
@@ -16,10 +21,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <remarks>
         /// Fixed length formats should return the field length, while other formats should simply return 1.
         /// </remarks>
-        public virtual int Size
-        {
-            get { return 1; }
-        }
+        public virtual int Size => 1;
 
         /// <summary>
         /// Gets the XML node type
@@ -108,12 +110,14 @@ namespace BeanIO.Internal.Parser.Format.Xml
                     // to a null value depending on the value of 'required'
                     return string.Empty;
                 }
+
                 if (length != Padding.Length)
                 {
                     if (reportErrors)
                     {
                         context.AddFieldError(Name, fieldText, "length", Padding.Length);
                     }
+
                     fieldText = Value.Invalid;
                 }
                 else

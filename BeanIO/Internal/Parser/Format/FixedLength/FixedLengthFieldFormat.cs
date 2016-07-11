@@ -1,4 +1,9 @@
-﻿using BeanIO.Internal.Parser.Format.Flat;
+// <copyright file="FixedLengthFieldFormat.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using BeanIO.Internal.Parser.Format.Flat;
 
 namespace BeanIO.Internal.Parser.Format.FixedLength
 {
@@ -20,13 +25,7 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
         /// <remarks>
         /// Fixed length formats should return the field length, while other formats should simply return 1.
         /// </remarks>
-        public override int Size
-        {
-            get
-            {
-                return Padding.Length;
-            }
-        }
+        public override int Size => Padding.Length;
 
         /// <summary>
         /// Extracts the field text from a record.

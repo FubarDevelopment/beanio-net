@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="ErrorContext.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -38,10 +43,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets the starting line number of the last record read from the record reader.
         /// </summary>
-        public virtual int RecordLineNumber
-        {
-            get { return LineNumber; }
-        }
+        public virtual int RecordLineNumber => LineNumber;
 
         /// <summary>
         /// Gets or sets the raw text of the parsed record.
@@ -62,34 +64,22 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets a value indicating whether this record has any record or field level errors.
         /// </summary>
-        public bool HasErrors
-        {
-            get { return HasRecordErrors || HasFieldErrors; }
-        }
+        public bool HasErrors => HasRecordErrors || HasFieldErrors;
 
         /// <summary>
         /// Gets a value indicating whether there are one or more record level errors.
         /// </summary>
-        public bool HasRecordErrors
-        {
-            get { return _recordErrors.Count != 0; }
-        }
+        public bool HasRecordErrors => _recordErrors.Count != 0;
 
         /// <summary>
         /// Gets a collection of record level error messages.
         /// </summary>
-        public IReadOnlyList<string> RecordErrors
-        {
-            get { return _recordErrors; }
-        }
+        public IReadOnlyList<string> RecordErrors => _recordErrors;
 
         /// <summary>
         /// Gets a value indicating whether there are one or more field level errors.
         /// </summary>
-        public bool HasFieldErrors
-        {
-            get { return _fieldErrors.Count != 0; }
-        }
+        public bool HasFieldErrors => _fieldErrors.Count != 0;
 
         /// <summary>
         /// Returns the number of times the given field was present in the stream.
@@ -222,16 +212,11 @@ namespace BeanIO.Internal.Parser
 
         private class Counter
         {
-            private int _count;
-
-            public int Count
-            {
-                get { return _count; }
-            }
+            public int Count { get; private set; }
 
             public void Increment()
             {
-                ++_count;
+                ++Count;
             }
         }
     }

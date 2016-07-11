@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="Record.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -42,10 +47,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets a value indicating whether this component is a record group.
         /// </summary>
-        public bool IsRecordGroup
-        {
-            get { return false; }
-        }
+        public bool IsRecordGroup => false;
 
         /// <summary>
         /// Returns the number of times this component was matched within the current

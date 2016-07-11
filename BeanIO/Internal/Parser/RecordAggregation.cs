@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="RecordAggregation.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,46 +27,27 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets the minimum number of occurrences of this component (within the context of its parent).
         /// </summary>
-        public virtual int MinOccurs
-        {
-            get { return Selector.MinOccurs; }
-        }
+        public virtual int MinOccurs => Selector.MinOccurs;
 
         /// <summary>
         /// Gets the maximum number of occurrences of this component (within the context of its parent).
         /// </summary>
-        public virtual int? MaxOccurs
-        {
-            get { return Selector.MaxOccurs; }
-        }
+        public virtual int? MaxOccurs => Selector.MaxOccurs;
 
         /// <summary>
         /// Gets the order of this component (within the context of its parent).
         /// </summary>
-        public virtual int Order
-        {
-            get { return Selector.Order; }
-        }
+        public virtual int Order => Selector.Order;
 
         /// <summary>
         /// Gets the <see cref="IProperty"/> mapped to this component, or null if there is no property mapping.
         /// </summary>
-        public virtual IProperty Property
-        {
-            get
-            {
-                // for now, a collection cannot be a property root so its safe to return null here
-                return null;
-            }
-        }
+        public virtual IProperty Property => null;
 
         /// <summary>
         /// Gets a value indicating whether this component is a record group.
         /// </summary>
-        public virtual bool IsRecordGroup
-        {
-            get { return false; }
-        }
+        public virtual bool IsRecordGroup => false;
 
         /// <summary>
         /// Gets the <see cref="IProperty"/> implementation type
@@ -76,15 +62,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets the child selector
         /// </summary>
-        public virtual ISelector Selector
-        {
-            get { return (ISelector)Children.First(); }
-        }
+        public virtual ISelector Selector => (ISelector)Children.First();
 
-        public virtual object NullValue
-        {
-            get { return CreateAggregationType(); }
-        }
+        public virtual object NullValue => CreateAggregationType();
 
         public virtual bool IsLazy { get; set; }
 
@@ -108,10 +88,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets the property value
         /// </summary>
-        protected ParserLocal<object> PropertyValue
-        {
-            get { return _value; }
-        }
+        protected ParserLocal<object> PropertyValue => _value;
 
         /// <summary>
         /// Returns the number of times this component was matched within the current

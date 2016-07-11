@@ -1,4 +1,9 @@
-﻿using System.Collections;
+// <copyright file="MapParser.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -32,26 +37,17 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets a value indicating whether this aggregation is a property of its parent bean object.
         /// </summary>
-        public override bool IsProperty
-        {
-            get { return PropertyType != null; }
-        }
+        public override bool IsProperty => PropertyType != null;
 
         /// <summary>
         /// Gets the <see cref="IProperty"/> implementation type
         /// </summary>
-        public override PropertyType Type
-        {
-            get { return Internal.Parser.PropertyType.AggregationMap; }
-        }
+        public override PropertyType Type => Internal.Parser.PropertyType.AggregationMap;
 
         /// <summary>
         /// Gets the size of the components that make up a single iteration.
         /// </summary>
-        public override int IterationSize
-        {
-            get { return Size ?? 0; }
-        }
+        public override int IterationSize => Size ?? 0;
 
         /// <summary>
         /// Returns the length of aggregation
@@ -61,7 +57,7 @@ namespace BeanIO.Internal.Parser
         public override int Length(object value)
         {
             var map = (IDictionary)value;
-            return map != null ? map.Count : 0;
+            return map?.Count ?? 0;
         }
 
         /// <summary>
@@ -77,6 +73,7 @@ namespace BeanIO.Internal.Parser
                 value = CreateMap();
                 _value.Set(context, value);
             }
+
             return GetValue(context);
         }
 
@@ -153,8 +150,7 @@ namespace BeanIO.Internal.Parser
         /// <param name="locals">set of local variables</param>
         public override void RegisterLocals(ISet<IParserLocal> locals)
         {
-            if (KeyProperty != null)
-                ((Component)KeyProperty).RegisterLocals(locals);
+            ((Component)KeyProperty)?.RegisterLocals(locals);
             if (locals.Add(_value))
                 base.RegisterLocals(locals);
         }

@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="CsvParserConfiguration.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 
 namespace BeanIO.Stream.Csv
 {
@@ -101,17 +106,11 @@ namespace BeanIO.Stream.Csv
         /// <summary>
         /// Gets a value indicating whether escaping is enabled. By default, escaping is enabled.
         /// </summary>
-        public bool IsEscapeEnabled
-        {
-            get { return Escape != null; }
-        }
+        public bool IsEscapeEnabled => Escape != null;
 
         /// <summary>
         /// Gets a value indicating whether one or more comment prefixes have been configured.
         /// </summary>
-        public bool IsCommentEnabled
-        {
-            get { return Comments != null && Comments.Length > 0; }
-        }
+        public bool IsCommentEnabled => Comments != null && Comments.Length > 0;
     }
 }

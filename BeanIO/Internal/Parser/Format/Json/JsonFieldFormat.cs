@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="JsonFieldFormat.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 
 using Newtonsoft.Json.Linq;
 
@@ -15,10 +20,7 @@ namespace BeanIO.Internal.Parser.Format.Json
         /// <remarks>
         /// Fixed length formats should return the field length, while other formats should simply return 1.
         /// </remarks>
-        public virtual int Size
-        {
-            get { return 1; }
-        }
+        public virtual int Size => 1;
 
         /// <summary>
         /// Gets or sets the field name.
@@ -160,6 +162,7 @@ namespace BeanIO.Internal.Parser.Format.Json
                     {
                         context.AddFieldError(Name, fieldText, "length", Padding.Length);
                     }
+
                     fieldText = Value.Invalid;
                 }
                 else
@@ -245,6 +248,7 @@ namespace BeanIO.Internal.Parser.Format.Json
                         {
                             throw new BeanWriterException("Cannot parse '" + text + "' into a JSON number", ex);
                         }
+
                         break;
                 }
             }
@@ -258,15 +262,7 @@ namespace BeanIO.Internal.Parser.Format.Json
 
         public override string ToString()
         {
-            return string.Format(
-                "{0}[name={1}, jsonName={2}, jsonType={3}{4}, jsonArrayIndex={5}, bypass={6}]",
-                GetType().Name,
-                Name,
-                JsonName,
-                JsonType,
-                IsJsonArray ? "[]" : string.Empty,
-                JsonArrayIndex,
-                BypassTypeHandler);
+            return $"{GetType().Name}[name={Name}, jsonName={JsonName}, jsonType={JsonType}{(IsJsonArray ? "[]" : string.Empty)}, jsonArrayIndex={JsonArrayIndex}, bypass={BypassTypeHandler}]";
         }
     }
 }

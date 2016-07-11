@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="CollectionParser.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -35,26 +40,17 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets a value indicating whether this aggregation is a property of its parent bean object.
         /// </summary>
-        public override bool IsProperty
-        {
-            get { return PropertyType != null; }
-        }
+        public override bool IsProperty => PropertyType != null;
 
         /// <summary>
         /// Gets the <see cref="IProperty"/> implementation type
         /// </summary>
-        public override PropertyType Type
-        {
-            get { return Internal.Parser.PropertyType.AggregationCollection; }
-        }
+        public override PropertyType Type => Internal.Parser.PropertyType.AggregationCollection;
 
         /// <summary>
         /// Gets the size of the components that make up a single iteration.
         /// </summary>
-        public override int IterationSize
-        {
-            get { return Size.GetValueOrDefault(); }
-        }
+        public override int IterationSize => Size.GetValueOrDefault();
 
         /// <summary>
         /// Returns whether this parser and its children match a record being unmarshalled.
@@ -75,7 +71,7 @@ namespace BeanIO.Internal.Parser
         public override int Length(object value)
         {
             var collection = (ICollection)value;
-            return collection != null ? collection.Count : 0;
+            return collection?.Count ?? 0;
         }
 
         /// <summary>
@@ -166,6 +162,7 @@ namespace BeanIO.Internal.Parser
         {
             // convert empty collections to null so that parent parsers
             // will consider this property missing during marshalling
+            // ReSharper disable once UseNullPropagation
             if (value != null)
             {
                 var list = value.AsList();
@@ -262,6 +259,7 @@ namespace BeanIO.Internal.Parser
                                 if (elementType.GetTypeInfo().IsPrimitive)
                                     fieldValue = elementType.NewInstance();
                             }
+
                             collection.Add(fieldValue);
                         }
                     }
@@ -320,6 +318,7 @@ namespace BeanIO.Internal.Parser
             {
                 type = PropertyType;
             }
+
             var result = type.NewInstance();
             var resultAsList = result as IList;
             if (resultAsList != null)

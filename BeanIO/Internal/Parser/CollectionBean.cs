@@ -1,4 +1,9 @@
-﻿using System.Collections;
+// <copyright file="CollectionBean.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,10 +26,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets the <see cref="IProperty"/> implementation type
         /// </summary>
-        public override PropertyType Type
-        {
-            get { return Parser.PropertyType.Collection; }
-        }
+        public override PropertyType Type => Parser.PropertyType.Collection;
 
         /// <summary>
         /// Clears the property value.
@@ -135,6 +137,7 @@ namespace BeanIO.Internal.Parser
                         iterFinished = true;
                     }
                 }
+
                 child.SetValue(context, childValue);
             }
         }
@@ -145,7 +148,7 @@ namespace BeanIO.Internal.Parser
                 return false;
             if (value == null)
                 return IsMatchNull;
-            if (!PropertyType.IsAssignableFrom(value.GetType()))
+            if (!TypeUtil.IsAssignableFrom(PropertyType, value.GetType()))
                 return false;
             if (!IsIdentifier)
                 return true;

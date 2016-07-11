@@ -1,4 +1,9 @@
-﻿namespace BeanIO.Internal.Config
+// <copyright file="RecordConfig.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace BeanIO.Internal.Config
 {
     /// <summary>
     /// A record is a segment that is bound to a record in a stream.
@@ -18,10 +23,7 @@
         /// <see cref="F:ComponentType.Field"/>, <see cref="F:ComponentType.Constant"/>,
         /// <see cref="F:ComponentType.Wrapper"/>, or <see cref="F:ComponentType.Stream"/>
         /// </returns>
-        public override ComponentType ComponentType
-        {
-            get { return ComponentType.Record; }
-        }
+        public override ComponentType ComponentType => ComponentType.Record;
 
         /// <summary>
         /// Gets or sets the minimum length of the record.

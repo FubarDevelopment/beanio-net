@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="XmlNodeUtil.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,10 +20,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
     {
         private static readonly XNamespace _xsiNs = XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance");
 
-        public static XNamespace Xsi
-        {
-            get { return _xsiNs; }
-        }
+        public static XNamespace Xsi => _xsiNs;
 
         public static string ToConvertedName(this string name, ElementNameConversionMode conversionMode)
         {
@@ -26,6 +28,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
             {
                 name = name.TrimStart('_');
             }
+
             switch (conversionMode & ElementNameConversionMode.CasingMask)
             {
                 case ElementNameConversionMode.AllLower:
@@ -41,6 +44,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
                     name = Introspector.Capitalize(name);
                     break;
             }
+
             return name;
         }
 
@@ -61,6 +65,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
                 localName = localName.TrimStart('_');
                 variants.Add(localName);
             }
+
             if (char.IsLower(localName[0]))
             {
                 localName = string.Format("{0}{1}", char.ToUpperInvariant(localName[0]), localName.Substring(1));
@@ -69,6 +74,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
             {
                 localName = string.Format("{0}{1}", char.ToLowerInvariant(localName[0]), localName.Substring(1));
             }
+
             variants.Add(localName);
 
             return variants.ToArray();
@@ -163,13 +169,8 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <returns>the defined attribute value, or <code>null</code> if the attribute was not found on the element</returns>
         public static string GetAttribute([CanBeNull] this XElement element, [NotNull] IXmlNode definition, params string[] alternativeNames)
         {
-            if (element == null)
-                return null;
-
-            var attribute = element.Attributes().SingleOrDefault(x => alternativeNames.IsEqual(definition, x.Name));
-            if (attribute == null)
-                return null;
-            return attribute.Value;
+            var attribute = element?.Attributes().SingleOrDefault(x => alternativeNames.IsEqual(definition, x.Name));
+            return attribute?.Value;
         }
 
         /// <summary>
@@ -196,7 +197,8 @@ namespace BeanIO.Internal.Parser.Format.Xml
                         break;
                 }
             }
-            return s == null ? null : s.ToString();
+
+            return s?.ToString();
         }
 
         /// <summary>
@@ -209,12 +211,8 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <returns>the matching element, or <code>null</code> if not found</returns>
         public static XElement FindSibling(XElement sibling, IXmlNode target, params string[] alternativeTargetNames)
         {
-            if (sibling == null)
-                return null;
-
-            var element = sibling
-                .ElementsAfterSelf()
-                .FirstOrDefault(x => alternativeTargetNames.IsEqual(target, x.Name));
+            var element = sibling?.ElementsAfterSelf()
+                                 .FirstOrDefault(x => alternativeTargetNames.IsEqual(target, x.Name));
             return element;
         }
 
@@ -229,12 +227,9 @@ namespace BeanIO.Internal.Parser.Format.Xml
         public static XElement FindChild(XNode parent, IXmlNode target, int offset, params string[] alternativeTargetNames)
         {
             var container = parent as XContainer;
-            if (container == null)
-                return null;
-            var element = container
-                .Elements().Where(x => alternativeTargetNames.IsEqual(target, x.Name))
-                .Skip(offset)
-                .FirstOrDefault();
+            var element = container?.Elements().Where(x => alternativeTargetNames.IsEqual(target, x.Name))
+                                   .Skip(offset)
+                                   .FirstOrDefault();
             return element;
         }
     }

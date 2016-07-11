@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="UnmarshallingContext.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -60,10 +65,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets the parsing mode.
         /// </summary>
-        public override ParsingMode Mode
-        {
-            get { return ParsingMode.Unmarshalling; }
-        }
+        public override ParsingMode Mode => ParsingMode.Unmarshalling;
 
         /// <summary>
         /// Gets or sets the <see cref="IRecordReader"/> to read from.
@@ -99,18 +101,12 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets a value indicating whether a field error was reported while parsing
         /// </summary>
-        public bool HasFieldErrors
-        {
-            get { return _recordContext.HasFieldErrors; }
-        }
+        public bool HasFieldErrors => _recordContext.HasFieldErrors;
 
         /// <summary>
         /// Gets a value indicating whether a record level error was reported while parsing
         /// </summary>
-        public bool HasRecordErrors
-        {
-            get { return _recordContext.HasRecordErrors; }
-        }
+        public bool HasRecordErrors => _recordContext.HasRecordErrors;
 
         public IEnumerable<IRecordContext> GetRecordContexts()
         {
@@ -374,9 +370,12 @@ namespace BeanIO.Internal.Parser
         public BeanReaderException NewUnsatisfiedGroupException(string groupName)
         {
             if (IsEof)
+            {
                 return new UnexpectedRecordException(
                     string.Format("End of stream reached, expected record from group '{0}'", groupName),
                     RecordException(groupName, "unsatisfied"));
+            }
+
             return new UnexpectedRecordException(
                 string.Format("Expected record from group '{0}' at line {1}", groupName, RecordReader.RecordLineNumber),
                 RecordException(groupName, "unsatisfied"));
@@ -385,9 +384,12 @@ namespace BeanIO.Internal.Parser
         public BeanReaderException NewUnsatisfiedRecordException(string recordName)
         {
             if (IsEof)
+            {
                 return new UnexpectedRecordException(
                     string.Format("End of stream reached, expected record '{0}'", recordName),
                     RecordException(recordName, "unsatisfied"));
+            }
+
             return new UnexpectedRecordException(
                 string.Format("Expected record '{0}' at line {1}", recordName, RecordReader.RecordLineNumber),
                 RecordException(recordName, "unsatisfied"));

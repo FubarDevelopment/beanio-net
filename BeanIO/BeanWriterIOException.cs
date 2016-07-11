@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="BeanWriterIOException.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.IO;
 
 namespace BeanIO
@@ -8,8 +13,6 @@ namespace BeanIO
     /// </summary>
     public class BeanWriterIOException : BeanWriterException
     {
-        private readonly IOException _ioException;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="BeanWriterIOException" /> class.
         /// </summary>
@@ -34,15 +37,12 @@ namespace BeanIO
         public BeanWriterIOException(string message, IOException inner)
             : base(message, inner)
         {
-            _ioException = inner;
+            Clause = inner;
         }
 
         /// <summary>
         /// Gets the IO exception or null.
         /// </summary>
-        public IOException Clause
-        {
-            get { return _ioException; }
-        }
+        public IOException Clause { get; }
     }
 }

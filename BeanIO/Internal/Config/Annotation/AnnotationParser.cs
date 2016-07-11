@@ -1,5 +1,11 @@
-﻿using System;
+// <copyright file="AnnotationParser.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
@@ -417,14 +423,17 @@ namespace BeanIO.Internal.Config.Annotation
                 if (ra == null && ga == null)
                     continue;
                 if (ra != null && ga != null)
+                {
                     throw new BeanIOConfigurationException(
                         string.Format(
                             "Field/Property '{0}' on class '{1}' cannot be annotated with both RecordAttribute and GroupAttribute.",
                             fieldOrProperty.Name,
                             parent.Name));
+                }
 
                 var fieldInfo = fieldOrProperty as FieldInfo;
                 var propInfo = fieldOrProperty as PropertyInfo;
+                Debug.Assert(fieldInfo != null || propInfo != null, "fieldInfo != null || propInfo != null");
 
                 var info = new TypeInfo
                     {
@@ -463,8 +472,10 @@ namespace BeanIO.Internal.Config.Annotation
                 if (ra == null && ga == null)
                     continue;
                 if (ra != null && ga != null)
+                {
                     throw new BeanIOConfigurationException(
                         string.Format("Method '{0}' on class '{1}' cannot be annotated with both RecordAttribute and GroupAttribute.", method.Name, parent.Name));
+                }
 
                 Type clazz;
                 var name = method.Name;
@@ -535,14 +546,17 @@ namespace BeanIO.Internal.Config.Annotation
                 if (fas.Count == 0 && sa == null)
                     continue;
                 if (fas.Count > 1 && sa == null)
+                {
                     throw new BeanIOConfigurationException(
                         string.Format(
                             "Field/Property '{0}' on class '{1}' cannot be annotated with multiple FieldAttribute without SegmentAttribute.",
                             fieldOrProperty.Name,
                             parent.Name));
+                }
 
                 var fieldInfo = fieldOrProperty as FieldInfo;
                 var propInfo = fieldOrProperty as PropertyInfo;
+                Debug.Assert(fieldInfo != null || propInfo != null, "fieldInfo != null || propInfo != null");
 
                 var info = new TypeInfo
                 {
@@ -580,11 +594,13 @@ namespace BeanIO.Internal.Config.Annotation
                 if (fas.Count == 0 && sa == null)
                     continue;
                 if (fas.Count > 1 && sa == null)
+                {
                     throw new BeanIOConfigurationException(
                         string.Format(
                             "Method '{0}' on class '{1}' cannot be annotated with multiple FieldAttribute without SegmentAttribute.",
                             method.Name,
                             parent.Name));
+                }
 
                 Type clazz;
                 var name = method.Name;
@@ -756,6 +772,7 @@ namespace BeanIO.Internal.Config.Annotation
                 // maximum value (i.e. unbounded)
                 return int.MaxValue;
             }
+
             return val.Value;
         }
 

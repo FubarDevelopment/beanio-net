@@ -1,4 +1,9 @@
-﻿using System.Xml.Linq;
+// <copyright file="IXmlStreamConfiguration.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Xml.Linq;
 
 namespace BeanIO.Stream.Xml
 {
@@ -15,6 +20,6 @@ namespace BeanIO.Stream.Xml
         /// <remarks>
         /// The returned DOM object should only be used to parse a single stream.
         /// </remarks>
-        XDocument Document { get; }
+        XDocument CreateDocument();
     }
 }

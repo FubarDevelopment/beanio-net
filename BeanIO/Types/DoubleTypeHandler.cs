@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="DoubleTypeHandler.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Globalization;
 
 namespace BeanIO.Types
@@ -33,6 +38,7 @@ namespace BeanIO.Types
                 var v = (double)value;
                 return v.ToString(Culture);
             }
+
             return fmt.ToString(Pattern.Item2, Culture);
         }
 

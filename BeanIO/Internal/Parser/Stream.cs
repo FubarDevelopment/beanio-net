@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="Stream.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -20,7 +25,7 @@ namespace BeanIO.Internal.Parser
         public Stream([NotNull] IStreamFormat format)
         {
             if (format == null)
-                throw new ArgumentNullException("format");
+                throw new ArgumentNullException(nameof(format));
             Format = format;
             Mode = AccessMode.ReadWrite;
         }
@@ -54,10 +59,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets the name of this stream
         /// </summary>
-        public string Name
-        {
-            get { return Format.Name; }
-        }
+        public string Name => Format.Name;
 
         /// <summary>
         /// Initializes the <see cref="Stream"/>
@@ -78,7 +80,7 @@ namespace BeanIO.Internal.Parser
         public IBeanReader CreateBeanReader([NotNull] TextReader textReader, CultureInfo culture)
         {
             if (textReader == null)
-                throw new ArgumentNullException("textReader");
+                throw new ArgumentNullException(nameof(textReader));
 
             var context = Format.CreateUnmarshallingContext();
             InitContext(context);
@@ -101,7 +103,7 @@ namespace BeanIO.Internal.Parser
         public IBeanWriter CreateBeanWriter([NotNull] TextWriter textWriter)
         {
             if (textWriter == null)
-                throw new ArgumentNullException("textWriter");
+                throw new ArgumentNullException(nameof(textWriter));
 
             var context = Format.CreateMarshallingContext(true);
             InitContext(context);

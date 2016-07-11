@@ -1,4 +1,9 @@
-﻿using BeanIO.Internal.Config;
+// <copyright file="GroupBuilder.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using BeanIO.Internal.Config;
 
 namespace BeanIO.Builder
 {
@@ -24,18 +29,12 @@ namespace BeanIO.Builder
         /// <summary>
         /// Gets this.
         /// </summary>
-        protected override GroupBuilder Me
-        {
-            get { return this; }
-        }
+        protected override GroupBuilder Me => this;
 
         /// <summary>
         /// Gets the configuration settings.
         /// </summary>
-        protected override GroupConfig Config
-        {
-            get { return _config; }
-        }
+        protected override GroupConfig Config => _config;
 
         /// <summary>
         /// Sets the order of this group relative to other children of the same parent.

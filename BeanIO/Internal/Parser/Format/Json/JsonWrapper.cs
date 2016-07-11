@@ -1,4 +1,9 @@
-﻿using System.Text;
+// <copyright file="JsonWrapper.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Text;
 
 using BeanIO.Internal.Util;
 
@@ -53,10 +58,7 @@ namespace BeanIO.Internal.Parser.Format.Json
         /// <summary>
         /// Gets a value indicating whether this node must exist during unmarshalling.
         /// </summary>
-        public override bool IsOptional
-        {
-            get { return _isOptional; }
-        }
+        public override bool IsOptional => _isOptional;
 
         /// <summary>
         /// Sets a value indicating whether this node must exist during unmarshalling.

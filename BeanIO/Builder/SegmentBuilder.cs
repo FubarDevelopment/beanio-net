@@ -1,4 +1,9 @@
-﻿using BeanIO.Internal.Config;
+// <copyright file="SegmentBuilder.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using BeanIO.Internal.Config;
 
 namespace BeanIO.Builder
 {
@@ -24,18 +29,12 @@ namespace BeanIO.Builder
         /// <summary>
         /// Gets this.
         /// </summary>
-        protected override SegmentBuilder Me
-        {
-            get { return this; }
-        }
+        protected override SegmentBuilder Me => this;
 
         /// <summary>
         /// Gets the configuration settings.
         /// </summary>
-        protected override SegmentConfig Config
-        {
-            get { return _config; }
-        }
+        protected override SegmentConfig Config => _config;
 
         /// <summary>
         /// Indicates the number of occurrences of this segment is governed by another field.

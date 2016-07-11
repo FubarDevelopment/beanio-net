@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+// <copyright file="MarshallingContext.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Collections.Generic;
 using System.Xml.Linq;
 
 using BeanIO.Stream;
@@ -36,10 +41,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets the parsing mode.
         /// </summary>
-        public override ParsingMode Mode
-        {
-            get { return ParsingMode.Marshalling; }
-        }
+        public override ParsingMode Mode => ParsingMode.Marshalling;
 
         /// <summary>
         /// Clear is invoked after each bean object (record or group) is marshalled

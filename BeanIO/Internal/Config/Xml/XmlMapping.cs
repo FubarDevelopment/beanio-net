@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="XmlMapping.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -47,23 +52,23 @@ namespace BeanIO.Internal.Config.Xml
         /// <summary>
         /// Gets the name of this mapping file
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the location of this mapping file (in URL format).
         /// </summary>
-        public Uri Location { get; private set; }
+        public Uri Location { get; }
 
         /// <summary>
         /// Gets the parent mapping file that imported this mapping file,
         /// or <code>null</code> if this file is the "root" mapping file.
         /// </summary>
-        public XmlMapping Parent { get; private set; }
+        public XmlMapping Parent { get; }
 
         /// <summary>
         /// Gets the BeanIO configuration for this mapping file.
         /// </summary>
-        public BeanIOConfig Configuration { get; private set; }
+        public BeanIOConfig Configuration { get; }
 
         /// <summary>
         /// Gets the properties declared in this mapping file
@@ -153,6 +158,7 @@ namespace BeanIO.Internal.Config.Xml
                         break;
                 }
             }
+
             return template;
         }
 

@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="DateTypeHandlerSupport.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Globalization;
 
 using BeanIO.Config;
@@ -28,7 +33,7 @@ namespace BeanIO.Types
         /// Initializes a new instance of the <see cref="DateTypeHandlerSupport"/> class.
         /// </summary>
         protected DateTypeHandlerSupport()
-            : this(culture => string.Format("{0} {1}", culture.DateTimeFormat.ShortDatePattern, culture.DateTimeFormat.LongTimePattern))
+            : this(culture => $"{culture.DateTimeFormat.ShortDatePattern} {culture.DateTimeFormat.LongTimePattern}")
         {
         }
 
@@ -49,7 +54,7 @@ namespace BeanIO.Types
         protected DateTypeHandlerSupport([NotNull] Func<CultureInfo, string> getDefaultPatternFunc)
         {
             if (getDefaultPatternFunc == null)
-                throw new ArgumentNullException("getDefaultPatternFunc");
+                throw new ArgumentNullException(nameof(getDefaultPatternFunc));
             _getDefaultPatternFunc = getDefaultPatternFunc;
         }
 
@@ -82,7 +87,7 @@ namespace BeanIO.Types
         {
             get
             {
-                return TimeZone == null ? null : TimeZone.Id;
+                return TimeZone?.Id;
             }
             set
             {
@@ -99,7 +104,8 @@ namespace BeanIO.Types
                         if (lastResult.Success)
                             break;
                     }
-                    TimeZone = DateTimeZone.ForOffset(lastResult.GetValueOrThrow());
+
+                    TimeZone = lastResult == null ? null : DateTimeZone.ForOffset(lastResult.GetValueOrThrow());
                 }
                 else
                 {
@@ -127,12 +133,16 @@ namespace BeanIO.Types
                 try
                 {
                     if (!string.IsNullOrEmpty(value))
-                        LocalDateTimePattern.Create(value, Culture);
+                    {
+                        var nodaTimePattern = ConvertToNodaTimePattern(value);
+                        LocalDateTimePattern.Create(nodaTimePattern, Culture);
+                    }
+
                     _pattern = value;
                 }
-                catch (InvalidPatternException ex)
+                catch (FormatException ex)
                 {
-                    throw new ArgumentException(string.Format("Invalid date format pattern '{0}': {1}", value, ex.Message), ex);
+                    throw new ArgumentException($"Invalid date format pattern '{value}': {ex.Message}", ex);
                 }
             }
         }
@@ -142,24 +152,15 @@ namespace BeanIO.Types
         /// </summary>
         public abstract Type TargetType { get; }
 
-        private LocalDateTimePattern DateFormat
-        {
-            get { return _format ?? (_format = CreateDateFormat()); }
-        }
+        private LocalDateTimePattern DateFormat => _format ?? (_format = CreateDateFormat());
 
-        private OffsetPattern[] OffsetPatterns
-        {
-            get
-            {
-                return _offsetPatterns ?? (_offsetPatterns = new[]
-                    {
-                        OffsetPattern.Create("g", Culture),
-                        OffsetPattern.Create("+H:mm:ss", Culture),
-                        OffsetPattern.Create("+H:mm", Culture),
-                        OffsetPattern.Create("+H", Culture),
-                    });
-            }
-        }
+        private OffsetPattern[] OffsetPatterns => _offsetPatterns ?? (_offsetPatterns = new[]
+                                                  {
+                                                      OffsetPattern.Create("g", Culture),
+                                                      OffsetPattern.Create("+H:mm:ss", Culture),
+                                                      OffsetPattern.Create("+H:mm", Culture),
+                                                      OffsetPattern.Create("+H", Culture),
+                                                  });
 
         /// <summary>
         /// Parses field text into an object.
@@ -245,6 +246,7 @@ namespace BeanIO.Types
                             dt = DateTime.Parse(text, Culture, DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AssumeUniversal);
                         }
                     }
+
                     var utcOffset = tz.GetUtcOffset(Instant.FromDateTimeUtc(dt));
                     result = ZonedDateTime.FromDateTimeOffset(new DateTimeOffset(dt, utcOffset.ToTimeSpan()));
                 }
@@ -253,6 +255,7 @@ namespace BeanIO.Types
                     throw new TypeConversionException(ex.Message, ex);
                 }
             }
+
             return result;
         }
 
@@ -288,7 +291,7 @@ namespace BeanIO.Types
         {
             if (string.IsNullOrEmpty(_pattern))
                 return CreateDefaultDateFormat();
-            return LocalDateTimePattern.Create(_pattern, Culture);
+            return LocalDateTimePattern.Create(ConvertToNodaTimePattern(_pattern), Culture);
         }
 
         /// <summary>
@@ -298,6 +301,11 @@ namespace BeanIO.Types
         protected virtual LocalDateTimePattern CreateDefaultDateFormat()
         {
             return LocalDateTimePattern.Create(_getDefaultPatternFunc(Culture), Culture);
+        }
+
+        private string ConvertToNodaTimePattern(string value)
+        {
+            return value.Replace("z", string.Empty);
         }
     }
 }

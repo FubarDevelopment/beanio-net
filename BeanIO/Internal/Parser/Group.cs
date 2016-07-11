@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="Group.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,10 +51,7 @@ namespace BeanIO.Internal.Parser
         /// stream formats calculate size based on the number of fields.  Some stream formats,
         /// such as XML, may ignore size settings.
         /// </remarks>
-        public override int? Size
-        {
-            get { return null; }
-        }
+        public override int? Size => null;
 
         /// <summary>
         /// Gets a value indicating whether this parser or any descendant of this parser is used to identify
@@ -71,10 +73,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets a value indicating whether this node must exist during unmarshalling.
         /// </summary>
-        public override bool IsOptional
-        {
-            get { return MinOccurs == 0; }
-        }
+        public override bool IsOptional => MinOccurs == 0;
 
         /// <summary>
         /// Gets or sets the minimum number of occurrences of this component (within the context of its parent).
@@ -99,10 +98,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets a value indicating whether this component is a record group.
         /// </summary>
-        public bool IsRecordGroup
-        {
-            get { return true; }
-        }
+        public bool IsRecordGroup => true;
 
         /// <summary>
         /// Returns whether this parser and its children match a record being unmarshalled.
@@ -158,8 +154,7 @@ namespace BeanIO.Internal.Parser
                     }
                 }
 
-                if (Property != null)
-                    Property.CreateValue(context);
+                Property?.CreateValue(context);
 
                 return true;
             }
@@ -199,8 +194,7 @@ namespace BeanIO.Internal.Parser
         /// <param name="context">The <see cref="ParsingContext"/></param>
         public override void ClearValue(ParsingContext context)
         {
-            if (Property != null)
-                Property.ClearValue(context);
+            Property?.ClearValue(context);
         }
 
         /// <summary>
@@ -375,7 +369,7 @@ namespace BeanIO.Internal.Parser
             if (lastMatch == null && MinOccurs == 0)
                 return null;
 
-            var pos = lastMatch == null ? 1 : lastMatch.Order;
+            var pos = lastMatch?.Order ?? 1;
 
             var unsatisfied = FindUnsatisfiedChild(context, pos);
             if (unsatisfied != null)
@@ -478,8 +472,7 @@ namespace BeanIO.Internal.Parser
         /// <param name="locals">set of local variables</param>
         public override void RegisterLocals(ISet<IParserLocal> locals)
         {
-            if (Property != null)
-                ((Component)Property).RegisterLocals(locals);
+            ((Component)Property)?.RegisterLocals(locals);
 
             if (locals.Add(_lastMatched))
             {
@@ -626,7 +619,7 @@ namespace BeanIO.Internal.Parser
             }
 
             // set the current position to the order of the last matched node (or default to 1)
-            var position = (lastMatch == null) ? 1 : lastMatch.Order;
+            var position = lastMatch?.Order ?? 1;
 
             // iterate over each child
             foreach (var node in Children.Cast<ISelector>())
@@ -723,7 +716,7 @@ namespace BeanIO.Internal.Parser
                 Node = node;
             }
 
-            public ISelector Node { get; private set; }
+            public ISelector Node { get; }
         }
     }
 }

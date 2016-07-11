@@ -1,4 +1,9 @@
-﻿namespace BeanIO.Internal.Parser.Format.Flat
+// <copyright file="IFlatFieldFormat.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace BeanIO.Internal.Parser.Format.Flat
 {
     /// <summary>
     /// A <see cref="IFlatFieldFormat"/> is a <see cref="IFieldFormat"/> for flat stream formats

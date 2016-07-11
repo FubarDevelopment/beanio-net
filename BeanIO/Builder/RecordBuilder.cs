@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="RecordBuilder.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 
 using BeanIO.Internal.Config;
 using BeanIO.Internal.Util;
@@ -38,18 +43,12 @@ namespace BeanIO.Builder
         /// <summary>
         /// Gets this.
         /// </summary>
-        protected override RecordBuilder Me
-        {
-            get { return this; }
-        }
+        protected override RecordBuilder Me => this;
 
         /// <summary>
         /// Gets the configuration settings.
         /// </summary>
-        protected override RecordConfig Config
-        {
-            get { return _config; }
-        }
+        protected override RecordConfig Config => _config;
 
         /// <summary>
         /// Sets the order of this record relative to other children of the same parent.

@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="XmlRecordMarshaller.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -59,7 +64,7 @@ namespace BeanIO.Stream.Xml
         {
             if (!_config.SuppressHeader)
             {
-                var version = _config.Version != null ? _config.Version.ToString() : null;
+                var version = _config.Version?.ToString();
                 document.Declaration = new XDeclaration(version, _config.Encoding, null);
             }
 

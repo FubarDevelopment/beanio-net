@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="TypeHandlerFactory.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -102,10 +107,7 @@ namespace BeanIO.Internal.Util
         /// <summary>
         /// Gets the default <see cref="TypeHandlerFactory"/>
         /// </summary>
-        public static TypeHandlerFactory Default
-        {
-            get { return _defaultFactory; }
-        }
+        public static TypeHandlerFactory Default => _defaultFactory;
 
         /// <summary>
         /// Returns a named type handler, or <code>null</code> if there is no type handler configured
@@ -130,7 +132,7 @@ namespace BeanIO.Internal.Util
         public ITypeHandler GetTypeHandler([NotNull] string name, Properties properties)
         {
             if (name == null)
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             return GetHandler(NameKey + name, null, properties);
         }
 
@@ -171,7 +173,7 @@ namespace BeanIO.Internal.Util
         public ITypeHandler GetTypeHandlerFor([NotNull] string typeName, string format, Properties properties)
         {
             if (typeName == null)
-                throw new ArgumentNullException("typeName");
+                throw new ArgumentNullException(nameof(typeName));
 
             var type = typeName.ToType();
             if (type == null)
@@ -213,13 +215,13 @@ namespace BeanIO.Internal.Util
         public ITypeHandler GetTypeHandlerFor([NotNull] Type type, string format, Properties properties)
         {
             if (type == null)
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
 
             // Ensure that we "unbox" a nullable type
             type = Nullable.GetUnderlyingType(type) ?? type;
 
             var handler = GetHandler(TypeKey + type.FullName, format, properties);
-            if (handler == null && typeof(Enum).IsAssignableFrom(type))
+            if (handler == null && TypeUtil.IsAssignableFrom(typeof(Enum), type))
                 return GetEnumHandler(type, properties);
 
             return handler;
@@ -233,9 +235,9 @@ namespace BeanIO.Internal.Util
         public void RegisterHandler([NotNull] string name, [NotNull] Func<ITypeHandler> createHandler)
         {
             if (name == null)
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             if (createHandler == null)
-                throw new ArgumentNullException("createHandler");
+                throw new ArgumentNullException(nameof(createHandler));
             _handlerMap[NameKey + name] = createHandler;
         }
 
@@ -258,11 +260,11 @@ namespace BeanIO.Internal.Util
         public void RegisterHandlerFor([NotNull] string name, [NotNull] Func<ITypeHandler> createHandler, string format)
         {
             if (name == null)
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
 
             var type = name.ToType();
             if (type == null)
-                throw new ArgumentException(string.Format("Invalid type or type alias '{0}'", name), "name");
+                throw new ArgumentException(string.Format("Invalid type or type alias '{0}'", name), nameof(name));
 
             RegisterHandlerFor(format, type.FullName, type, createHandler);
         }
@@ -286,14 +288,14 @@ namespace BeanIO.Internal.Util
         public void RegisterHandlerFor([NotNull] Type type, [NotNull] Func<ITypeHandler> createHandler, string format)
         {
             if (type == null)
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             RegisterHandlerFor(format, type.FullName, type, createHandler);
         }
 
         private void RegisterHandlerFor([CanBeNull] string format, [NotNull] string typeName, [NotNull] Type expectedClass, [NotNull] Func<ITypeHandler> createHandler)
         {
             var testInstance = createHandler();
-            if (!expectedClass.IsAssignableFrom(testInstance.TargetType))
+            if (!TypeUtil.IsAssignableFrom(expectedClass, testInstance.TargetType))
                 throw new ArgumentException(string.Format("Type handler of type '{0}' is not assignable from configured type '{1}'", testInstance.TargetType, expectedClass));
 
             if (format != null)

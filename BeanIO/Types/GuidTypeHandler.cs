@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="GuidTypeHandler.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 
 namespace BeanIO.Types
 {
@@ -28,10 +33,7 @@ namespace BeanIO.Types
         /// <summary>
         /// Gets the class type supported by this handler.
         /// </summary>
-        public Type TargetType
-        {
-            get { return typeof(Guid); }
-        }
+        public Type TargetType => typeof(Guid);
 
         /// <summary>
         /// Parses field text into an object.
@@ -52,9 +54,7 @@ namespace BeanIO.Types
         /// <returns>The formatted field text, or <code>null</code> to indicate the value is not present</returns>
         public virtual string Format(object value)
         {
-            if (value == null)
-                return null;
-            return ((Guid)value).ToString(_format);
+            return ((Guid?)value)?.ToString(_format);
         }
     }
 }

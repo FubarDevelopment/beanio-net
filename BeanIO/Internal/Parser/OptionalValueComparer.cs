@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="OptionalValueComparer.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -6,10 +11,6 @@ namespace BeanIO.Internal.Parser
 {
     internal sealed class OptionalValueComparer : IComparer<OptionalValue>, IEqualityComparer<OptionalValue>, IComparer, IEqualityComparer
     {
-        private static readonly OptionalValueComparer _default = new OptionalValueComparer(StringComparer.Ordinal);
-
-        private static readonly OptionalValueComparer _ignoreCase = new OptionalValueComparer(StringComparer.OrdinalIgnoreCase);
-
         private readonly StringComparer _stringComparer;
 
         private OptionalValueComparer(StringComparer comparer)
@@ -17,15 +18,9 @@ namespace BeanIO.Internal.Parser
             _stringComparer = comparer;
         }
 
-        public static OptionalValueComparer Default
-        {
-            get { return _default; }
-        }
+        public static OptionalValueComparer Default { get; } = new OptionalValueComparer(StringComparer.Ordinal);
 
-        public static OptionalValueComparer IgnoreCase
-        {
-            get { return _ignoreCase; }
-        }
+        public static OptionalValueComparer IgnoreCase { get; } = new OptionalValueComparer(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Compares to objects

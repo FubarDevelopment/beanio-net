@@ -1,4 +1,10 @@
-﻿using System.Collections.Generic;
+// <copyright file="XmlMarshallingContext.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Linq;
 
 using BeanIO.Internal.Parser.Format.Xml.Annotations;
@@ -36,20 +42,18 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Gets the element name conversion mode
         /// </summary>
-        public ElementNameConversionMode NameConversionMode { get; private set; }
+        public ElementNameConversionMode NameConversionMode { get; }
 
         /// <summary>
         /// Gets the record object to pass to the <see cref="IRecordWriter"/>
         /// when <see cref="MarshallingContext.WriteRecord"/> is called.
         /// </summary>
-        public object RecordObject
-        {
-            get { return Document; }
-        }
+        public object RecordObject => Document;
 
         /// <summary>
         /// Gets the document being marshalled
         /// </summary>
+        [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1513:ClosingBraceMustBeFollowedByBlankLine", Justification = "Reviewed.")]
         public XDocument Document
         {
             get
@@ -103,6 +107,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
                         _parent = element;
                     }
                 }
+
                 return _parent;
             }
             set

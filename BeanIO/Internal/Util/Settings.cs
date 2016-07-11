@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="Settings.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -197,10 +202,7 @@ namespace BeanIO.Internal.Util
         /// <summary>
         /// Gets all registered scheme handlers
         /// </summary>
-        public IReadOnlyDictionary<string, ISchemeHandler> SchemeHandlers
-        {
-            get { return _schemeHandlers; }
-        }
+        public IReadOnlyDictionary<string, ISchemeHandler> SchemeHandlers => _schemeHandlers;
 
         /// <summary>
         /// Returns a BeanIO configuration setting
@@ -290,6 +292,7 @@ namespace BeanIO.Internal.Util
                         scheme,
                         string.Join(", ", SchemeHandlers.Keys.Select(x => string.Format("'{0}'", x)))));
             }
+
             return handler;
         }
 

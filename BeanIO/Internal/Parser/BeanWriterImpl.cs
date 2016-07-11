@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+// <copyright file="BeanWriterImpl.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Collections.Generic;
 using System.IO;
 
 using BeanIO.Internal.Util;
@@ -146,8 +151,7 @@ namespace BeanIO.Internal.Parser
         {
             _layout.UpdateState(_context, ns + ".m", state);
             var writer = _context.RecordWriter as IStatefulWriter;
-            if (writer != null)
-                writer.UpdateState(ns + ".w", state);
+            writer?.UpdateState(ns + ".w", state);
         }
 
         /// <summary>
@@ -160,8 +164,7 @@ namespace BeanIO.Internal.Parser
             _layout.RestoreState(_context, ns + ".m", state);
 
             var writer = _context.RecordWriter as IStatefulWriter;
-            if (writer != null)
-                writer.RestoreState(ns + ".w", state);
+            writer?.RestoreState(ns + ".w", state);
         }
 
         private void EnsureOpen()

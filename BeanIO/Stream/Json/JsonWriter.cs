@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="JsonWriter.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.IO;
 
 using JetBrains.Annotations;
@@ -46,15 +51,12 @@ namespace BeanIO.Stream.Json
         /// <summary>
         /// Gets the line separator used while indenting the JSON data.
         /// </summary>
-        protected string LineSeparator { get; private set; }
+        protected string LineSeparator { get; }
 
         /// <summary>
         /// Gets the <see cref="NJ.JsonTextWriter"/>
         /// </summary>
-        protected NJ.JsonTextWriter Writer
-        {
-            get { return _writer; }
-        }
+        protected NJ.JsonTextWriter Writer => _writer;
 
         /// <summary>
         /// Writes a record object to this output stream.

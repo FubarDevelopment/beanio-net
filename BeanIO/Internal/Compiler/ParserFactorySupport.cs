@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="ParserFactorySupport.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,6 +21,7 @@ using BeanIO.Internal.Parser.Message;
 using BeanIO.Internal.Util;
 using BeanIO.Stream;
 using BeanIO.Types;
+using JetBrains.Annotations;
 
 namespace BeanIO.Internal.Compiler
 {
@@ -61,27 +67,18 @@ namespace BeanIO.Internal.Compiler
         /// <summary>
         /// Gets a value indicating whether the stream definition must support reading an input stream.
         /// </summary>
-        public bool IsReadEnabled
-        {
-            get { return _readEnabled; }
-        }
+        public bool IsReadEnabled => _readEnabled;
 
         /// <summary>
         /// Gets a value indicating whether the stream definition must support writing to an output stream.
         /// </summary>
-        public bool IsWriteEnabled
-        {
-            get { return _writeEnabled; }
-        }
+        public bool IsWriteEnabled => _writeEnabled;
 
         /// <summary>
         /// Gets a value indicating whether a property has been pushed onto the property stack, indicating
         /// that further properties will be bound to a parent property.
         /// </summary>
-        protected bool IsBound
-        {
-            get { return _propertyStack.Count != 0 && _propertyStack.Peek() != _unbound; }
-        }
+        protected bool IsBound => _propertyStack.Count != 0 && _propertyStack.Peek() != _unbound;
 
         /// <summary>
         /// Creates a new stream parser from a given stream configuration
@@ -102,12 +99,7 @@ namespace BeanIO.Internal.Compiler
             {
                 Process(config);
             }
-            catch (BeanIOConfigurationException)
-            {
-                // TODO: Use C# 6 exception filters
-                throw;
-            }
-            catch (Exception ex)
+            catch (Exception ex) when ((ex as BeanIOConfigurationException) == null)
             {
                 throw new BeanIOConfigurationException(string.Format("Failed to compile stream '{0}'", config.Name), ex);
             }
@@ -222,7 +214,7 @@ namespace BeanIO.Internal.Compiler
             var beanType = bean.PropertyType;
             foreach (var testConstructor in beanType.GetTypeInfo().DeclaredConstructors.Where(x => x.GetParameters().Length == count))
             {
-                var argsMatching = testConstructor.GetParameters().Select((p, i) => p.ParameterType.IsAssignableFrom(args[i].PropertyType)).All(x => x);
+                var argsMatching = testConstructor.GetParameters().Select((p, i) => TypeUtil.IsAssignableFrom(p.ParameterType, args[i].PropertyType)).All(x => x);
                 if (argsMatching && (testConstructor.IsPublic || _allowProtectedPropertyAccess))
                 {
                     constructor = testConstructor;
@@ -282,7 +274,6 @@ namespace BeanIO.Internal.Compiler
                 }
                 catch (MissingManifestResourceException ex)
                 {
-                    // TODO: Use C# 6 exception filtering
                     throw new BeanIOConfigurationException(string.Format("Missing default resource bundle '{0}' for stream format '{1}'", bundleName, config.Format), ex);
                 }
                 catch (TypeLoadException ex)
@@ -305,7 +296,6 @@ namespace BeanIO.Internal.Compiler
                 }
                 catch (MissingManifestResourceException ex)
                 {
-                    // TODO: Use C# 6 exception filtering
                     throw new BeanIOConfigurationException(string.Format("Missing default resource bundle '{0}'", bundleName), ex);
                 }
                 catch (TypeLoadException ex)
@@ -553,9 +543,10 @@ namespace BeanIO.Internal.Compiler
                     throw new BeanIOConfigurationException(string.Format("Key '{0}' not found", key));
 
                 IProperty keyProperty = c as IProperty;
-                if (keyProperty == null || keyProperty.PropertyType == null)
+                if (keyProperty?.PropertyType == null)
                     throw new BeanIOConfigurationException(string.Format("Key '{0}' is not a property", key));
 
+                Debug.Assert(recordMap != null, "recordMap != null");
                 recordMap.KeyProperty = keyProperty;
             }
 
@@ -691,9 +682,10 @@ namespace BeanIO.Internal.Compiler
                     throw new BeanIOConfigurationException(string.Format("Key '{0}' not found", key));
 
                 var keyProperty = c as IProperty;
-                if (keyProperty == null || keyProperty.PropertyType == null)
+                if (keyProperty?.PropertyType == null)
                     throw new BeanIOConfigurationException(string.Format("Key '{0}' is not a property", key));
 
+                Debug.Assert(mapParser != null, "mapParser != null");
                 mapParser.KeyProperty = keyProperty;
             }
 
@@ -732,6 +724,7 @@ namespace BeanIO.Internal.Compiler
                 var target = config.Target;
                 if (target != null)
                 {
+                    Debug.Assert(segment != null, "segment != null");
                     property = FindTarget(segment, target);
                     PushProperty((Component)property);
                     PopProperty();
@@ -829,16 +822,18 @@ namespace BeanIO.Internal.Compiler
             field.Handler = FindTypeHandler(config, field);
 
             // set the default field value using the configured type handler
-            field.DefaultValue  = ParseDefaultValue(field, config.DefaultValue);
+            field.DefaultValue = ParseDefaultValue(field, config.DefaultValue);
 
             field.Format = CreateFieldFormat(config, field.PropertyType);
 
             PushParser(field);
+
             if (bind)
             {
                 PushProperty(field);
                 PopProperty();
             }
+
             PopParser();
 
             if (aggregation != null)
@@ -919,6 +914,7 @@ namespace BeanIO.Internal.Compiler
                 {
                     throw new BeanIOConfigurationException("Map type collections are not supported for fields");
                 }
+
                 if (isMap && ((SegmentConfig)config).Key == null)
                 {
                     throw new BeanIOConfigurationException("Key required for Map type collection");
@@ -957,6 +953,7 @@ namespace BeanIO.Internal.Compiler
             {
                 aggregation = new CollectionParser();
             }
+
             aggregation.Name = config.Label;
             if (config.OccursRef != null)
             {
@@ -968,6 +965,7 @@ namespace BeanIO.Internal.Compiler
                 aggregation.MinOccurs = config.MinOccurs ?? 0;
                 aggregation.MaxOccurs = config.MaxOccurs;
             }
+
             aggregation.IsLazy = config.IsLazy;
             aggregation.PropertyType = collectionType;
             return aggregation;
@@ -1001,7 +999,7 @@ namespace BeanIO.Internal.Compiler
                             arrayType = reflectedType.GenericTypeArguments[0];
                         }
 
-                        if (arrayType != null && !arrayType.IsAssignableFrom(property.PropertyType))
+                        if (arrayType != null && !TypeUtil.IsAssignableFrom(arrayType, property.PropertyType))
                         {
                             // override target type if we were able to reflect its value and the property type
                             // cannot be cast to the array type
@@ -1061,6 +1059,7 @@ namespace BeanIO.Internal.Compiler
             {
                 aggregation = new RecordCollection();
             }
+
             aggregation.Name = config.Name;
             aggregation.PropertyType = collectionType;
             aggregation.IsLazy = config.IsLazy;
@@ -1143,6 +1142,7 @@ namespace BeanIO.Internal.Compiler
                 {
                     throw new BeanIOConfigurationException("Invalid setter method", ex);
                 }
+
                 setter = null;
             }
 
@@ -1167,7 +1167,7 @@ namespace BeanIO.Internal.Compiler
                 {
                     property.PropertyType = arrayType;
                 }
-                else if (!arrayType.IsAssignableFrom(type))
+                else if (!TypeUtil.IsAssignableFrom(arrayType, type))
                 {
                     throw new BeanIOConfigurationException(
                         string.Format(
@@ -1178,7 +1178,7 @@ namespace BeanIO.Internal.Compiler
             }
             else
             {
-                if (!reflectedType.IsAssignableFrom(iteration.PropertyType))
+                if (!TypeUtil.IsAssignableFrom(reflectedType, iteration.PropertyType))
                 {
                     if (reflectedType.IsConstructedGenericType)
                     {
@@ -1195,7 +1195,8 @@ namespace BeanIO.Internal.Compiler
                         iteration.PropertyType = reflectedType;
                     }
                 }
-                if (!reflectedType.IsAssignableFrom(iteration.PropertyType))
+
+                if (!TypeUtil.IsAssignableFrom(reflectedType, iteration.PropertyType))
                 {
                     string beanPropertyTypeName;
                     if (reflectedType.IsArray())
@@ -1265,6 +1266,7 @@ namespace BeanIO.Internal.Compiler
                 {
                     throw new BeanIOConfigurationException("Invalid setter method", ex);
                 }
+
                 setter = null;
             }
 
@@ -1280,20 +1282,24 @@ namespace BeanIO.Internal.Compiler
             {
                 property.PropertyType = reflectedType;
             }
-            else if (reflectedType != null && !reflectedType.IsAssignableFrom(type))
+            else if (reflectedType != null)
             {
-                // reflectedType may be null if for read-only streams using a constructor argument
-                throw new BeanIOConfigurationException(string.Format("Property type '{0}' is not assignable to bean property type '{1}'", config.Type, reflectedType.GetAssemblyQualifiedName()));
-            }
-            else if (reflectedType.GetTypeInfo().IsPrimitive)
-            {
-                property.PropertyType = reflectedType;
-            }
-            else if (!type.IsConstructedGenericType && type.GetTypeInfo().IsGenericType)
-            {
-                if (reflectedType.IsConstructedGenericType)
+                if (!TypeUtil.IsAssignableFrom(reflectedType, type))
                 {
-                    property.PropertyType = type.Instantiate(reflectedType);
+                    // reflectedType may be null if for read-only streams using a constructor argument
+                    throw new BeanIOConfigurationException($"Property type '{config.Type}' is not assignable to bean property type '{reflectedType.GetAssemblyQualifiedName()}'");
+                }
+
+                if (reflectedType.GetTypeInfo().IsPrimitive)
+                {
+                    property.PropertyType = reflectedType;
+                }
+                else if (!type.IsConstructedGenericType && type.GetTypeInfo().IsGenericType)
+                {
+                    if (reflectedType.IsConstructedGenericType)
+                    {
+                        property.PropertyType = type.Instantiate(reflectedType);
+                    }
                 }
             }
         }
@@ -1365,6 +1371,7 @@ namespace BeanIO.Internal.Compiler
                 if (IsReadEnabled && (beanTypeInfo.IsInterface || beanTypeInfo.IsAbstract))
                     throw new BeanIOConfigurationException(string.Format("Class must be concrete unless stream mode is set to '{0}'", AccessMode.Write));
             }
+
             return beanClass;
         }
 
@@ -1447,20 +1454,20 @@ namespace BeanIO.Internal.Compiler
             }
         }
 
-        private IProperty FindTarget(Component segment, string name)
+        private IProperty FindTarget([NotNull] Component segment, [NotNull] string name)
         {
             Component c = FindDescendant("value", segment, name);
             if (c == null)
                 throw new BeanIOConfigurationException(string.Format("Descendant value '{0}' not found", name));
 
             var property = c as IProperty;
-            if (property == null || property.PropertyType == null)
+            if (property?.PropertyType == null)
                 throw new BeanIOConfigurationException(string.Format("No class defined for value '{0}'", name));
 
             return property;
         }
 
-        private Component FindDescendant(string type, Component c, string name)
+        private Component FindDescendant([NotNull] string type, [NotNull] Component c, [NotNull] string name)
         {
             if (string.Equals(name, c.Name, StringComparison.Ordinal))
                 return c;
@@ -1509,6 +1516,7 @@ namespace BeanIO.Internal.Compiler
                     return typeof(List<>).Instantiate(type);
                 return typeof(List<object>);
             }
+
             return type;
         }
 
@@ -1576,7 +1584,7 @@ namespace BeanIO.Internal.Compiler
                     propertyType = handler.TargetType;
                     field.PropertyType = propertyType;
                 }
-                else if (!propertyType.IsAssignableFrom(handler.TargetType))
+                else if (!TypeUtil.IsAssignableFrom(propertyType, handler.TargetType))
                 {
                     // otherwise validate the property type is compatible with the type handler
                     throw new BeanIOConfigurationException(
@@ -1610,6 +1618,7 @@ namespace BeanIO.Internal.Compiler
                 {
                     throw new BeanIOConfigurationException(ex.Message, ex);
                 }
+
                 if (handler == null)
                 {
                     throw new BeanIOConfigurationException(string.Format("Type handler not found for type '{0}'", typeName));

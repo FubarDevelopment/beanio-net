@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="XmlDateTimeOffsetTypeHandler.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Text;
 using System.Xml;
 
@@ -17,10 +22,7 @@ namespace BeanIO.Types.Xml
         /// <summary>
         /// Gets the XML data type name
         /// </summary>
-        protected override string DatatypeQName
-        {
-            get { return "dateTime"; }
-        }
+        protected override string DatatypeQName => "dateTime";
 
         /// <summary>
         /// Formats an object into field text.
@@ -43,6 +45,7 @@ namespace BeanIO.Types.Xml
                     if (OutputMilliseconds)
                         formatString.Append(".fff");
                 }
+
                 if (TimeZone != null)
                     formatString.Append("K");
                 pattern = formatString.ToString();

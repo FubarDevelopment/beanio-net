@@ -1,4 +1,10 @@
-﻿using System;
+// <copyright file="XmlReader.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -76,15 +82,14 @@ namespace BeanIO.Stream.Xml
         public XmlReader(TextReader reader, XDocument baseDocument)
         {
             RecordLineNumber = -1;
-            _in = System.Xml.XmlReader.Create(
-                reader,
-                new XmlReaderSettings()
-                {
-                    DtdProcessing = DtdProcessing.Ignore,
-                    IgnoreComments = true,
-                    IgnoreProcessingInstructions = true,
-                    IgnoreWhitespace = true,
-                });
+            var readerSettings = new XmlReaderSettings()
+            {
+                DtdProcessing = DtdProcessing.Ignore,
+                IgnoreComments = true,
+                IgnoreProcessingInstructions = true,
+                IgnoreWhitespace = true,
+            };
+            _in = System.Xml.XmlReader.Create(reader, readerSettings);
             _document = baseDocument ?? new XDocument();
             if (_document.Root == null)
             {
@@ -113,10 +118,7 @@ namespace BeanIO.Stream.Xml
         /// <returns>
         /// The unparsed text of the last record read
         /// </returns>
-        public string RecordText
-        {
-            get { return _document.ToString(); }
-        }
+        public string RecordText => _document.ToString();
 
         /// <summary>
         /// Reads a single record from this input stream.
@@ -201,7 +203,7 @@ namespace BeanIO.Stream.Xml
                                 {
                                     // if found, increment its counter and continue
                                     var groupCount = baseElement.Annotation<GroupCountAnnotation>();
-                                    var count = groupCount != null ? groupCount.Count : 0;
+                                    var count = groupCount?.Count ?? 0;
                                     baseElement.SetAnnotation(new GroupCountAnnotation(count + 1));
                                     node = baseElement;
                                     continue;
@@ -223,6 +225,8 @@ namespace BeanIO.Stream.Xml
                             var attrName = XNamespace.Get(_in.NamespaceURI) + _in.LocalName;
                             e.SetAttributeValue(attrName, _in.GetAttribute(i));
                         }
+
+                        Debug.Assert(node != null, "node != null");
                         node.Add(e);
                         node = e;
 
@@ -237,7 +241,11 @@ namespace BeanIO.Stream.Xml
                     case XmlNodeType.Text:
                     case XmlNodeType.CDATA:
                         if (recordPosition >= 0)
+                        {
+                            Debug.Assert(node != null, "node != null");
                             node.Add(new XText(_in.Value));
+                        }
+
                         break;
                     case XmlNodeType.EndElement:
                         closeElement = true;
@@ -246,6 +254,7 @@ namespace BeanIO.Stream.Xml
 
                 if (closeElement)
                 {
+                    Debug.Assert(node != null, "node != null");
                     var parent = node.Parent;
                     if (parent != null && parent.NodeType == XmlNodeType.Element)
                     {
@@ -293,7 +302,7 @@ namespace BeanIO.Stream.Xml
         private bool IsNode(XElement node, string ns, string name)
         {
             var handlingModeAttr = node.Annotation<NamespaceModeAnnotation>();
-            var handlingMode = handlingModeAttr == null ? NamespaceHandlingMode.UseNamespace : handlingModeAttr.HandlingMode;
+            var handlingMode = handlingModeAttr?.HandlingMode ?? NamespaceHandlingMode.UseNamespace;
 
             return NamespaceAwareElementComparer.Compare(
                 handlingMode,

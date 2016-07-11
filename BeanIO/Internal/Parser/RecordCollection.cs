@@ -1,4 +1,9 @@
-﻿using System.Collections;
+// <copyright file="RecordCollection.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Collections;
 
 using BeanIO.Internal.Util;
 
@@ -16,10 +21,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets the <see cref="IProperty"/> implementation type
         /// </summary>
-        public override PropertyType Type
-        {
-            get { return Internal.Parser.PropertyType.AggregationCollection; }
-        }
+        public override PropertyType Type => Internal.Parser.PropertyType.AggregationCollection;
 
         /// <summary>
         /// Unmarshals a record
@@ -127,8 +129,10 @@ namespace BeanIO.Internal.Parser
         /// <returns>the <see cref="IList"/></returns>
         protected virtual ICollection GetCollection(ParsingContext context)
         {
+#pragma warning disable SA1100
             // ReSharper disable once RedundantBaseQualifier
             return (ICollection)base.GetValue(context);
+#pragma warning restore SA1100
         }
     }
 }

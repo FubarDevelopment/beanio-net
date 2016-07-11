@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="FieldPadding.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Reflection;
 using System.Text;
 
@@ -148,14 +153,7 @@ namespace BeanIO.Internal.Parser.Format
         /// <returns>the unpadded field text</returns>
         public virtual string Unpad(string fieldText)
         {
-            if (Justify == Align.Left)
-            {
-                fieldText = fieldText.TrimEnd(Filler);
-            }
-            else
-            {
-                fieldText = fieldText.TrimStart(Filler);
-            }
+            fieldText = Justify == Align.Left ? fieldText.TrimEnd(Filler) : fieldText.TrimStart(Filler);
 
             if (string.IsNullOrEmpty(fieldText))
                 return DefaultText;

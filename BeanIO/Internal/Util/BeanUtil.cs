@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="BeanUtil.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,7 +54,7 @@ namespace BeanIO.Internal.Util
         public static object CreateBean([NotNull] string className)
         {
             if (className == null)
-                throw new ArgumentNullException("className");
+                throw new ArgumentNullException(nameof(className));
 
             Type type;
             try
@@ -212,6 +217,7 @@ namespace BeanIO.Internal.Util
                 {
                     descriptor = new PropertyDescriptor(fieldInfo, _getterInfo, _setterInfo);
                 }
+
                 return descriptor;
             }
 
@@ -230,6 +236,7 @@ namespace BeanIO.Internal.Util
                         break;
                     typeInfo = typeInfo.BaseType.GetTypeInfo();
                 }
+
                 return null;
             }
 
@@ -248,6 +255,7 @@ namespace BeanIO.Internal.Util
                         break;
                     typeInfo = typeInfo.BaseType.GetTypeInfo();
                 }
+
                 return null;
             }
 
@@ -262,6 +270,7 @@ namespace BeanIO.Internal.Util
                 {
                     name = name.Substring(2);
                 }
+
                 return name;
             }
 
@@ -272,6 +281,7 @@ namespace BeanIO.Internal.Util
                 {
                     name = name.Substring(3);
                 }
+
                 return name;
             }
 
@@ -304,6 +314,7 @@ namespace BeanIO.Internal.Util
                         return info;
                     }
                 }
+
                 return null;
             }
 
@@ -324,6 +335,7 @@ namespace BeanIO.Internal.Util
                         return info;
                     }
                 }
+
                 return null;
             }
 
@@ -342,6 +354,7 @@ namespace BeanIO.Internal.Util
                         break;
                     typeInfo = typeInfo.BaseType.GetTypeInfo();
                 }
+
                 return methodInfo;
             }
 
@@ -349,12 +362,15 @@ namespace BeanIO.Internal.Util
             private void ThrowMethodMissingException(string getterOrSetter, string name)
             {
                 if (string.IsNullOrEmpty(_property))
+                {
                     throw new BeanIOConfigurationException(
                         string.Format(
                             "{2} '{0}' not found in type '{1}'",
                             name,
                             _typeInfo.GetType().GetAssemblyQualifiedName(),
                             getterOrSetter));
+                }
+
                 throw new BeanIOConfigurationException(
                     string.Format(
                         "{3} '{0}' not found for property/field '{1}' of type '{2}'",
@@ -370,10 +386,7 @@ namespace BeanIO.Internal.Util
             /// <summary>
             /// Gets the class type supported by this handler.
             /// </summary>
-            public Type TargetType
-            {
-                get { return typeof(char); }
-            }
+            public Type TargetType => typeof(char);
 
             /// <summary>
             /// Parses field text into an object.
@@ -427,10 +440,7 @@ namespace BeanIO.Internal.Util
             /// <summary>
             /// Gets the class type supported by this handler.
             /// </summary>
-            public Type TargetType
-            {
-                get { return typeof(string); }
-            }
+            public Type TargetType => typeof(string);
 
             /// <summary>
             /// Parses field text into an object.
@@ -478,12 +488,14 @@ namespace BeanIO.Internal.Util
                                 {
                                     value.Append(c);
                                 }
+
                                 break;
 
                             default:
                                 value.Append(c);
                                 break;
                         }
+
                         escaped = false;
                         start = n + 1;
                         n = text.IndexOf('\\', start);
@@ -517,10 +529,7 @@ namespace BeanIO.Internal.Util
             /// <summary>
             /// Gets the class type supported by this handler.
             /// </summary>
-            public Type TargetType
-            {
-                get { return typeof(string[]); }
-            }
+            public Type TargetType => typeof(string[]);
 
             /// <summary>
             /// Parses field text into an object.

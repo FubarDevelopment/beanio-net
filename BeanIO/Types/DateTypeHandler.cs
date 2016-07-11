@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="DateTypeHandler.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 
 using NodaTime;
 
@@ -29,10 +34,7 @@ namespace BeanIO.Types
         /// <summary>
         /// Gets the class type supported by this handler.
         /// </summary>
-        public override Type TargetType
-        {
-            get { return typeof(LocalDate); }
-        }
+        public override Type TargetType => typeof(LocalDate);
 
         /// <summary>
         /// Parses field text into an object.
@@ -42,9 +44,7 @@ namespace BeanIO.Types
         public override object Parse(string text)
         {
             var dt = ParseDate(text);
-            if (dt == null)
-                return null;
-            return dt.Value.Date;
+            return dt?.Date;
         }
 
         /// <summary>

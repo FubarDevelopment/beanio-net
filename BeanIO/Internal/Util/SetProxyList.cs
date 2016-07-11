@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="SetProxyList.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
@@ -22,25 +27,13 @@ namespace BeanIO.Internal.Util
             _countProperty = collectionTypeInfo.DeclaredProperties.FirstOrDefault(x => x.CanRead && x.GetMethod.IsPublic && !x.GetMethod.IsStatic && x.Name == "Count");
         }
 
-        public IEnumerable Instance
-        {
-            get { return _instance; }
-        }
+        public IEnumerable Instance => _instance;
 
-        public bool IsFixedSize
-        {
-            get { return false; }
-        }
+        public bool IsFixedSize => false;
 
-        public bool IsReadOnly
-        {
-            get { return false; }
-        }
+        public bool IsReadOnly => false;
 
-        public int Count
-        {
-            get { return (int)_countProperty.GetMethod.Invoke(_instance, null); }
-        }
+        public int Count => (int)_countProperty.GetMethod.Invoke(_instance, null);
 
         public bool IsSynchronized
         {

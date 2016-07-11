@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="DelegatingParser.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 
 namespace BeanIO.Internal.Parser
 {
@@ -19,18 +24,12 @@ namespace BeanIO.Internal.Parser
         /// stream formats calculate size based on the number of fields.  Some stream formats,
         /// such as XML, may ignore size settings.
         /// </remarks>
-        public override int? Size
-        {
-            get { return Parser.Size; }
-        }
+        public override int? Size => Parser.Size;
 
         /// <summary>
         /// Gets a value indicating whether this node must exist during unmarshalling.
         /// </summary>
-        public override bool IsOptional
-        {
-            get { return Parser.IsOptional; }
-        }
+        public override bool IsOptional => Parser.IsOptional;
 
         /// <summary>
         /// Gets a value indicating whether this parser or any descendant of this parser is used to identify
@@ -45,10 +44,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets the <see cref="IParser"/>
         /// </summary>
-        protected IParser Parser
-        {
-            get { return (IParser)First; }
-        }
+        protected IParser Parser => (IParser)First;
 
         /// <summary>
         /// Returns whether this parser and its children match a record being unmarshalled.

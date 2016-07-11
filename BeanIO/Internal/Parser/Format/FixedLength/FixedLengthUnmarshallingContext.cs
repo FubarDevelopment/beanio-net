@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="FixedLengthUnmarshallingContext.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 
 using BeanIO.Stream;
 
@@ -23,7 +28,7 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
         public override void SetRecordValue(object value)
         {
             _record = (string)value;
-            RecordLength = _record == null ? 0 : _record.Length;
+            RecordLength = _record?.Length ?? 0;
         }
 
         public string GetFieldText(string name, int position, int length, int until)

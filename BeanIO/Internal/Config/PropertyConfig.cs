@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+// <copyright file="PropertyConfig.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Collections.Generic;
 using System.Xml;
 
 using BeanIO.Internal.Util;
@@ -187,10 +192,7 @@ namespace BeanIO.Internal.Config
         /// <summary>
         /// Gets a value indicating whether this component is bound to a collection or array.
         /// </summary>
-        public bool IsCollection
-        {
-            get { return Collection != null; }
-        }
+        public bool IsCollection => Collection != null;
 
         /// <summary>
         /// Gets a value indicating whether this component repeats in a stream.
@@ -199,19 +201,13 @@ namespace BeanIO.Internal.Config
         /// The component is assumed to repeat if bound to a collection or the maximum
         /// occurrences is greater than one.
         /// </remarks>
-        public bool IsRepeating
-        {
-            get { return IsCollection || (MaxOccurs != null && MaxOccurs > 1); }
-        }
+        public bool IsRepeating => IsCollection || (MaxOccurs != null && MaxOccurs > 1);
 
         /// <summary>
         /// Gets the name of the property descendant to use for the Map key when
         /// <see cref="Collection"/> is set to <see cref="Dictionary{TKey,TValue}"/> (map).
         /// </summary>
-        public virtual string Key
-        {
-            get { return null; }
-        }
+        public virtual string Key => null;
 
         /// <summary>
         /// Returns whether a node is a supported child of this node.

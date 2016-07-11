@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="XmlDateTypeHandler.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Text;
 using System.Xml;
 
@@ -14,18 +19,12 @@ namespace BeanIO.Types.Xml
         /// <summary>
         /// Gets the class type supported by this handler.
         /// </summary>
-        public override Type TargetType
-        {
-            get { return typeof(LocalDate); }
-        }
+        public override Type TargetType => typeof(LocalDate);
 
         /// <summary>
         /// Gets the XML data type name
         /// </summary>
-        protected override string DatatypeQName
-        {
-            get { return "date"; }
-        }
+        protected override string DatatypeQName => "date";
 
         /// <summary>
         /// Parses field text into an object.

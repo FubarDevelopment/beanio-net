@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="ResourceSchemeHandler.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Reflection;
 
 namespace BeanIO.Config.SchemeHandlers
@@ -11,10 +16,7 @@ namespace BeanIO.Config.SchemeHandlers
         /// <summary>
         /// Gets the schema this handler supports (e.g. file)
         /// </summary>
-        public string Scheme
-        {
-            get { return "resource"; }
-        }
+        public string Scheme => "resource";
 
         /// <summary>
         /// This functions opens a stream for the given <paramref name="resource"/> <see cref="Uri"/>

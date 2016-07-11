@@ -1,4 +1,9 @@
-﻿using System.Xml.Linq;
+// <copyright file="XmlStreamFormat.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Xml.Linq;
 
 using BeanIO.Stream;
 using BeanIO.Stream.Xml;
@@ -34,8 +39,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
             set
             {
                 var configAware = value as IXmlStreamConfigurationAware;
-                if (configAware != null)
-                    configAware.Configure(new RecordParserXmlStreamConfiguration(this));
+                configAware?.Configure(new RecordParserXmlStreamConfiguration(this));
                 base.RecordParserFactory = value;
             }
         }
@@ -86,10 +90,8 @@ namespace BeanIO.Internal.Parser.Format.Xml
                 _format = format;
             }
 
-            public XDocument Document
-            {
-                get { return _format.CreateBaseDocument(_format.Layout, _format.NameConversionMode); }
-            }
+            public XDocument CreateDocument()
+                => _format.CreateBaseDocument(_format.Layout, _format.NameConversionMode);
         }
     }
 }

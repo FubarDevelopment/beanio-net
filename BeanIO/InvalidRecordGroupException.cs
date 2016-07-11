@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="InvalidRecordGroupException.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Linq;
 using System.Text;
 
@@ -15,8 +20,6 @@ namespace BeanIO
     /// </remarks>
     public class InvalidRecordGroupException : InvalidRecordException
     {
-        private readonly string _groupName;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidRecordGroupException" /> class.
         /// </summary>
@@ -25,7 +28,7 @@ namespace BeanIO
         public InvalidRecordGroupException(string groupName, params IRecordContext[] contexts)
             : base(contexts)
         {
-            _groupName = groupName;
+            RecordName = groupName;
         }
 
         /// <summary>
@@ -37,7 +40,7 @@ namespace BeanIO
         public InvalidRecordGroupException(string message, string groupName, params IRecordContext[] contexts)
             : base(message, contexts)
         {
-            _groupName = groupName;
+            RecordName = groupName;
         }
 
         /// <summary>
@@ -50,16 +53,13 @@ namespace BeanIO
         public InvalidRecordGroupException(string message, Exception inner, string groupName, params IRecordContext[] contexts)
             : base(message, inner, contexts)
         {
-            _groupName = groupName;
+            RecordName = groupName;
         }
 
         /// <summary>
         /// Gets the record group name.
         /// </summary>
-        public override string RecordName
-        {
-            get { return _groupName; }
-        }
+        public override string RecordName { get; }
 
         /// <summary>
         /// Called by <see cref="InvalidRecordException.ToString"/> to append record context details to the error message.

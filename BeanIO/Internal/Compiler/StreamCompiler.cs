@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="StreamCompiler.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
@@ -30,7 +35,7 @@ namespace BeanIO.Internal.Compiler
         /// <summary>
         /// Gets the default mapping configuration loader
         /// </summary>
-        public IConfigurationLoader DefaultConfigurationLoader { get; private set; }
+        public IConfigurationLoader DefaultConfigurationLoader { get; }
 
         /// <summary>
         /// Gets or sets the mapping configuration loader
@@ -89,7 +94,7 @@ namespace BeanIO.Internal.Compiler
         protected IEnumerable<Parser.Stream> CreateStreamDefinitions([NotNull] BeanIOConfig config)
         {
             if (config == null)
-                throw new ArgumentNullException("config");
+                throw new ArgumentNullException(nameof(config));
             Contract.EndContractBlock();
 
             var parent = CreateTypeHandlerFactory(TypeHandlerFactory.Default, config.TypeHandlerConfigurations);

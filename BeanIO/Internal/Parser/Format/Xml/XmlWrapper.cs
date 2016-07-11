@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+// <copyright file="XmlWrapper.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -13,10 +18,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Gets the XML node type
         /// </summary>
-        public XmlNodeType Type
-        {
-            get { return XmlNodeType.Element; }
-        }
+        public XmlNodeType Type => XmlNodeType.Element;
 
         /// <summary>
         /// Gets or sets the XML local name for this node.
@@ -59,10 +61,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Gets a value indicating whether this node must exist during unmarshalling.
         /// </summary>
-        public override bool IsOptional
-        {
-            get { return IsLazy; }
-        }
+        public override bool IsOptional => IsLazy;
 
         /// <summary>
         /// Returns whether this parser and its children match a record being unmarshalled.
@@ -111,6 +110,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
                 {
                     base.Unmarshal(context);
                 }
+
                 return true;
             }
             finally

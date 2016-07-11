@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="ResourceBundleMessageFactory.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -103,9 +108,9 @@ namespace BeanIO.Internal.Parser.Message
             return GetMessage(
                 new[]
                     {
-                        string.Format("{0}.{1}.{2}.{3}", FIELD_ERROR_MESSAGE_PREFIX, recordName, fieldName, rule),
-                        string.Format("{0}.{1}.{2}", FIELD_ERROR_MESSAGE_PREFIX, recordName, rule),
-                        string.Format("{0}.{1}", FIELD_ERROR_MESSAGE_PREFIX, rule)
+                        $"{FIELD_ERROR_MESSAGE_PREFIX}.{recordName}.{fieldName}.{rule}",
+                        $"{FIELD_ERROR_MESSAGE_PREFIX}.{recordName}.{rule}",
+                        $"{FIELD_ERROR_MESSAGE_PREFIX}.{rule}"
                     },
                 true);
         }

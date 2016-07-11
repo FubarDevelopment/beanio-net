@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="BooleanCharacterTypeHandler.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 
 namespace BeanIO.Types
 {
@@ -34,10 +39,7 @@ namespace BeanIO.Types
         /// <summary>
         /// Gets the class type supported by this handler.
         /// </summary>
-        public Type TargetType
-        {
-            get { return typeof(bool); }
-        }
+        public Type TargetType => typeof(bool);
 
         /// <summary>
         /// Parses field text into an object.

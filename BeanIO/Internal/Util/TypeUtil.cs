@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="TypeUtil.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -157,13 +162,14 @@ namespace BeanIO.Internal.Util
                     return typeof(HashSet<object>);
                 return null;
             }
+
             return type;
         }
 
         public static Type ToAggregationType(this string type, IProperty property)
         {
             Type propertyType;
-            if (property != null && property.PropertyType != null)
+            if (property?.PropertyType != null)
             {
                 propertyType = property.PropertyType.CreateDefaultType();
             }
@@ -207,26 +213,32 @@ namespace BeanIO.Internal.Util
                         return null;
                 }
             }
+
             if (clazz.IsSet())
             {
                 if (propertyType != null && !clazz.IsConstructedGenericType && clazz.GetTypeInfo().ContainsGenericParameters)
                 {
                     return clazz.MakeGenericType(propertyType);
                 }
+
                 return clazz;
             }
+
             if (clazz.IsList())
             {
                 if (propertyType != null && !clazz.IsConstructedGenericType && clazz.GetTypeInfo().ContainsGenericParameters)
                 {
                     return clazz.MakeGenericType(propertyType);
                 }
+
                 return clazz;
             }
+
             if (clazz.IsMap())
             {
                 return clazz;
             }
+
             return null;
         }
 
@@ -269,7 +281,7 @@ namespace BeanIO.Internal.Util
         /// <returns>true, if <paramref name="testType"/> is an instance of <paramref name="refType"/></returns>
         public static bool IsAssignableFrom(this Type refType, Type testType)
         {
-            return testType.IsInstanceOf(refType);
+            return IsInstanceOf(testType, refType);
         }
 
         /// <summary>
@@ -305,6 +317,7 @@ namespace BeanIO.Internal.Util
                     result.Append(t.Namespace).Append(".");
                 result.Append(t.Name);
             }
+
             result.AppendFormat(", {0}", t.GetTypeInfo().Assembly.FullName);
             return result.ToString();
         }
@@ -416,14 +429,7 @@ namespace BeanIO.Internal.Util
             else if (!testType.IsConstructedGenericType && refType.IsConstructedGenericType)
             {
                 var nonNullableType = Nullable.GetUnderlyingType(refType);
-                if (nonNullableType == null)
-                {
-                    refType = refType.GetGenericTypeDefinition();
-                }
-                else
-                {
-                    refType = nonNullableType;
-                }
+                refType = nonNullableType ?? refType.GetGenericTypeDefinition();
             }
 
             var refTypeInfo = refType.GetTypeInfo();
@@ -451,6 +457,7 @@ namespace BeanIO.Internal.Util
                     }
                 }
             }
+
             if (testTypeInfo.ImplementedInterfaces.Any(x => comparer.Compare(refType, x) == 0))
                 return true;
 

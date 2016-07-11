@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="RecordFilterReader.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.IO;
 using System.Text;
 
@@ -70,8 +75,7 @@ namespace BeanIO.Internal.Util
                 return n;
 
             var c = char.ConvertFromUtf32(n);
-            if (_record != null)
-                _record.Append(c);
+            _record?.Append(c);
 
             switch (c)
             {
@@ -85,6 +89,7 @@ namespace BeanIO.Internal.Util
                         LineNumber += 1;
                         Position = 0;
                     }
+
                     break;
                 case "\r":
                     _skipLf = true;
@@ -107,7 +112,7 @@ namespace BeanIO.Internal.Util
         public override void Mark(int readAheadLimit)
         {
             base.Mark(readAheadLimit);
-            _mark = _record == null ? -1 : _record.Length;
+            _mark = _record?.Length ?? -1;
         }
 
         /// <summary>

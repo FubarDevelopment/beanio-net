@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="Preprocessor.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -30,10 +35,7 @@ namespace BeanIO.Internal.Compiler
         /// <summary>
         /// Gets the stream configuration
         /// </summary>
-        protected StreamConfig Stream
-        {
-            get { return _stream; }
-        }
+        protected StreamConfig Stream => _stream;
 
         protected PropertyConfig PropertyRoot { get; set; }
 
@@ -284,10 +286,13 @@ namespace BeanIO.Internal.Compiler
 
             // set and validate occurrences
             if (field.MinOccurs == null)
+            {
                 field.MinOccurs =
                     field.OccursRef != null
                         ? 0
                         : _settings.GetInt(string.Format("{0}.{1}", Settings.DEFAULT_FIELD_MIN_OCCURS, _stream.Format), 0);
+            }
+
             if (field.MaxOccurs == null)
                 field.MaxOccurs = field.OccursRef != null ? int.MaxValue : Math.Max(field.MinOccurs.Value, 1);
             if (field.MaxOccurs != null)
@@ -380,6 +385,7 @@ namespace BeanIO.Internal.Compiler
                         result = ((GroupConfig)config).Order;
                         break;
                 }
+
                 if (result != null && result < 0)
                     result = int.MaxValue + result;
                 return result;

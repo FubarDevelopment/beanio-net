@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="XmlMappingParser.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -62,7 +67,7 @@ namespace BeanIO.Internal.Config.Xml
         public XmlMappingParser([NotNull] XmlMappingReader reader)
         {
             if (reader == null)
-                throw new ArgumentNullException("reader");
+                throw new ArgumentNullException(nameof(reader));
 
             _reader = reader;
         }
@@ -71,10 +76,7 @@ namespace BeanIO.Internal.Config.Xml
         /// Gets the mapping file information actively being parsed, which may change
         /// when one mapping file imports another.
         /// </summary>
-        protected XmlMapping Mapping
-        {
-            get { return _mapping; }
-        }
+        protected XmlMapping Mapping => _mapping;
 
         /// <summary>
         /// Gets the amount to offset a field position, which is calculated
@@ -148,6 +150,7 @@ namespace BeanIO.Internal.Config.Xml
             {
                 value = _properties[key];
             }
+
             if (value == null)
             {
                 var mappingProperties = _mapping.Properties;
@@ -156,6 +159,7 @@ namespace BeanIO.Internal.Config.Xml
                     value = mappingProperties[key];
                 }
             }
+
             return value;
         }
 
@@ -262,6 +266,7 @@ namespace BeanIO.Internal.Config.Xml
                             var value = GetAttribute(child, "value");
                             _mapping.SetProperty(key, value);
                         }
+
                         break;
                     case "typeHandler":
                         {
@@ -270,6 +275,7 @@ namespace BeanIO.Internal.Config.Xml
                                 throw new BeanIOConfigurationException(string.Format("Duplicate global type handler named '{0}'", handler.Name));
                             config.Add(handler);
                         }
+
                         break;
                     case "template":
                         CreateTemplate(child);
@@ -298,11 +304,13 @@ namespace BeanIO.Internal.Config.Xml
             var url = new Uri(resource);
             var handler = Settings.Instance.GetSchemeHandler(url, false);
             if (handler == null)
+            {
                 throw new BeanIOConfigurationException(
                     string.Format(
                         "Scheme of import resource name {0} must one of: {1}",
                         resource,
                         string.Join(", ", Settings.Instance.SchemeHandlers.Keys.Select(x => string.Format("'{0}'", x)))));
+            }
 
             if (_mapping.IsLoading(url))
                 throw new BeanIOConfigurationException(string.Format("Failed to import resource '{0}': Circular reference(s) detected", name));
@@ -402,9 +410,11 @@ namespace BeanIO.Internal.Config.Xml
                             var value = GetAttribute(child, "value");
                             props[name] = value ?? string.Empty;
                         }
+
                         break;
                 }
             }
+
             return new Properties(props);
         }
 
@@ -781,12 +791,7 @@ namespace BeanIO.Internal.Config.Xml
             return int.Parse(text);
         }
 
-        private int? GetUnboundedIntAttribute(XElement element, string name)
-        {
-            return GetUnboundedIntAttribute(element, name, null);
-        }
-
-        private int? GetUnboundedIntAttribute(XElement element, string name, int? unboundedValue)
+        private int? GetUnboundedIntAttribute(XElement element, string name, int? unboundedValue = null)
         {
             var text = GetAttribute(element, name);
             if (string.IsNullOrEmpty(text))
@@ -914,9 +919,9 @@ namespace BeanIO.Internal.Config.Xml
                 Offset = offset;
             }
 
-            public string Template { get; private set; }
+            public string Template { get; }
 
-            public int Offset { get; private set; }
+            public int Offset { get; }
         }
 
         private class Range
@@ -927,9 +932,9 @@ namespace BeanIO.Internal.Config.Xml
                 Max = max;
             }
 
-            public int? Min { get; private set; }
+            public int? Min { get; }
 
-            public int? Max { get; private set; }
+            public int? Max { get; }
         }
     }
 }

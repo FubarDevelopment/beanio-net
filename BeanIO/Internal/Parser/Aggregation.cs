@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="Aggregation.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -84,18 +89,12 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets a value indicating whether the iteration size is variable based on another field in the record.
         /// </summary>
-        public bool IsDynamicIteration
-        {
-            get { return Occurs != null; }
-        }
+        public bool IsDynamicIteration => Occurs != null;
 
         /// <summary>
         /// Gets a value indicating whether this node must exist during unmarshalling.
         /// </summary>
-        public override bool IsOptional
-        {
-            get { return MinOccurs == 0; }
-        }
+        public override bool IsOptional => MinOccurs == 0;
 
         /// <summary>
         /// Returns the length of aggregation

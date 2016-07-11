@@ -1,4 +1,9 @@
-﻿using System.Collections;
+// <copyright file="Properties.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System.Collections;
 using System.Collections.Generic;
 
 namespace BeanIO.Config
@@ -22,26 +27,17 @@ namespace BeanIO.Config
         /// <summary>
         /// Gets the number of entries
         /// </summary>
-        public int Count
-        {
-            get { return _dictionary.Count; }
-        }
+        public int Count => _dictionary.Count;
 
         /// <summary>
         /// Gets all keys
         /// </summary>
-        public IEnumerable<string> Keys
-        {
-            get { return _dictionary.Keys; }
-        }
+        public IEnumerable<string> Keys => _dictionary.Keys;
 
         /// <summary>
         /// Gets all values
         /// </summary>
-        public IEnumerable<string> Values
-        {
-            get { return _dictionary.Values; }
-        }
+        public IEnumerable<string> Values => _dictionary.Values;
 
         /// <summary>
         /// Gets the property for the given key

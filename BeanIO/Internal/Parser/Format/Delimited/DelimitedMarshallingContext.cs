@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="DelimitedMarshallingContext.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -133,11 +138,11 @@ namespace BeanIO.Internal.Parser.Format.Delimited
                 Text = text;
             }
 
-            public int Order { get; private set; }
+            public int Order { get; }
 
-            public string Text { get; private set; }
+            public string Text { get; }
 
-            public int Position { get; private set; }
+            public int Position { get; }
 
             public override string ToString()
             {

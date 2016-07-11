@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="MarkableTextReader.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.IO;
 
 namespace BeanIO.Internal.Util
@@ -28,15 +33,9 @@ namespace BeanIO.Internal.Util
         /// <summary>
         /// Gets the reader this reader reads from.
         /// </summary>
-        public TextReader BaseReader { get; private set; }
+        public TextReader BaseReader { get; }
 
-        private bool HasRemainingMarkBufferData
-        {
-            get
-            {
-                return _markBuffer != null && _markBufferPosition < _markBufferSize;
-            }
-        }
+        private bool HasRemainingMarkBufferData => _markBuffer != null && _markBufferPosition < _markBufferSize;
 
         /// <summary>
         /// Peeks for the next character
@@ -98,6 +97,7 @@ namespace BeanIO.Internal.Util
                 _markBuffer = new int[readAheadLimit];
                 _markBufferSize = 0;
             }
+
             _markBufferPosition = 0;
         }
 

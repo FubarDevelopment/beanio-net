@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="OptionalValue.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 
 namespace BeanIO.Internal.Parser
 {
@@ -47,25 +52,13 @@ namespace BeanIO.Internal.Parser
             HasValue
         }
 
-        public bool IsInvalid
-        {
-            get { return _status == Status.Invalid; }
-        }
+        public bool IsInvalid => _status == Status.Invalid;
 
-        public bool IsMissing
-        {
-            get { return _status == Status.Missing; }
-        }
+        public bool IsMissing => _status == Status.Missing;
 
-        public bool IsNil
-        {
-            get { return _status == Status.Nil; }
-        }
+        public bool IsNil => _status == Status.Nil;
 
-        public bool HasText
-        {
-            get { return _status == Status.HasValue; }
-        }
+        public bool HasText => _status == Status.HasValue;
 
         public string Text
         {
@@ -77,10 +70,7 @@ namespace BeanIO.Internal.Parser
             }
         }
 
-        internal int StatusHashCode
-        {
-            get { return _status.GetHashCode(); }
-        }
+        internal int StatusHashCode => _status.GetHashCode();
 
         public static implicit operator OptionalValue(string text)
         {
