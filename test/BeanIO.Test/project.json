@@ -1,0 +1,57 @@
+﻿{
+  "version": "1.0.0-*",
+  "authors": [ "Fubar Development Junker", "Mark Junker" ],
+
+  "configurations": {
+    "Debug": {
+      "buildOptions": {
+        "define": [ "DEBUG" ]
+      }
+    },
+    "Release": {
+      "buildOptions": {
+        "debugType": "none"
+      }
+    }
+  },
+
+  "buildOptions": {
+    "additionalArguments": [ "/ruleset:../../BeanIO.ruleset", "/additionalfile:../../stylecop.json" ],
+    "keyFile": "../../BeanIO.snk",
+    "compile": [ "../../GlobalAssemblyInfo.cs" ],
+    "define": [ "TEST" ],
+    "embed": [ "**/*.xml", "**/*.txt" ]
+  },
+
+  "testRunner": "xunit",
+
+  "dependencies": {
+    "NETStandard.Library": "1.6.0",
+    "BeanIO": { "target": "project" },
+    "JetBrains.Annotations": {
+      "version": "10.1.5",
+      "type": "build"
+    },
+    "StyleCop.Analyzers": {
+      "version": "1.0.0",
+      "type": "build"
+    },
+    "xunit": "2.2.0-beta2-build3300",
+    "dotnet-test-xunit": "2.2.0-preview2-build1029"
+  },
+
+  "frameworks": {
+    "netcoreapp1.0": {
+      "imports": "dotnet",
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.0.0"
+        },
+        "System.Collections.NonGeneric": "4.0.1"
+      }
+    },
+    "net451": {
+    }
+  }
+}

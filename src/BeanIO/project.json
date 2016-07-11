@@ -1,0 +1,75 @@
+﻿{
+  "version": "1.0.0-*",
+  "authors": [ "Fubar Development Junker", "Mark Junker" ],
+  "title": "BeanIO",
+  "description": "A .NET port of BeanIO which perfectly fits into the .NET world.",
+  "copyright": "Fubar Development, Kevin Seim 2015-2016",
+
+  "configurations": {
+    "Debug": {
+      "buildOptions": {
+        "define": [ "DEBUG" ]
+      }
+    },
+    "Release": {
+      "buildOptions": {
+        "debugType": "none",
+        "xmlDoc": true
+      }
+    }
+  },
+
+  "buildOptions": {
+    "additionalArguments": [ "/ruleset:../../BeanIO.ruleset", "/additionalfile:../../stylecop.json" ],
+    "keyFile": "../../BeanIO.snk",
+    "compile": [ "../../GlobalAssemblyInfo.cs" ],
+    "embed": "**/*.properties"
+  },
+
+  "packOptions": {
+    "summary": "A .NET port of BeanIO",
+    "owners": [ "FubarCoder" ],
+    "licenseUrl": "http://opensource.org/licenses/MIT",
+    "projectUrl": "https://github.com/FubarDevelopment/beanio-net",
+    "tags": [ "BeanIO", "Core", "CSV", "XML", "JSON", "fixed length", "file", "parse", "serialize", "deserialize", "serialization", "deserialization", "parsing", "marshal", "marshalling", "unmarshal", "unmarshalling" ],
+    "iconUrl": "https://github.com/FubarDevelopment/beanio-net/raw/master/beanio-logo.png",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/FubarDevelopment/restsharp.portable"
+    },
+    "files": {
+      "mappings": {
+        "/": [ "../../*.md", "../../beanio-logo.png", "../../LICENSE" ],
+        "src/Xsd": "Xsd/**/*.xsd"
+      }
+    }
+  },
+
+  "dependencies": {
+    "NETStandard.Library": "1.6.0",
+    "JetBrains.Annotations": {
+      "version": "10.1.5",
+      "type": "build"
+    },
+    "Newtonsoft.Json": "9.0.1",
+    "NodaTime": "2.0.0-alpha20160707",
+    "StyleCop.Analyzers": {
+      "version": "1.0.0",
+      "type": "build"
+    }
+  },
+
+  "frameworks": {
+    "netstandard1.1": {
+      "imports": [ "dotnet" ],
+      "dependencies": {
+        "System.Diagnostics.Contracts": "4.0.1"
+      }
+    },
+    "net45": {
+      "frameworkAssemblies": {
+        "System.Xml.Linq": "*"
+      }
+    }
+  }
+}
