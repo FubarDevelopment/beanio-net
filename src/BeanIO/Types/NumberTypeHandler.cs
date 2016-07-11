@@ -12,11 +12,11 @@ using BeanIO.Config;
 namespace BeanIO.Types
 {
     /// <summary>
-    /// A type handler implementation for the <see cref="System.Decimal"/> class.
+    /// A type handler implementation for the <see cref="decimal"/> class.
     /// </summary>
     /// <remarks>
     /// If <see cref="Pattern"/> is set, a NumberStyle is used to parse the value and a format string to format the value.
-    /// Otherwise, the value is parsed and formatted using the <see cref="System.Decimal"/> class.
+    /// Otherwise, the value is parsed and formatted using the <see cref="decimal"/> class.
     /// </remarks>
     public class NumberTypeHandler : CultureSupport, IConfigurableTypeHandler
     {
@@ -162,13 +162,13 @@ namespace BeanIO.Types
             if ((styles & NumberStyles.AllowHexSpecifier) == NumberStyles.None)
             {
                 if (!decimal.TryParse(text, styles, Culture, out result))
-                    throw new TypeConversionException(string.Format("Invalid {0} value '{1}'", TargetType, text));
+                    throw new TypeConversionException($"Invalid {TargetType} value '{text}'");
             }
             else
             {
                 long temp;
                 if (!long.TryParse(text, styles, Culture, out temp))
-                    throw new TypeConversionException(string.Format("Invalid {0} value '{1}'", TargetType, text));
+                    throw new TypeConversionException($"Invalid {TargetType} value '{text}'");
                 result = temp;
             }
 
@@ -179,7 +179,7 @@ namespace BeanIO.Types
             }
             catch (Exception ex)
             {
-                throw new TypeConversionException(string.Format("Invalid {0} value '{1}'", TargetType, text), ex);
+                throw new TypeConversionException($"Invalid {TargetType} value '{text}'", ex);
             }
         }
 
@@ -194,9 +194,9 @@ namespace BeanIO.Types
         }
 
         /// <summary>
-        /// Parses a number from a <see cref="System.Decimal"/>.
+        /// Parses a number from a <see cref="decimal"/>.
         /// </summary>
-        /// <param name="value">The <see cref="System.Decimal"/> to convert to a number</param>
+        /// <param name="value">The <see cref="decimal"/> to convert to a number</param>
         /// <returns>The parsed number</returns>
         protected virtual object CreateNumber(decimal value)
         {

@@ -20,6 +20,7 @@ namespace BeanIO.Stream.Xml
         /// <remarks>
         /// The returned DOM object should only be used to parse a single stream.
         /// </remarks>
+        /// <returns>a new <see cref="XDocument"/></returns>
         XDocument CreateDocument();
     }
 }

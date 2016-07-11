@@ -79,6 +79,11 @@ namespace BeanIO.Internal.Parser
         /// <param name="value">the property value</param>
         void SetValue(ParsingContext context, [CanBeNull] object value);
 
+        /// <summary>
+        /// Returns a value indicating whether the given object is a valid value.
+        /// </summary>
+        /// <param name="value">The value to validate</param>
+        /// <returns><code>true</code> when the value is valid for the given property</returns>
         bool Defines(object value);
     }
 }

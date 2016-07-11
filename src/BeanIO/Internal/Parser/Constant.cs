@@ -87,6 +87,7 @@ namespace BeanIO.Internal.Parser
             Value = value;
         }
 
+        /// <inheritdoc />
         public bool Defines(object value)
         {
             if (ReferenceEquals(Value, value))

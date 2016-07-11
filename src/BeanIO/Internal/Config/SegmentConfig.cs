@@ -78,7 +78,7 @@ namespace BeanIO.Internal.Config
         /// Returns whether a node is a supported child of this node.
         /// </summary>
         /// <remarks>
-        /// Called by <see cref="TreeNode{T}.Add"/>.
+        /// Called by <see cref="Util.TreeNode{T}.Add"/>.
         /// </remarks>
         /// <param name="child">the node to test</param>
         /// <returns>true if the child is allowed</returns>

@@ -16,7 +16,7 @@ namespace BeanIO.Stream.FixedLength
     /// A <see cref="FixedLengthReader"/> is used to read records from a fixed length file or input stream.
     /// </summary>
     /// <remarks>
-    /// <para>A fixed length record is represented using the <see cref="String"/> class.
+    /// <para>A fixed length record is represented using the <see cref="string"/> class.
     /// Records must be terminated by a single configurable character, or by
     /// default, any of the following: line feed (LF), carriage return (CR), or
     /// CRLF combination.</para>

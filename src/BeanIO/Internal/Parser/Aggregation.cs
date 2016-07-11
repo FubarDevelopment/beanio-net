@@ -54,7 +54,7 @@ namespace BeanIO.Internal.Parser
         public abstract PropertyType Type { get; }
 
         /// <summary>
-        /// Gets a value indicating whether this parser or any descendant of this parser is used to identify
+        /// Gets or sets a value indicating whether this parser or any descendant of this parser is used to identify
         /// a record during unmarshalling.
         /// </summary>
         /// <returns>false; iterations cannot be used to identify records</returns>
@@ -110,6 +110,7 @@ namespace BeanIO.Internal.Parser
         /// <returns>the property value</returns>
         public abstract object CreateValue(ParsingContext context);
 
+        /// <inheritdoc />
         public abstract bool Defines(object value);
 
         /// <summary>

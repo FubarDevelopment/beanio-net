@@ -69,7 +69,7 @@ namespace BeanIO.Internal.Parser
         public virtual bool IsLazy { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether this parser or any descendant of this parser is used to identify
+        /// Gets or sets a value indicating whether this parser or any descendant of this parser is used to identify
         /// a record during unmarshalling.
         /// </summary>
         public override bool IsIdentifier

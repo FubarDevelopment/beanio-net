@@ -7,6 +7,9 @@ using System.Xml;
 
 namespace BeanIO.Internal.Parser.Format.Xml
 {
+    /// <summary>
+    /// An XML node
+    /// </summary>
     internal interface IXmlNode
     {
         /// <summary>

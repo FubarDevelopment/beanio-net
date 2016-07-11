@@ -9,7 +9,7 @@ using System.IO;
 namespace BeanIO.Stream.Csv
 {
     /// <summary>
-    /// A <see cref="CsvWriter"/> is used to format and write records, of <see cref="String"/> arrays,
+    /// A <see cref="CsvWriter"/> is used to format and write records, of <see cref="string"/> arrays,
     /// to a CSV output stream.
     /// </summary>
     /// <remarks>

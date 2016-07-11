@@ -298,7 +298,7 @@ namespace BeanIO.Internal.Util
         }
 
         /// <summary>
-        /// Get the assembly qualified name using the <see cref="Type.Namespace"/>, <see cref="Type.Name"/>, and <see cref="Assembly.FullName"/>
+        /// Get the assembly qualified name using the <see cref="Type.Namespace"/>, <see cref="P:Type.Name"/>, and <see cref="Assembly.FullName"/>
         /// </summary>
         /// <param name="t">The type to get the assembly qualified name for</param>
         /// <returns>The assembly qualified type name</returns>

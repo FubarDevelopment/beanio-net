@@ -8,7 +8,7 @@ using System;
 namespace BeanIO.Types
 {
     /// <summary>
-    /// A type handler implementation for the <see cref="System.Int32"/> class.
+    /// A type handler implementation for the <see cref="int"/> class.
     /// </summary>
     public class IntegerTypeHandler : NumberTypeHandler
     {

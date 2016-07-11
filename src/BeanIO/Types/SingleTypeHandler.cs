@@ -9,7 +9,7 @@ using System.Globalization;
 namespace BeanIO.Types
 {
     /// <summary>
-    /// A type handler implementation for the <see cref="System.Single"/> class.
+    /// A type handler implementation for the <see cref="float"/> class.
     /// </summary>
     public class SingleTypeHandler : NumberTypeHandler
     {

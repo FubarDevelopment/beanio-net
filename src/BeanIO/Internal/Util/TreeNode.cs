@@ -157,6 +157,7 @@ namespace BeanIO.Internal.Util
             return s.ToString();
         }
 
+        /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

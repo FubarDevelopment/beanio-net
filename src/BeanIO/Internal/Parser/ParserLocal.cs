@@ -43,11 +43,7 @@ namespace BeanIO.Internal.Parser
             _createFunc = createFunc;
         }
 
-        /// <summary>
-        /// Initializes the variable.
-        /// </summary>
-        /// <param name="index">the index of the variable in the <see cref="ParsingContext.LocalHeap"/></param>
-        /// <param name="context">the <see cref="ParsingContext"/> being initialized</param>
+        /// <inheritdoc />
         public void Init(int index, ParsingContext context)
         {
             if (index < 0)

@@ -14,7 +14,7 @@ using BeanIO.Stream.Util;
 namespace BeanIO.Stream.Csv
 {
     /// <summary>
-    /// A <see cref="CsvReader"/> is used to parse CSV formatted flat files into records of <see cref="System.String"/> arrays.
+    /// A <see cref="CsvReader"/> is used to parse CSV formatted flat files into records of <see cref="string"/> arrays.
     /// </summary>
     /// <remarks>
     /// <para>The CSV format supported is defined by specification RFC 4180.

@@ -64,6 +64,7 @@ namespace BeanIO.Config
             return _dictionary.GetEnumerator();
         }
 
+        /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

@@ -67,7 +67,7 @@ namespace BeanIO.Internal.Parser
         public Type PropertyType { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether this parser or any descendant of this parser is used to identify
+        /// Gets or sets a value indicating whether this parser or any descendant of this parser is used to identify
         /// a record during unmarshalling.
         /// </summary>
         public override bool IsIdentifier { get; set; }
@@ -346,6 +346,7 @@ namespace BeanIO.Internal.Parser
                 base.RegisterLocals(locals);
         }
 
+        /// <inheritdoc />
         public bool Defines(object value)
         {
             if (value == null)
