@@ -47,7 +47,6 @@
   },
 
   "dependencies": {
-    "NETStandard.Library": "1.6.0",
     "JetBrains.Annotations": {
       "version": "10.1.5",
       "type": "build"
@@ -64,6 +63,7 @@
     "netstandard1.1": {
       "imports": [ "dotnet" ],
       "dependencies": {
+        "NETStandard.Library": "1.6.0",
         "System.Diagnostics.Contracts": "4.0.1"
       }
     },
