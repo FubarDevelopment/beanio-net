@@ -144,7 +144,7 @@ namespace BeanIO.Internal.Util
             }
 
             var clazz = Type.GetType(type);
-            if (!typeof(IList).IsAssignableFrom(clazz))
+            if (!typeof(IList).IsAssignableFromThis(clazz))
                 return null;
             return clazz;
         }
@@ -279,7 +279,7 @@ namespace BeanIO.Internal.Util
         /// <param name="refType">The reference type to test against</param>
         /// <param name="testType">The type to test for being an instance of <paramref name="refType"/></param>
         /// <returns>true, if <paramref name="testType"/> is an instance of <paramref name="refType"/></returns>
-        public static bool IsAssignableFrom(this Type refType, Type testType)
+        public static bool IsAssignableFromThis(this Type refType, Type testType)
         {
             return IsInstanceOf(testType, refType);
         }
@@ -362,29 +362,29 @@ namespace BeanIO.Internal.Util
 
         public static bool IsCollection(this Type type)
         {
-            return typeof(ICollection).IsAssignableFrom(type)
-                   || typeof(ICollection<>).IsAssignableFrom(type)
-                   || typeof(IReadOnlyCollection<>).IsAssignableFrom(type);
+            return typeof(ICollection).IsAssignableFromThis(type)
+                   || typeof(ICollection<>).IsAssignableFromThis(type)
+                   || typeof(IReadOnlyCollection<>).IsAssignableFromThis(type);
         }
 
         public static bool IsList(this Type type)
         {
-            return typeof(IList).IsAssignableFrom(type)
-                   || typeof(IList<>).IsAssignableFrom(type)
-                   || typeof(IReadOnlyList<>).IsAssignableFrom(type)
+            return typeof(IList).IsAssignableFromThis(type)
+                   || typeof(IList<>).IsAssignableFromThis(type)
+                   || typeof(IReadOnlyList<>).IsAssignableFromThis(type)
                    || (type.IsCollection() && !type.IsMap());
         }
 
         public static bool IsMap(this Type type)
         {
-            return typeof(IDictionary).IsAssignableFrom(type)
-                   || typeof(IDictionary<,>).IsAssignableFrom(type)
-                   || typeof(IReadOnlyDictionary<,>).IsAssignableFrom(type);
+            return typeof(IDictionary).IsAssignableFromThis(type)
+                   || typeof(IDictionary<,>).IsAssignableFromThis(type)
+                   || typeof(IReadOnlyDictionary<,>).IsAssignableFromThis(type);
         }
 
         public static bool IsSet(this Type type)
         {
-            return typeof(ISet<>).IsAssignableFrom(type);
+            return typeof(ISet<>).IsAssignableFromThis(type);
         }
 
         /// <summary>

@@ -148,7 +148,7 @@ namespace BeanIO.Internal.Parser
                 return false;
             if (value == null)
                 return IsMatchNull;
-            if (!TypeUtil.IsAssignableFrom(PropertyType, value.GetType()))
+            if (!PropertyType.IsAssignableFromThis(value.GetType()))
                 return false;
             if (!IsIdentifier)
                 return true;

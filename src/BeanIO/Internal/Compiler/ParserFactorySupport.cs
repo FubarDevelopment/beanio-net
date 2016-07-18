@@ -214,7 +214,7 @@ namespace BeanIO.Internal.Compiler
             var beanType = bean.PropertyType;
             foreach (var testConstructor in beanType.GetTypeInfo().DeclaredConstructors.Where(x => x.GetParameters().Length == count))
             {
-                var argsMatching = testConstructor.GetParameters().Select((p, i) => TypeUtil.IsAssignableFrom(p.ParameterType, args[i].PropertyType)).All(x => x);
+                var argsMatching = testConstructor.GetParameters().Select((p, i) => p.ParameterType.IsAssignableFromThis(args[i].PropertyType)).All(x => x);
                 if (argsMatching && (testConstructor.IsPublic || _allowProtectedPropertyAccess))
                 {
                     constructor = testConstructor;
@@ -999,7 +999,7 @@ namespace BeanIO.Internal.Compiler
                             arrayType = reflectedType.GenericTypeArguments[0];
                         }
 
-                        if (arrayType != null && !TypeUtil.IsAssignableFrom(arrayType, property.PropertyType))
+                        if (arrayType != null && !arrayType.IsAssignableFromThis(property.PropertyType))
                         {
                             // override target type if we were able to reflect its value and the property type
                             // cannot be cast to the array type
@@ -1167,7 +1167,7 @@ namespace BeanIO.Internal.Compiler
                 {
                     property.PropertyType = arrayType;
                 }
-                else if (!TypeUtil.IsAssignableFrom(arrayType, type))
+                else if (!arrayType.IsAssignableFromThis(type))
                 {
                     throw new BeanIOConfigurationException(
                         string.Format(
@@ -1178,7 +1178,7 @@ namespace BeanIO.Internal.Compiler
             }
             else
             {
-                if (!TypeUtil.IsAssignableFrom(reflectedType, iteration.PropertyType))
+                if (!reflectedType.IsAssignableFromThis(iteration.PropertyType))
                 {
                     if (reflectedType.IsConstructedGenericType)
                     {
@@ -1196,7 +1196,7 @@ namespace BeanIO.Internal.Compiler
                     }
                 }
 
-                if (!TypeUtil.IsAssignableFrom(reflectedType, iteration.PropertyType))
+                if (!reflectedType.IsAssignableFromThis(iteration.PropertyType))
                 {
                     string beanPropertyTypeName;
                     if (reflectedType.IsArray())
@@ -1284,7 +1284,7 @@ namespace BeanIO.Internal.Compiler
             }
             else if (reflectedType != null)
             {
-                if (!TypeUtil.IsAssignableFrom(reflectedType, type))
+                if (!reflectedType.IsAssignableFromThis(type))
                 {
                     // reflectedType may be null if for read-only streams using a constructor argument
                     throw new BeanIOConfigurationException($"Property type '{config.Type}' is not assignable to bean property type '{reflectedType.GetAssemblyQualifiedName()}'");
@@ -1584,7 +1584,7 @@ namespace BeanIO.Internal.Compiler
                     propertyType = handler.TargetType;
                     field.PropertyType = propertyType;
                 }
-                else if (!TypeUtil.IsAssignableFrom(propertyType, handler.TargetType))
+                else if (!propertyType.IsAssignableFromThis(handler.TargetType))
                 {
                     // otherwise validate the property type is compatible with the type handler
                     throw new BeanIOConfigurationException(

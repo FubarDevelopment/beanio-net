@@ -221,7 +221,7 @@ namespace BeanIO.Internal.Util
             type = Nullable.GetUnderlyingType(type) ?? type;
 
             var handler = GetHandler(TypeKey + type.FullName, format, properties);
-            if (handler == null && TypeUtil.IsAssignableFrom(typeof(Enum), type))
+            if (handler == null && typeof(Enum).IsAssignableFromThis(type))
                 return GetEnumHandler(type, properties);
 
             return handler;
@@ -295,7 +295,7 @@ namespace BeanIO.Internal.Util
         private void RegisterHandlerFor([CanBeNull] string format, [NotNull] string typeName, [NotNull] Type expectedClass, [NotNull] Func<ITypeHandler> createHandler)
         {
             var testInstance = createHandler();
-            if (!TypeUtil.IsAssignableFrom(expectedClass, testInstance.TargetType))
+            if (!expectedClass.IsAssignableFromThis(testInstance.TargetType))
                 throw new ArgumentException(string.Format("Type handler of type '{0}' is not assignable from configured type '{1}'", testInstance.TargetType, expectedClass));
 
             if (format != null)

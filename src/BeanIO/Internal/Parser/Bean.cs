@@ -239,7 +239,7 @@ namespace BeanIO.Internal.Parser
                 return IsMatchNull;
             }
 
-            if (!TypeUtil.IsAssignableFrom(PropertyType, bean.GetType()))
+            if (!PropertyType.IsAssignableFromThis(bean.GetType()))
             {
                 if (PropertyType == typeof(Dictionary<,>))
                 {
