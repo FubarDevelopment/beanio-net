@@ -191,6 +191,7 @@ namespace BeanIO.Stream.Xml
                                 node = _document.Root;
                                 if (IsNode((XElement)node, _in.NamespaceURI, _in.LocalName))
                                 {
+                                    Debug.Assert(node != null, "node != null");
                                     node.SetAnnotation(new GroupCountAnnotation(1));
                                     continue;
                                 }
