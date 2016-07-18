@@ -15,7 +15,7 @@ namespace BeanIO
         [Fact]
         public void TestLoadMappingFile()
         {
-            using (var mappingStream = typeof(StreamFactoryTest).GetTypeInfo().Assembly.GetManifestResourceStream("BeanIO.Test.mapping.xml"))
+            using (var mappingStream = typeof(StreamFactoryTest).GetTypeInfo().Assembly.GetManifestResourceStream("FubarDev.BeanIO.Test.mapping.xml"))
             {
                 var factory = StreamFactory.NewInstance();
                 factory.Load(mappingStream);

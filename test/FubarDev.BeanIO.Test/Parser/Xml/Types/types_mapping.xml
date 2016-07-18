@@ -4,8 +4,8 @@
   xsi:schemaLocation="http://www.beanio.org/2012/03 http://www.beanio.org/2012/03/mapping.xsd">
 
   <stream name="stream" format="xml" xmlName="stream">
-    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, BeanIO.Test" />
-    <record name="person" class="BeanIO.Parser.Xml.Person, BeanIO.Test">
+    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, FubarDev.BeanIO.Test" />
+    <record name="person" class="BeanIO.Parser.Xml.Person, FubarDev.BeanIO.Test">
       <field name="gender" xmlType="attribute" />
       <field name="firstName" nillable="true" />
       <field name="lastName" xmlType="element" minOccurs="0" />
@@ -13,8 +13,8 @@
   </stream>
 
   <stream name="stream2" format="xml" xmlName="stream">
-    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, BeanIO.Test" />
-    <record name="person" class="BeanIO.Parser.Xml.Person, BeanIO.Test">
+    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, FubarDev.BeanIO.Test" />
+    <record name="person" class="BeanIO.Parser.Xml.Person, FubarDev.BeanIO.Test">
       <field name="gender" xmlType="attribute" xmlNamespace="fieldNS" xmlPrefix="ns" />
       <field name="firstName" xmlName="first" xmlType="attribute" xmlNamespace="fieldNS" xmlPrefix="ns" />
       <field name="lastName" xmlName="last" xmlType="attribute" minOccurs="1" />
@@ -22,53 +22,53 @@
   </stream>
 
   <stream name="stream3" format="xml" xmlName="stream">
-    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, BeanIO.Test" />
-    <record name="person" class="BeanIO.Parser.Xml.Person, BeanIO.Test">
+    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, FubarDev.BeanIO.Test" />
+    <record name="person" class="BeanIO.Parser.Xml.Person, FubarDev.BeanIO.Test">
       <field name="gender" xmlType="attribute" />
       <field name="firstName" xmlType="text" />
     </record>
   </stream>
 
   <stream name="stream4" format="xml" xmlName="stream">
-    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, BeanIO.Test" />
-    <record name="male" xmlName="person" class="BeanIO.Parser.Xml.Male, BeanIO.Test">
+    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, FubarDev.BeanIO.Test" />
+    <record name="male" xmlName="person" class="BeanIO.Parser.Xml.Male, FubarDev.BeanIO.Test">
       <field name="gender" rid="true" xmlType="attribute" literal="M" />
       <field name="firstName" xmlType="text" />
     </record>
-    <record name="female" xmlName="person" class="BeanIO.Parser.Xml.Person, BeanIO.Test">
+    <record name="female" xmlName="person" class="BeanIO.Parser.Xml.Person, FubarDev.BeanIO.Test">
       <field name="gender" rid="true" xmlType="attribute" literal="F" />
       <field name="firstName" xmlType="text" />
     </record>
   </stream>
 
   <stream name="stream5" format="xml" xmlName="stream">
-    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, BeanIO.Test" />
-    <record name="male" xmlName="person" class="BeanIO.Parser.Xml.Male, BeanIO.Test">
+    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, FubarDev.BeanIO.Test" />
+    <record name="male" xmlName="person" class="BeanIO.Parser.Xml.Male, FubarDev.BeanIO.Test">
       <field name="gender" rid="true" xmlType="text" literal="M" />
       <field name="firstName" xmlType="attribute" />
     </record>
-    <record name="female" xmlName="person" class="BeanIO.Parser.Xml.Person, BeanIO.Test">
+    <record name="female" xmlName="person" class="BeanIO.Parser.Xml.Person, FubarDev.BeanIO.Test">
       <field name="gender" rid="true" xmlType="text" literal="F" />
       <field name="firstName" xmlType="attribute" />
     </record>
   </stream>
 
   <stream name="stream6" format="xml" xmlName="stream">
-    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, BeanIO.Test" />
-    <record name="male" xmlName="person" class="BeanIO.Parser.Xml.Male, BeanIO.Test">
+    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, FubarDev.BeanIO.Test" />
+    <record name="male" xmlName="person" class="BeanIO.Parser.Xml.Male, FubarDev.BeanIO.Test">
       <field name="gender" rid="true" literal="M" />
       <field name="firstName" />
     </record>
-    <record name="female" xmlName="person" class="BeanIO.Parser.Xml.Person, BeanIO.Test">
+    <record name="female" xmlName="person" class="BeanIO.Parser.Xml.Person, FubarDev.BeanIO.Test">
       <field name="gender" rid="true" literal="F" />
       <field name="firstName" />
     </record>
   </stream>
 
   <stream name="stream7" format="xml" xmlName="stream">
-    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, BeanIO.Test" />
-    <typeHandler type="string" class="BeanIO.Parser.Xml.Types.NillableStringTypeHandler, BeanIO.Test" />
-    <record name="record" xmlName="person" class="BeanIO.Parser.Xml.Person, BeanIO.Test">
+    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, FubarDev.BeanIO.Test" />
+    <typeHandler type="string" class="BeanIO.Parser.Xml.Types.NillableStringTypeHandler, FubarDev.BeanIO.Test" />
+    <record name="record" xmlName="person" class="BeanIO.Parser.Xml.Person, FubarDev.BeanIO.Test">
       <field name="firstName" minOccurs="0" nillable="false" />
       <field name="lastName" minOccurs="0" nillable="true" />
     </record>

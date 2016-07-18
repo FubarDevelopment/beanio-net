@@ -3,7 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.beanio.org/2012/03 http://www.beanio.org/2012/03/mapping.xsd">
   
-  <typeHandler type="date" class="BeanIO.Types.DateTypeHandler, BeanIO">
+  <typeHandler type="date" class="BeanIO.Types.DateTypeHandler, FubarDev.BeanIO">
     <property name="pattern" value="MMddyyyy" />
   </typeHandler>
 

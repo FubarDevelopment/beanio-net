@@ -16,7 +16,7 @@ namespace BeanIO.Parser.Delimited
         [Fact]
         public void TestRequiredField()
         {
-            var factory = NewStreamFactory("BeanIO.Test.Parser.Delimited.delimited.xml");
+            var factory = NewStreamFactory("delimited.xml");
             var reader = factory.CreateReader("d1", LoadReader("d1_recordErrors.txt"));
             try
             {
@@ -34,7 +34,7 @@ namespace BeanIO.Parser.Delimited
         [Fact]
         public void TestOptionalField()
         {
-            var factory = NewStreamFactory("BeanIO.Test.Parser.Delimited.delimited.xml");
+            var factory = NewStreamFactory("delimited.xml");
             var reader = factory.CreateReader("d2", LoadReader("d2_optionalField.txt"));
             try
             {
@@ -53,7 +53,7 @@ namespace BeanIO.Parser.Delimited
         [Fact]
         public void TestPadding()
         {
-            var factory = NewStreamFactory("BeanIO.Test.Parser.Delimited.delimited.xml");
+            var factory = NewStreamFactory("delimited.xml");
             var reader = factory.CreateReader("d3", LoadReader("d3_padding.txt"));
             try
             {

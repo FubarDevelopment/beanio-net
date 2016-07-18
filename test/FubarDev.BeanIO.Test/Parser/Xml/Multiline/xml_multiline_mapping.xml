@@ -4,17 +4,17 @@
   xsi:schemaLocation="http://www.beanio.org/2012/03 http://www.beanio.org/2012/03/mapping.xsd">
 
   <stream name="ml1" format="xml" xmlName="orders">
-    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, BeanIO.Test" />
-    <group name="orderGroup" class="BeanIO.Beans.Order, BeanIO.Test" xmlType="none">
+    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, FubarDev.BeanIO.Test" />
+    <group name="orderGroup" class="BeanIO.Beans.Order, FubarDev.BeanIO.Test" xmlType="none">
       <record name="order" minOccurs="1" maxOccurs="1" order="1">
         <field name="id" />
         <field name="date" format="yyyy-MM-dd" />
       </record>
-      <record name="customer" class="BeanIO.Beans.Person, BeanIO.Test" minOccurs="0" maxOccurs="1" order="2">
+      <record name="customer" class="BeanIO.Beans.Person, FubarDev.BeanIO.Test" minOccurs="0" maxOccurs="1" order="2">
         <field name="firstName" />
         <field name="lastName" />
       </record>
-      <record name="item" getter="getItems" setter="setItems" class="BeanIO.Beans.OrderItem, BeanIO.Test" 
+      <record name="item" getter="getItems" setter="setItems" class="BeanIO.Beans.OrderItem, FubarDev.BeanIO.Test" 
         collection="list" minOccurs="1" maxOccurs="100" order="3">
         <field name="name" />
         <field name="quantity" />

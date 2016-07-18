@@ -7,18 +7,18 @@
     <parser>
       <property name="lineSeparator" value="\n" />
     </parser>
-    <group name="orderGroup" class="BeanIO.Beans.Order, BeanIO.Test">
+    <group name="orderGroup" class="BeanIO.Beans.Order, FubarDev.BeanIO.Test">
       <record name="order" minOccurs="1" maxOccurs="1" order="1">
         <field name="type" rid="true" literal="order" ignore="true" />
         <field name="id" />
         <field name="date" format="yyyy-MM-dd" />
       </record>
-      <record name="customer" class="BeanIO.Beans.Person, BeanIO.Test" minOccurs="0" maxOccurs="1" order="2">
+      <record name="customer" class="BeanIO.Beans.Person, FubarDev.BeanIO.Test" minOccurs="0" maxOccurs="1" order="2">
         <field name="type" rid="true" literal="customer" ignore="true" />
         <field name="firstName" />
         <field name="lastName" />
       </record>
-      <record name="item" getter="get_Items" setter="set_Items" class="BeanIO.Beans.OrderItem, BeanIO.Test" 
+      <record name="item" getter="get_Items" setter="set_Items" class="BeanIO.Beans.OrderItem, FubarDev.BeanIO.Test" 
         collection="list" minOccurs="1" maxOccurs="100" order="3">
         <field name="type" rid="true" literal="item" ignore="true" />
         <field name="name" />
@@ -31,19 +31,19 @@
     <parser>
       <property name="lineSeparator" value="\n" />
     </parser>
-    <group name="batch" class="BeanIO.Beans.OrderBatch, BeanIO.Test" minOccurs="1" maxOccurs="unbounded">
+    <group name="batch" class="BeanIO.Beans.OrderBatch, FubarDev.BeanIO.Test" minOccurs="1" maxOccurs="unbounded">
       <record name="header" minOccurs="1" maxOccurs="1">
         <field name="type" rid="true" literal="header" ignore="true" />
         <field name="batchCount" />
       </record>
-      <group name="order" getter="GetOrderArray" setter="SetOrderArray" class="BeanIO.Beans.Order, BeanIO.Test" 
+      <group name="order" getter="GetOrderArray" setter="SetOrderArray" class="BeanIO.Beans.Order, FubarDev.BeanIO.Test" 
         collection="array" minOccurs="1" maxOccurs="unbounded">
         <record name="order" minOccurs="1" maxOccurs="1" order="1">
           <field name="type" rid="true" literal="order" ignore="true" />
           <field name="id" />
           <field name="date" format="yyyy-MM-dd" />
         </record>
-        <record name="customer" class="BeanIO.Beans.Person, BeanIO.Test" minOccurs="1" maxOccurs="1" order="2">
+        <record name="customer" class="BeanIO.Beans.Person, FubarDev.BeanIO.Test" minOccurs="1" maxOccurs="1" order="2">
           <field name="type" rid="true" literal="customer" ignore="true" />
           <field name="firstName" />
           <field name="lastName" />
@@ -62,21 +62,21 @@
       <property name="lineSeparator" value="\n" />
     </parser>
     <group name="result" class="map" minOccurs="1" maxOccurs="unbounded">
-      <group name="batch" class="BeanIO.Beans.OrderBatch, BeanIO.Test" collection="list" minOccurs="1" maxOccurs="unbounded">
+      <group name="batch" class="BeanIO.Beans.OrderBatch, FubarDev.BeanIO.Test" collection="list" minOccurs="1" maxOccurs="unbounded">
       
         <record name="header" order="1" minOccurs="1" maxOccurs="1">
           <field name="type" rid="true" literal="header" ignore="true" />
           <field name="batchCount" />
         </record>
         
-        <group name="orders" class="BeanIO.Beans.Order, BeanIO.Test" collection="list" 
+        <group name="orders" class="BeanIO.Beans.Order, FubarDev.BeanIO.Test" collection="list" 
             order="2" minOccurs="1" maxOccurs="unbounded">
           <record name="order" minOccurs="1" maxOccurs="1" order="1">
             <field name="type" rid="true" literal="order" ignore="true" />
             <field name="id" />
             <field name="date" format="yyyy-MM-dd" />
           </record>
-          <record name="customer" class="BeanIO.Beans.Person, BeanIO.Test" minOccurs="1" maxOccurs="1" order="2">
+          <record name="customer" class="BeanIO.Beans.Person, FubarDev.BeanIO.Test" minOccurs="1" maxOccurs="1" order="2">
             <field name="type" rid="true" literal="customer" ignore="true" />
             <field name="firstName" />
             <field name="lastName" />
@@ -91,13 +91,13 @@
     <parser>
       <property name="lineSeparator" value="\n" />
     </parser>
-    <group name="order" class="BeanIO.Beans.Order, BeanIO.Test" order="2" occurs="1+">
+    <group name="order" class="BeanIO.Beans.Order, FubarDev.BeanIO.Test" order="2" occurs="1+">
       <record name="header" minOccurs="1" maxOccurs="1" order="1">
         <field name="type" rid="true" literal="order" ignore="true" />
         <field name="id" />
         <field name="date" format="yyyy-MM-dd" />
       </record>
-      <record name="itemMap" class="BeanIO.Beans.OrderItem, BeanIO.Test" collection="map" key="name" occurs="1-100" order="2">
+      <record name="itemMap" class="BeanIO.Beans.OrderItem, FubarDev.BeanIO.Test" collection="map" key="name" occurs="1-100" order="2">
         <field name="type" rid="true" literal="item" ignore="true" />
         <field name="name" />
         <field name="quantity" />
@@ -109,20 +109,20 @@
     <parser>
       <property name="lineSeparator" value="\n" />
     </parser>
-    <group name="batch" class="BeanIO.Beans.OrderBatch, BeanIO.Test" occurs="1">
+    <group name="batch" class="BeanIO.Beans.OrderBatch, FubarDev.BeanIO.Test" occurs="1">
 
       <record name="header" order="1" occurs="1">
         <field name="type" rid="true" literal="header" ignore="true" />
         <field name="batchCount" />
       </record>
       
-      <group name="order" class="BeanIO.Beans.Order, BeanIO.Test" order="2" occurs="1">
+      <group name="order" class="BeanIO.Beans.Order, FubarDev.BeanIO.Test" order="2" occurs="1">
         <record name="order" order="1" occurs="1">
           <field name="type" rid="true" literal="order" ignore="true" />
           <field name="id" />
           <field name="date" format="yyyy-MM-dd" />
         </record>
-        <record name="customer" class="BeanIO.Beans.Person, BeanIO.Test" order="2" occurs="1">
+        <record name="customer" class="BeanIO.Beans.Person, FubarDev.BeanIO.Test" order="2" occurs="1">
           <field name="type" rid="true" literal="customer" ignore="true" />
           <field name="firstName" />
           <field name="lastName" />
@@ -136,13 +136,13 @@
     <parser>
       <property name="lineSeparator" value="\n" />
     </parser>
-    <group name="orderGroup" class="BeanIO.Beans.Order, BeanIO.Test" order="2" occurs="1">
+    <group name="orderGroup" class="BeanIO.Beans.Order, FubarDev.BeanIO.Test" order="2" occurs="1">
       <record name="order" order="1" occurs="1">
         <field name="type" rid="true" literal="order" ignore="true" />
         <field name="id" />
         <field name="date" format="yyyy-MM-dd" />
       </record>
-      <record name="items" class="BeanIO.Beans.OrderItem, BeanIO.Test" collection="list" order="2" occurs="0+">
+      <record name="items" class="BeanIO.Beans.OrderItem, FubarDev.BeanIO.Test" collection="list" order="2" occurs="0+">
         <field name="type" rid="true" literal="item" ignore="true" />
         <field name="name" />
         <field name="quantity" />
@@ -163,12 +163,12 @@
   </stream>
   
   <stream name="ml8" format="fixedlength">
-    <group name="group" class="BeanIO.Beans.Order, BeanIO.Test" occurs="1">
-      <record name="customer" occurs="1" order="1" class="BeanIO.Beans.Person, BeanIO.Test">
+    <group name="group" class="BeanIO.Beans.Order, FubarDev.BeanIO.Test" occurs="1">
+      <record name="customer" occurs="1" order="1" class="BeanIO.Beans.Person, FubarDev.BeanIO.Test">
         <field name="id" rid="true" literal="CUST" />
         <field name="firstName" length="unbounded" />
       </record>
-      <record name="shipper" occurs="0-1" order="2" class="BeanIO.Beans.Person, BeanIO.Test">
+      <record name="shipper" occurs="0-1" order="2" class="BeanIO.Beans.Person, FubarDev.BeanIO.Test">
         <field name="id" rid="true" literal="SHIP" />
         <field name="firstName" length="unbounded" />
       </record>

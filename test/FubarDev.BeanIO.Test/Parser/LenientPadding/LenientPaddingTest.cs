@@ -16,7 +16,7 @@ namespace BeanIO.Parser.LenientPadding
         {
             var factory = CreateFactory(@"
                 <stream name=""s"" format=""fixedlength"" strict=""true"">
-                  <record name=""record"" class=""BeanIO.Beans.Bean, BeanIO.Test"">
+                  <record name=""record"" class=""BeanIO.Beans.Bean, FubarDev.BeanIO.Test"">
                     <field name=""field1"" length=""3"" />
                     <field name=""field2"" length=""3"" minOccurs=""0"" lenientPadding=""true"" />
                     <field name=""field3"" length=""3"" minOccurs=""0"" lenientPadding=""true"" />

@@ -14,7 +14,7 @@ namespace BeanIO.Parser.Trim
         [Fact]
         public void TestLazySegment()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Trim.trim_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Trim.trim_mapping.xml");
             var u = factory.CreateUnmarshaller("s1");
             var map = Assert.IsType<Dictionary<string, object>>(u.Unmarshal("\"jen  \",jen  ,1    "));
             Assert.Equal("jen  ", map["text"]);

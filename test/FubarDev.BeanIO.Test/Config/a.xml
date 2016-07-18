@@ -3,7 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.beanio.org/2012/03 http://www.beanio.org/2012/03/mapping.xsd">
 
-  <import resource="resource:BeanIO.Test.Config.ab_template.xml, BeanIO.Test" />
+  <import resource="resource:FubarDev.BeanIO.Test.Config.ab_template.xml, FubarDev.BeanIO.Test" />
 
   <stream name="a" format="csv">
     <record name="record" class="map" template="template" />

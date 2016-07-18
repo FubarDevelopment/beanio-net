@@ -17,7 +17,7 @@ namespace BeanIO.Parser.Template
         [Fact]
         public void TestRecordTemplate()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Template.template_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Template.template_mapping.xml");
             var reader = factory.CreateReader("stream1", LoadReader("t1.txt"));
             try
             {
@@ -35,7 +35,7 @@ namespace BeanIO.Parser.Template
         [Fact]
         public void TestBeanTemplate()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Template.template_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Template.template_mapping.xml");
             var reader = factory.CreateReader("stream2", LoadReader("t1.txt"));
             try
             {
@@ -55,7 +55,7 @@ namespace BeanIO.Parser.Template
         [Fact]
         public void TestIncludeTemplateFromRecord()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Template.template_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Template.template_mapping.xml");
             var reader = factory.CreateReader("stream3", LoadReader("t3.txt"));
             try
             {
@@ -78,7 +78,7 @@ namespace BeanIO.Parser.Template
                 .AddRecord(
                     new RecordBuilder("record", typeof(Dictionary<string, object>))
                         .AddField(new FieldBuilder("id").Type(typeof(int)).At(0))
-                        .LoadMapping(new Uri("resource:BeanIO.Test.Parser.Template.template_mapping.xml, BeanIO.Test"))
+                        .LoadMapping(new Uri("resource:FubarDev.BeanIO.Test.Parser.Template.template_mapping.xml, FubarDev.BeanIO.Test"))
                         .Include("t3", 1)
                         .AddField(new FieldBuilder("gender").Type(typeof(char)).At(3)));
             var factory = StreamFactory.NewInstance();

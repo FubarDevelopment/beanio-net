@@ -14,7 +14,7 @@ namespace BeanIO.Parser.Indeterminates
         [Fact]
         public void TestDelimitedIndeterminateFieldBeforeEOR()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Indeterminates.indeterminates_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Indeterminates.indeterminates_mapping.xml");
             TestDelimitedIndeterminateFieldBeforeEOR(factory, "d1");
             TestDelimitedIndeterminateFieldBeforeEOR(factory, "d3");
         }
@@ -22,7 +22,7 @@ namespace BeanIO.Parser.Indeterminates
         [Fact]
         public void TestDelimitedIndeterminateSegmentBeforeEOR()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Indeterminates.indeterminates_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Indeterminates.indeterminates_mapping.xml");
             var text = "v1,v2.1,v3.1,v2.2,v3.2,v4,v5.1,v6.1,v6.2,v5.2,v6.3,v6.4,v7";
             var u = factory.CreateUnmarshaller("d2");
             var map = Assert.IsType<Dictionary<string, object>>(u.Unmarshal(text));
@@ -84,7 +84,7 @@ namespace BeanIO.Parser.Indeterminates
         [Fact]
         public void TestNestedSegment()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Indeterminates.indeterminates_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Indeterminates.indeterminates_mapping.xml");
             var text = "v1,v2.1,v3.1,v2.2,v3.2";
 
             var u = factory.CreateUnmarshaller("d4");
@@ -121,7 +121,7 @@ namespace BeanIO.Parser.Indeterminates
         public void TestFixedLengthIndeterminateFieldBeforeEOR()
         {
             var text = "v1v2.1v2.2v2.3v3.1v3.2v4";
-            var factory = NewStreamFactory("BeanIO.Parser.Indeterminates.indeterminates_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Indeterminates.indeterminates_mapping.xml");
 
             var u = factory.CreateUnmarshaller("fl1");
             var map = Assert.IsType<Dictionary<string, object>>(u.Unmarshal(text));

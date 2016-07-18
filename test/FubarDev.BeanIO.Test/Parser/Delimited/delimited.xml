@@ -3,7 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.beanio.org/2012/03 http://www.beanio.org/2012/03/mapping.xsd">
 
-  <stream name="d1" format="delimited" resourceBundle="BeanIO.Test.Parser.Delimited.d1_messages, BeanIO.Test">
+  <stream name="d1" format="delimited" resourceBundle="BeanIO.Parser.Delimited.d1_messages, FubarDev.BeanIO.Test">
     <parser>
       <property name="delimiter" value="," />
     </parser>
@@ -15,7 +15,7 @@
     </record>
   </stream>
 
-  <stream name="d2" format="delimited" resourceBundle="BeanIO.Test.Parser.Delimited.d1_messages, BeanIO.Test">
+  <stream name="d2" format="delimited" resourceBundle="BeanIO.Parser.Delimited.d1_messages, FubarDev.BeanIO.Test">
     <parser>
       <property name="delimiter" value="," />
     </parser>
@@ -27,7 +27,7 @@
     </record>
   </stream>
 
-  <stream name="d3" format="delimited" resourceBundle="BeanIO.Test.Parser.Delimited.d1_messages, BeanIO.Test">
+  <stream name="d3" format="delimited" resourceBundle="BeanIO.Parser.Delimited.d1_messages, FubarDev.BeanIO.Test">
     <parser>
       <property name="delimiter" value="\t" />
       <property name="recordTerminator" value="~" />

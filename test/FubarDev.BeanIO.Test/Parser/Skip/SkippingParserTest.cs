@@ -14,7 +14,7 @@ namespace BeanIO.Parser.Skip
         [Fact]
         public void TestSkip()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Skip.skip_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Skip.skip_mapping.xml");
             var reader = factory.CreateReader("s1", LoadReader("s1.txt"));
             try
             {
@@ -35,7 +35,7 @@ namespace BeanIO.Parser.Skip
         [Fact]
         public void TestSkipPastEOF()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Skip.skip_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Skip.skip_mapping.xml");
             var reader = factory.CreateReader("s1", LoadReader("s1.txt"));
             try
             {

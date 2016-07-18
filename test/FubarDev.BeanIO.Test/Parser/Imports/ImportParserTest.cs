@@ -18,7 +18,7 @@ namespace BeanIO.Parser.Imports
         [Fact]
         public void TestImportHierarchy()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Imports.import_mapping1.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Imports.import_mapping1.xml");
             var reader = factory.CreateReader("stream1.1", new StringReader("Joe ,1970-01-01"));
             var map = Assert.IsType<Dictionary<string, object>>(reader.Read());
             Assert.True(map.ContainsKey("name"));
@@ -44,10 +44,10 @@ namespace BeanIO.Parser.Imports
         [Fact]
         public void TestCircularReference()
         {
-            var ex = Assert.Throws<BeanIOConfigurationException>(() => NewStreamFactory("BeanIO.Parser.Imports.circular_mapping1.xml"));
+            var ex = Assert.Throws<BeanIOConfigurationException>(() => NewStreamFactory("FubarDev.BeanIO.Test.Parser.Imports.circular_mapping1.xml"));
             Assert.Equal(
-                "Invalid mapping file 'resource:BeanIO.Test.Parser.Imports.circular_mapping1.xml, BeanIO.Test': " +
-                "Failed to import resource 'resource:BeanIO.Test.Parser.Imports.circular_mapping2.xml, BeanIO.Test': " +
+                "Invalid mapping file 'resource:FubarDev.BeanIO.Test.Parser.Imports.circular_mapping1.xml, FubarDev.BeanIO.Test': " +
+                "Failed to import resource 'resource:FubarDev.BeanIO.Test.Parser.Imports.circular_mapping2.xml, FubarDev.BeanIO.Test': " +
                 "Circular reference(s) detected",
                 ex.Message);
         }

@@ -18,7 +18,7 @@
   </stream>
 
   <stream name="t2" format="csv">
-    <record name="person" class="BeanIO.Beans.Person, BeanIO.Test">
+    <record name="person" class="BeanIO.Beans.Person, FubarDev.BeanIO.Test">
       <segment name="lastName" value="last">
         <field name="first" />
         <field name="last" />
@@ -27,7 +27,7 @@
   </stream>
 
   <stream name="t3" format="csv">
-    <group name="group" class="BeanIO.Beans.Person, BeanIO.Test">
+    <group name="group" class="BeanIO.Beans.Person, FubarDev.BeanIO.Test">
       <record name="lastName" value="last" occurs="1">
         <field name="first" />
         <field name="last" />

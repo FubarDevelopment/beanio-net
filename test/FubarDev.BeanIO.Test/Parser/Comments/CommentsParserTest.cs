@@ -15,7 +15,7 @@ namespace BeanIO.Parser.Comments
         [Fact]
         public void TestCsvComments()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Comments.comments_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Comments.comments_mapping.xml");
             var reader = factory.CreateReader("c1", LoadReader("c1.txt"));
             try
             {

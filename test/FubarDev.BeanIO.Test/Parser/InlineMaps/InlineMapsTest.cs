@@ -21,7 +21,7 @@ namespace BeanIO.Parser.InlineMaps
         {
             var factory = CreateFactory(@"
                 <stream name=""s"" format=""csv"" strict=""true"">
-                  <record name=""record"" class=""BeanIO.Parser.InlineMaps.InlineMapsTest+AnnotatedRecord, BeanIO.Test"" />
+                  <record name=""record"" class=""BeanIO.Parser.InlineMaps.InlineMapsTest+AnnotatedRecord, FubarDev.BeanIO.Test"" />
                 </stream>");
             ValidateSegmentMap(factory);
         }
@@ -51,7 +51,7 @@ namespace BeanIO.Parser.InlineMaps
         {
             var factory = CreateFactory(@"
                 <stream name=""s"" format=""csv"" strict=""true"">
-                  <record name=""record"" class=""BeanIO.Parser.InlineMaps.InlineMapsTest+AnnotatedRecord2, BeanIO.Test"" />
+                  <record name=""record"" class=""BeanIO.Parser.InlineMaps.InlineMapsTest+AnnotatedRecord2, FubarDev.BeanIO.Test"" />
                 </stream>");
             ValidateSegmentMapWithValue(factory);
         }

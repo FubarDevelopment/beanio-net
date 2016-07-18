@@ -18,7 +18,7 @@ namespace BeanIO.Parser.Validation
         [Fact]
         public void TestFieldValidation()
         {
-            var factory = NewStreamFactory("BeanIO.Test.Parser.Validation.validation.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Validation.validation.xml");
             var reader = factory.CreateReader("v1", LoadReader("v1.txt"));
             try
             {

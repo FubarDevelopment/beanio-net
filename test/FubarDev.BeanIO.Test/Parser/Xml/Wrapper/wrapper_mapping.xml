@@ -4,10 +4,10 @@
   xsi:schemaLocation="http://www.beanio.org/2012/03 http://www.beanio.org/2012/03/mapping.xsd">
 
   <stream name="stream" format="xml" xmlName="stream">
-    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, BeanIO.Test">
+    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, FubarDev.BeanIO.Test">
       <property name="namespaces" value="xsi http://www.w3.org/2001/XMLSchema-instance" />
     </parser>
-    <record name="person" class="BeanIO.Parser.Xml.Person, BeanIO.Test">
+    <record name="person" class="BeanIO.Parser.Xml.Person, FubarDev.BeanIO.Test">
       <segment name="firstName">
         <field name="firstName" xmlType="text" />
       </segment>
@@ -18,7 +18,7 @@
         <field name="color" collection="list" type="string" minOccurs="0" maxOccurs="unbounded" />
       </segment>
       <segment name="addresses" nillable="true">
-        <segment name="addressList" xmlName="address" class="BeanIO.Parser.Xml.Address, BeanIO.Test" minOccurs="0" maxOccurs="unbounded" 
+        <segment name="addressList" xmlName="address" class="BeanIO.Parser.Xml.Address, FubarDev.BeanIO.Test" minOccurs="0" maxOccurs="unbounded" 
           collection="list" nillable="true">
           <field name="state" xmlType="text" />
         </segment>
@@ -27,10 +27,10 @@
   </stream>
 
   <stream name="stream2" format="xml" xmlName="stream">
-    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, BeanIO.Test">
+    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, FubarDev.BeanIO.Test">
       <property name="namespaces" value="xsi http://www.w3.org/2001/XMLSchema-instance" />
     </parser>
-    <record name="person" class="BeanIO.Parser.Xml.Person, BeanIO.Test">
+    <record name="person" class="BeanIO.Parser.Xml.Person, FubarDev.BeanIO.Test">
       <segment name="colors" nillable="true">
         <field name="color" collection="list" type="string" minOccurs="0" maxOccurs="unbounded" />
       </segment>
@@ -38,10 +38,10 @@
   </stream>
 
   <stream name="stream3" format="xml" xmlName="stream">
-    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, BeanIO.Test">
+    <parser class="BeanIO.Parser.Xml.TestXmlWriterFactory, FubarDev.BeanIO.Test">
       <property name="namespaces" value="xsi http://www.w3.org/2001/XMLSchema-instance" />
     </parser>
-    <record name="person" class="BeanIO.Parser.Xml.Person, BeanIO.Test">
+    <record name="person" class="BeanIO.Parser.Xml.Person, FubarDev.BeanIO.Test">
       <segment name="colors">
         <field name="color" collection="list" type="string" minOccurs="1" maxOccurs="unbounded" />
       </segment>

@@ -17,7 +17,7 @@ namespace BeanIO.Parser.WriteMode
         [Fact]
         public void TestBasic()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.WriteMode.writemode_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.WriteMode.writemode_mapping.xml");
             var person = new TestPerson();
             var text = new StringWriter();
             factory.CreateWriter("wm1", text).Write(person);
@@ -27,7 +27,7 @@ namespace BeanIO.Parser.WriteMode
         [Fact]
         public void TestCreateReader()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.WriteMode.writemode_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.WriteMode.writemode_mapping.xml");
             Assert.Throws<BeanIOException>(() => factory.CreateReader("wm1", new StringReader("dummy")));
         }
 

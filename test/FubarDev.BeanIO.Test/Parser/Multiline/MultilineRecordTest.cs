@@ -18,7 +18,7 @@ namespace BeanIO.Parser.Multiline
         [Fact]
         public void TestRecordGroup()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Multiline.multiline_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Multiline.multiline_mapping.xml");
             var reader = factory.CreateReader("ml1", LoadReader("ml1.txt"));
             try
             {
@@ -105,7 +105,7 @@ namespace BeanIO.Parser.Multiline
         [Fact]
         public void TestNestedRecordGroup()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Multiline.multiline_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Multiline.multiline_mapping.xml");
             var reader = factory.CreateReader("ml2", LoadReader("ml2.txt"));
             try
             {
@@ -145,7 +145,7 @@ namespace BeanIO.Parser.Multiline
         [Fact]
         public void TestNestedRecordGroupCollections()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Multiline.multiline_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Multiline.multiline_mapping.xml");
             var reader = factory.CreateReader("ml3", LoadReader("ml3.txt"));
             try
             {
@@ -191,7 +191,7 @@ namespace BeanIO.Parser.Multiline
         [Fact]
         public void TestRecordMap()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Multiline.multiline_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Multiline.multiline_mapping.xml");
             var reader = factory.CreateReader("ml4", LoadReader("ml4.txt"));
             try
             {
@@ -246,7 +246,7 @@ namespace BeanIO.Parser.Multiline
         [Fact]
         public void TestNestedRecordGroupNonCollection()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Multiline.multiline_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Multiline.multiline_mapping.xml");
             var reader = factory.CreateReader("ml5", LoadReader("ml5.txt"));
             try
             {
@@ -278,7 +278,7 @@ namespace BeanIO.Parser.Multiline
         [Fact]
         public void TestEmptyRecordList()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Multiline.multiline_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Multiline.multiline_mapping.xml");
             var reader = factory.CreateReader("ml6", LoadReader("ml6.txt"));
             try
             {
@@ -299,7 +299,7 @@ namespace BeanIO.Parser.Multiline
         [Fact]
         public void TestInlineRecordMap()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Multiline.multiline_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Multiline.multiline_mapping.xml");
             var reader = factory.CreateReader("ml7", LoadReader("ml7.txt"));
             try
             {
@@ -338,7 +338,7 @@ namespace BeanIO.Parser.Multiline
         [Fact]
         public void TestOptionalRecord()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Multiline.multiline_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Multiline.multiline_mapping.xml");
             var text = "CUSTGeorge" + LineSeparator;
             var reader = factory.CreateReader("ml8", new StringReader(text));
             var order = Assert.IsType<Beans.Order>(reader.Read());

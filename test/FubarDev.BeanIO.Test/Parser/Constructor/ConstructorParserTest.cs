@@ -16,7 +16,7 @@ namespace BeanIO.Parser.Constructor
         {
             var factory = CreateFactory(@"
           <stream name=""c1"" format=""csv"">
-            <record name=""record"" class=""BeanIO.Parser.Constructor.Color, BeanIO.Test"">
+            <record name=""record"" class=""BeanIO.Parser.Constructor.Color, FubarDev.BeanIO.Test"">
               <field name=""name"" setter=""#1"" />
               <field name=""r"" type=""int"" setter=""#2"" />
               <field name=""g"" type=""int"" setter=""#3"" />

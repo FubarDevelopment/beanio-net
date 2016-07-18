@@ -16,7 +16,7 @@
   <stream name="o2" format="fixedlength">
     <record name="record" class="map">
       <field name="n1" length="2" justify="right" padding="0" ignore="true" />
-      <segment name="people" class="BeanIO.Beans.Person, BeanIO.Test" collection="list" occursRef="n1">
+      <segment name="people" class="BeanIO.Beans.Person, FubarDev.BeanIO.Test" collection="list" occursRef="n1">
         <field name="firstName" length="4" />
         <field name="numbersCount" length="2" justify="right" padding="0" ignore="true" />
         <field name="numbers" type="int" length="2" collection="list" justify="right" padding="0" occursRef="numbersCount" />
@@ -52,14 +52,14 @@
   </stream>
 
   <stream name="o6" format="fixedlength">
-    <record name="record" class="BeanIO.Parser.DynamicOccurs.TestRecord, BeanIO.Test">
+    <record name="record" class="BeanIO.Parser.DynamicOccurs.TestRecord, FubarDev.BeanIO.Test">
       <field name="itemCount" length="1" />
       <field name="otherItemCount" length="1" />
-      <segment name="items" class="BeanIO.Parser.DynamicOccurs.TestItem, BeanIO.Test" collection="list" occursRef="itemCount">
+      <segment name="items" class="BeanIO.Parser.DynamicOccurs.TestItem, FubarDev.BeanIO.Test" collection="list" occursRef="itemCount">
         <field name="id" literal="t1" length="2" />
         <field name="text" length="10" />
       </segment>
-      <segment name="otherItems" class="BeanIO.Parser.DynamicOccurs.TestOtherItem, BeanIO.Test" collection="list" occursRef="otherItemCount">
+      <segment name="otherItems" class="BeanIO.Parser.DynamicOccurs.TestOtherItem, FubarDev.BeanIO.Test" collection="list" occursRef="otherItemCount">
         <field name="id" literal="t2" length="2" />
         <field name="text" length="10" />
       </segment>
@@ -67,15 +67,15 @@
   </stream>
 
   <stream name="o7" format="fixedlength">
-    <typeHandler name="yn" class="BeanIO.Types.BooleanCharacterTypeHandler, BeanIO" />
-    <record name="record" class="BeanIO.Parser.DynamicOccurs.TestRecordBool, BeanIO.Test">
+    <typeHandler name="yn" class="BeanIO.Types.BooleanCharacterTypeHandler, FubarDev.BeanIO" />
+    <record name="record" class="BeanIO.Parser.DynamicOccurs.TestRecordBool, FubarDev.BeanIO.Test">
       <field name="hasItem" length="1" typeHandler="yn" />
       <field name="hasOtherItem" length="1" typeHandler="yn" />
-      <segment name="items" class="BeanIO.Parser.DynamicOccurs.TestItem, BeanIO.Test" collection="list" occursRef="hasItem">
+      <segment name="items" class="BeanIO.Parser.DynamicOccurs.TestItem, FubarDev.BeanIO.Test" collection="list" occursRef="hasItem">
         <field name="id" literal="t1" length="2" />
         <field name="text" length="10" />
       </segment>
-      <segment name="otherItems" class="BeanIO.Parser.DynamicOccurs.TestOtherItem, BeanIO.Test" collection="list" occursRef="hasOtherItem">
+      <segment name="otherItems" class="BeanIO.Parser.DynamicOccurs.TestOtherItem, FubarDev.BeanIO.Test" collection="list" occursRef="hasOtherItem">
         <field name="id" literal="t2" length="2" />
         <field name="text" length="10" />
       </segment>

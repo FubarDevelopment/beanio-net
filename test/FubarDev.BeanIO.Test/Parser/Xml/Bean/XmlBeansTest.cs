@@ -16,7 +16,7 @@ namespace BeanIO.Parser.Xml.Bean
 
         public XmlBeansTest()
         {
-            _factory = NewStreamFactory("BeanIO.Parser.Xml.Bean.beans_mapping.xml");
+            _factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Xml.Bean.beans_mapping.xml");
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace BeanIO.Parser.Xml.Bean
                 writer.Write(person);
 
                 writer.Close();
-                Assert.Equal(Load("BeanIO.Parser.Xml.Bean.b1_out.xml"), s.ToString());
+                Assert.Equal(Load("b1_out.xml"), s.ToString());
             }
             finally
             {
@@ -81,7 +81,7 @@ namespace BeanIO.Parser.Xml.Bean
                 Assert.Null(person.Address);
 
                 writer.Close();
-                Assert.Equal(Load("BeanIO.Parser.Xml.Bean.b2_out.xml"), s.ToString());
+                Assert.Equal(Load("b2_out.xml"), s.ToString());
             }
             finally
             {
@@ -129,7 +129,7 @@ namespace BeanIO.Parser.Xml.Bean
                 writer.Write(person);
 
                 writer.Close();
-                Assert.Equal(Load("BeanIO.Parser.Xml.Bean.b3_in.xml"), s.ToString());
+                Assert.Equal(Load("b3_in.xml"), s.ToString());
             }
             finally
             {
@@ -166,7 +166,7 @@ namespace BeanIO.Parser.Xml.Bean
                 writer.Write(person);
 
                 writer.Close();
-                Assert.Equal(Load("BeanIO.Parser.Xml.Bean.b4_in.xml"), s.ToString());
+                Assert.Equal(Load("b4_in.xml"), s.ToString());
             }
             finally
             {
@@ -202,7 +202,7 @@ namespace BeanIO.Parser.Xml.Bean
 
                 writer.Close();
 
-                Assert.Equal(Load("BeanIO.Parser.Xml.Bean.b5_out.xml"), s.ToString());
+                Assert.Equal(Load("b5_out.xml"), s.ToString());
             }
             finally
             {

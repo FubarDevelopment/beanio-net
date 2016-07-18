@@ -19,10 +19,10 @@ namespace BeanIO.Parser.Types
 
             var factory = CreateFactory(@"
                 <stream name=""s"" format=""csv"" strict=""true"">
-                  <typeHandler name=""int_de"" class=""BeanIO.Types.IntegerTypeHandler, BeanIO"">
+                  <typeHandler name=""int_de"" class=""BeanIO.Types.IntegerTypeHandler, FubarDev.BeanIO"">
                     <property name=""locale"" value=""de"" />
                   </typeHandler>
-                  <typeHandler name=""date_de"" class=""BeanIO.Types.DateTimeTypeHandler, BeanIO"">
+                  <typeHandler name=""date_de"" class=""BeanIO.Types.DateTimeTypeHandler, FubarDev.BeanIO"">
                     <property name=""locale"" value=""de"" />
                   </typeHandler>
                   <record name=""record"" class=""map"">

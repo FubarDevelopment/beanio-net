@@ -2,7 +2,7 @@
 
   <stream name="stream1" format="csv">
     <record name="detail" target="map">
-      <segment name="map" collection="map" key="id" class="BeanIO.Beans.Person, BeanIO.Test" occurs="1+">
+      <segment name="map" collection="map" key="id" class="BeanIO.Beans.Person, FubarDev.BeanIO.Test" occurs="1+">
         <field name="id" />
         <field name="firstName" />
         <field name="lastName" />
@@ -21,7 +21,7 @@
   </stream>
 
   <stream name="stream3" format="csv">
-    <record name="detail" class="BeanIO.Parser.InlineMaps.Job, BeanIO.Test">
+    <record name="detail" class="BeanIO.Parser.InlineMaps.Job, FubarDev.BeanIO.Test">
       <field name="recordType" rid="true" literal="J" ignore="true" />
       <field name="id" />
       <segment name="codes" collection="map" key="code" value="status" occurs="2">
@@ -32,7 +32,7 @@
   </stream>
 
   <stream name="stream4" format="csv">
-    <group name="group" class="BeanIO.Parser.InlineMaps.Job, BeanIO.Test">
+    <group name="group" class="BeanIO.Parser.InlineMaps.Job, FubarDev.BeanIO.Test">
       <record name="codes" collection="map" key="code" value="status">
         <field name="code" />
         <field name="status" />

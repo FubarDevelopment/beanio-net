@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://www.beanio.org/2012/03 http://www.beanio.org/2012/03/mapping.xsd">
 
   <stream name="stream" format="json">
-    <parser class="BeanIO.Parser.Json.JsonTestRecordParserFactory, BeanIO.Test" />
+    <parser class="BeanIO.Parser.Json.JsonTestRecordParserFactory, FubarDev.BeanIO.Test" />
     <record name="record" class="map">
       <field name="firstName" jsonName="first" />
       <!-- json name overridden -->

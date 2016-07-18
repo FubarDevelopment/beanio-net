@@ -19,7 +19,7 @@
     </record>
   </stream>
 
-  <stream name="f2" format="fixedlength" resourceBundle="BeanIO.Test.Parser.FixedLength.f2_messages, BeanIO.Test">
+  <stream name="f2" format="fixedlength" resourceBundle="BeanIO.Parser.FixedLength.f2_messages, FubarDev.BeanIO.Test">
     <parser>
       <property name="recordTerminator" value="\r\n" />
     </parser>

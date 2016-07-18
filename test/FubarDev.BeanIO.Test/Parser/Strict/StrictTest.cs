@@ -14,7 +14,7 @@ namespace BeanIO.Parser.Strict
         [Fact]
         public void TestRecordLengthStrict()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Strict.strict_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Strict.strict_mapping.xml");
             var reader = factory.CreateReader("s1_strict", LoadReader("s1_invalidRecordLength.txt"));
             try
             {
@@ -29,7 +29,7 @@ namespace BeanIO.Parser.Strict
         [Fact]
         public void TestRecordLengthNotStrict()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Strict.strict_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Strict.strict_mapping.xml");
             var reader = factory.CreateReader("s1_not_strict", LoadReader("s1_invalidRecordLength.txt"));
             try
             {
@@ -44,7 +44,7 @@ namespace BeanIO.Parser.Strict
         [Fact]
         public void TestRecordSequenceStrict()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Strict.strict_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Strict.strict_mapping.xml");
             var reader = factory.CreateReader("s1_strict", LoadReader("s1_invalidSequence.txt"));
             try
             {
@@ -64,7 +64,7 @@ namespace BeanIO.Parser.Strict
         [Fact]
         public void TestRecordSequenceNotStrict()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Strict.strict_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Strict.strict_mapping.xml");
             var reader = factory.CreateReader("s1_not_strict", LoadReader("s1_invalidSequence.txt"));
             try
             {

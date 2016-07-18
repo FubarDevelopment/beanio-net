@@ -17,7 +17,7 @@ namespace BeanIO.Parser.InlineMaps
         [Fact]
         public void TestMapWithClass()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.InlineMaps.map_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.InlineMaps.map_mapping.xml");
             var u = factory.CreateUnmarshaller("stream1");
             var m = factory.CreateMarshaller("stream1");
 
@@ -42,7 +42,7 @@ namespace BeanIO.Parser.InlineMaps
         [Fact]
         public void TestMapWithTarget()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.InlineMaps.map_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.InlineMaps.map_mapping.xml");
             var u = factory.CreateUnmarshaller("stream2");
             var m = factory.CreateMarshaller("stream2");
 
@@ -61,7 +61,7 @@ namespace BeanIO.Parser.InlineMaps
         [Fact]
         public void TestRecordBoundMap()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.InlineMaps.map_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.InlineMaps.map_mapping.xml");
             var u = factory.CreateUnmarshaller("stream3");
             var m = factory.CreateMarshaller("stream3");
 
@@ -83,7 +83,7 @@ namespace BeanIO.Parser.InlineMaps
         [Fact]
         public void TestGroupBoundMap()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.InlineMaps.map_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.InlineMaps.map_mapping.xml");
             var text = "key1,value1\nkey2,value2";
             var reader = factory.CreateReader("stream4", new StringReader(text));
             var job = Assert.IsType<Job>(reader.Read());
@@ -104,7 +104,7 @@ namespace BeanIO.Parser.InlineMaps
                 "entity,PERSON,-33.993670,25.676320,TEST_ENTITY_2\n" +
                 "entity,PERSON,-22.282174,166.441458,TEST_ENTITY_3\n";
 
-            var factory = NewStreamFactory("BeanIO.Parser.InlineMaps.map_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.InlineMaps.map_mapping.xml");
             var reader = factory.CreateReader("stream5", new StringReader(text));
             var map = Assert.IsType<Dictionary<string, object>>(reader.Read());
             Assert.True(map.ContainsKey("name"));

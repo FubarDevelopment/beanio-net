@@ -14,7 +14,7 @@ namespace BeanIO.Parser.Lazy
         [Fact]
         public void TestLazySegment()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Lazy.lazy_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Lazy.lazy_mapping.xml");
             var u = factory.CreateUnmarshaller("s1");
 
             var user = Assert.IsType<LazyUser>(u.Unmarshal("kevin          "));
@@ -31,7 +31,7 @@ namespace BeanIO.Parser.Lazy
         [Fact]
         public void TestRepeatingLazySegments()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Lazy.lazy_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Lazy.lazy_mapping.xml");
             var u = factory.CreateUnmarshaller("s2");
 
             var user = Assert.IsType<LazyUser>(u.Unmarshal("kevin      "));
@@ -49,7 +49,7 @@ namespace BeanIO.Parser.Lazy
         [Fact]
         public void TestNestedLazySegments()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Lazy.lazy_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Lazy.lazy_mapping.xml");
             var u = factory.CreateUnmarshaller("s3");
 
             var user = Assert.IsType<LazyUser>(u.Unmarshal("kevin,7,checking,DR,CR"));
@@ -71,7 +71,7 @@ namespace BeanIO.Parser.Lazy
         [Fact]
         public void TestRepeatingLazyField()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.Lazy.lazy_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Lazy.lazy_mapping.xml");
             var u = factory.CreateUnmarshaller("s4");
             var record = Assert.IsType<Dictionary<string, object>>(u.Unmarshal("kevin,trevor"));
             Assert.True(record.ContainsKey("names"));

@@ -18,7 +18,7 @@ namespace BeanIO.Parser.DynamicOccurs
         [Fact]
         public void TestDynamicFieldOccurrences()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.DynamicOccurs.dynamicOccurs_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.DynamicOccurs.dynamicOccurs_mapping.xml");
             var u = factory.CreateUnmarshaller("o1");
             var m = factory.CreateMarshaller("o1");
 
@@ -63,7 +63,7 @@ namespace BeanIO.Parser.DynamicOccurs
         [Fact]
         public void TestDynamicSegmentOccurrences()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.DynamicOccurs.dynamicOccurs_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.DynamicOccurs.dynamicOccurs_mapping.xml");
             var u = factory.CreateUnmarshaller("o2");
             var m = factory.CreateMarshaller("o2");
 
@@ -100,7 +100,7 @@ namespace BeanIO.Parser.DynamicOccurs
         [Fact]
         public void TestInlineMapDynamicOccurrences()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.DynamicOccurs.dynamicOccurs_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.DynamicOccurs.dynamicOccurs_mapping.xml");
             var u = factory.CreateUnmarshaller("o3");
             var m = factory.CreateMarshaller("o3");
 
@@ -135,7 +135,7 @@ namespace BeanIO.Parser.DynamicOccurs
         [Fact]
         public void TestArrayDynamicOccurrences()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.DynamicOccurs.dynamicOccurs_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.DynamicOccurs.dynamicOccurs_mapping.xml");
             var u = factory.CreateUnmarshaller("o4");
             var m = factory.CreateMarshaller("o4");
 
@@ -157,7 +157,7 @@ namespace BeanIO.Parser.DynamicOccurs
         [Fact]
         public void TestDynamicOccurrencesValidation()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.DynamicOccurs.dynamicOccurs_mapping.xml");
+            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.DynamicOccurs.dynamicOccurs_mapping.xml");
             var u = factory.CreateUnmarshaller("o5");
             var m = factory.CreateMarshaller("o5");
 

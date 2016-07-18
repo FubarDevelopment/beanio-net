@@ -17,7 +17,7 @@ namespace BeanIO.Parser.DefaultValue
         {
             var factory = CreateFactory(@"
             <stream name=""s"" format=""csv"" strict=""true"">
-              <record name=""record"" class=""BeanIO.Beans.Bean, BeanIO.Test"">
+              <record name=""record"" class=""BeanIO.Beans.Bean, FubarDev.BeanIO.Test"">
                 <field name=""field1"" default=""default1"" minOccurs=""1"" />
                 <field name=""field2"" default=""default2"" minOccurs=""0"" />
                 <field name=""date"" default=""00000000"" minOccurs=""0"" format=""yyyyMMdd"" parseDefault=""false"" />
@@ -43,7 +43,7 @@ namespace BeanIO.Parser.DefaultValue
         {
             var factory = CreateFactory(@"
             <stream name=""s"" format=""csv"" strict=""true"">
-              <record name=""record"" class=""BeanIO.Beans.Bean, BeanIO.Test"">
+              <record name=""record"" class=""BeanIO.Beans.Bean, FubarDev.BeanIO.Test"">
                 <field name=""list"" collection=""list"" default=""default"" minOccurs=""1"" maxOccurs=""5"" />
               </record>
             </stream>");

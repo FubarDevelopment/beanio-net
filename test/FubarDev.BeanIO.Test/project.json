@@ -21,8 +21,7 @@
     "keyFile": "../../BeanIO.snk",
     "compile": [ "../../GlobalAssemblyInfo.cs" ],
     "define": [ "TEST" ],
-    "embed": [ "**/*.xml", "**/*.txt" ],
-    "outputName": "BeanIO.Test"
+    "embed": [ "**/*.xml", "**/*.txt" ]
   },
 
   "testRunner": "xunit",

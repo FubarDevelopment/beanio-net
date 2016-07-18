@@ -16,7 +16,7 @@ namespace BeanIO.Parser.FixedLength
         [Fact]
         public void TestFieldDefinitions()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.FixedLength.fixedlength.xml");
+            var factory = NewStreamFactory("fixedlength.xml");
             var reader = factory.CreateReader("f1", LoadReader("f1_valid.txt"));
             try
             {
@@ -42,7 +42,7 @@ namespace BeanIO.Parser.FixedLength
         [Fact]
         public void TestDefaultMinLengthValidation()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.FixedLength.fixedlength.xml");
+            var factory = NewStreamFactory("fixedlength.xml");
             var reader = factory.CreateReader("f1", LoadReader("f1_minLength.txt"));
             try
             {
@@ -57,7 +57,7 @@ namespace BeanIO.Parser.FixedLength
         [Fact]
         public void TestDefaultMaxLengthValidation()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.FixedLength.fixedlength.xml");
+            var factory = NewStreamFactory("fixedlength.xml");
             var reader = factory.CreateReader("f1", LoadReader("f1_maxLength.txt"));
             try
             {
@@ -72,7 +72,7 @@ namespace BeanIO.Parser.FixedLength
         [Fact]
         public void TestOptionalField()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.FixedLength.fixedlength.xml");
+            var factory = NewStreamFactory("fixedlength.xml");
             var reader = factory.CreateReader("f2", LoadReader("f2_valid.txt"));
             try
             {
@@ -100,7 +100,7 @@ namespace BeanIO.Parser.FixedLength
         [Fact]
         public void TestValidation()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.FixedLength.fixedlength.xml");
+            var factory = NewStreamFactory("fixedlength.xml");
             var reader = factory.CreateReader("f2", LoadReader("f2_invalid.txt"));
             try
             {
@@ -117,7 +117,7 @@ namespace BeanIO.Parser.FixedLength
         [Fact]
         public void TestReader()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.FixedLength.fixedlength.xml");
+            var factory = NewStreamFactory("fixedlength.xml");
             var reader = factory.CreateReader("f3", LoadReader("f3_valid.txt"));
             try
             {
@@ -154,7 +154,7 @@ namespace BeanIO.Parser.FixedLength
         [Fact]
         public void TestPadding()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.FixedLength.fixedlength.xml");
+            var factory = NewStreamFactory("fixedlength.xml");
             var reader = factory.CreateReader("f4", LoadReader("f4_padding.txt"));
             try
             {
@@ -199,7 +199,7 @@ namespace BeanIO.Parser.FixedLength
         [Fact]
         public void TestIgnoredField()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.FixedLength.fixedlength.xml");
+            var factory = NewStreamFactory("fixedlength.xml");
             var reader = factory.CreateReader("f5", LoadReader("f5_valid.txt"));
             try
             {
@@ -221,7 +221,7 @@ namespace BeanIO.Parser.FixedLength
         [Fact]
         public void TestVariableLengthField()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.FixedLength.fixedlength.xml");
+            var factory = NewStreamFactory("fixedlength.xml");
             var u = factory.CreateUnmarshaller("f6");
             var record = "kevin     johnson";
             var map = Assert.IsType<Dictionary<string, object>>(u.Unmarshal(record));
@@ -237,7 +237,7 @@ namespace BeanIO.Parser.FixedLength
         [Fact]
         public void TestKeepPadding()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.FixedLength.fixedlength.xml");
+            var factory = NewStreamFactory("fixedlength.xml");
             var m = factory.CreateMarshaller("f7");
             var reader = factory.CreateReader("f7", LoadReader("f7.txt"));
             try
@@ -260,7 +260,7 @@ namespace BeanIO.Parser.FixedLength
         [Fact]
         public void TestOverlay()
         {
-            var factory = NewStreamFactory("BeanIO.Parser.FixedLength.fixedlength.xml");
+            var factory = NewStreamFactory("fixedlength.xml");
             var output = new StringWriter();
             var writer = factory.CreateWriter("f8", output);
 

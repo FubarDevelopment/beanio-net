@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://www.beanio.org/2012/03 http://www.beanio.org/2012/03/mapping.xsd">
 
   <stream name="stream" format="csv">
-    <record name="person" class="BeanIO.Config.ConcreteBean, BeanIO.Test">
+    <record name="person" class="BeanIO.Config.ConcreteBean, FubarDev.BeanIO.Test">
       <field name="name" />
     </record>
   </stream>

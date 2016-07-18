@@ -119,15 +119,10 @@ namespace BeanIO.Parser
         {
             var asm = typeof(AbstractParserTest).GetTypeInfo().Assembly;
             var resStream = asm.GetManifestResourceStream(fileName);
-            if (resStream == null && !fileName.StartsWith("BeanIO.Test.") && fileName.StartsWith("BeanIO."))
-            {
-                fileName = fileName.Replace("BeanIO.", "BeanIO.Test.");
-                resStream = asm.GetManifestResourceStream(fileName);
-            }
 
             if (resStream == null)
             {
-                var testClassNamespace = this.GetType().Namespace.Replace("BeanIO.", "BeanIO.Test.");
+                var testClassNamespace = this.GetType().Namespace.Replace("BeanIO.", "FubarDev.BeanIO.Test.");
                 var resourceName = string.Format("{0}.{1}", testClassNamespace, fileName);
                 resStream = asm.GetManifestResourceStream(resourceName);
             }

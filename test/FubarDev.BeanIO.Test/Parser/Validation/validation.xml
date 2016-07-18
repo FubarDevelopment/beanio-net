@@ -7,7 +7,7 @@
     <property name="pattern" value="MMddyy" />
   </typeHandler>
 
-  <stream name="v1" format="csv" resourceBundle="BeanIO.Test.Parser.Validation.v1_messages, BeanIO.Test">
+  <stream name="v1" format="csv" resourceBundle="BeanIO.Parser.Validation.v1_messages, FubarDev.BeanIO.Test">
     <record name="regex" class="map">
       <field name="id" rid="true" literal="regex" />
       <field name="field" regex="\d+"/>

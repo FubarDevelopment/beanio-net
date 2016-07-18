@@ -38,7 +38,7 @@ namespace BeanIO.Internal.Util
             Assert.Equal(typeof(DateTimeOffset), "datetimeoffset".ToType());
             Assert.Equal(typeof(LocalDate), "date".ToType());
             Assert.Equal(typeof(LocalTime), "time".ToType());
-            Assert.Equal(GetType(), "BeanIO.Internal.Util.TypeUtilTest, BeanIO.Test".ToType());
+            Assert.Equal(GetType(), "BeanIO.Internal.Util.TypeUtilTest, FubarDev.BeanIO.Test".ToType());
             Assert.Equal(typeof(List<>), "System.Collections.Generic.List`1".ToType());
             Assert.Equal(typeof(IList<>), "System.Collections.Generic.IList`1".ToType());
         }

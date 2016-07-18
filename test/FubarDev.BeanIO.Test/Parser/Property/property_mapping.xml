@@ -9,7 +9,7 @@
       <field name="recordType" rid="true" literal="Header" ignore="true" />
       <field name="fileDate" type="date" format="yyyy-MM-dd" />
     </record>
-    <record name="detail" class="BeanIO.Parser.Property.User, BeanIO.Test">
+    <record name="detail" class="BeanIO.Parser.Property.User, FubarDev.BeanIO.Test">
       <property name="id" rid="true" type="int" value="2" getter="GetType" setter="SetType" />
       <field name="recordType" rid="true" literal="Detail" ignore="true" />
       <field name="name" />
