@@ -162,7 +162,7 @@ namespace BeanIO.Internal.Util
         /// </summary>
         public static readonly string ALLOW_PROTECTED_PROPERTY_ACCESS = "org.beanio.allowProtectedAccess";
 
-        private const string DEFAULT_CONFIGURATION_PATH = "BeanIO.Internal.Config.beanio.properties";
+        private const string DEFAULT_CONFIGURATION_PATH = "FubarDev.BeanIO.Internal.Config.beanio.properties";
 
         private static readonly object _syncRoot = new object();
 
