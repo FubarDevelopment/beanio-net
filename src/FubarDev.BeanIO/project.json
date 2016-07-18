@@ -24,7 +24,8 @@
     "additionalArguments": [ "/ruleset:../../BeanIO.ruleset", "/additionalfile:../../stylecop.json" ],
     "keyFile": "../../BeanIO.snk",
     "compile": [ "../../GlobalAssemblyInfo.cs" ],
-    "embed": "**/*.properties"
+    "embed": "**/*.properties",
+    "outputName": "BeanIO"
   },
 
   "packOptions": {

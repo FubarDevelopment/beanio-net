@@ -21,14 +21,15 @@
     "keyFile": "../../BeanIO.snk",
     "compile": [ "../../GlobalAssemblyInfo.cs" ],
     "define": [ "TEST" ],
-    "embed": [ "**/*.xml", "**/*.txt" ]
+    "embed": [ "**/*.xml", "**/*.txt" ],
+    "outputName": "BeanIO.Test"
   },
 
   "testRunner": "xunit",
 
   "dependencies": {
     "NETStandard.Library": "1.6.0",
-    "BeanIO": { "target": "project" },
+    "FubarDev.BeanIO": { "target": "project" },
     "JetBrains.Annotations": {
       "version": "10.1.5",
       "type": "build"
