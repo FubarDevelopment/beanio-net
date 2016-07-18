@@ -24,8 +24,7 @@
     "additionalArguments": [ "/ruleset:../../BeanIO.ruleset", "/additionalfile:../../stylecop.json" ],
     "keyFile": "../../BeanIO.snk",
     "compile": [ "../../GlobalAssemblyInfo.cs" ],
-    "embed": "**/*.properties",
-    "outputName": "BeanIO"
+    "embed": "**/*.properties"
   },
 
   "packOptions": {
@@ -65,7 +64,8 @@
       "imports": [ "dotnet" ],
       "dependencies": {
         "NETStandard.Library": "1.6.0",
-        "System.Diagnostics.Contracts": "4.0.1"
+        "System.Diagnostics.Contracts": "4.0.1",
+        "System.Reflection.Extensions": "4.0.1"
       }
     },
     "net45": {
