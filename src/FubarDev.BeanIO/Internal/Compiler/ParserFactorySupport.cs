@@ -268,43 +268,14 @@ namespace BeanIO.Internal.Compiler
             var bundleName = Settings.Instance.GetProperty($"org.beanio.{config.Format}.messages");
             if (bundleName != null)
             {
-                try
-                {
-                    var resType = Type.GetType(bundleName, true);
-                    var resMgr = new ResourceManager(bundleName, resType.GetTypeInfo().Assembly);
-                    resMgr.GetString("ignore");
-                    messageFactory.DefaultResourceBundle = resMgr;
-                }
-                catch (MissingManifestResourceException ex)
-                {
-                    throw new BeanIOConfigurationException($"Missing default resource bundle '{bundleName}' for stream format '{config.Format}'", ex);
-                }
-                catch (TypeLoadException ex)
-                {
-                    throw new BeanIOConfigurationException($"Missing default resource bundle '{bundleName}' for stream format '{config.Format}'", ex);
-                }
+                messageFactory.DefaultResourceBundle = LoadResource(bundleName, config.Format);
             }
 
             // load the stream resource bundle
             bundleName = config.ResourceBundle;
             if (bundleName != null)
             {
-                try
-                {
-                    var resType = Type.GetType(bundleName, true);
-                    bundleName = !string.IsNullOrEmpty(resType.Namespace) ? $"{resType.Namespace}.{resType.Name}" : resType.Name;
-                    var resMgr = new ResourceManager(bundleName, resType.GetTypeInfo().Assembly);
-                    resMgr.GetString("ignore");
-                    messageFactory.ResourceBundle = resMgr;
-                }
-                catch (MissingManifestResourceException ex)
-                {
-                    throw new BeanIOConfigurationException($"Missing default resource bundle '{bundleName}'", ex);
-                }
-                catch (TypeLoadException ex)
-                {
-                    throw new BeanIOConfigurationException($"Missing default resource bundle '{bundleName}'", ex);
-                }
+                messageFactory.ResourceBundle = LoadResource(bundleName, config.Format);
             }
 
             _stream.MessageFactory = messageFactory;
@@ -1454,6 +1425,53 @@ namespace BeanIO.Internal.Compiler
             catch (ArgumentException ex)
             {
                 throw new BeanIOConfigurationException($"Invalid parser setting(s): {ex.Message}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Load a resource manager for a given bundle name and format
+        /// </summary>
+        /// <param name="bundleName">The (assembly qualified) name of the resource</param>
+        /// <param name="format">The format for this resource</param>
+        /// <returns>The resource manager</returns>
+        protected virtual ResourceManager LoadResource(string bundleName, string format)
+        {
+            try
+            {
+                ResourceManager resMgr;
+                var resType = Type.GetType(bundleName, false);
+                if (resType == null)
+                {
+                    var parts = bundleName.Split(new[] { ',' }, 2);
+                    if (parts.Length != 2)
+                        throw new BeanIOConfigurationException($"Missing assembly name in resource bundle name {bundleName} for stream format '{format}'");
+
+                    var assemblyName = parts[1];
+                    var asm = Assembly.Load(new AssemblyName(assemblyName));
+                    resMgr = new ResourceManager(bundleName, asm);
+                }
+                else
+                {
+                    // The type must contain a "ResourceManager" property
+                    var prop = resType.GetRuntimeProperty("ResourceManager");
+                    if (prop == null)
+                        throw new BeanIOConfigurationException($"Missing property ResourceManager in resource bundle {bundleName} for stream format '{format}'");
+
+                    resMgr = (ResourceManager)prop.GetValue(null);
+                }
+
+                // Test if the resource data could be loaded successfully
+                resMgr.GetString("ignore");
+
+                return resMgr;
+            }
+            catch (MissingManifestResourceException ex)
+            {
+                throw new BeanIOConfigurationException($"Missing default resource bundle '{bundleName}' for stream format '{format}'", ex);
+            }
+            catch (TypeLoadException ex)
+            {
+                throw new BeanIOConfigurationException($"Missing default resource bundle '{bundleName}' for stream format '{format}'", ex);
             }
         }
 
