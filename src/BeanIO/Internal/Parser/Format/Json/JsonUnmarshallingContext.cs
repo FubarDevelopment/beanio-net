@@ -134,7 +134,7 @@ namespace BeanIO.Internal.Parser.Format.Json
 
                     break;
                 default:
-                    throw new InvalidOperationException(string.Format("Invalid json type: {0}", node.JsonType));
+                    throw new InvalidOperationException($"Invalid json type: {node.JsonType}");
             }
 
             ++_depth;

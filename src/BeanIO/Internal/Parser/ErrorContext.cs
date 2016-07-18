@@ -132,7 +132,7 @@ namespace BeanIO.Internal.Parser
         {
             var key = !_fieldCounters.ContainsKey(fieldName) && index == 0
                           ? fieldName
-                          : string.Format("{0}:{1}", index, fieldName);
+                          : $"{index}:{fieldName}";
             string fieldText;
             if (_fieldTexts.TryGetValue(key, out fieldText))
                 return fieldText;
@@ -200,7 +200,7 @@ namespace BeanIO.Internal.Parser
                 if (!_fieldCounters.TryGetValue(fieldName, out counter))
                     _fieldCounters.Add(fieldName, counter = new Counter());
 
-                _fieldTexts.Add(string.Format("{0}:{1}", counter.Count, fieldName), text);
+                _fieldTexts.Add($"{counter.Count}:{fieldName}", text);
 
                 counter.Increment();
             }

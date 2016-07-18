@@ -17,8 +17,8 @@ namespace BeanIO.Internal.Util
         public static string FormatRange(int min, int? max)
         {
             if (max == null || max == int.MaxValue)
-                return string.Format("{0}+", min);
-            return string.Format("{0}-{1}", min, max);
+                return $"{min}+";
+            return $"{min}-{max}";
         }
 
         public static string FormatOption(string option, bool value)
@@ -32,7 +32,7 @@ namespace BeanIO.Internal.Util
         {
             if (padding == null)
                 return string.Empty;
-            return string.Format(", padded[length={0}, filler={1}, align={2}]", padding.Length, padding.Filler, padding.Justify);
+            return $", padded[length={padding.Length}, filler={padding.Filler}, align={padding.Justify}]";
         }
 
         public static string ToDebug(this IDebuggable c)

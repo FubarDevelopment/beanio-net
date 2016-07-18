@@ -31,7 +31,7 @@ namespace BeanIO.Internal.Util
             }
             catch (Exception ex)
             {
-                throw new BeanIOException(string.Format("Failed to instantiate class '{0}'", type.GetAssemblyQualifiedName()), ex);
+                throw new BeanIOException($"Failed to instantiate class '{type.GetAssemblyQualifiedName()}'", ex);
             }
         }
 

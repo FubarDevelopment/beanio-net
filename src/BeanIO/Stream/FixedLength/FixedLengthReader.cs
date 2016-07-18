@@ -236,7 +236,7 @@ namespace BeanIO.Stream.FixedLength
             {
                 _recordText = null;
                 _recordLineNumber = -1;
-                throw new RecordIOException(string.Format("Unexpected end of stream after line continuation at line {0}", _lineNumber));
+                throw new RecordIOException($"Unexpected end of stream after line continuation at line {_lineNumber}");
             }
 
             if (_recordText.Length == 0)

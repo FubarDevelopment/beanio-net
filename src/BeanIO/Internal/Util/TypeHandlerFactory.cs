@@ -264,7 +264,7 @@ namespace BeanIO.Internal.Util
 
             var type = name.ToType();
             if (type == null)
-                throw new ArgumentException(string.Format("Invalid type or type alias '{0}'", name), nameof(name));
+                throw new ArgumentException($"Invalid type or type alias '{name}'", nameof(name));
 
             RegisterHandlerFor(format, type.FullName, type, createHandler);
         }
@@ -296,7 +296,10 @@ namespace BeanIO.Internal.Util
         {
             var testInstance = createHandler();
             if (!expectedClass.IsAssignableFromThis(testInstance.TargetType))
-                throw new ArgumentException(string.Format("Type handler of type '{0}' is not assignable from configured type '{1}'", testInstance.TargetType, expectedClass));
+            {
+                throw new ArgumentException(
+                    $"Type handler of type '{testInstance.TargetType}' is not assignable from configured type '{expectedClass}'");
+            }
 
             if (format != null)
             {
@@ -341,7 +344,11 @@ namespace BeanIO.Internal.Util
             {
                 var configurableHandler = handler as IConfigurableTypeHandler;
                 if (configurableHandler == null)
-                    throw new BeanIOConfigurationException(string.Format("'{0}' setting not supported by type handler with target type '{1}'", properties.First().Key, handler.TargetType));
+                {
+                    throw new BeanIOConfigurationException(
+                        $"'{properties.First().Key}' setting not supported by type handler with target type '{handler.TargetType}'");
+                }
+
                 configurableHandler.Configure(properties);
             }
 

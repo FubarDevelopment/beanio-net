@@ -454,7 +454,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <returns>the fully qualified key</returns>
         protected virtual string GetKey(string ns, string name)
         {
-            return string.Format("{0}.{1}.{2}", ns, Name, name);
+            return $"{ns}.{Name}.{name}";
         }
 
         /// <summary>

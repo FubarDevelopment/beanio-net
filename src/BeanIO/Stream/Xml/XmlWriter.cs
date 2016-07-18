@@ -206,7 +206,7 @@ namespace BeanIO.Stream.Xml
             // remove previous stack items beyond the current level
             for (var i = lastLevel; i > _level; i--)
             {
-                var stackPrefix = string.Format("{0}.s{1}", ns, i);
+                var stackPrefix = $"{ns}.s{i}";
                 state.Remove(GetKey(stackPrefix, STACK_ELEMENT_KEY));
                 state.Remove(GetKey(stackPrefix, STACK_NS_MAP_KEY));
             }
@@ -217,7 +217,7 @@ namespace BeanIO.Stream.Xml
             var e = _elementStack;
             for (int i = _level; i > to; i--)
             {
-                var stackPrefix = string.Format("{0}.s{1}", ns, i);
+                var stackPrefix = $"{ns}.s{i}";
                 state[GetKey(stackPrefix, STACK_ELEMENT_KEY)] = e.ToToken();
 
                 var nsMapKey = GetKey(stackPrefix, STACK_NS_MAP_KEY);
@@ -276,7 +276,7 @@ namespace BeanIO.Stream.Xml
                 var level = (int)GetRequired(ns, LEVEL_KEY, state);
                 for (int i = 0; i != level; ++i)
                 {
-                    var stackPrefix = string.Format("{0}.s{1}", ns, i + 1);
+                    var stackPrefix = $"{ns}.s{i + 1}";
 
                     var e = ElementStack.FromToken(_elementStack, (string)GetRequired(stackPrefix, STACK_ELEMENT_KEY, state));
                     if (e.IsDefaultNamespace())
@@ -302,7 +302,7 @@ namespace BeanIO.Stream.Xml
                         var s = nsMap.Trim().Split(' ');
                         if ((s.Length & 1) != 0)
                         {
-                            throw new InvalidOperationException(string.Format("Invalid state information for key '{0}'", GetKey(stackPrefix, STACK_NS_MAP_KEY)));
+                            throw new InvalidOperationException($"Invalid state information for key '{GetKey(stackPrefix, STACK_NS_MAP_KEY)}'");
                         }
 
                         Debug.Assert(_elementStack != null, "_elementStack != null");
@@ -324,7 +324,7 @@ namespace BeanIO.Stream.Xml
 
         private static string GetKey(string ns, string name)
         {
-            return string.Format("{0}.{1}", ns, name);
+            return $"{ns}.{name}";
         }
 
         /// <summary>
@@ -339,7 +339,7 @@ namespace BeanIO.Stream.Xml
             key = GetKey(ns, key);
             object value;
             if (!state.TryGetValue(key, out value))
-                throw new InvalidOperationException(string.Format("Missing state information for key '{0}'", key));
+                throw new InvalidOperationException($"Missing state information for key '{key}'");
             return value;
         }
 
@@ -356,7 +356,7 @@ namespace BeanIO.Stream.Xml
 
             var s = token.Trim().Split(' ');
             if ((s.Length & 1) == 1)
-                throw new InvalidOperationException(string.Format("Invalid state information for key '{0}'", key));
+                throw new InvalidOperationException($"Invalid state information for key '{key}'");
 
             var map = new Dictionary<string, string>();
             for (var n = 0; n != s.Length; n += 2)
@@ -672,12 +672,12 @@ namespace BeanIO.Stream.Xml
             }
             else
             {
-                prefix = string.Format("ns{0}", ++_namespaceIndex);
+                prefix = $"ns{++_namespaceIndex}";
             }
 
             while (!_usedPrefixes.Add(prefix))
             {
-                prefix = string.Format("ns{0}", ++_namespaceIndex);
+                prefix = $"ns{++_namespaceIndex}";
             }
 
             _namespaceMap.Add(uri, prefix);

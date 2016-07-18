@@ -42,7 +42,7 @@ namespace BeanIO.Internal.Compiler.Xml
             else
             {
                 if (type != XmlNodeType.Element && type != XmlNodeType.None)
-                    throw new BeanIOConfigurationException(string.Format("Invalid xmlType '{0}'", type));
+                    throw new BeanIOConfigurationException($"Invalid xmlType '{type}'");
             }
 
             if (config.XmlNamespace == null)
@@ -100,7 +100,7 @@ namespace BeanIO.Internal.Compiler.Xml
             else
             {
                 if (type != XmlNodeType.Element && type != XmlNodeType.None)
-                    throw new BeanIOConfigurationException(string.Format("Invalid xmlType '{0}'", type));
+                    throw new BeanIOConfigurationException($"Invalid xmlType '{type}'");
             }
 
             if (config.XmlPrefix != null)
@@ -163,7 +163,7 @@ namespace BeanIO.Internal.Compiler.Xml
                     case XmlNodeType.Text:
                         break;
                     default:
-                        throw new BeanIOConfigurationException(string.Format("Invalid xmlType '{0}'", type));
+                        throw new BeanIOConfigurationException($"Invalid xmlType '{type}'");
                 }
             }
 
@@ -177,13 +177,13 @@ namespace BeanIO.Internal.Compiler.Xml
                 && type != XmlNodeType.Element
                 && type != XmlNodeType.Attribute)
             {
-                throw new BeanIOConfigurationException(string.Format("XML namespace is not applicable for xmlType '{0}'", type));
+                throw new BeanIOConfigurationException($"XML namespace is not applicable for xmlType '{type}'");
             }
 
             // if the bean/field/record is nillable, it must be of type 'element'
             if (config.IsNillable && type != XmlNodeType.Element)
             {
-                throw new BeanIOConfigurationException(string.Format("xmlType '{0}' is not nillable", type));
+                throw new BeanIOConfigurationException($"xmlType '{type}' is not nillable");
             }
 
             // validate a namespace is set if a prefix is set

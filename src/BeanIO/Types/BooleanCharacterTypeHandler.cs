@@ -52,7 +52,7 @@ namespace BeanIO.Types
                 return null;
 
             if (text.Length != 1)
-                throw new FormatException(string.Format("Invalid value '{0}' (too long)", text));
+                throw new FormatException($"Invalid value '{text}' (too long)");
 
             var ch = text[0];
             if (ch == TrueValue)
@@ -60,7 +60,7 @@ namespace BeanIO.Types
             if (FalseValue.HasValue && FalseValue == ch)
                 return false;
 
-            throw new FormatException(string.Format("Invalid value '{0}' for type '{1}'", text, TargetType.Name));
+            throw new FormatException($"Invalid value '{text}' for type '{TargetType.Name}'");
         }
 
         /// <summary>
@@ -71,9 +71,9 @@ namespace BeanIO.Types
         public virtual string Format(object value)
         {
             if (value == null)
-                return string.Format("{0}", NullValue);
+                return $"{NullValue}";
             var boolValue = (bool)value;
-            return string.Format("{0}", boolValue ? TrueValue : FalseValue);
+            return $"{(boolValue ? TrueValue : FalseValue)}";
         }
     }
 }

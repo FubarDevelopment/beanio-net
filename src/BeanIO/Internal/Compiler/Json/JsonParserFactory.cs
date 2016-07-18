@@ -218,7 +218,7 @@ namespace BeanIO.Internal.Compiler.Json
         {
             var tokenType = (JTokenType)Enum.Parse(typeof(JTokenType), type, true);
             if (tokenType != JTokenType.Array && tokenType != JTokenType.Object)
-                throw new BeanIOConfigurationException(string.Format("Invalid jsonType '{0}'", type));
+                throw new BeanIOConfigurationException($"Invalid jsonType '{type}'");
             return tokenType;
         }
     }

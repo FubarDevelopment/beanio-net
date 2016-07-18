@@ -41,7 +41,7 @@ namespace BeanIO.Internal.Parser.Accessor
             }
             catch (Exception ex)
             {
-                throw new BeanIOException(string.Format("Failed to get field '{0}' from bean class '{1}'", _field.Name, bean.GetType().GetAssemblyQualifiedName()), ex);
+                throw new BeanIOException($"Failed to get field '{_field.Name}' from bean class '{bean.GetType().GetAssemblyQualifiedName()}'", ex);
             }
         }
 
@@ -58,7 +58,8 @@ namespace BeanIO.Internal.Parser.Accessor
             }
             catch (Exception ex)
             {
-                throw new BeanIOException(string.Format("Failed to set field '{0}' on bean class '{1}': {2}", _field.Name, bean.GetType().GetAssemblyQualifiedName(), ex.Message), ex);
+                throw new BeanIOException(
+                    $"Failed to set field '{_field.Name}' on bean class '{bean.GetType().GetAssemblyQualifiedName()}': {ex.Message}", ex);
             }
         }
     }

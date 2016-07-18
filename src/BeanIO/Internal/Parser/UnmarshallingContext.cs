@@ -253,7 +253,7 @@ namespace BeanIO.Internal.Parser
             }
             catch (IOException e)
             {
-                throw new BeanReaderIOException(string.Format("IOException caught reading from input stream: {0}", e.Message), e);
+                throw new BeanReaderIOException($"IOException caught reading from input stream: {e.Message}", e);
             }
         }
 
@@ -275,10 +275,7 @@ namespace BeanIO.Internal.Parser
                 {
                     var rca = _recordList.Cast<IRecordContext>().ToArray();
                     throw new InvalidRecordGroupException(
-                        string.Format(
-                            "Invalid '{0}' record group at line {1}",
-                            _componentName,
-                            rca[0].LineNumber),
+                        $"Invalid '{_componentName}' record group at line {rca[0].LineNumber}",
                         _componentName,
                         rca);
                 }
@@ -287,8 +284,8 @@ namespace BeanIO.Internal.Parser
             {
                 _isDirty = true;
                 if (LineNumber > 0)
-                    throw new InvalidRecordException(string.Format("Invalid '{0}' record at line {1}", _componentName, LineNumber), _recordContext);
-                throw new InvalidRecordException(string.Format("Invalid '{0}' record", _componentName), _recordContext);
+                    throw new InvalidRecordException($"Invalid '{_componentName}' record at line {LineNumber}", _recordContext);
+                throw new InvalidRecordException($"Invalid '{_componentName}' record", _recordContext);
             }
         }
 
@@ -333,8 +330,8 @@ namespace BeanIO.Internal.Parser
         {
             var lineNumber = _recordContext.LineNumber;
             var recordName = _recordContext.RecordName;
-            var recordLabel = MessageFactory.GetRecordLabel(recordName) ?? string.Format("'{0}'", recordName);
-            var fieldLabel = MessageFactory.GetFieldLabel(recordName, fieldName) ?? string.Format("'{0}'", fieldName);
+            var recordLabel = MessageFactory.GetRecordLabel(recordName) ?? $"'{recordName}'";
+            var fieldLabel = MessageFactory.GetFieldLabel(recordName, fieldName) ?? $"'{fieldName}'";
 
             var messageParams = new object[4 + args.Length];
             messageParams[0] = lineNumber;
@@ -363,7 +360,7 @@ namespace BeanIO.Internal.Parser
         public BeanReaderException NewMalformedRecordException(RecordIOException cause)
         {
             return new MalformedRecordException(
-                string.Format("Malformed record at line {0}: {1}", RecordReader.RecordLineNumber, cause.Message),
+                $"Malformed record at line {RecordReader.RecordLineNumber}: {cause.Message}",
                 RecordException(null, "malformed", cause.Message));
         }
 
@@ -372,12 +369,12 @@ namespace BeanIO.Internal.Parser
             if (IsEof)
             {
                 return new UnexpectedRecordException(
-                    string.Format("End of stream reached, expected record from group '{0}'", groupName),
+                    $"End of stream reached, expected record from group '{groupName}'",
                     RecordException(groupName, "unsatisfied"));
             }
 
             return new UnexpectedRecordException(
-                string.Format("Expected record from group '{0}' at line {1}", groupName, RecordReader.RecordLineNumber),
+                $"Expected record from group '{groupName}' at line {RecordReader.RecordLineNumber}",
                 RecordException(groupName, "unsatisfied"));
         }
 
@@ -386,26 +383,26 @@ namespace BeanIO.Internal.Parser
             if (IsEof)
             {
                 return new UnexpectedRecordException(
-                    string.Format("End of stream reached, expected record '{0}'", recordName),
+                    $"End of stream reached, expected record '{recordName}'",
                     RecordException(recordName, "unsatisfied"));
             }
 
             return new UnexpectedRecordException(
-                string.Format("Expected record '{0}' at line {1}", recordName, RecordReader.RecordLineNumber),
+                $"Expected record '{recordName}' at line {RecordReader.RecordLineNumber}",
                 RecordException(recordName, "unsatisfied"));
         }
 
         public BeanReaderException RecordUnexpectedException(string recordName)
         {
             return new UnexpectedRecordException(
-                string.Format("Unexpected record '{0}' at line {1}", recordName, RecordReader.RecordLineNumber),
+                $"Unexpected record '{recordName}' at line {RecordReader.RecordLineNumber}",
                 RecordException(recordName, "unexpected"));
         }
 
         public BeanReaderException RecordUnidentifiedException()
         {
             return new UnidentifiedRecordException(
-                string.Format("Unidentified record at line {0}", RecordReader.RecordLineNumber),
+                $"Unidentified record at line {RecordReader.RecordLineNumber}",
                 RecordException(null, "unidentified"));
         }
 
@@ -422,7 +419,7 @@ namespace BeanIO.Internal.Parser
             var recordName = errorContext.RecordName;
 
             var recordLabel = (recordName != null ? MessageFactory.GetRecordLabel(recordName) : null)
-                              ?? string.Format("'{0}'", recordName);
+                              ?? $"'{recordName}'";
 
             var messageParams = new object[3 + args.Length];
             messageParams[0] = lineNumber;

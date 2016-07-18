@@ -214,7 +214,6 @@ namespace BeanIO.Types
                 }
                 catch (UnparsableValueException ex)
                 {
-                    // TODO: Use C# 6 exception filter
                     if (Pattern == null || !IsLenient)
                         throw new TypeConversionException(ex.Message, ex);
 

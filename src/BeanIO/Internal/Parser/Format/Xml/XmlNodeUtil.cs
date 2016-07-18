@@ -68,11 +68,11 @@ namespace BeanIO.Internal.Parser.Format.Xml
 
             if (char.IsLower(localName[0]))
             {
-                localName = string.Format("{0}{1}", char.ToUpperInvariant(localName[0]), localName.Substring(1));
+                localName = $"{char.ToUpperInvariant(localName[0])}{localName.Substring(1)}";
             }
             else
             {
-                localName = string.Format("{0}{1}", char.ToLowerInvariant(localName[0]), localName.Substring(1));
+                localName = $"{char.ToLowerInvariant(localName[0])}{localName.Substring(1)}";
             }
 
             variants.Add(localName);

@@ -280,7 +280,7 @@ namespace BeanIO.Internal.Parser
             }
             catch (UnsatisfiedNodeException ex)
             {
-                throw new BeanWriterException(string.Format("Bean identification failed: expected record type '{0}'", ex.Node.Name), ex);
+                throw new BeanWriterException($"Bean identification failed: expected record type '{ex.Node.Name}'", ex);
             }
         }
 
@@ -439,14 +439,14 @@ namespace BeanIO.Internal.Parser
             var key = GetKey(ns, COUNT_KEY);
             var n = (int?)state.Get(key);
             if (n == null)
-                throw new InvalidOperationException(string.Format("Missing state information for key '{0}'", key));
+                throw new InvalidOperationException($"Missing state information for key '{key}'");
             _count.Set(context, n.Value);
 
             // determine the last matched child
             key = GetKey(ns, LAST_MATCHED_KEY);
             var lastMatchedChildName = (string)state.Get(key);
             if (lastMatchedChildName == null)
-                throw new InvalidOperationException(string.Format("Missing state information for key '{0}'", key));
+                throw new InvalidOperationException($"Missing state information for key '{key}'");
 
             if (lastMatchedChildName.Length == 0)
             {
@@ -700,13 +700,13 @@ namespace BeanIO.Internal.Parser
                 case ParsingMode.Unmarshalling:
                     return child.MatchNext((UnmarshallingContext)context);
                 default:
-                    throw new InvalidOperationException(string.Format("Invalid mode: {0}", context.Mode));
+                    throw new InvalidOperationException($"Invalid mode: {context.Mode}");
             }
         }
 
         private string GetKey(string ns, string name)
         {
-            return string.Format("{0}.{1}.{2}", ns, Name, name);
+            return $"{ns}.{Name}.{name}";
         }
 
         private class UnsatisfiedNodeException : BeanIOException

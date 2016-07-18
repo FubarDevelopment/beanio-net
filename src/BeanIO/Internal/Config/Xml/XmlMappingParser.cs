@@ -113,12 +113,9 @@ namespace BeanIO.Internal.Config.Xml
             {
                 LoadMapping(input);
             }
-            catch (BeanIOConfigurationException ex)
+            catch (BeanIOConfigurationException ex) when (_mapping.Location != null)
             {
-                // TODO: Change for C# 6 (Exception filters)
-                if (_mapping.Location != null)
-                    throw new BeanIOConfigurationException(string.Format("Invalid mapping file '{0}': {1}", _mapping.Name, ex.Message), ex);
-                throw;
+                throw new BeanIOConfigurationException($"Invalid mapping file '{_mapping.Name}': {ex.Message}", ex);
             }
 
             var configList = new List<BeanIOConfig>(_mappings.Count);
@@ -187,13 +184,13 @@ namespace BeanIO.Internal.Config.Xml
 
             // validate the template was declared
             if (element == null)
-                throw new BeanIOConfigurationException(string.Format("Template '{0}' not found", template));
+                throw new BeanIOConfigurationException($"Template '{template}' not found");
 
             // validate there is no circular reference
             foreach (var include in _includes)
             {
                 if (string.Equals(template, include.Template, StringComparison.Ordinal))
-                    throw new BeanIOConfigurationException(string.Format("Circular reference detected in template '{0}'", template));
+                    throw new BeanIOConfigurationException($"Circular reference detected in template '{template}'");
             }
 
             // adjust the configured offset by any previous offset
@@ -272,7 +269,7 @@ namespace BeanIO.Internal.Config.Xml
                         {
                             TypeHandlerConfig handler = CreateHandlerConfig(child);
                             if (handler.Name != null && _mapping.IsDeclaredGlobalTypeHandler(handler.Name))
-                                throw new BeanIOConfigurationException(string.Format("Duplicate global type handler named '{0}'", handler.Name));
+                                throw new BeanIOConfigurationException($"Duplicate global type handler named '{handler.Name}'");
                             config.Add(handler);
                         }
 
@@ -299,21 +296,18 @@ namespace BeanIO.Internal.Config.Xml
 
             var colonIndex = resource.IndexOf(':');
             if (colonIndex == -1)
-                throw new BeanIOConfigurationException(string.Format("No scheme specified for resource '{0}'", resource));
+                throw new BeanIOConfigurationException($"No scheme specified for resource '{resource}'");
 
             var url = new Uri(resource);
             var handler = Settings.Instance.GetSchemeHandler(url, false);
             if (handler == null)
             {
                 throw new BeanIOConfigurationException(
-                    string.Format(
-                        "Scheme of import resource name {0} must one of: {1}",
-                        resource,
-                        string.Join(", ", Settings.Instance.SchemeHandlers.Keys.Select(x => string.Format("'{0}'", x)))));
+                    $"Scheme of import resource name {resource} must one of: {string.Join(", ", Settings.Instance.SchemeHandlers.Keys.Select(x => $"'{x}'"))}");
             }
 
             if (_mapping.IsLoading(url))
-                throw new BeanIOConfigurationException(string.Format("Failed to import resource '{0}': Circular reference(s) detected", name));
+                throw new BeanIOConfigurationException($"Failed to import resource '{name}': Circular reference(s) detected");
 
             // check to see if the mapping file has already been loaded
             XmlMapping m;
@@ -328,7 +322,7 @@ namespace BeanIO.Internal.Config.Xml
                 using (var input = handler.Open(url))
                 {
                     if (input == null)
-                        throw new BeanIOConfigurationException(string.Format("Resource '{0}' not found in classpath for import", name));
+                        throw new BeanIOConfigurationException($"Resource '{name}' not found in classpath for import");
 
                     // push a new Mapping instance onto the stack for this url
                     Push(name, url).Configuration.Source = name;
@@ -344,7 +338,7 @@ namespace BeanIO.Internal.Config.Xml
             }
             catch (IOException ex)
             {
-                throw new BeanIOConfigurationException(string.Format("Failed to import mapping file '{0}'", name), ex);
+                throw new BeanIOConfigurationException($"Failed to import mapping file '{name}'", ex);
             }
         }
 
@@ -374,7 +368,7 @@ namespace BeanIO.Internal.Config.Xml
         {
             var templateName = GetAttribute(element, "name");
             if (!_mapping.AddTemplate(templateName, element))
-                throw new BeanIOConfigurationException(string.Format("Duplicate template named '{0}'", templateName));
+                throw new BeanIOConfigurationException($"Duplicate template named '{templateName}'");
         }
 
         /// <summary>
@@ -516,7 +510,7 @@ namespace BeanIO.Internal.Config.Xml
             }
             catch (Exception ex)
             {
-                throw new BeanIOConfigurationException(string.Format("Invalid '{0}' property definition: {1}", name, ex.Message), ex);
+                throw new BeanIOConfigurationException($"Invalid '{name}' property definition: {ex.Message}", ex);
             }
         }
 
@@ -873,7 +867,7 @@ namespace BeanIO.Internal.Config.Xml
             }
             catch (FormatException ex)
             {
-                throw new BeanIOConfigurationException(string.Format("Invalid {0} '{1}'", name, range), ex);
+                throw new BeanIOConfigurationException($"Invalid {name} '{range}'", ex);
             }
         }
 

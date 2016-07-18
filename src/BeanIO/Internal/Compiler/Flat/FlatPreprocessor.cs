@@ -112,7 +112,7 @@ namespace BeanIO.Internal.Compiler.Flat
             {
                 if (minSet)
                     throw new BeanIOConfigurationException("Maximum record length cannot be less than minimum record length");
-                throw new BeanIOConfigurationException(string.Format("Maximum record length must be at least {0}", record.MinLength));
+                throw new BeanIOConfigurationException($"Maximum record length must be at least {record.MinLength}");
             }
 
             // if there is an unbounded component in the middle of the record, we need to
@@ -521,17 +521,17 @@ namespace BeanIO.Internal.Compiler.Flat
             FieldConfig occurs = _fieldComponents.FirstOrDefault(fc => string.Equals(fc.Name, config.OccursRef));
             if (occurs == null)
             {
-                throw new BeanIOConfigurationException(string.Format("Referenced field '{0}' not found", config.OccursRef));
+                throw new BeanIOConfigurationException($"Referenced field '{config.OccursRef}' not found");
             }
 
             if (occurs.Collection != null)
             {
-                throw new BeanIOConfigurationException(string.Format("Referenced field '{0}' may not repeat", config.OccursRef));
+                throw new BeanIOConfigurationException($"Referenced field '{config.OccursRef}' may not repeat");
             }
 
             if (occurs.Position >= config.Position)
             {
-                throw new BeanIOConfigurationException(string.Format("Referenced field '{0}' must precede this field", config.OccursRef));
+                throw new BeanIOConfigurationException($"Referenced field '{config.OccursRef}' must precede this field");
             }
 
             // default occurs to an Integer if not set...
@@ -542,7 +542,7 @@ namespace BeanIO.Internal.Compiler.Flat
 
             if (occurs.IsRef && !occurs.IsBound)
             {
-                throw new BeanIOConfigurationException(string.Format("Unbound field '{0}' cannot be referenced more than once", occurs.Name));
+                throw new BeanIOConfigurationException($"Unbound field '{occurs.Name}' cannot be referenced more than once");
             }
 
             occurs.IsRef = true;

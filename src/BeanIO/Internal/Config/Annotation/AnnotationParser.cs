@@ -218,7 +218,7 @@ namespace BeanIO.Internal.Config.Annotation
                 {
                     if (setter != null)
                         throw new BeanIOConfigurationException("setter not allowed");
-                    setter = string.Format("#{0}", info.ArgumentIndex);
+                    setter = $"#{info.ArgumentIndex}";
                 }
                 else
                 {
@@ -375,10 +375,7 @@ namespace BeanIO.Internal.Config.Annotation
             catch (Exception ex)
             {
                 throw new BeanIOConfigurationException(
-                    string.Format(
-                        "Invalid FieldAttribute annotation on a constructor parameter in class '{0}': {1}",
-                        clazz.GetAssemblyQualifiedName(),
-                        ex.Message),
+                    $"Invalid FieldAttribute annotation on a constructor parameter in class '{clazz.GetAssemblyQualifiedName()}': {ex.Message}",
                     ex);
             }
         }
@@ -425,10 +422,7 @@ namespace BeanIO.Internal.Config.Annotation
                 if (ra != null && ga != null)
                 {
                     throw new BeanIOConfigurationException(
-                        string.Format(
-                            "Field/Property '{0}' on class '{1}' cannot be annotated with both RecordAttribute and GroupAttribute.",
-                            fieldOrProperty.Name,
-                            parent.Name));
+                        $"Field/Property '{fieldOrProperty.Name}' on class '{parent.Name}' cannot be annotated with both RecordAttribute and GroupAttribute.");
                 }
 
                 var fieldInfo = fieldOrProperty as FieldInfo;
@@ -453,11 +447,7 @@ namespace BeanIO.Internal.Config.Annotation
                 catch (ArgumentException ex)
                 {
                     throw new BeanIOConfigurationException(
-                        string.Format(
-                            "Invalid annotation for field/property '{0}' on class '{1}': {2}",
-                            fieldOrProperty.Name,
-                            parent.Name,
-                            ex.Message),
+                        $"Invalid annotation for field/property '{fieldOrProperty.Name}' on class '{parent.Name}': {ex.Message}",
                         ex);
                 }
 
@@ -474,7 +464,7 @@ namespace BeanIO.Internal.Config.Annotation
                 if (ra != null && ga != null)
                 {
                     throw new BeanIOConfigurationException(
-                        string.Format("Method '{0}' on class '{1}' cannot be annotated with both RecordAttribute and GroupAttribute.", method.Name, parent.Name));
+                        $"Method '{method.Name}' on class '{parent.Name}' cannot be annotated with both RecordAttribute and GroupAttribute.");
                 }
 
                 Type clazz;
@@ -504,7 +494,7 @@ namespace BeanIO.Internal.Config.Annotation
                 }
                 else
                 {
-                    throw new BeanIOConfigurationException(string.Format("Method '{0}' on class '{1}' is not a valid getter or setter", method.Name, parent.Name));
+                    throw new BeanIOConfigurationException($"Method '{method.Name}' on class '{parent.Name}' is not a valid getter or setter");
                 }
 
                 name = Introspector.Decapitalize(name);
@@ -527,7 +517,7 @@ namespace BeanIO.Internal.Config.Annotation
                 }
                 catch (ArgumentException ex)
                 {
-                    throw new BeanIOConfigurationException(string.Format("Invalid annotation for method '{0}' on class '{1}': {2}", method.Name, parent.Name, ex.Message), ex);
+                    throw new BeanIOConfigurationException($"Invalid annotation for method '{method.Name}' on class '{parent.Name}': {ex.Message}", ex);
                 }
 
                 config.Add(child);
@@ -548,10 +538,7 @@ namespace BeanIO.Internal.Config.Annotation
                 if (fas.Count > 1 && sa == null)
                 {
                     throw new BeanIOConfigurationException(
-                        string.Format(
-                            "Field/Property '{0}' on class '{1}' cannot be annotated with multiple FieldAttribute without SegmentAttribute.",
-                            fieldOrProperty.Name,
-                            parent.Name));
+                        $"Field/Property '{fieldOrProperty.Name}' on class '{parent.Name}' cannot be annotated with multiple FieldAttribute without SegmentAttribute.");
                 }
 
                 var fieldInfo = fieldOrProperty as FieldInfo;
@@ -575,11 +562,7 @@ namespace BeanIO.Internal.Config.Annotation
                 catch (ArgumentException ex)
                 {
                     throw new BeanIOConfigurationException(
-                        string.Format(
-                            "Invalid annotation for field/property '{0}' on class '{1}': {2}",
-                            fieldOrProperty.Name,
-                            parent.Name,
-                            ex.Message),
+                        $"Invalid annotation for field/property '{fieldOrProperty.Name}' on class '{parent.Name}': {ex.Message}",
                         ex);
                 }
 
@@ -596,10 +579,7 @@ namespace BeanIO.Internal.Config.Annotation
                 if (fas.Count > 1 && sa == null)
                 {
                     throw new BeanIOConfigurationException(
-                        string.Format(
-                            "Method '{0}' on class '{1}' cannot be annotated with multiple FieldAttribute without SegmentAttribute.",
-                            method.Name,
-                            parent.Name));
+                        $"Method '{method.Name}' on class '{parent.Name}' cannot be annotated with multiple FieldAttribute without SegmentAttribute.");
                 }
 
                 Type clazz;
@@ -629,7 +609,7 @@ namespace BeanIO.Internal.Config.Annotation
                 }
                 else
                 {
-                    throw new BeanIOConfigurationException(string.Format("Method '{0}' on class '{1}' is not a valid getter or setter", method.Name, parent.Name));
+                    throw new BeanIOConfigurationException($"Method '{method.Name}' on class '{parent.Name}' is not a valid getter or setter");
                 }
 
                 name = Introspector.Decapitalize(name);
@@ -652,7 +632,7 @@ namespace BeanIO.Internal.Config.Annotation
                 }
                 catch (ArgumentException ex)
                 {
-                    throw new BeanIOConfigurationException(string.Format("Invalid annotation for method '{0}' on class '{1}': {2}", method.Name, parent.Name, ex.Message), ex);
+                    throw new BeanIOConfigurationException($"Invalid annotation for method '{method.Name}' on class '{parent.Name}': {ex.Message}", ex);
                 }
 
                 config.Add(child);

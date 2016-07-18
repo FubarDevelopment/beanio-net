@@ -14,7 +14,7 @@ namespace BeanIO.Internal.Parser.Format.Json
         /// <returns>the description</returns>
         public static string GetTypeDescription(this IJsonNode node)
         {
-            return string.Format("{0}{1}", node.JsonType, node.IsJsonArray ? "[]" : string.Empty);
+            return $"{node.JsonType}{(node.IsJsonArray ? "[]" : string.Empty)}";
         }
     }
 }

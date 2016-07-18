@@ -26,12 +26,12 @@ namespace BeanIO.Config.SchemeHandlers
         public System.IO.Stream Open(Uri resource)
         {
             if (resource.Scheme != Scheme)
-                throw new ArgumentOutOfRangeException(string.Format("Only '{0}' URLs are allowed", Scheme));
+                throw new ArgumentOutOfRangeException($"Only '{Scheme}' URLs are allowed");
 
             var resName = resource.LocalPath;
             var commaIndex = resName.IndexOf(',');
             if (commaIndex == -1)
-                throw new BeanIOConfigurationException(string.Format("No assembly specified for resource name {0}", resName));
+                throw new BeanIOConfigurationException($"No assembly specified for resource name {resName}");
 
             var asmName = resName.Substring(commaIndex + 1).Trim();
             resName = resName.Substring(0, commaIndex).TrimEnd();

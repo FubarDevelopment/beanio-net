@@ -30,7 +30,7 @@ namespace BeanIO
         {
             var className = Settings.Instance[Settings.STREAM_FACTORY_CLASS];
             if (string.IsNullOrEmpty(className))
-                throw new BeanIOConfigurationException(string.Format("Property '{0}' not set", Settings.STREAM_FACTORY_CLASS));
+                throw new BeanIOConfigurationException($"Property '{Settings.STREAM_FACTORY_CLASS}' not set");
 
             try
             {
@@ -40,7 +40,7 @@ namespace BeanIO
             }
             catch (Exception ex)
             {
-                throw new BeanIOConfigurationException(string.Format("Failed to load stream factory implementation class '{0}'", className), ex);
+                throw new BeanIOConfigurationException($"Failed to load stream factory implementation class '{className}'", ex);
             }
         }
 

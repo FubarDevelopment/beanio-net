@@ -81,7 +81,7 @@ namespace BeanIO.Stream.Csv
             _in = reader;
             _delim = config.Delimiter.ToString();
             if (_delim == " ")
-                throw new BeanIOConfigurationException(string.Format("The CSV field delimiter '{0}' is not supported", _delim));
+                throw new BeanIOConfigurationException($"The CSV field delimiter '{_delim}' is not supported");
             _quote = config.Quote.ToString();
             _endQuote = config.Quote.ToString();
             if (_quote == _delim)
@@ -283,7 +283,7 @@ namespace BeanIO.Stream.Csv
                         else if (c == "\r" || c == "\n")
                         {
                             if (!_multilineEnabled)
-                                throw new RecordIOException(string.Format("Expected end quotation character '{0}' before end of line {1}", _endQuote, _lineNumber));
+                                throw new RecordIOException($"Expected end quotation character '{_endQuote}' before end of line {_lineNumber}");
                             _skipLineFeed = c == "\r";
                             ++_lineNumber;
                             text.Append(c);
@@ -306,7 +306,7 @@ namespace BeanIO.Stream.Csv
                         else if (c == _quote && !_unquotedQuotesAllowed)
                         {
                             Recover(text);
-                            throw new RecordIOException(string.Format("Quotation character '{0}' must be quoted at line {1}", _quote, _lineNumber));
+                            throw new RecordIOException($"Quotation character '{_quote}' must be quoted at line {_lineNumber}");
                         }
                         else if (c == "\n")
                         {
@@ -334,7 +334,7 @@ namespace BeanIO.Stream.Csv
                             if (!_whitepsaceAllowed)
                             {
                                 Recover(text);
-                                throw new RecordIOException(string.Format("Invalid whitespace found outside of quoted field at line {0}", _lineNumber));
+                                throw new RecordIOException($"Invalid whitespace found outside of quoted field at line {_lineNumber}");
                             }
                         }
                         else if (c == _delim)
@@ -353,7 +353,7 @@ namespace BeanIO.Stream.Csv
                         else
                         {
                             Recover(text);
-                            throw new RecordIOException(string.Format("Invalid character found outside of quoted field at line {0}", _lineNumber));
+                            throw new RecordIOException($"Invalid character found outside of quoted field at line {_lineNumber}");
                         }
 
                         break;
@@ -391,7 +391,7 @@ namespace BeanIO.Stream.Csv
                     _fieldList = null;
                     RecordText = null;
                     RecordLineNumber = -1;
-                    throw new RecordIOException(string.Format("Expected end quote before end of line at line {0}", _lineNumber));
+                    throw new RecordIOException($"Expected end quote before end of line at line {_lineNumber}");
                 case 2:
                     _fieldList.Add(field.ToString());
                     break;

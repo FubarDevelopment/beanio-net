@@ -30,7 +30,7 @@ namespace BeanIO
             if (name.Length > 1 && char.IsUpper(name, 1))
                 return name;
 
-            return string.Format("{0}{1}", char.ToLowerInvariant(name[0]), name.Substring(1));
+            return $"{char.ToLowerInvariant(name[0])}{name.Substring(1)}";
         }
 
         public static string Capitalize(string name)
@@ -41,7 +41,7 @@ namespace BeanIO
             if (char.IsUpper(name, 0))
                 return name;
 
-            return string.Format("{0}{1}", char.ToUpperInvariant(name[0]), name.Substring(1));
+            return $"{char.ToUpperInvariant(name[0])}{name.Substring(1)}";
         }
     }
 }

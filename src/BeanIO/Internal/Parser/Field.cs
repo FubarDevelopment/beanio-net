@@ -227,19 +227,19 @@ namespace BeanIO.Internal.Parser
                 {
                     if (!Format.IsNillable)
                     {
-                        throw new InvalidBeanException(string.Format("Invalid field '{0}', the value is not nillable", Name));
+                        throw new InvalidBeanException($"Invalid field '{Name}', the value is not nillable");
                     }
 
                     if (IsRequired)
                     {
-                        throw new InvalidBeanException(string.Format("Invalid field '{0}', a value is required", Name));
+                        throw new InvalidBeanException($"Invalid field '{Name}', a value is required");
                     }
                 }
                 else if (text == null)
                 {
                     if (IsRequired)
                     {
-                        throw new InvalidBeanException(string.Format("Invalid field '{0}', a value is required", Name));
+                        throw new InvalidBeanException($"Invalid field '{Name}', a value is required");
                     }
                 }
                 else
@@ -247,19 +247,19 @@ namespace BeanIO.Internal.Parser
                     // validate minimum length
                     if (text.Length < MinLength)
                     {
-                        throw new InvalidBeanException(string.Format("Invalid field '{0}', '{1}' does not meet minimum length of {2}", Name, text, MinLength));
+                        throw new InvalidBeanException($"Invalid field '{Name}', '{text}' does not meet minimum length of {MinLength}");
                     }
 
                     // validate maximum length
                     if (text.Length > MaxLength)
                     {
-                        throw new InvalidBeanException(string.Format("Invalid field '{0}', '{1}' exceeds maximum length of {2}", Name, text, MaxLength));
+                        throw new InvalidBeanException($"Invalid field '{Name}', '{text}' exceeds maximum length of {MaxLength}");
                     }
 
                     // validate the regular expression
                     if (RegexPattern != null && !RegexPattern.IsMatch(text))
                     {
-                        throw new InvalidBeanException(string.Format("Invalid field '{0}', '{1}' does not match pattern '{2}'", Name, text, Regex));
+                        throw new InvalidBeanException($"Invalid field '{Name}', '{text}' does not match pattern '{Regex}'");
                     }
                 }
             }
@@ -388,7 +388,7 @@ namespace BeanIO.Internal.Parser
                 }
                 catch (Exception ex)
                 {
-                    throw new BeanWriterException(string.Format("Type conversion failed for field '{0}' while formatting value '{1}'", Name, value), ex);
+                    throw new BeanWriterException($"Type conversion failed for field '{Name}' while formatting value '{value}'", ex);
                 }
             }
             else
@@ -516,7 +516,7 @@ namespace BeanIO.Internal.Parser
             }
             catch (Exception ex)
             {
-                throw new BeanReaderException(string.Format("Type conversion failed for field '{0}' while parsing text '{1}'", Name, fieldText), ex, context.GetRecordContexts().ToArray());
+                throw new BeanReaderException($"Type conversion failed for field '{Name}' while parsing text '{fieldText}'", ex, context.GetRecordContexts().ToArray());
             }
         }
     }

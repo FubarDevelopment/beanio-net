@@ -53,7 +53,7 @@ namespace BeanIO.Types
         {
             double result;
             if (!double.TryParse(text, styles, Culture, out result))
-                throw new TypeConversionException(string.Format("Invalid {0} value '{1}'", TargetType, text));
+                throw new TypeConversionException($"Invalid {TargetType} value '{text}'");
             return result;
         }
 

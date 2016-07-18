@@ -146,7 +146,7 @@ namespace BeanIO.Internal.Parser.Format.Delimited
 
             public override string ToString()
             {
-                return string.Format("{0}:{1}", Order, Text);
+                return $"{Order}:{Text}";
             }
         }
     }

@@ -39,7 +39,7 @@ namespace BeanIO.Builder
         {
             var gc = AnnotationParser.CreateGroupConfig(group);
             if (gc == null)
-                throw new BeanIOConfigurationException(string.Format("Group annotation not detected on class '{0}'", group));
+                throw new BeanIOConfigurationException($"Group annotation not detected on class '{group}'");
             Config.Add(gc);
             return Me;
         }
@@ -64,7 +64,7 @@ namespace BeanIO.Builder
         {
             var gc = AnnotationParser.CreateRecordConfig(record);
             if (gc == null)
-                throw new BeanIOConfigurationException(string.Format("Record annotation not detected on class '{0}'", record));
+                throw new BeanIOConfigurationException($"Record annotation not detected on class '{record}'");
             Config.Add(gc);
             return Me;
         }

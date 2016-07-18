@@ -140,7 +140,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
             var parentElement = ctx.Parent as XElement;
 
             // create an element for this node
-            var ns = Namespace ?? (IsNamespaceAware ? string.Empty : (parentElement == null ? string.Empty : parentElement.Name.NamespaceName));
+            var ns = Namespace ?? (IsNamespaceAware ? string.Empty : (parentElement?.Name.NamespaceName ?? string.Empty));
             var element = new XElement(XNamespace.Get(ns) + LocalName.ToConvertedName(ctx.NameConversionMode));
             var annotations = new List<object>();
 

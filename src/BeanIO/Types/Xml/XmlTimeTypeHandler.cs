@@ -97,7 +97,7 @@ namespace BeanIO.Types.Xml
             {
                 foreach (var defaultTimeZoneFormat in DefaultTimeZoneFormats)
                 {
-                    yield return string.Format("{0}{1}", defaultTimeFormat, defaultTimeZoneFormat);
+                    yield return $"{defaultTimeFormat}{defaultTimeZoneFormat}";
                 }
             }
 

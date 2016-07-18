@@ -50,7 +50,7 @@ namespace BeanIO.Stream.Csv
 
             _delim = config.Delimiter;
             if (_delim == ' ')
-                throw new BeanIOConfigurationException(string.Format("The CSV field delimiter '{0}' is not supported", _delim));
+                throw new BeanIOConfigurationException($"The CSV field delimiter '{_delim}' is not supported");
             _quote = config.Quote;
             _endQuote = _quote;
             if (_quote == _delim)
@@ -210,7 +210,7 @@ namespace BeanIO.Stream.Csv
                         }
                         else if (c == _quote && !_unquotedQuotesAllowed)
                         {
-                            throw new RecordIOException(string.Format("Quotation character '{0}' must be quoted", _quote));
+                            throw new RecordIOException($"Quotation character '{_quote}' must be quoted");
                         }
                         else
                         {

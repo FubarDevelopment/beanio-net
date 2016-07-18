@@ -73,16 +73,11 @@ namespace BeanIO.Internal.Parser
                     if (recordName != null)
                     {
                         throw new BeanWriterException(
-                            string.Format(
-                                "Bean identification failed: record name '{0}' not matched at the current position{1}",
-                                recordName,
-                                bean != null ? " for bean class '" + bean.GetType() + "'" : string.Empty));
+                            $"Bean identification failed: record name '{recordName}' not matched at the current position{(bean != null ? " for bean class '" + bean.GetType() + "'" : string.Empty)}");
                     }
 
                     throw new BeanWriterException(
-                        string.Format(
-                            "Bean identification failed: no record or group mapping for bean class '{0}' at the current position",
-                            bean));
+                        $"Bean identification failed: no record or group mapping for bean class '{bean}' at the current position");
                 }
 
                 // marshal the bean object
@@ -92,12 +87,7 @@ namespace BeanIO.Internal.Parser
             {
                 throw new BeanWriterIOException(e.Message, e);
             }
-            catch (BeanWriterException)
-            {
-                // TODO: Use C# 6 exception filter
-                throw;
-            }
-            catch (BeanIOException e)
+            catch (BeanIOException e) when (!(e is BeanWriterException))
             {
                 // wrap the generic exception in a BeanReaderException
                 throw new BeanWriterException("Fatal BeanIOException", e);

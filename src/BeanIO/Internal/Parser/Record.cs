@@ -199,7 +199,7 @@ namespace BeanIO.Internal.Parser
             var key = GetKey(ns, DefaultSelectorStateKeys.CountKey);
             object n;
             if (!state.TryGetValue(key, out n))
-                throw new InvalidOperationException(string.Format("Missing state information for key '{0}'", key));
+                throw new InvalidOperationException($"Missing state information for key '{key}'");
             _count.Set(context, (int)n);
         }
 
@@ -300,7 +300,7 @@ namespace BeanIO.Internal.Parser
         /// <returns>the fully qualified key</returns>
         protected string GetKey(string ns, string name)
         {
-            return string.Format("{0}.{1}.{2}", ns, Name, name);
+            return $"{ns}.{Name}.{name}";
         }
     }
 }

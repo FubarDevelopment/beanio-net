@@ -37,7 +37,7 @@ namespace BeanIO.Types.Xml
             if (dto == null)
                 return null;
             if (dto.Value.TimeOfDay != TimeSpan.Zero)
-                throw new TypeConversionException(string.Format("Invalid XML {0} - no time component allowed", DatatypeQName));
+                throw new TypeConversionException($"Invalid XML {DatatypeQName} - no time component allowed");
             return ZonedDateTime.FromDateTimeOffset(dto.Value).Date;
         }
 

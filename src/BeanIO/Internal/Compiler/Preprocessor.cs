@@ -138,7 +138,7 @@ namespace BeanIO.Internal.Compiler
                 if (orderSet.Value)
                 {
                     if (child.Order < lastOrder)
-                        throw new BeanIOConfigurationException(string.Format("'{0}' {1} configuration is out of order", child.Name, typeDescription));
+                        throw new BeanIOConfigurationException($"'{child.Name}' {typeDescription} configuration is out of order");
                     lastOrder = child.Order.Value;
                 }
                 else
@@ -290,7 +290,7 @@ namespace BeanIO.Internal.Compiler
                 field.MinOccurs =
                     field.OccursRef != null
                         ? 0
-                        : _settings.GetInt(string.Format("{0}.{1}", Settings.DEFAULT_FIELD_MIN_OCCURS, _stream.Format), 0);
+                        : _settings.GetInt($"{Settings.DEFAULT_FIELD_MIN_OCCURS}.{_stream.Format}", 0);
             }
 
             if (field.MaxOccurs == null)

@@ -109,7 +109,7 @@ namespace BeanIO.Internal.Compiler.Xml
             }
             else
             {
-                throw new InvalidOperationException(string.Format("Invalid xml type: {0}", config.XmlType));
+                throw new InvalidOperationException($"Invalid xml type: {config.XmlType}");
             }
 
             format.Name = config.Name;

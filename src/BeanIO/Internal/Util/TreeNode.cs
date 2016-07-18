@@ -61,7 +61,7 @@ namespace BeanIO.Internal.Util
         public void Add(T child)
         {
             if (!IsSupportedChild(child))
-                throw new ArgumentException(string.Format("Child type not supported: {0}", child.GetType()));
+                throw new ArgumentException($"Child type not supported: {child.GetType()}");
             _children.Add(child);
         }
 

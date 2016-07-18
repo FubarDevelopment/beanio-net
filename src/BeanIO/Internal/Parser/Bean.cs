@@ -92,7 +92,7 @@ namespace BeanIO.Internal.Parser
                 {
                     var accessor = property.Accessor;
                     if (accessor == null)
-                        throw new InvalidOperationException(string.Format("Accessor not set for property value '{0}'", property.Name));
+                        throw new InvalidOperationException($"Accessor not set for property value '{property.Name}'");
                     if (!accessor.IsConstructorArgument)
                         continue;
 
@@ -163,7 +163,7 @@ namespace BeanIO.Internal.Parser
                     }
                     catch (Exception ex)
                     {
-                        throw new BeanIOException(string.Format("Failed to set property '{0}' on bean '{1}'", property.Name, Name), ex);
+                        throw new BeanIOException($"Failed to set property '{property.Name}' on bean '{Name}'", ex);
                     }
                 }
             }
@@ -305,7 +305,7 @@ namespace BeanIO.Internal.Parser
             }
             catch (Exception ex)
             {
-                throw new BeanReaderException(string.Format("Failed to instantiate class '{0}'", beanClass.GetAssemblyQualifiedName()), ex);
+                throw new BeanReaderException($"Failed to instantiate class '{beanClass.GetAssemblyQualifiedName()}'", ex);
             }
         }
 
@@ -329,7 +329,7 @@ namespace BeanIO.Internal.Parser
                 }
                 catch (Exception ex)
                 {
-                    throw new BeanIOException(string.Format("Failed to set property '{0}' on bean '{1}'", property.Name, Name), ex);
+                    throw new BeanIOException($"Failed to set property '{property.Name}' on bean '{Name}'", ex);
                 }
             }
         }

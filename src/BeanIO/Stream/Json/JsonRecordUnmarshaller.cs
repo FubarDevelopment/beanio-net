@@ -41,7 +41,7 @@ namespace BeanIO.Stream.Json
                         return value;
                     }
 
-                    throw new RecordIOException(string.Format("Unexpected token {0}", reader.TokenType));
+                    throw new RecordIOException($"Unexpected token {reader.TokenType}");
                 }
             }
             catch (NJ.JsonReaderException ex)
@@ -50,7 +50,7 @@ namespace BeanIO.Stream.Json
             }
             catch (Exception ex)
             {
-                throw new RecordIOException(string.Format("{0} at line {1}, near position {2}", ex.Message, reader.LineNumber, reader.LinePosition), ex);
+                throw new RecordIOException($"{ex.Message} at line {reader.LineNumber}, near position {reader.LinePosition}", ex);
             }
 
             return null;

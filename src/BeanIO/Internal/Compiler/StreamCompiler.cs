@@ -75,7 +75,7 @@ namespace BeanIO.Internal.Compiler
                 foreach (var streamConfig in configurations.SelectMany(x => x.StreamConfigurations))
                 {
                     if (!set.Add(streamConfig.Name))
-                        throw new BeanIOConfigurationException(string.Format("Duplicate stream name '{0}'", streamConfig.Name));
+                        throw new BeanIOConfigurationException($"Duplicate stream name '{streamConfig.Name}'");
                 }
             }
 
@@ -111,12 +111,9 @@ namespace BeanIO.Internal.Compiler
                 {
                     streamDefinitions.Add(factory.CreateStream(streamConfiguration));
                 }
-                catch (BeanIOConfigurationException ex)
+                catch (BeanIOConfigurationException ex) when (config.Source != null)
                 {
-                    // TODO: Use C# 6 exception filter
-                    if (config.Source != null)
-                        throw new BeanIOConfigurationException(string.Format("Invalid mapping file '{0}': {1}", config.Source, ex.Message), ex);
-                    throw;
+                    throw new BeanIOConfigurationException($"Invalid mapping file '{config.Source}': {ex.Message}", ex);
                 }
             }
 
@@ -130,15 +127,18 @@ namespace BeanIO.Internal.Compiler
         /// <returns>the stream definition factory</returns>
         protected IParserFactory CreateParserFactory(string format)
         {
-            var propertyName = string.Format("org.beanio.{0}.streamDefinitionFactory", format);
+            var propertyName = $"org.beanio.{format}.streamDefinitionFactory";
             var typeName = Settings.Instance[propertyName];
 
             if (typeName == null)
-                throw new BeanIOConfigurationException(string.Format("A stream definition factory is not configured for format '{0}'", format));
+                throw new BeanIOConfigurationException($"A stream definition factory is not configured for format '{format}'");
 
             var factory = BeanUtil.CreateBean(typeName) as IParserFactory;
             if (factory == null)
-                throw new BeanIOConfigurationException(string.Format("Configured stream definition factory '{0}' does not implement '{1}'", typeName, typeof(IParserFactory)));
+            {
+                throw new BeanIOConfigurationException(
+                    $"Configured stream definition factory '{typeName}' does not implement '{typeof(IParserFactory)}'");
+            }
 
             return factory;
         }
@@ -172,13 +172,16 @@ namespace BeanIO.Internal.Compiler
                     catch (BeanIOConfigurationException ex)
                     {
                         if (handlerConfig.Name != null)
-                            throw new BeanIOConfigurationException(string.Format("Failed to create type handler named '{0}'", handlerConfig.Name), ex);
-                        throw new BeanIOConfigurationException(string.Format("Failed to create type handler for type '{0}'", handlerConfig.Type), ex);
+                            throw new BeanIOConfigurationException($"Failed to create type handler named '{handlerConfig.Name}'", ex);
+                        throw new BeanIOConfigurationException($"Failed to create type handler for type '{handlerConfig.Type}'", ex);
                     }
 
                     // validate the configured class is assignable to the target class
                     if (!(bean is ITypeHandler))
-                        throw new BeanIOConfigurationException(string.Format("Type handler class '{0}' does not implement TypeHandler interface", handlerConfig.ClassName));
+                    {
+                        throw new BeanIOConfigurationException(
+                            $"Type handler class '{handlerConfig.ClassName}' does not implement TypeHandler interface");
+                    }
 
                     var funcHandlerConfig = handlerConfig;
                     createFunc = () => (ITypeHandler)BeanUtil.CreateBean(funcHandlerConfig.ClassName, funcHandlerConfig.Properties);

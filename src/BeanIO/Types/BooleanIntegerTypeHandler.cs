@@ -55,14 +55,14 @@ namespace BeanIO.Types
             const NumberStyles styles = NumberStyles.Integer;
             int intValue;
             if (!int.TryParse(text, styles, Culture, out intValue))
-                throw new FormatException(string.Format("Number value '{0}' doesn't match the number styles {1}", text, styles));
+                throw new FormatException($"Number value '{text}' doesn't match the number styles {styles}");
 
             if (intValue == TrueValue)
                 return true;
             if (FalseValue.HasValue && FalseValue == intValue)
                 return false;
 
-            throw new FormatException(string.Format("Invalid value '{0}' for type '{1}'", text, TargetType.Name));
+            throw new FormatException($"Invalid value '{text}' for type '{TargetType.Name}'");
         }
 
         /// <summary>

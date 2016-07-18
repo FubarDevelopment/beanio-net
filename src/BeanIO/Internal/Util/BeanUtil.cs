@@ -64,7 +64,7 @@ namespace BeanIO.Internal.Util
             }
             catch (Exception ex)
             {
-                throw new BeanIOConfigurationException(string.Format("Class not found '{0}'", className), ex);
+                throw new BeanIOConfigurationException($"Class not found '{className}'", ex);
             }
 
             try
@@ -74,7 +74,7 @@ namespace BeanIO.Internal.Util
             }
             catch (Exception ex)
             {
-                throw new BeanIOConfigurationException(string.Format("Could not instantiate class '{0}'", type), ex);
+                throw new BeanIOConfigurationException($"Could not instantiate class '{type}'", ex);
             }
         }
 
@@ -93,7 +93,10 @@ namespace BeanIO.Internal.Util
 
                 var handler = _typeHandlerFactory.GetTypeHandlerFor(descriptor.PropertyType);
                 if (handler == null)
-                    throw new BeanIOConfigurationException(string.Format("Property type '{0}' not supported for property '{1}' on class '{2}'", descriptor.PropertyType, name, type));
+                {
+                    throw new BeanIOConfigurationException(
+                        $"Property type '{descriptor.PropertyType}' not supported for property '{name}' on class '{type}'");
+                }
 
                 try
                 {
@@ -103,11 +106,11 @@ namespace BeanIO.Internal.Util
                 }
                 catch (FormatException ex)
                 {
-                    throw new BeanIOConfigurationException(string.Format("Type conversion failed for property '{0}' on class '{1}': {2}", name, type, ex.Message), ex);
+                    throw new BeanIOConfigurationException($"Type conversion failed for property '{name}' on class '{type}': {ex.Message}", ex);
                 }
                 catch (Exception ex)
                 {
-                    throw new BeanIOConfigurationException(string.Format("Failed to set property '{0}' on class '{1}': {2}", name, type, ex.Message), ex);
+                    throw new BeanIOConfigurationException($"Failed to set property '{name}' on class '{type}': {ex.Message}", ex);
                 }
             }
         }
@@ -210,7 +213,11 @@ namespace BeanIO.Internal.Util
                 else if (fieldInfo == null)
                 {
                     if (!_isConstructorArgument && _setterInfo == null && _getterInfo == null)
-                        throw new BeanIOConfigurationException(string.Format("Neither property or field found with name '{0}' for type '{1}'", _property, _typeInfo.AssemblyQualifiedName));
+                    {
+                        throw new BeanIOConfigurationException(
+                            $"Neither property or field found with name '{_property}' for type '{_typeInfo.AssemblyQualifiedName}'");
+                    }
+
                     descriptor = new PropertyDescriptor(_property, _getterInfo, _setterInfo);
                 }
                 else
@@ -421,7 +428,7 @@ namespace BeanIO.Internal.Util
                         break;
                 }
 
-                throw new FormatException(string.Format("Invalid character '{0}'", ch));
+                throw new FormatException($"Invalid character '{ch}'");
             }
 
             /// <summary>

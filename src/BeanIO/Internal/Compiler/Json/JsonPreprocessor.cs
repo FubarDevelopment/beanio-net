@@ -46,7 +46,7 @@ namespace BeanIO.Internal.Compiler.Json
             {
                 if (record.JsonType.EndsWith("[]", StringComparison.Ordinal))
                 {
-                    throw new BeanIOConfigurationException(string.Format("Invalid jsonType '{0}', [] not supported", record.JsonType));
+                    throw new BeanIOConfigurationException($"Invalid jsonType '{record.JsonType}', [] not supported");
                 }
             }
 
@@ -89,7 +89,7 @@ namespace BeanIO.Internal.Compiler.Json
                 }
                 else if (segment.IsRepeating && segment.ComponentType != ComponentType.Record)
                 {
-                    throw new BeanIOConfigurationException(string.Format("Invalid jsonType '{0}', expected 'object[]'", segment.JsonType));
+                    throw new BeanIOConfigurationException($"Invalid jsonType '{segment.JsonType}', expected 'object[]'");
                 }
 
                 JTokenType tokenType;
@@ -102,7 +102,7 @@ namespace BeanIO.Internal.Compiler.Json
                     case JTokenType.None:
                         break;
                     default:
-                        throw new BeanIOConfigurationException(string.Format("Invalid jsonType '{0}'", segment.JsonType));
+                        throw new BeanIOConfigurationException($"Invalid jsonType '{segment.JsonType}'");
                 }
 
                 segment.JsonType = type;
@@ -150,7 +150,7 @@ namespace BeanIO.Internal.Compiler.Json
                 }
                 else if (field.IsRepeating)
                 {
-                    throw new BeanIOConfigurationException(string.Format("Invalid jsonType '{0}', expected array", field.JsonType));
+                    throw new BeanIOConfigurationException($"Invalid jsonType '{field.JsonType}', expected array");
                 }
 
                 switch (type.ToLowerInvariant())
@@ -171,7 +171,7 @@ namespace BeanIO.Internal.Compiler.Json
                     case JTokenType.Float:
                         break;
                     default:
-                        throw new BeanIOConfigurationException(string.Format("Invalid jsonType '{0}'", field.JsonType));
+                        throw new BeanIOConfigurationException($"Invalid jsonType '{field.JsonType}'");
                 }
 
                 field.JsonType = type;

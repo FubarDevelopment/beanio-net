@@ -51,7 +51,7 @@ namespace BeanIO.Stream.Xml
             }
             catch (Exception ex)
             {
-                throw new RecordIOException(string.Format("Failed to marshal XML record: {0}", ex.Message), ex);
+                throw new RecordIOException($"Failed to marshal XML record: {ex.Message}", ex);
             }
         }
 

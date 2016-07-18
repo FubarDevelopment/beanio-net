@@ -287,10 +287,7 @@ namespace BeanIO.Internal.Util
                 if (!throwIfMissing)
                     return null;
                 throw new BeanIOConfigurationException(
-                    string.Format(
-                        "Scheme '{0}' must one of: {1}",
-                        scheme,
-                        string.Join(", ", SchemeHandlers.Keys.Select(x => string.Format("'{0}'", x)))));
+                    $"Scheme '{scheme}' must one of: {string.Join(", ", SchemeHandlers.Keys.Select(x => $"'{x}'"))}");
             }
 
             return handler;

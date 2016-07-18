@@ -149,7 +149,7 @@ namespace BeanIO.Internal.Parser.Format.Flat
         /// <returns>a string that represents the current object</returns>
         public override string ToString()
         {
-            return $"{this}[at={Position}{(Until != 0 ? string.Format(", until={0}", Until) : string.Empty)}, {DebugUtil.FormatOption("optional", IsLazy)}, {Padding.FormatPadding()}]";
+            return $"{this}[at={Position}{(Until != 0 ? $", until={Until}" : string.Empty)}, {DebugUtil.FormatOption("optional", IsLazy)}, {Padding.FormatPadding()}]";
         }
 
         /// <summary>

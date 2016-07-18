@@ -28,7 +28,7 @@ namespace BeanIO.Types
                 return null;
 
             if (text.Length != 1)
-                throw new FormatException(string.Format("Invalid value '{0}' (too long)", text));
+                throw new FormatException($"Invalid value '{text}' (too long)");
 
             return text[0];
         }

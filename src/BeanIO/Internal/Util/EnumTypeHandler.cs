@@ -57,7 +57,7 @@ namespace BeanIO.Internal.Util
             }
             catch (Exception ex)
             {
-                throw new TypeConversionException(string.Format("Invalid {0} enum value '{1}'", TargetType.Name, text), ex);
+                throw new TypeConversionException($"Invalid {TargetType.Name} enum value '{text}'", ex);
             }
         }
 
@@ -114,7 +114,7 @@ namespace BeanIO.Internal.Util
                 }
                 else
                 {
-                    throw new BeanIOConfigurationException(string.Format("Invalid format '{0}', expected 'toString' or 'name' (default)", format));
+                    throw new BeanIOConfigurationException($"Invalid format '{format}', expected 'toString' or 'name' (default)");
                 }
             }
         }

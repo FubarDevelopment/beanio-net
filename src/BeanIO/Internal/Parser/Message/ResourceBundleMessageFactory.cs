@@ -58,7 +58,7 @@ namespace BeanIO.Internal.Parser.Message
             return GetMessage(
                 new[]
                     {
-                        string.Format("{0}.{1}", LABEL_MESSAGE_PREFIX, recordName)
+                        $"{LABEL_MESSAGE_PREFIX}.{recordName}"
                     },
                 false);
         }
@@ -74,8 +74,8 @@ namespace BeanIO.Internal.Parser.Message
             return GetMessage(
                 new[]
                     {
-                        string.Format("{0}.{1}.{2}", RECORD_ERROR_MESSAGE_PREFIX, recordName, rule),
-                        string.Format("{0}.{1}", RECORD_ERROR_MESSAGE_PREFIX, rule)
+                        $"{RECORD_ERROR_MESSAGE_PREFIX}.{recordName}.{rule}",
+                        $"{RECORD_ERROR_MESSAGE_PREFIX}.{rule}"
                     },
                 true);
         }
@@ -91,7 +91,7 @@ namespace BeanIO.Internal.Parser.Message
             return GetMessage(
                 new[]
                     {
-                        string.Format("{0}.{1}.{2}", LABEL_MESSAGE_PREFIX, recordName, fieldName)
+                        $"{LABEL_MESSAGE_PREFIX}.{recordName}.{fieldName}"
                     },
                 false);
         }
