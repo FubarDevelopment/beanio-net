@@ -36,7 +36,7 @@ namespace BeanIO.Config
         [Fact(DisplayName = "Resource not found")]
         public void TestInvalidImportResourceNotFound()
         {
-            LoadInvalidMappingFile("invalidImport_ResourceNotFound.xml", "Resource 'resource:FubarDev.BeanIO.Test.Config.doesnotexist.xml, FubarDev.BeanIO.Test' not found in classpath for import");
+            LoadInvalidMappingFile("invalidImport_ResourceNotFound.xml", "Resource 'resource:BeanIO.Test.Config.doesnotexist.xml, FubarDev.BeanIO.Test' not found in classpath for import");
         }
 
         [Fact(DisplayName = "Invalid resource")]
@@ -122,7 +122,8 @@ namespace BeanIO.Config
         {
             var factory = StreamFactory.NewInstance();
             var asm = typeof(ParserTest).GetTypeInfo().Assembly;
-            var stream = asm.GetManifestResourceStream(string.Format("FubarDev.BeanIO.Test.Config.{0}", name));
+            var stream = asm.GetManifestResourceStream($"FubarDev.BeanIO.Test.Config.{name}");
+            Assert.NotNull(stream != null);
             var ex = Assert.Throws<BeanIOConfigurationException>(() => factory.Load(stream));
             var innermostException = ex.GetBaseException();
             Assert.Equal(errorMessage, innermostException.Message);

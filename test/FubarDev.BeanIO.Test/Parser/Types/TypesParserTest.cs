@@ -18,7 +18,7 @@ namespace BeanIO.Parser.Types
         [Fact]
         public void TestObjectHandlers()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Types.types.xml");
+            var factory = NewStreamFactory("types.xml");
             var reader = factory.CreateReader("t1", LoadReader("t1_valid.txt"));
             try
             {
@@ -78,7 +78,7 @@ namespace BeanIO.Parser.Types
         [Fact]
         public void TestPrimitiveHandlers()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Types.types.xml");
+            var factory = NewStreamFactory("types.xml");
             var reader = factory.CreateReader("t2", LoadReader("t2_valid.txt"));
             try
             {
@@ -125,7 +125,7 @@ namespace BeanIO.Parser.Types
         [Fact]
         public void TestStreamTypeHandler()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Types.types.xml");
+            var factory = NewStreamFactory("types.xml");
             var reader = factory.CreateReader("t3", LoadReader("t3_valid.txt"));
             try
             {
@@ -147,7 +147,7 @@ namespace BeanIO.Parser.Types
         [Fact]
         public void TestNamedTypeHandler()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Types.types.xml");
+            var factory = NewStreamFactory("types.xml");
             var reader = factory.CreateReader("t4", LoadReader("t4_valid.txt"));
             try
             {
@@ -169,7 +169,7 @@ namespace BeanIO.Parser.Types
         [Fact]
         public void TestStringTypeHandler()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Types.types.xml");
+            var factory = NewStreamFactory("types.xml");
             var reader = factory.CreateReader("t5", LoadReader("t5_valid.txt"));
             try
             {
@@ -194,7 +194,7 @@ namespace BeanIO.Parser.Types
         [Fact]
         public void TestNullPrimitive()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Types.types.xml");
+            var factory = NewStreamFactory("types.xml");
             var reader = factory.CreateReader("t6", new StringReader("\n"));
             var record = Assert.IsType<PrimitiveRecord>(reader.Read());
             Assert.Equal(0, record.IntegerValue);
@@ -203,7 +203,7 @@ namespace BeanIO.Parser.Types
         [Fact(Skip = "There is no ParseExact for numeric types")]
         public void TestFormats()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Types.types.xml");
+            var factory = NewStreamFactory("types.xml");
             var reader = factory.CreateReader("t7", LoadReader("t7_valid.txt"));
             try
             {
@@ -232,7 +232,7 @@ namespace BeanIO.Parser.Types
         [Fact]
         public void TestFormatSpecificTypeHandler()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Types.types.xml");
+            var factory = NewStreamFactory("types.xml");
             var reader = factory.CreateReader("t8", LoadReader("t8_valid.txt"));
             try
             {

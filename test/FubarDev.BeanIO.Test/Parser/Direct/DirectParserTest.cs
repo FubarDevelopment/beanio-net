@@ -12,7 +12,7 @@ namespace BeanIO.Parser.Direct
         [Fact]
         public void TestPadding()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Direct.direct_mapping.xml");
+            var factory = NewStreamFactory("direct_mapping.xml");
             var u = factory.CreateUnmarshaller("d1");
             var p = (DirectUser)u.Unmarshal("george,true");
             Assert.Equal("george", p.FirstName);

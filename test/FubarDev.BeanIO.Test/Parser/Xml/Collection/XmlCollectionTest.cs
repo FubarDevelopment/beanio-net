@@ -16,7 +16,7 @@ namespace BeanIO.Parser.Xml.Collection
 
         public XmlCollectionTest()
         {
-            _factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Xml.Collection.collection_mapping.xml");
+            _factory = NewStreamFactory("collection_mapping.xml");
         }
 
         /// <summary>

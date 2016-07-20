@@ -16,7 +16,7 @@ namespace BeanIO.Parser.Property
         [Fact]
         public void TestBasic()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Property.property_mapping.xml");
+            var factory = NewStreamFactory("property_mapping.xml");
             var reader = factory.CreateReader("p1", LoadReader("p1.txt"));
             try
             {

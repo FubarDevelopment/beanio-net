@@ -16,7 +16,7 @@ namespace BeanIO.Parser.Misc
         [Fact]
         public void TestRecordWithoutFieldsClassNotSet()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Misc.misc_mapping.xml");
+            var factory = NewStreamFactory("misc_mapping.xml");
             var reader = factory.CreateReader("stream1", LoadReader("m1.txt"));
             try
             {
@@ -37,7 +37,7 @@ namespace BeanIO.Parser.Misc
         [Fact]
         public void TestRecordWithoutFieldsClassSet()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Misc.misc_mapping.xml");
+            var factory = NewStreamFactory("misc_mapping.xml");
             var reader = factory.CreateReader("stream2", LoadReader("m1.txt"));
             try
             {
@@ -67,7 +67,7 @@ namespace BeanIO.Parser.Misc
         [Fact]
         public void TestRecordWithPropertyOnlyClassSet()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Misc.misc_mapping.xml");
+            var factory = NewStreamFactory("misc_mapping.xml");
             var reader = factory.CreateReader("stream3", LoadReader("m1.txt"));
             try
             {
@@ -88,7 +88,7 @@ namespace BeanIO.Parser.Misc
         [Fact]
         public void TestTypeValidationClassNotSet()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Misc.misc_mapping.xml");
+            var factory = NewStreamFactory("misc_mapping.xml");
             var reader = factory.CreateReader("stream4", LoadReader("m1.txt"));
             try
             {
@@ -107,7 +107,7 @@ namespace BeanIO.Parser.Misc
         [Fact]
         public void TestRecordWithPropertyOnlyClassNotSet()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Misc.misc_mapping.xml");
+            var factory = NewStreamFactory("misc_mapping.xml");
             var reader = factory.CreateReader("stream5", LoadReader("m1.txt"));
             try
             {
@@ -128,7 +128,7 @@ namespace BeanIO.Parser.Misc
         public void TestMarshalStaticRecord()
         {
             var text = new StringWriter();
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Misc.misc_mapping.xml");
+            var factory = NewStreamFactory("misc_mapping.xml");
 
             var writer = factory.CreateWriter("stream6", text);
             writer.Write("header", null);

@@ -122,9 +122,8 @@ namespace BeanIO.Parser
 
             if (resStream == null)
             {
-                var testClassNamespace = this.GetType().Namespace.Replace("BeanIO.", "FubarDev.BeanIO.Test.");
-                var resourceName = string.Format("{0}.{1}", testClassNamespace, fileName);
-                resStream = asm.GetManifestResourceStream(resourceName);
+                var resName = $"{GetType().Namespace.Replace("BeanIO.", "FubarDev.BeanIO.Test.")}.{fileName}";
+                resStream = asm.GetManifestResourceStream(resName);
             }
 
             if (resStream == null)

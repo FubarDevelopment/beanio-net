@@ -161,7 +161,7 @@ namespace BeanIO.Parser.Groups
         /// <param name="errorLineNumber">the error line number</param>
         private void Test(string name, string fileName, int errorLineNumber)
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Groups.group.xml");
+            var factory = NewStreamFactory("group.xml");
             var reader = factory.CreateReader(name, LoadReader(fileName));
             try
             {

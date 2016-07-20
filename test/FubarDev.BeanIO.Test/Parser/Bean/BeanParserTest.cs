@@ -17,7 +17,7 @@ namespace BeanIO.Parser.Bean
         [Fact]
         public void TestDelimitedPositions()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Bean.widget.xml");
+            var factory = NewStreamFactory("widget.xml");
             var reader = factory.CreateReader("w1", LoadReader("w1_position.txt"));
             try
             {
@@ -44,7 +44,7 @@ namespace BeanIO.Parser.Bean
         [Fact]
         public void TestCollectionsAndDefaultDelmitedPositions()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Bean.widget.xml");
+            var factory = NewStreamFactory("widget.xml");
             var reader = factory.CreateReader("w2", LoadReader("w2_collections.txt"));
             try
             {
@@ -67,7 +67,7 @@ namespace BeanIO.Parser.Bean
         [Fact]
         public void TestFixedLengthAndOptionalFields()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Bean.widget.xml");
+            var factory = NewStreamFactory("widget.xml");
             var reader = factory.CreateReader("w3", LoadReader("w3_fixedLength.txt"));
             try
             {
@@ -121,7 +121,7 @@ namespace BeanIO.Parser.Bean
         [Fact]
         public void TestFixedLengthMap()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Bean.widget.xml");
+            var factory = NewStreamFactory("widget.xml");
             var reader = factory.CreateReader("w4", LoadReader("w4_map.txt"));
             try
             {
@@ -156,7 +156,7 @@ namespace BeanIO.Parser.Bean
         [Fact]
         public void TestFixedLengthOutOfOrder()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Bean.widget.xml");
+            var factory = NewStreamFactory("widget.xml");
             var reader = factory.CreateReader("w5", LoadReader("w5_outOfOrder.txt"));
             try
             {
@@ -178,7 +178,7 @@ namespace BeanIO.Parser.Bean
         [Fact]
         public void TestFieldError()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Bean.widget.xml");
+            var factory = NewStreamFactory("widget.xml");
             var reader = factory.CreateReader("w6", LoadReader("w6_fieldError.txt"));
             try
             {
@@ -193,7 +193,7 @@ namespace BeanIO.Parser.Bean
         [Fact]
         public void TestWriteNull()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Bean.widget.xml");
+            var factory = NewStreamFactory("widget.xml");
             var w = new Widget();
 
             var text = new StringWriter();
@@ -232,7 +232,7 @@ namespace BeanIO.Parser.Bean
         [Fact]
         public void TestBackfill()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Bean.widget.xml");
+            var factory = NewStreamFactory("widget.xml");
             var w = new Widget
                 {
                     Id = 1,
@@ -252,7 +252,7 @@ namespace BeanIO.Parser.Bean
         [Fact]
         public void TestRecordIdentifier()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Bean.widget.xml");
+            var factory = NewStreamFactory("widget.xml");
             var w = new Widget()
                 {
                     Id = 1,
@@ -284,7 +284,7 @@ namespace BeanIO.Parser.Bean
         [Fact]
         public void TestFixedLengthCollection()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Bean.widget.xml");
+            var factory = NewStreamFactory("widget.xml");
             var reader = factory.CreateReader("w9", LoadReader("w9_flcollections.txt"));
             try
             {
@@ -305,7 +305,7 @@ namespace BeanIO.Parser.Bean
         [Fact]
         public void TestNestedBeans()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Bean.widget.xml");
+            var factory = NewStreamFactory("widget.xml");
             var reader = factory.CreateReader("w10", LoadReader("w10_nestedBeans.txt"));
             try
             {
@@ -371,7 +371,7 @@ namespace BeanIO.Parser.Bean
         [Fact]
         public void TestParseDefaultFalse()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Bean.widget.xml");
+            var factory = NewStreamFactory("widget.xml");
 
             var u = factory.CreateUnmarshaller("w11");
             var m = factory.CreateMarshaller("w11");

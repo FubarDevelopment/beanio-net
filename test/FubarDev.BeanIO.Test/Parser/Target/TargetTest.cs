@@ -16,7 +16,7 @@ namespace BeanIO.Parser.Target
         [Fact]
         public void TestTarget()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Target.target_mapping.xml");
+            var factory = NewStreamFactory("target_mapping.xml");
             var unmarshaller = factory.CreateUnmarshaller("stream");
             var marshaller = factory.CreateMarshaller("stream");
 
@@ -32,7 +32,7 @@ namespace BeanIO.Parser.Target
         [Fact]
         public void TestSegmentTarget()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Target.target_mapping.xml");
+            var factory = NewStreamFactory("target_mapping.xml");
             var unmarshaller = factory.CreateUnmarshaller("t2");
             var marshaller = factory.CreateMarshaller("t2");
 
@@ -45,25 +45,25 @@ namespace BeanIO.Parser.Target
         [Fact]
         public void TestTargetTargetNotFound()
         {
-            Assert.Throws<BeanIOConfigurationException>(() => NewStreamFactory("FubarDev.BeanIO.Test.Parser.Target.targetNotFound.xml"));
+            Assert.Throws<BeanIOConfigurationException>(() => NewStreamFactory("targetNotFound.xml"));
         }
 
         [Fact]
         public void TestTargetRepeatingTarget()
         {
-            Assert.Throws<BeanIOConfigurationException>(() => NewStreamFactory("FubarDev.BeanIO.Test.Parser.Target.targetRepeating.xml"));
+            Assert.Throws<BeanIOConfigurationException>(() => NewStreamFactory("targetRepeating.xml"));
         }
 
         [Fact]
         public void TestTargetIsNotProperty()
         {
-            Assert.Throws<BeanIOConfigurationException>(() => NewStreamFactory("FubarDev.BeanIO.Test.Parser.Target.targetIsNotProperty.xml"));
+            Assert.Throws<BeanIOConfigurationException>(() => NewStreamFactory("targetIsNotProperty.xml"));
         }
 
         [Fact]
         public void TestTargetTargetAndClassSet()
         {
-            Assert.Throws<BeanIOConfigurationException>(() => NewStreamFactory("FubarDev.BeanIO.Test.Parser.Target.targetAndClass.xml"));
+            Assert.Throws<BeanIOConfigurationException>(() => NewStreamFactory("targetAndClass.xml"));
         }
     }
 }

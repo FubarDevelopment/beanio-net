@@ -15,7 +15,7 @@ namespace BeanIO.Parser.Collection
         [Fact]
         public void TestCollectionDelimited()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Collection.collection.xml");
+            var factory = NewStreamFactory("collection.xml");
             var reader = factory.CreateReader("dc1", LoadReader("dc1_valid.txt"));
             try
             {
@@ -36,7 +36,7 @@ namespace BeanIO.Parser.Collection
         [Fact]
         public void TestNullPrimitive()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Collection.collection.xml");
+            var factory = NewStreamFactory("collection.xml");
             var reader = factory.CreateReader("dc2", LoadReader("dc2_nullPrimitive.txt"));
             try
             {
@@ -56,7 +56,7 @@ namespace BeanIO.Parser.Collection
         [Fact]
         public void TestCollectionFixedLength()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Collection.collection.xml");
+            var factory = NewStreamFactory("collection.xml");
             var reader = factory.CreateReader("fc1", LoadReader("fc1_valid.txt"));
             try
             {
@@ -89,7 +89,7 @@ namespace BeanIO.Parser.Collection
         [Fact]
         public void TestCollectionFixedLengthWithDerivedClass()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.Collection.collection.xml");
+            var factory = NewStreamFactory("collection.xml");
             var reader = factory.CreateReader("fc2", LoadReader("fc2_valid.txt"));
             try
             {

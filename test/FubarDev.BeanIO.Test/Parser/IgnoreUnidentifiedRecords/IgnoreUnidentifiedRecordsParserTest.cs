@@ -14,7 +14,7 @@ namespace BeanIO.Parser.IgnoreUnidentifiedRecords
         [Fact]
         public void TestIgnoreUnidentifiedRecords()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.IgnoreUnidentifiedRecords.ignore_mapping.xml");
+            var factory = NewStreamFactory("ignore_mapping.xml");
             var reader = factory.CreateReader("stream1", LoadReader("ignoreUnidentifiedRecords1.txt"));
             try
             {
