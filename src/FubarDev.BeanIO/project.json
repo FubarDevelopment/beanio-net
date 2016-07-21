@@ -63,7 +63,9 @@
     "netstandard1.1": {
       "imports": [ "dotnet" ],
       "dependencies": {
-        "NETStandard.Library": "1.6.0",
+        "System.Collections.Concurrent": "4.0.12",
+        "System.Diagnostics.Tools": "4.0.1",
+        "System.Runtime": "4.1.0",
         "System.Diagnostics.Contracts": "4.0.1",
         "System.Reflection.Extensions": "4.0.1"
       }
