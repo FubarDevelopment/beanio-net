@@ -16,11 +16,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		stylecop.json = stylecop.json
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "BeanIO", "src\FubarDev.BeanIO\FubarDev.BeanIO.xproj", "{F9872CE3-A82C-463E-B875-CE0F2729931C}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "FubarDev.BeanIO", "src\FubarDev.BeanIO\FubarDev.BeanIO.xproj", "{F9872CE3-A82C-463E-B875-CE0F2729931C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E65ED37A-52A5-41A8-B7C9-B892C87AFB40}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "BeanIO.Test", "test\FubarDev.BeanIO.Test\FubarDev.BeanIO.Test.xproj", "{DB027EC3-C3A6-4D6D-A701-66E7E94266C9}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "FubarDev.BeanIO.Test", "test\FubarDev.BeanIO.Test\FubarDev.BeanIO.Test.xproj", "{DB027EC3-C3A6-4D6D-A701-66E7E94266C9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packaging", "Packaging", "{77610794-4C34-4838-8955-D48D0A2B505F}"
+	ProjectSection(SolutionItems) = preProject
+		packaging\FubarDev.BeanIO.nuspec = packaging\FubarDev.BeanIO.nuspec
+		packaging\FubarDev.BeanIO.targets = packaging\FubarDev.BeanIO.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -69,7 +69,7 @@ namespace BeanIO.Internal.Parser.Format.Flat
         /// </summary>
         /// <remarks>
         /// <para>May return <see cref="F:Value.Invalid"/> if the field is invalid, or <see cref="F:Value.Nil"/>
-        /// if the field is explicitly set to nil or null such as in an XML or JSON formatted
+        /// if the field is explicitly set to nil or null such as in an XML formatted
         /// stream.</para>
         /// <para>Implementations should also remove any field padding before returning the text.</para>
         /// </remarks>

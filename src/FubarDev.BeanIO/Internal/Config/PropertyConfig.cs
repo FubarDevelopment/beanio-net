@@ -28,7 +28,6 @@ namespace BeanIO.Internal.Config
         /// </summary>
         protected PropertyConfig()
         {
-            JsonArrayIndex = -1;
         }
 
         /// <summary>
@@ -140,32 +139,6 @@ namespace BeanIO.Internal.Config
         /// Gets or sets a value indicating whether this component is nillable.
         /// </summary>
         public bool IsNillable { get; set; }
-
-        /// <summary>
-        /// Gets or sets the JSON field name if different that the property name.
-        /// </summary>
-        /// <remarks>
-        /// Ignored if its parent is a JSON array.
-        /// </remarks>
-        public string JsonName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the JSON type.
-        /// </summary>
-        public string JsonType { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the property is mapped to a JSON array.
-        /// </summary>
-        /// <remarks>
-        /// Set internally by BeanIO.
-        /// </remarks>
-        public bool IsJsonArray { get; set; }
-
-        /// <summary>
-        /// Gets or sets the index of this property in its parent JSON array.
-        /// </summary>
-        public int JsonArrayIndex { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this component is used to identify a record during

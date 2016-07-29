@@ -32,7 +32,7 @@
     "owners": [ "FubarCoder" ],
     "licenseUrl": "http://opensource.org/licenses/MIT",
     "projectUrl": "https://github.com/FubarDevelopment/beanio-net",
-    "tags": [ "BeanIO", "Core", "CSV", "XML", "JSON", "fixed length", "file", "parse", "serialize", "deserialize", "serialization", "deserialization", "parsing", "marshal", "marshalling", "unmarshal", "unmarshalling" ],
+    "tags": [ "BeanIO", "Core", "CSV", "XML", "fixed length", "file", "parse", "serialize", "deserialize", "serialization", "deserialization", "parsing", "marshal", "marshalling", "unmarshal", "unmarshalling" ],
     "iconUrl": "https://github.com/FubarDevelopment/beanio-net/raw/master/beanio-logo.png",
     "repository": {
       "type": "git",
@@ -41,9 +41,12 @@
     "files": {
       "mappings": {
         "/": [ "../../*.md", "../../beanio-logo.png", "../../LICENSE" ],
-        "src/Xsd/": "Xsd/"
+        "src/Xsd/": "Xsd/",
+        "build/": "../../packaging/FubarDev.BeanIO.targets",
+        "lib/native/": [ "../../packaging/_._" ]
       }
-    }
+    },
+    "releaseNotes": "- Support for .NET Core"
   },
 
   "dependencies": {
@@ -51,8 +54,7 @@
       "version": "10.1.5",
       "type": "build"
     },
-    "Newtonsoft.Json": "9.0.1",
-    "NodaTime": "2.0.0-alpha20160707",
+    "NodaTime": "2.0.0-alpha20160729",
     "StyleCop.Analyzers": {
       "version": "1.0.0",
       "type": "build"
@@ -64,15 +66,19 @@
       "imports": [ "dotnet" ],
       "dependencies": {
         "System.Collections.Concurrent": "4.0.12",
-        "System.Diagnostics.Tools": "4.0.1",
-        "System.Runtime": "4.1.0",
         "System.Diagnostics.Contracts": "4.0.1",
-        "System.Reflection.Extensions": "4.0.1"
+        "System.Diagnostics.Tools": "4.0.1",
+        "System.Reflection.Extensions": "4.0.1",
+        "System.Runtime": "4.1.0",
+        "System.Text.Encoding.Extensions": "4.0.11",
+        "System.Text.RegularExpressions": "4.1.0",
+        "System.Xml.ReaderWriter": "4.0.11",
+        "System.Xml.XDocument": "4.0.11"
       }
     },
     "net45": {
       "frameworkAssemblies": {
-        "System.Xml.Linq": "*"
+        "System.Xml.Linq": ""
       }
     }
   }
