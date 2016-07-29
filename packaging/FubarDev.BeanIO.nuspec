@@ -49,6 +49,6 @@
     <file src="..\src\$id$\bin\$configuration$\net45\$id$.xml" target="lib\net45\" />
     <file src="..\src\$id$\bin\$configuration$\netstandard1.1\$id$.dll" target="lib\netstandard1.1\" />
     <file src="..\src\$id$\bin\$configuration$\netstandard1.1\$id$.xml" target="lib\netstandard1.1\" />
-	<file src="$id$.targets" target="build\" />
+	<file src="$id$.targets" target="build\native\" />
   </files>
 </package>
