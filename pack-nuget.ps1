@@ -9,6 +9,8 @@ if (test-path $packageOutputPath) {
 	remove-item -whatif -recurse -force $packageOutputPath
 }
 
+new-item $packageOutputPath
+
 $fullVersion = $Version + (&{if ($VersionSuffix) { "-" + $VersionSuffix } else { "" }})
 
 $nuspecPath = join-path (Join-Path $PSScriptRoot "packaging") "*.nuspec"
