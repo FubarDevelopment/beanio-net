@@ -6,10 +6,10 @@ param(
 
 $packageOutputPath = Join-Path $PSScriptRoot "package-output"
 if (test-path $packageOutputPath) {
-	remove-item -whatif -recurse -force $packageOutputPath
+	remove-item -recurse -force $packageOutputPath
 }
 
-new-item $packageOutputPath
+new-item $packageOutputPath -itemtype directory | out-null
 
 $fullVersion = $Version + (&{if ($VersionSuffix) { "-" + $VersionSuffix } else { "" }})
 
