@@ -26,6 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packaging", "Packaging", "{
 	ProjectSection(SolutionItems) = preProject
 		packaging\FubarDev.BeanIO.nuspec = packaging\FubarDev.BeanIO.nuspec
 		packaging\FubarDev.BeanIO.targets = packaging\FubarDev.BeanIO.targets
+		packaging\NuGet.exe = packaging\NuGet.exe
 	EndProjectSection
 EndProject
 Global
