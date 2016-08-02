@@ -4,9 +4,9 @@
   xmlns:tns="http://www.beanio.org/2015/06"
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   elementFormDefault="qualified"
-  targetNamespace="http://www.beanio.org/2015/06"
+  targetNamespace="http://www.beanio.org/2016/07"
   xml:lang="en"
-  version="2.2.0">
+  version="4.0.0">
 
   <annotation>
     <documentation>
