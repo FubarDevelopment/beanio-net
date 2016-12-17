@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "4.0.0-*",
   "authors": [ "Fubar Development Junker", "Mark Junker" ],
   "title": "BeanIO",
@@ -51,7 +51,7 @@
 
   "dependencies": {
     "JetBrains.Annotations": {
-      "version": "10.1.5",
+      "version": "10.2.1",
       "type": "build"
     },
     "NodaTime": "2.0.0-alpha20160729",
@@ -65,15 +65,15 @@
     "netstandard1.1": {
       "imports": [ "dotnet" ],
       "dependencies": {
-        "System.Collections.Concurrent": "4.0.12",
-        "System.Diagnostics.Contracts": "4.0.1",
-        "System.Diagnostics.Tools": "4.0.1",
-        "System.Reflection.Extensions": "4.0.1",
-        "System.Runtime": "4.1.0",
-        "System.Text.Encoding.Extensions": "4.0.11",
-        "System.Text.RegularExpressions": "4.1.0",
-        "System.Xml.ReaderWriter": "4.0.11",
-        "System.Xml.XDocument": "4.0.11"
+        "System.Collections.Concurrent": "4.3.0",
+        "System.Diagnostics.Contracts": "4.3.0",
+        "System.Diagnostics.Tools": "4.3.0",
+        "System.Reflection.Extensions": "4.3.0",
+        "System.Runtime": "4.3.0",
+        "System.Text.Encoding.Extensions": "4.3.0",
+        "System.Text.RegularExpressions": "4.3.0",
+        "System.Xml.ReaderWriter": "4.3.0",
+        "System.Xml.XDocument": "4.3.0"
       }
     },
     "net45": {

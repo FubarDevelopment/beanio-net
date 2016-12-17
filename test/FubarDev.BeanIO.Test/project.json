@@ -27,10 +27,10 @@
   "testRunner": "xunit",
 
   "dependencies": {
-    "NETStandard.Library": "1.6.0",
+    "NETStandard.Library": "1.6.1",
     "FubarDev.BeanIO": { "target": "project" },
     "JetBrains.Annotations": {
-      "version": "10.1.5",
+      "version": "10.2.1",
       "type": "build"
     },
     "StyleCop.Analyzers": {
@@ -47,9 +47,9 @@
       "dependencies": {
         "Microsoft.NETCore.App": {
           "type": "platform",
-          "version": "1.0.0"
+          "version": "1.1.0"
         },
-        "System.Collections.NonGeneric": "4.0.1"
+        "System.Collections.NonGeneric": "4.3.0"
       }
     },
     "net451": {
