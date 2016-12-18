@@ -4,6 +4,11 @@
 
 # Latest changes
 
+## 4.1.0
+
+* Supports a new experimental property accessor factory `asm` which uses compiled expression trees instead of reflection
+* Update of all dependencies
+
 ## 4.0.0
 
 * Now supports .NET Core 1.0 (through .NET Standard 1.1)

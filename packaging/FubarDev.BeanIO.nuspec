@@ -14,7 +14,7 @@
     <iconUrl>https://github.com/FubarDevelopment/beanio-net/raw/master/beanio-logo.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <developmentDependency>false</developmentDependency>
-    <releaseNotes>- Support for .NET Core</releaseNotes>
+    <releaseNotes>Support for new experimental property accessor factory that uses compiled expression trees</releaseNotes>
     <copyright>Copyright © Fubar Development, Kevin Seim 2015-2016</copyright>
     <tags>BeanIO CSV XML fixed length file parse serialize deserialize serialization deserialization parsing marshal marshalling unmarshal unmarshalling</tags>
     <dependencies>
