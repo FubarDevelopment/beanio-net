@@ -40,8 +40,6 @@ namespace BeanIO.Stream.Xml
     {
         private static readonly bool DELTA_ENABLED = Settings.Instance.GetBoolean(Settings.XML_WRITER_UPDATE_STATE_USING_DELTA);
 
-        private static readonly string DEFAULT_LINE_SEPARATOR = Environment.NewLine;
-
         #region map keys for storing state information for implementing StatefulWriter
         private static readonly string OUTPUT_HEADER_KEY = "header";
         private static readonly string NAMESPACE_MAP_KEY = "nsMap";
@@ -118,7 +116,7 @@ namespace BeanIO.Stream.Xml
                 Indent = _config.IsIndentionEnabled,
                 IndentChars = new string(' ', _config.Indentation.GetValueOrDefault()),
                 OmitXmlDeclaration = _config.SuppressHeader,
-                NewLineChars = _config.LineSeparator ?? DEFAULT_LINE_SEPARATOR,
+                NewLineChars = _config.LineSeparator ?? writer.NewLine,
                 Encoding = _encoding ?? Encoding.UTF8,
                 NamespaceHandling = NamespaceHandling.OmitDuplicates,
             };

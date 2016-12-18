@@ -67,7 +67,7 @@ namespace BeanIO.Stream.Csv
             _endQuote = config.Quote;
             _alwaysQuote = config.AlwaysQuote;
             _escapeChar = config.Escape.GetValueOrDefault('"');
-            _lineSeparator = config.RecordTerminator ?? Environment.NewLine;
+            _lineSeparator = config.RecordTerminator ?? textWriter.NewLine;
         }
 
         /// <summary>

@@ -37,7 +37,7 @@ namespace BeanIO.Stream.FixedLength
         public FixedLengthWriter(TextWriter writer, string recordTerminator)
         {
             _writer = writer;
-            _recordTerminator = recordTerminator ?? Environment.NewLine;
+            _recordTerminator = recordTerminator ?? writer.NewLine;
         }
 
         /// <summary>

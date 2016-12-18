@@ -48,7 +48,7 @@ namespace BeanIO.Stream.Xml
         /// </summary>
         /// <remarks>
         /// When set to <code>null</code> (the default), the line separator is set to the
-        /// value of the <see cref="Environment.NewLine"/> system property.
+        /// value of the <see cref="System.IO.TextWriter.NewLine"/> system property.
         /// </remarks>
         public string LineSeparator { get; set; }
 

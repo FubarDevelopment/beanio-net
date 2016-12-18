@@ -68,7 +68,7 @@ namespace BeanIO.Stream.Delimited
             _escapeChar = config.Escape;
             if (_escapeChar != null && _escapeChar == _delim)
                 throw new BeanIOConfigurationException("Delimiter cannot match the escape character");
-            _recordTerminator = config.RecordTerminator ?? Environment.NewLine;
+            _recordTerminator = config.RecordTerminator ?? textWriter.NewLine;
         }
 
         /// <summary>
