@@ -23,7 +23,7 @@ namespace BeanIO.Internal.Compiler.Accessor
         /// <param name="property">the property to access</param>
         /// <param name="carg">the constructor argument index</param>
         /// <returns>the new <see cref="IPropertyAccessor"/></returns>
-        public IPropertyAccessor CreatePropertyAccessor(Type parent, PropertyDescriptor property, int carg)
+        public IPropertyAccessor CreatePropertyAccessor(Type parent, PropertyDescriptor property, int? carg)
         {
             var accessor = new PropertyReflectionAccessor(property, carg);
             return accessor;

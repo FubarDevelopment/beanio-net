@@ -1102,15 +1102,14 @@ namespace BeanIO.Internal.Compiler
             }
 
             // parse the constructor argument index from the 'setter'
-            var construtorArgumentIndex = -1;
+            int? construtorArgumentIndex = null;
             if (setter != null && setter.StartsWith(CONSTRUCTOR_PREFIX))
             {
                 try
                 {
-                    construtorArgumentIndex = int.Parse(setter.Substring(1));
-                    if (construtorArgumentIndex <= 0)
+                    construtorArgumentIndex = int.Parse(setter.Substring(1)) - 1;
+                    if (construtorArgumentIndex < 0)
                         throw new BeanIOConfigurationException("Invalid setter method");
-                    construtorArgumentIndex--;
                 }
                 catch (FormatException ex)
                 {
@@ -1121,7 +1120,7 @@ namespace BeanIO.Internal.Compiler
             }
 
             // set the property descriptor on the field
-            var descriptor = GetPropertyDescriptor(iteration.Name, getter, setter, construtorArgumentIndex >= 0);
+            var descriptor = GetPropertyDescriptor(iteration.Name, getter, setter, (construtorArgumentIndex ?? -1) >= 0);
             var reflectedType = descriptor.PropertyType;
 
             iteration.Accessor = _accessorFactory.CreatePropertyAccessor(parent.PropertyType, descriptor, construtorArgumentIndex);
@@ -1223,15 +1222,14 @@ namespace BeanIO.Internal.Compiler
             var getter = config.Getter;
 
             // parse the constructor argument index from the 'setter'
-            var construtorArgumentIndex = -1;
+            int? construtorArgumentIndex = null;
             if (setter != null && setter.StartsWith(CONSTRUCTOR_PREFIX))
             {
                 try
                 {
-                    construtorArgumentIndex = int.Parse(setter.Substring(1));
-                    if (construtorArgumentIndex <= 0)
+                    construtorArgumentIndex = int.Parse(setter.Substring(1)) - 1;
+                    if (construtorArgumentIndex < 0)
                         throw new BeanIOConfigurationException("Invalid setter method");
-                    construtorArgumentIndex--;
                 }
                 catch (FormatException ex)
                 {
@@ -1242,7 +1240,7 @@ namespace BeanIO.Internal.Compiler
             }
 
             // set the property descriptor on the field
-            var descriptor = GetPropertyDescriptor(config.Name, getter, setter, construtorArgumentIndex >= 0);
+            var descriptor = GetPropertyDescriptor(config.Name, getter, setter, (construtorArgumentIndex ?? -1) >= 0);
             var reflectedType = descriptor.PropertyType;
 
             property.Accessor = _accessorFactory.CreatePropertyAccessor(parent.PropertyType, descriptor, construtorArgumentIndex);
