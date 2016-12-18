@@ -5,6 +5,7 @@
 
 using System.Collections;
 
+using BeanIO.Config;
 using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser
@@ -18,6 +19,13 @@ namespace BeanIO.Internal.Parser
     /// </remarks>
     internal class RecordCollection : RecordAggregation
     {
+        private readonly bool _lazyIfEmpty;
+
+        public RecordCollection(ISettings settings)
+        {
+            _lazyIfEmpty = settings.GetBoolean(ConfigurationKeys.LAZY_IF_EMPTY);
+        }
+
         /// <summary>
         /// Gets the <see cref="IProperty"/> implementation type
         /// </summary>
@@ -36,7 +44,7 @@ namespace BeanIO.Internal.Parser
             var aggregatedValue = Selector.GetValue(context);
             if (!ReferenceEquals(aggregatedValue, Value.Invalid))
             {
-                if (!IsLazy || StringUtil.HasValue(aggregatedValue))
+                if (!IsLazy || StringUtil.HasValue(aggregatedValue, _lazyIfEmpty))
                 {
                     var aggregation = PropertyValue.Get(context);
                     if (aggregation == null || ReferenceEquals(aggregation, Value.Missing))

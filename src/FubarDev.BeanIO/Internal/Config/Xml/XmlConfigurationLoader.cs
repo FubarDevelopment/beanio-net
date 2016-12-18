@@ -19,11 +19,16 @@ namespace BeanIO.Internal.Config.Xml
     /// </remarks>
     internal class XmlConfigurationLoader : IConfigurationLoader
     {
+        private readonly ISettings _settings;
+        private readonly ISchemeProvider _schemeProvider;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlConfigurationLoader"/> class.
         /// </summary>
-        public XmlConfigurationLoader()
+        public XmlConfigurationLoader(ISettings settings, ISchemeProvider schemeProvider)
         {
+            _settings = settings;
+            _schemeProvider = schemeProvider;
             Reader = new XmlMappingReader();
         }
 
@@ -49,7 +54,7 @@ namespace BeanIO.Internal.Config.Xml
         /// <returns>a new XML mapping parser</returns>
         protected virtual XmlMappingParser CreateParser()
         {
-            return new XmlMappingParser(Reader);
+            return new XmlMappingParser(_settings, _schemeProvider, Reader);
         }
     }
 }

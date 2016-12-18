@@ -7,6 +7,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+using BeanIO.Config;
+
 namespace BeanIO.Internal.Parser
 {
     /// <summary>
@@ -18,6 +20,11 @@ namespace BeanIO.Internal.Parser
     /// </remarks>
     internal class RecordArray : RecordCollection
     {
+        public RecordArray(ISettings settings)
+            : base(settings)
+        {
+        }
+
         /// <summary>
         /// Gets the <see cref="IProperty"/> implementation type
         /// </summary>

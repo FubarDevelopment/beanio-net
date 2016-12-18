@@ -24,12 +24,23 @@ namespace BeanIO.Internal.Compiler
     /// </summary>
     internal class StreamCompiler
     {
+        private readonly ISettings _settings;
+
+        private readonly ISchemeProvider _schemeProvider;
+
+        private readonly BeanUtil _beanUtil;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="StreamCompiler"/> class.
         /// </summary>
-        public StreamCompiler()
+        /// <param name="settings">The configuration settings</param>
+        /// <param name="schemeProvider">The scheme provider used to load resources</param>
+        public StreamCompiler(ISettings settings, ISchemeProvider schemeProvider)
         {
-            DefaultConfigurationLoader = new XmlConfigurationLoader();
+            _settings = settings;
+            _schemeProvider = schemeProvider;
+            _beanUtil = new BeanUtil(settings);
+            DefaultConfigurationLoader = new XmlConfigurationLoader(settings, schemeProvider);
         }
 
         /// <summary>
@@ -128,12 +139,13 @@ namespace BeanIO.Internal.Compiler
         protected IParserFactory CreateParserFactory(string format)
         {
             var propertyName = $"org.beanio.{format}.streamDefinitionFactory";
-            var typeName = Settings.Instance[propertyName];
+            var typeName = _settings[propertyName];
 
             if (typeName == null)
                 throw new BeanIOConfigurationException($"A stream definition factory is not configured for format '{format}'");
 
-            var factory = BeanUtil.CreateBean(typeName) as IParserFactory;
+            var arguments = new List<object>() {_settings, _schemeProvider};
+            var factory = BeanUtil.CreateBean(typeName, arguments) as IParserFactory;
             if (factory == null)
             {
                 throw new BeanIOConfigurationException(
@@ -167,7 +179,7 @@ namespace BeanIO.Internal.Compiler
                     object bean;
                     try
                     {
-                        bean = BeanUtil.CreateBean(handlerConfig.ClassName, handlerConfig.Properties);
+                        bean = _beanUtil.CreateBean(handlerConfig.ClassName, handlerConfig.Properties);
                     }
                     catch (BeanIOConfigurationException ex)
                     {
@@ -184,7 +196,7 @@ namespace BeanIO.Internal.Compiler
                     }
 
                     var funcHandlerConfig = handlerConfig;
-                    createFunc = () => (ITypeHandler)BeanUtil.CreateBean(funcHandlerConfig.ClassName, funcHandlerConfig.Properties);
+                    createFunc = () => (ITypeHandler)_beanUtil.CreateBean(funcHandlerConfig.ClassName, funcHandlerConfig.Properties);
                 }
 
                 if (handlerConfig.Name != null)

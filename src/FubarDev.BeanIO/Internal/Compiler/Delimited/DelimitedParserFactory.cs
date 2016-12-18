@@ -5,6 +5,7 @@
 
 using System;
 
+using BeanIO.Config;
 using BeanIO.Internal.Compiler.Flat;
 using BeanIO.Internal.Config;
 using BeanIO.Internal.Parser;
@@ -17,6 +18,11 @@ namespace BeanIO.Internal.Compiler.Delimited
 {
     internal class DelimitedParserFactory : FlatParserFactory
     {
+        public DelimitedParserFactory(ISettings settings)
+            : base(settings)
+        {
+        }
+
         /// <summary>
         /// Creates the default <see cref="IRecordParserFactory"/>.
         /// </summary>

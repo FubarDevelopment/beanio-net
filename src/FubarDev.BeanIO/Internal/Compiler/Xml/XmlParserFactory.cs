@@ -6,6 +6,7 @@
 using System;
 using System.Xml;
 
+using BeanIO.Config;
 using BeanIO.Internal.Config;
 using BeanIO.Internal.Parser;
 using BeanIO.Internal.Parser.Format;
@@ -26,6 +27,11 @@ namespace BeanIO.Internal.Compiler.Xml
         private int _groupDepth;
 
         private int _maxGroupDepth;
+
+        public XmlParserFactory(ISettings settings)
+            : base(settings)
+        {
+        }
 
         /// <summary>
         /// Creates a new stream parser from a given stream configuration
@@ -50,7 +56,7 @@ namespace BeanIO.Internal.Compiler.Xml
         /// <returns>the new <see cref="Preprocessor"/></returns>
         protected override Preprocessor CreatePreprocessor(StreamConfig config)
         {
-            return new XmlPreprocessor(config);
+            return new XmlPreprocessor(Settings, config);
         }
 
         /// <summary>
@@ -61,7 +67,7 @@ namespace BeanIO.Internal.Compiler.Xml
         /// </returns>
         protected override IRecordParserFactory CreateDefaultRecordParserFactory()
         {
-            return new XmlRecordParserFactory();
+            return new XmlRecordParserFactory(Settings);
         }
 
         protected override IStreamFormat CreateStreamFormat(StreamConfig config)

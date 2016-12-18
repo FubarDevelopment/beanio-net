@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
+using BeanIO.Config;
 using BeanIO.Internal.Util;
 using BeanIO.Types;
 
@@ -28,14 +29,14 @@ namespace BeanIO.Internal.Parser
 
         private Regex _regex;
 
-        public Field()
+        public Field(ISettings settings)
             : base(0)
         {
-            ErrorIfNullPrimitive = Settings.Instance.GetBoolean(Settings.ERROR_IF_NULL_PRIMITIVE);
-            UseDefaultIfMissing = Settings.Instance.GetBoolean(Settings.USE_DEFAULT_IF_MISSING);
-            ParseDefault = Settings.Instance.GetBoolean(Settings.DEFAULT_PARSING_ENABLED);
-            MarshalDefault = Settings.Instance.GetBoolean(Settings.DEFAULT_MARSHALLING_ENABLED);
-            ValidateOnMarshal = Settings.Instance.GetBoolean(Settings.VALIDATE_ON_MARSHAL);
+            ErrorIfNullPrimitive = settings.GetBoolean(ConfigurationKeys.ERROR_IF_NULL_PRIMITIVE);
+            UseDefaultIfMissing = settings.GetBoolean(ConfigurationKeys.USE_DEFAULT_IF_MISSING);
+            ParseDefault = settings.GetBoolean(ConfigurationKeys.DEFAULT_PARSING_ENABLED);
+            MarshalDefault = settings.GetBoolean(ConfigurationKeys.DEFAULT_MARSHALLING_ENABLED);
+            ValidateOnMarshal = settings.GetBoolean(ConfigurationKeys.VALIDATE_ON_MARSHAL);
             MaxLength = int.MaxValue;
         }
 

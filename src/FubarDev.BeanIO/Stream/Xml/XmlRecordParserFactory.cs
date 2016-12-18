@@ -3,8 +3,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.IO;
 using System.Xml.Linq;
+
+using BeanIO.Config;
 
 namespace BeanIO.Stream.Xml
 {
@@ -13,7 +16,26 @@ namespace BeanIO.Stream.Xml
     /// </summary>
     public class XmlRecordParserFactory : XmlParserConfiguration, IRecordParserFactory, IXmlStreamConfigurationAware
     {
+        private readonly ISettings _settings;
         private IXmlStreamConfiguration _source;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlRecordParserFactory"/> class.
+        /// </summary>
+        [Obsolete("Use XmlRecordParserFactory(ISettings)")]
+        public XmlRecordParserFactory()
+            : this(DefaultConfigurationFactory.CreateDefaultSettings())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlRecordParserFactory"/> class.
+        /// </summary>
+        /// <param name="settings">The configuration settings</param>
+        public XmlRecordParserFactory(ISettings settings)
+        {
+            _settings = settings;
+        }
 
         /// <summary>
         /// Initializes the factory.
@@ -45,7 +67,7 @@ namespace BeanIO.Stream.Xml
         /// <returns>The new <see cref="IRecordWriter"/></returns>
         public IRecordWriter CreateWriter(TextWriter writer)
         {
-            return new XmlWriter(writer, this);
+            return new XmlWriter(writer, _settings, this);
         }
 
         /// <summary>

@@ -41,15 +41,19 @@ namespace BeanIO.Internal.Compiler
     {
         private static readonly string CONSTRUCTOR_PREFIX = "#";
 
-        private static readonly bool _allowProtectedPropertyAccess = Settings.Instance.GetBoolean(Settings.ALLOW_PROTECTED_PROPERTY_ACCESS);
-
-        private static readonly string _propertyAccessorFactory = Settings.Instance.GetProperty(Settings.PROPERTY_ACCESSOR_METHOD);
-
         private static readonly Component _unbound = new UnboundComponent();
+
+        private readonly bool _allowProtectedPropertyAccess;
+
+        private readonly string _propertyAccessorFactory;
 
         private readonly Stack<Component> _parserStack = new Stack<Component>();
 
         private readonly Stack<Component> _propertyStack = new Stack<Component>();
+
+        private readonly ISettings _settings;
+
+        private readonly BeanUtil _beanUtil;
 
         private IPropertyAccessorFactory _accessorFactory;
 
@@ -60,6 +64,19 @@ namespace BeanIO.Internal.Compiler
         private bool _readEnabled = true;
 
         private bool _writeEnabled = true;
+
+        protected ParserFactorySupport(ISettings settings)
+        {
+            _settings = settings;
+            _allowProtectedPropertyAccess = _settings.GetBoolean(ConfigurationKeys.ALLOW_PROTECTED_PROPERTY_ACCESS);
+            _propertyAccessorFactory = _settings[ConfigurationKeys.PROPERTY_ACCESSOR_METHOD];
+            _beanUtil = new BeanUtil(settings);
+        }
+
+        /// <summary>
+        /// Gets the configuration settings
+        /// </summary>
+        public ISettings Settings => _settings;
 
         /// <summary>
         /// Gets or sets the type handler factory to use for resolving type handlers
@@ -139,7 +156,7 @@ namespace BeanIO.Internal.Compiler
         /// <returns>the new <see cref="Preprocessor"/></returns>
         protected virtual Preprocessor CreatePreprocessor(StreamConfig config)
         {
-            return new Preprocessor(config);
+            return new Preprocessor(_settings, config);
         }
 
         protected abstract IStreamFormat CreateStreamFormat(StreamConfig config);
@@ -278,7 +295,7 @@ namespace BeanIO.Internal.Compiler
             }
 
             var messageFactory = new ResourceBundleMessageFactory();
-            var bundleName = Settings.Instance.GetProperty($"org.beanio.{config.Format}.messages");
+            var bundleName = _settings[$"org.beanio.{config.Format}.messages"];
             if (bundleName != null)
             {
                 messageFactory.DefaultResourceBundle = LoadResource(bundleName, config.Format);
@@ -744,7 +761,7 @@ namespace BeanIO.Internal.Compiler
             if (config.Name == null)
                 throw new BeanIOConfigurationException("Missing field name");
 
-            var field = new Field()
+            var field = new Field(_settings)
                 {
                     Name = config.Name,
                     IsIdentifier = config.IsIdentifier,
@@ -925,7 +942,7 @@ namespace BeanIO.Internal.Compiler
             if (collectionType.IsArray())
             {
                 var elementType = property.PropertyType ?? typeof(object);
-                var collParser = new ArrayParser
+                var collParser = new ArrayParser(Settings)
                     {
                         ElementType = elementType
                     };
@@ -934,11 +951,11 @@ namespace BeanIO.Internal.Compiler
             }
             else if (isMap)
             {
-                aggregation = new MapParser();
+                aggregation = new MapParser(Settings);
             }
             else
             {
-                aggregation = new CollectionParser();
+                aggregation = new CollectionParser(Settings);
             }
 
             aggregation.Name = config.Label;
@@ -1036,15 +1053,15 @@ namespace BeanIO.Internal.Compiler
             RecordAggregation aggregation;
             if (collectionType.IsArray())
             {
-                aggregation = new RecordArray();
+                aggregation = new RecordArray(Settings);
             }
             else if (isMap)
             {
-                aggregation = new RecordMap();
+                aggregation = new RecordMap(Settings);
             }
             else
             {
-                aggregation = new RecordCollection();
+                aggregation = new RecordCollection(Settings);
             }
 
             aggregation.Name = config.Name;
@@ -1306,7 +1323,7 @@ namespace BeanIO.Internal.Compiler
                     required = config.MinOccurs.GetValueOrDefault() > 0 && !config.IsNillable;
                 var matchNull = !required && config.MinOccurs.GetValueOrDefault() == 0;
 
-                var collection = new CollectionBean()
+                var collection = new CollectionBean(_settings)
                     {
                         Name = config.Name,
                         PropertyType = beanClass,
@@ -1320,7 +1337,7 @@ namespace BeanIO.Internal.Compiler
                 var required = _propertyStack.Count == 0;
                 var matchNull = !required && config.MinOccurs.GetValueOrDefault() == 0;
 
-                var bean = new Bean()
+                var bean = new Bean(_settings)
                     {
                         Name = config.Name,
                         PropertyType = beanClass,
@@ -1424,7 +1441,7 @@ namespace BeanIO.Internal.Compiler
                     }
                 }
 
-                BeanUtil.Configure(factory, parserFactoryBean.Properties);
+                _beanUtil.Configure(factory, parserFactoryBean.Properties);
             }
 
             try

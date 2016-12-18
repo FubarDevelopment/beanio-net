@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
+using BeanIO.Config;
 using BeanIO.Internal.Config;
 using BeanIO.Internal.Util;
 
@@ -52,8 +53,13 @@ namespace BeanIO.Internal.Compiler.Flat
         /// </summary>
         private PropertyConfig _unboundedComponentFollower;
 
-        public FlatPreprocessor(StreamConfig stream)
-            : base(stream)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FlatPreprocessor"/> class.
+        /// </summary>
+        /// <param name="settings">The configuration settings</param>
+        /// <param name="stream">The stream configuration</param>
+        public FlatPreprocessor(ISettings settings, StreamConfig stream)
+            : base(settings, stream)
         {
         }
 

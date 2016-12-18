@@ -12,7 +12,7 @@ namespace BeanIO.Parser.Xml.Multiline
 {
     public sealed class XmlMultilineRecordTest : XmlParserTest
     {
-        private readonly StreamFactory _factory;
+        private readonly IStreamFactory _factory;
 
         public XmlMultilineRecordTest()
         {

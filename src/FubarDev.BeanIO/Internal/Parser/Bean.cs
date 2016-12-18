@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
+using BeanIO.Config;
 using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser
@@ -30,13 +31,18 @@ namespace BeanIO.Internal.Parser
         /// </summary>
         private readonly ParserLocal<object[]> _constructorArgs;
 
+        private readonly bool _lazyIfEmpty;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Bean"/> class.
         /// </summary>
-        public Bean()
+        /// <param name="settings">The configuration settings</param>
+        public Bean(ISettings settings)
+            : base(settings)
         {
             _bean = new BeanParserLocal(this);
             _constructorArgs = new ConstructorArgsParserLocal(this);
+            _lazyIfEmpty = settings.GetBoolean(ConfigurationKeys.LAZY_IF_EMPTY);
         }
 
         /// <summary>
@@ -107,7 +113,7 @@ namespace BeanIO.Internal.Parser
                     else
                     {
                         hasProperties = true;
-                        create = create || !IsLazy || StringUtil.HasValue(value);
+                        create = create || !IsLazy || StringUtil.HasValue(value, _lazyIfEmpty);
                     }
 
                     Debug.Assert(accessor.ConstructorArgumentIndex != null, "accessor.ConstructorArgumentIndex != null");
@@ -141,7 +147,7 @@ namespace BeanIO.Internal.Parser
                     {
                         if (IsLazy)
                         {
-                            if (!StringUtil.HasValue(value))
+                            if (!StringUtil.HasValue(value, _lazyIfEmpty))
                                 continue;
 
                             b = NewInstance(context);

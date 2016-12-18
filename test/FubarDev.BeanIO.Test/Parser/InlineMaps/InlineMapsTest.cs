@@ -56,7 +56,7 @@ namespace BeanIO.Parser.InlineMaps
             ValidateSegmentMapWithValue(factory);
         }
 
-        private void ValidateSegmentMap(StreamFactory factory)
+        private void ValidateSegmentMap(IStreamFactory factory)
         {
             var u = factory.CreateUnmarshaller("s");
             var m = factory.CreateMarshaller("s");
@@ -81,7 +81,7 @@ namespace BeanIO.Parser.InlineMaps
             Assert.Equal(text, m.Marshal(record).ToString());
         }
 
-        private void ValidateSegmentMapWithValue(StreamFactory factory)
+        private void ValidateSegmentMapWithValue(IStreamFactory factory)
         {
             var u = factory.CreateUnmarshaller("s");
             var m = factory.CreateMarshaller("s");

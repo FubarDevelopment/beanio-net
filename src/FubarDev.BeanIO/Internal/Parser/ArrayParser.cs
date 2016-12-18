@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
+using BeanIO.Config;
 using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser
@@ -18,6 +19,11 @@ namespace BeanIO.Internal.Parser
     /// </summary>
     internal class ArrayParser : CollectionParser
     {
+        public ArrayParser(ISettings settings)
+            : base(settings)
+        {
+        }
+
         /// <summary>
         /// Gets the <see cref="IProperty"/> implementation type
         /// </summary>

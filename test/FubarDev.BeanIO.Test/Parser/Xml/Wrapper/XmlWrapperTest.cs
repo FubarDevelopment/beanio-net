@@ -16,7 +16,7 @@ namespace BeanIO.Parser.Xml.Wrapper
     /// </summary>
     public sealed class XmlWrapperTest : XmlParserTest
     {
-        private readonly StreamFactory _factory;
+        private readonly IStreamFactory _factory;
 
         public XmlWrapperTest()
         {

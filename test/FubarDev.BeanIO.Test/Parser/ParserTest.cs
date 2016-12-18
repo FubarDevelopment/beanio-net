@@ -4,10 +4,10 @@
 // </copyright>
 
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Runtime.CompilerServices;
+
+using BeanIO.Config;
 
 using Xunit;
 
@@ -20,14 +20,18 @@ namespace BeanIO.Parser
     {
         protected static string LineSeparator { get; } = Environment.NewLine;
 
+        protected static ISettings DefaultSettings { get; } = DefaultConfigurationFactory.CreateDefaultSettings();
+
+        protected static ISchemeProvider DefaultSchemeProvider { get; } = DefaultConfigurationFactory.CreateDefaultSchemeProvider();
+
         public System.IO.Stream LoadStream(string fileName)
         {
-            return LoadStreamInternal(fileName, 2);
+            return LoadStreamInternal(fileName);
         }
 
         public TextReader LoadReader(string fileName)
         {
-            return new StreamReader(LoadStreamInternal(fileName, 2));
+            return new StreamReader(LoadStreamInternal(fileName));
         }
 
         /// <summary>
@@ -37,17 +41,17 @@ namespace BeanIO.Parser
         /// <returns>the resource contents</returns>
         public virtual string Load(string resourceName)
         {
-            using (var resStream = LoadStreamInternal(resourceName, 2))
+            using (var resStream = LoadStreamInternal(resourceName))
             {
                 var reader = new StreamReader(resStream);
                 return reader.ReadToEnd();
             }
         }
 
-        protected virtual StreamFactory NewStreamFactory(string resourceName)
+        protected virtual IStreamFactory NewStreamFactory(string resourceName)
         {
             var factory = StreamFactory.NewInstance();
-            using (var resStream = LoadStreamInternal(resourceName, 2))
+            using (var resStream = LoadStreamInternal(resourceName))
             {
                 factory.Load(resStream);
             }
@@ -57,7 +61,7 @@ namespace BeanIO.Parser
 
         protected virtual void LoadMappingFile(StreamFactory factory, string resourceName)
         {
-            using (var resStream = LoadStreamInternal(resourceName, 2))
+            using (var resStream = LoadStreamInternal(resourceName))
             {
                 factory.Load(resStream);
             }
@@ -115,7 +119,7 @@ namespace BeanIO.Parser
             }
         }
 
-        private System.IO.Stream LoadStreamInternal(string fileName, int levels)
+        private System.IO.Stream LoadStreamInternal(string fileName)
         {
             var asm = typeof(AbstractParserTest).GetTypeInfo().Assembly;
             var resStream = asm.GetManifestResourceStream(fileName);
@@ -127,7 +131,7 @@ namespace BeanIO.Parser
             }
 
             if (resStream == null)
-                throw new ArgumentOutOfRangeException("fileName");
+                throw new ArgumentOutOfRangeException(nameof(fileName));
             return resStream;
         }
     }

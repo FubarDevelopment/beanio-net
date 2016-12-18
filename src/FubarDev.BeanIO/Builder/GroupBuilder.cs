@@ -27,14 +27,14 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
+        /// Gets the configuration settings.
+        /// </summary>
+        protected internal override GroupConfig Config => _config;
+
+        /// <summary>
         /// Gets this.
         /// </summary>
         protected override GroupBuilder Me => this;
-
-        /// <summary>
-        /// Gets the configuration settings.
-        /// </summary>
-        protected override GroupConfig Config => _config;
 
         /// <summary>
         /// Sets the order of this group relative to other children of the same parent.

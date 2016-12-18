@@ -11,7 +11,7 @@ namespace BeanIO.Parser.Xml.Groups
 {
     public sealed class XmlGroupsTest : XmlParserTest
     {
-        private readonly StreamFactory _factory;
+        private readonly IStreamFactory _factory;
 
         public XmlGroupsTest()
         {

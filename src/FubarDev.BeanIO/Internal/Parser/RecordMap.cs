@@ -6,12 +6,20 @@
 using System.Collections;
 using System.Text;
 
+using BeanIO.Config;
 using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser
 {
     internal class RecordMap : RecordAggregation
     {
+        private readonly bool _lazyIfEmpty;
+
+        public RecordMap(ISettings settings)
+        {
+            _lazyIfEmpty = settings.GetBoolean(ConfigurationKeys.LAZY_IF_EMPTY);
+        }
+
         /// <summary>
         /// Gets the <see cref="IProperty"/> implementation type
         /// </summary>
@@ -42,7 +50,7 @@ namespace BeanIO.Internal.Parser
             {
                 var keyValue = KeyProperty.GetValue(context);
 
-                if (!IsLazy || StringUtil.HasValue(keyValue) || StringUtil.HasValue(aggregatedValue))
+                if (!IsLazy || StringUtil.HasValue(keyValue, _lazyIfEmpty) || StringUtil.HasValue(aggregatedValue, _lazyIfEmpty))
                 {
                     var aggregation = PropertyValue.Get(context);
                     if (aggregation == null || ReferenceEquals(aggregation, Value.Missing))

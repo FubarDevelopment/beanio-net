@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
+using BeanIO.Config;
 using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser
@@ -18,7 +19,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionBean"/> class.
         /// </summary>
-        public CollectionBean()
+        /// <param name="settings">The configuration settings</param>
+        public CollectionBean(ISettings settings)
+            : base(settings)
         {
             _bean = new BeanParserLocal(this);
         }

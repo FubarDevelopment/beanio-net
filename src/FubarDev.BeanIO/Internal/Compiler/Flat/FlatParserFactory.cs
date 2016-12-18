@@ -5,12 +5,22 @@
 
 using System;
 
+using BeanIO.Config;
 using BeanIO.Internal.Config;
 
 namespace BeanIO.Internal.Compiler.Flat
 {
     internal abstract class FlatParserFactory : ParserFactorySupport
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FlatParserFactory"/> class.
+        /// </summary>
+        /// <param name="settings">The configuration settings</param>
+        protected FlatParserFactory(ISettings settings)
+            : base(settings)
+        {
+        }
+
         /// <summary>
         /// Creates a stream configuration pre-processor
         /// </summary>
@@ -19,7 +29,7 @@ namespace BeanIO.Internal.Compiler.Flat
         /// <returns>the new <see cref="Preprocessor"/></returns>
         protected override Preprocessor CreatePreprocessor(StreamConfig config)
         {
-            return new FlatPreprocessor(config);
+            return new FlatPreprocessor(Settings, config);
         }
     }
 }

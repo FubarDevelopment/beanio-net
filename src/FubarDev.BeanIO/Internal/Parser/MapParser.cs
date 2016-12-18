@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
+using BeanIO.Config;
 using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser
@@ -23,6 +24,13 @@ namespace BeanIO.Internal.Parser
         /// the property value
         /// </summary>
         private readonly ParserLocal<object> _value = new ParserLocal<object>();
+
+        private readonly bool _lazyIfEmpty;
+
+        public MapParser(ISettings settings)
+        {
+            _lazyIfEmpty = settings.GetBoolean(ConfigurationKeys.LAZY_IF_EMPTY);
+        }
 
         /// <summary>
         /// Gets or sets the key property
@@ -243,7 +251,7 @@ namespace BeanIO.Internal.Parser
                     else if (!ReferenceEquals(fieldValue, Value.Missing))
                     {
                         var mapKey = KeyProperty.GetValue(context);
-                        if (!IsLazy || StringUtil.HasValue(mapKey) || StringUtil.HasValue(fieldValue))
+                        if (!IsLazy || StringUtil.HasValue(mapKey, _lazyIfEmpty) || StringUtil.HasValue(fieldValue, _lazyIfEmpty))
                         {
                             if (map == null)
                                 map = CreateMap();

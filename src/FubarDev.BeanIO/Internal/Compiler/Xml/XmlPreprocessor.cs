@@ -6,8 +6,8 @@
 using System;
 using System.Xml;
 
+using BeanIO.Config;
 using BeanIO.Internal.Config;
-using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Compiler.Xml
 {
@@ -16,8 +16,8 @@ namespace BeanIO.Internal.Compiler.Xml
     /// </summary>
     internal class XmlPreprocessor : Preprocessor
     {
-        public XmlPreprocessor(StreamConfig stream)
-            : base(stream)
+        public XmlPreprocessor(ISettings settings, StreamConfig stream)
+            : base(settings, stream)
         {
         }
 
@@ -148,7 +148,7 @@ namespace BeanIO.Internal.Compiler.Xml
             var type = config.XmlType;
             if (type == null)
             {
-                var xmlType = Settings.Instance.GetProperty(Settings.DEFAULT_XML_TYPE);
+                var xmlType = Settings[ConfigurationKeys.DEFAULT_XML_TYPE];
                 XmlNodeType newXmlNodeType;
                 if (!Enum.TryParse(xmlType, true, out newXmlNodeType))
                     newXmlNodeType = XmlNodeType.Element;

@@ -8,7 +8,6 @@ using System;
 using BeanIO.Config;
 using BeanIO.Internal.Config;
 using BeanIO.Internal.Config.Xml;
-using BeanIO.Internal.Util;
 
 namespace BeanIO.Builder
 {
@@ -22,8 +21,6 @@ namespace BeanIO.Builder
         where TConfig : SegmentConfig
     {
         private XmlMappingParser _mappingParser;
-
-        internal XmlMappingParser MappingParser => _mappingParser ?? (_mappingParser = new XmlMappingParser(new XmlMappingReader()));
 
         /// <summary>
         /// Sets the name of a child component to use as the key for an
@@ -87,11 +84,19 @@ namespace BeanIO.Builder
         /// <param name="resource">The resource to load that gives access to a template</param>
         /// <param name="properties">The optional properties to use while loading data from the resource</param>
         /// <returns>The value of <see cref="P:SegmentBuilderSupport{T,TConfig}.Me"/></returns>
+        [Obsolete("Use the SegmentBuilderExtensions.WithLoader extension method instead")]
         public T LoadMapping(Uri resource, Properties properties = null)
         {
-            var handler = Settings.Instance.GetSchemeHandler(resource, true);
+            var schemeProvider = DefaultConfigurationFactory.CreateDefaultSchemeProvider();
+            if (_mappingParser == null)
+            {
+                var settings = DefaultConfigurationFactory.CreateDefaultSettings();
+                _mappingParser = new XmlMappingParser(settings, schemeProvider, new XmlMappingReader());
+            }
+
+            var handler = schemeProvider.GetSchemeHandler(resource.Scheme, true);
             using (var input = handler.Open(resource))
-                MappingParser.LoadConfiguration(input, properties);
+                _mappingParser.LoadConfiguration(input, properties);
             return Me;
         }
 
@@ -101,9 +106,10 @@ namespace BeanIO.Builder
         /// <param name="templateName">The name of the template to apply to this builder.</param>
         /// <param name="offset">the value to offset configured positions by</param>
         /// <returns>The value of <see cref="P:SegmentBuilderSupport{T,TConfig}.Me"/></returns>
+        [Obsolete("Use the SegmentBuilderExtensions.WithLoader extension method instead")]
         public T Include(string templateName, int offset = 0)
         {
-            MappingParser.IncludeTemplate(Config, templateName, offset);
+            _mappingParser.IncludeTemplate(Config, templateName, offset);
             return Me;
         }
     }

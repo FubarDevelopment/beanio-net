@@ -32,14 +32,14 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
+        /// Gets the configuration settings.
+        /// </summary>
+        protected internal override FieldConfig Config => _config;
+
+        /// <summary>
         /// Gets this.
         /// </summary>
         protected override FieldBuilder Me => this;
-
-        /// <summary>
-        /// Gets the configuration settings.
-        /// </summary>
-        protected override FieldConfig Config => _config;
 
         /// <summary>
         /// Indicates this field is used to identify the record.

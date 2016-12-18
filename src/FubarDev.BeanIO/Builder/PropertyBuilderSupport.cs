@@ -23,14 +23,14 @@ namespace BeanIO.Builder
         where TConfig : PropertyConfig
     {
         /// <summary>
+        /// Gets the configuration settings.
+        /// </summary>
+        protected internal abstract TConfig Config { get; }
+
+        /// <summary>
         /// Gets this.
         /// </summary>
         protected abstract T Me { get; }
-
-        /// <summary>
-        /// Gets the configuration settings.
-        /// </summary>
-        protected abstract TConfig Config { get; }
 
         /// <summary>
         /// Sets the minimum occurrences of this component.

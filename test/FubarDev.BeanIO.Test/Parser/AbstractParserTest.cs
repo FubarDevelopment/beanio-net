@@ -37,9 +37,9 @@ namespace BeanIO.Parser
             return factory.CreateReader(name, new StringReader(input));
         }
 
-        protected StreamFactory CreateFactory(string xml = null)
+        protected IStreamFactory CreateFactory(string xml = null)
         {
-            StreamFactory factory = StreamFactory.NewInstance();
+            var factory = StreamFactory.NewInstance();
             if (xml != null)
             {
                 xml = "<beanio xmlns=\"http://www.beanio.org/2015/06\">\n" + xml + "\n</beanio>";
@@ -49,9 +49,9 @@ namespace BeanIO.Parser
             return factory;
         }
 
-        protected StreamFactory CreateFactory(StreamBuilder builder)
+        protected IStreamFactory CreateFactory(StreamBuilder builder)
         {
-            StreamFactory factory = StreamFactory.NewInstance();
+            var factory = StreamFactory.NewInstance();
             if (builder != null)
             {
                 factory.Define(builder);

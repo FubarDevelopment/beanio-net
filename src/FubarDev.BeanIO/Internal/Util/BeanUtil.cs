@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -20,35 +21,21 @@ namespace BeanIO.Internal.Util
     /// <summary>
     /// Utility class for instantiating configurable bean classes
     /// </summary>
-    internal static class BeanUtil
+    internal class BeanUtil
     {
-        private static readonly bool NULL_ESCAPING_ENABLED = Settings.Instance.GetBoolean(Settings.NULL_ESCAPING_ENABLED);
+        private static readonly ConcurrentDictionary<Type, MethodInfo> _addMethods = new ConcurrentDictionary<Type, MethodInfo>();
 
-        private static readonly TypeHandlerFactory _typeHandlerFactory = new TypeHandlerFactory();
+        private readonly TypeHandlerFactory _typeHandlerFactory = new TypeHandlerFactory();
 
-        static BeanUtil()
+        public BeanUtil(ISettings settings)
         {
+            var nullEscapingEnabled = settings.GetBoolean(ConfigurationKeys.NULL_ESCAPING_ENABLED);
             _typeHandlerFactory.RegisterHandlerFor(typeof(string[]), () => new StringArrayTypeHandler());
-            if (Settings.Instance.GetBoolean(Settings.PROPERTY_ESCAPING_ENABLED))
+            if (settings.GetBoolean(ConfigurationKeys.PROPERTY_ESCAPING_ENABLED))
             {
-                _typeHandlerFactory.RegisterHandlerFor(typeof(string), () => new EscapedStringTypeHandler());
-                _typeHandlerFactory.RegisterHandlerFor(typeof(char), () => new EscapedCharacterTypeHandler());
+                _typeHandlerFactory.RegisterHandlerFor(typeof(string), () => new EscapedStringTypeHandler(nullEscapingEnabled));
+                _typeHandlerFactory.RegisterHandlerFor(typeof(char), () => new EscapedCharacterTypeHandler(nullEscapingEnabled));
             }
-        }
-
-        public static void Add(this ICollection collection, object value)
-        {
-            var t = collection.GetType();
-            var i = t.GetTypeInfo();
-            var addMethod = i.DeclaredMethods.FirstOrDefault(x => x.IsPublic && !x.IsStatic && x.Name == "Add" && x.GetParameters().Length == 1);
-            addMethod.Invoke(collection, new[] { value });
-        }
-
-        public static object CreateBean([NotNull] string className, Properties properties)
-        {
-            var bean = CreateBean(className);
-            Configure(bean, properties);
-            return bean;
         }
 
         public static object CreateBean([NotNull] string className)
@@ -78,7 +65,68 @@ namespace BeanIO.Internal.Util
             }
         }
 
-        public static void Configure(object bean, Properties properties)
+        public static object CreateBean([NotNull] string className, IReadOnlyCollection<object> availableObjects)
+        {
+            if (availableObjects == null || availableObjects.Count == 0)
+                return CreateBean(className);
+            if (className == null)
+                throw new ArgumentNullException(nameof(className));
+
+            Type type;
+            try
+            {
+                // load the class
+                type = Type.GetType(className, true);
+            }
+            catch (Exception ex)
+            {
+                throw new BeanIOConfigurationException($"Class not found '{className}'", ex);
+            }
+
+            try
+            {
+                // instantiate an instance of the class
+                var match = GetBestConstructorMatch(type, availableObjects);
+                if (match == null)
+                    return type.NewInstance();
+                return match.Constructor.Invoke(match.Arguments.ToArray());
+            }
+            catch (Exception ex)
+            {
+                throw new BeanIOConfigurationException($"Could not instantiate class '{type}'", ex);
+            }
+        }
+
+        public static PropertyDescriptor GetPropertyDescriptor(Type type, string property, string getter, string setter, bool isConstructorArgument)
+        {
+            var detector = new PropertyDescriptorDetector(type, property, getter, setter, isConstructorArgument);
+            return detector.Create();
+        }
+
+        public void Add(IEnumerable collection, object value)
+        {
+            var t = collection.GetType();
+            var addMethod = _addMethods.GetOrAdd(
+                t,
+                collectionType =>
+                {
+                    var i = collectionType.GetTypeInfo();
+                    var foundAddMethod =
+                        i.DeclaredMethods.First(
+                            x => x.IsPublic && !x.IsStatic && x.Name == "Add" && x.GetParameters().Length == 1);
+                    return foundAddMethod;
+                });
+            addMethod.Invoke(collection, new[] { value });
+        }
+
+        public object CreateBean([NotNull] string className, Properties properties)
+        {
+            var bean = CreateBean(className);
+            Configure(bean, properties);
+            return bean;
+        }
+
+        public void Configure(object bean, Properties properties)
         {
             // if no properties, we're done...
             if (properties == null || properties.Count == 0)
@@ -115,10 +163,59 @@ namespace BeanIO.Internal.Util
             }
         }
 
-        public static PropertyDescriptor GetPropertyDescriptor(Type type, string property, string getter, string setter, bool isConstructorArgument)
+        internal static ConstructorMatch GetBestConstructorMatch(Type type, IReadOnlyCollection<object> arguments)
         {
-            var detector = new PropertyDescriptorDetector(type, property, getter, setter, isConstructorArgument);
-            return detector.Create();
+            return type.GetTypeInfo().DeclaredConstructors
+                .Select(x => new ConstructorMatch(x, arguments))
+                .OrderByDescending(x => x.Score)
+                .FirstOrDefault(x => x.Score > 0);
+        }
+
+        internal class ConstructorMatch
+        {
+            public ConstructorMatch(ConstructorInfo constructor, IReadOnlyCollection<object> arguments)
+            {
+                var score = 0;
+                var parameters = constructor.GetParameters();
+                var constructorArgs = new List<object>(parameters.Length);
+                foreach (var parameter in parameters)
+                {
+                    var matchingArgument = arguments.FirstOrDefault(x => x != null && x.GetType().IsInstanceOf(parameter.ParameterType));
+                    constructorArgs.Add(matchingArgument);
+                    if (matchingArgument != null)
+                    {
+                        score += 1;
+                    }
+                    else
+                    {
+                        if (parameter.ParameterType.GetTypeInfo().IsValueType)
+                        {
+                            if (Nullable.GetUnderlyingType(parameter.ParameterType) != null)
+                            {
+                                score -= 2;
+                            }
+                            else
+                            {
+                                score -= 100;
+                            }
+                        }
+                        else
+                        {
+                            score -= 1;
+                        }
+                    }
+                }
+
+                Constructor = constructor;
+                Arguments = constructorArgs;
+                Score = score;
+            }
+
+            public ConstructorInfo Constructor { get; }
+
+            public IReadOnlyCollection<object> Arguments { get; }
+
+            public int Score { get; }
         }
 
         private class PropertyDescriptorDetector
@@ -390,6 +487,13 @@ namespace BeanIO.Internal.Util
 
         private class EscapedCharacterTypeHandler : ITypeHandler
         {
+            private readonly bool _nullEscapingEnabled;
+
+            public EscapedCharacterTypeHandler(bool nullEscapingEnabled)
+            {
+                _nullEscapingEnabled = nullEscapingEnabled;
+            }
+
             /// <summary>
             /// Gets the class type supported by this handler.
             /// </summary>
@@ -423,7 +527,7 @@ namespace BeanIO.Internal.Util
                     case 'f':
                         return '\f';
                     case '0':
-                        if (NULL_ESCAPING_ENABLED)
+                        if (_nullEscapingEnabled)
                             return '\0';
                         break;
                 }
@@ -444,6 +548,13 @@ namespace BeanIO.Internal.Util
 
         private class EscapedStringTypeHandler : ITypeHandler
         {
+            private readonly bool _nullEscapingEnabled;
+
+            public EscapedStringTypeHandler(bool nullEscapingEnabled)
+            {
+                _nullEscapingEnabled = nullEscapingEnabled;
+            }
+
             /// <summary>
             /// Gets the class type supported by this handler.
             /// </summary>
@@ -487,7 +598,7 @@ namespace BeanIO.Internal.Util
                                 value.Append('\f');
                                 break;
                             case '0':
-                                if (NULL_ESCAPING_ENABLED)
+                                if (_nullEscapingEnabled)
                                 {
                                     value.Append('\0');
                                 }

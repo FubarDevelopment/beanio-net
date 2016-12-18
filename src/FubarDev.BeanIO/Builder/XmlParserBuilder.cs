@@ -6,7 +6,9 @@
 using System;
 using System.Text;
 
+using BeanIO.Config;
 using BeanIO.Internal.Config;
+using BeanIO.Internal.Util;
 using BeanIO.Stream;
 using BeanIO.Stream.Xml;
 
@@ -17,7 +19,25 @@ namespace BeanIO.Builder
     /// </summary>
     public class XmlParserBuilder : IParserBuilder
     {
-        private readonly XmlRecordParserFactory _parser = new XmlRecordParserFactory();
+        private readonly XmlRecordParserFactory _parser;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlParserBuilder"/> class.
+        /// </summary>
+        [Obsolete("Use XmlParserBuilder(ISettings)")]
+        public XmlParserBuilder()
+            : this(DefaultConfigurationFactory.CreateDefaultSettings())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlParserBuilder"/> class.
+        /// </summary>
+        /// <param name="settings">The configuration settings</param>
+        public XmlParserBuilder(ISettings settings)
+        {
+            _parser = new XmlRecordParserFactory(settings);
+        }
 
         /// <summary>
         /// Suppress the XML header?

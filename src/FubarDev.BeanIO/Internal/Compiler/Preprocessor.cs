@@ -7,8 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using BeanIO.Config;
 using BeanIO.Internal.Config;
-using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Compiler
 {
@@ -19,18 +19,27 @@ namespace BeanIO.Internal.Compiler
     /// </summary>
     internal class Preprocessor : ProcessorSupport
     {
-        private static readonly Settings _settings = Settings.Instance;
-
-        private static readonly bool SORT_XML_COMPONENTS = Settings.Instance.GetBoolean(Settings.SORT_XML_COMPONENTS_BY_POSITION);
+        private readonly ISettings _settings;
 
         private readonly StreamConfig _stream;
 
         private bool _recordIgnored;
 
-        public Preprocessor(StreamConfig stream)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Preprocessor"/> class.
+        /// </summary>
+        /// <param name="settings">The configuration settings</param>
+        /// <param name="stream">The stream configuration</param>
+        public Preprocessor(ISettings settings, StreamConfig stream)
         {
+            _settings = settings;
             _stream = stream;
         }
+
+        /// <summary>
+        /// Gets the configuration settings
+        /// </summary>
+        protected ISettings Settings => _settings;
 
         /// <summary>
         /// Gets the stream configuration
@@ -58,7 +67,8 @@ namespace BeanIO.Internal.Compiler
         {
             FinalizeGroup(stream);
 
-            bool sortingRequired = SORT_XML_COMPONENTS || !string.Equals("xml", stream.Format, StringComparison.Ordinal);
+            var sortXmlComponents = _settings.GetBoolean(ConfigurationKeys.SORT_XML_COMPONENTS_BY_POSITION);
+            bool sortingRequired = sortXmlComponents || !string.Equals("xml", stream.Format, StringComparison.Ordinal);
             if (sortingRequired)
                 stream.Sort(new ComponentConfigComparer());
         }
@@ -70,7 +80,7 @@ namespace BeanIO.Internal.Compiler
         protected override void InitializeGroup(GroupConfig group)
         {
             if (group.MinOccurs == null)
-                group.MinOccurs = _settings.GetInt(Settings.DEFAULT_GROUP_MIN_OCCURS, 0);
+                group.MinOccurs = _settings.GetInt(ConfigurationKeys.DEFAULT_GROUP_MIN_OCCURS, 0);
             if (group.MaxOccurs == null)
                 group.MaxOccurs = int.MaxValue;
             if (group.MaxOccurs <= 0)
@@ -175,7 +185,7 @@ namespace BeanIO.Internal.Compiler
 
             // assign default min and max occurs
             if (record.MinOccurs == null)
-                record.MinOccurs = _settings.GetInt(Settings.DEFAULT_RECORD_MIN_OCCURS, 0);
+                record.MinOccurs = _settings.GetInt(ConfigurationKeys.DEFAULT_RECORD_MIN_OCCURS, 0);
             if (record.MaxOccurs == null)
                 record.MaxOccurs = int.MaxValue;
             if (record.MaxOccurs <= 0)
@@ -290,7 +300,7 @@ namespace BeanIO.Internal.Compiler
                 field.MinOccurs =
                     field.OccursRef != null
                         ? 0
-                        : _settings.GetInt($"{Settings.DEFAULT_FIELD_MIN_OCCURS}.{_stream.Format}", 0);
+                        : _settings.GetInt($"{ConfigurationKeys.DEFAULT_FIELD_MIN_OCCURS}.{_stream.Format}", 0);
             }
 
             if (field.MaxOccurs == null)

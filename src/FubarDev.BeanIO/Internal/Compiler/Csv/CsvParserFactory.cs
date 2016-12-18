@@ -3,6 +3,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using BeanIO.Config;
 using BeanIO.Internal.Compiler.Delimited;
 using BeanIO.Internal.Config;
 using BeanIO.Internal.Parser;
@@ -14,6 +15,11 @@ namespace BeanIO.Internal.Compiler.Csv
 {
     internal class CsvParserFactory : DelimitedParserFactory
     {
+        public CsvParserFactory(ISettings settings)
+            : base(settings)
+        {
+        }
+
         protected override IStreamFormat CreateStreamFormat(StreamConfig config)
         {
             var format = new CsvStreamFormat()

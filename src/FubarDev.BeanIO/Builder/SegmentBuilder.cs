@@ -27,14 +27,14 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
+        /// Gets the configuration settings.
+        /// </summary>
+        protected internal override SegmentConfig Config => _config;
+
+        /// <summary>
         /// Gets this.
         /// </summary>
         protected override SegmentBuilder Me => this;
-
-        /// <summary>
-        /// Gets the configuration settings.
-        /// </summary>
-        protected override SegmentConfig Config => _config;
 
         /// <summary>
         /// Indicates the number of occurrences of this segment is governed by another field.

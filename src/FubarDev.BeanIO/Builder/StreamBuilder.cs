@@ -49,14 +49,14 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
+        /// Gets the configuration settings.
+        /// </summary>
+        protected internal override StreamConfig Config => _config;
+
+        /// <summary>
         /// Gets this.
         /// </summary>
         protected override StreamBuilder Me => this;
-
-        /// <summary>
-        /// Gets the configuration settings.
-        /// </summary>
-        protected override StreamConfig Config => _config;
 
         /// <summary>
         /// Sets the stream format.

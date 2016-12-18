@@ -5,6 +5,7 @@
 
 using System;
 
+using BeanIO.Config;
 using BeanIO.Internal.Compiler.Flat;
 using BeanIO.Internal.Config;
 using BeanIO.Internal.Parser;
@@ -16,6 +17,11 @@ namespace BeanIO.Internal.Compiler.FixedLength
 {
     internal class FixedLengthParserFactory : FlatParserFactory
     {
+        public FixedLengthParserFactory(ISettings settings)
+            : base(settings)
+        {
+        }
+
         /// <summary>
         /// Creates the default <see cref="IRecordParserFactory"/>.
         /// </summary>
@@ -85,7 +91,7 @@ namespace BeanIO.Internal.Compiler.FixedLength
         /// <returns>the new <see cref="Preprocessor"/></returns>
         protected override Preprocessor CreatePreprocessor(StreamConfig config)
         {
-            return new FixedLengthPreprocessor(config);
+            return new FixedLengthPreprocessor(Settings, config);
         }
     }
 }

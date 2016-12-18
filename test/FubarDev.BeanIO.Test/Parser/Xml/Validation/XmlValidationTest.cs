@@ -11,7 +11,7 @@ namespace BeanIO.Parser.Xml.Validation
 {
     public sealed class XmlValidationTest : XmlParserTest
     {
-        private readonly StreamFactory _factory;
+        private readonly IStreamFactory _factory;
 
         public XmlValidationTest()
         {

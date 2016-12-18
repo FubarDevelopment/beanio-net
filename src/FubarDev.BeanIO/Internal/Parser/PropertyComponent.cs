@@ -6,13 +6,18 @@
 using System;
 using System.Text;
 
+using BeanIO.Config;
 using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser
 {
     internal abstract class PropertyComponent : Component, IProperty
     {
-        protected static readonly bool CreateMissingBeans = Settings.Instance.GetBoolean(Settings.CREATE_MISSING_BEANS);
+        protected PropertyComponent(ISettings settings)
+        {
+            Settings = settings;
+            CreateMissingBeans = settings.GetBoolean(ConfigurationKeys.CREATE_MISSING_BEANS);
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this property should always be instantiated when
@@ -44,6 +49,16 @@ namespace BeanIO.Internal.Parser
         /// Gets or sets the bean property type
         /// </summary>
         public Type PropertyType { get; set; }
+
+        /// <summary>
+        /// Gets the configuration settings
+        /// </summary>
+        protected ISettings Settings { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether missing beans should be created
+        /// </summary>
+        protected bool CreateMissingBeans { get; }
 
         /// <summary>
         /// Clears the property value.

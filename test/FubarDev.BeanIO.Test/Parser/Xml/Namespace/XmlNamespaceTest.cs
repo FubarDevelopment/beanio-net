@@ -11,7 +11,7 @@ namespace BeanIO.Parser.Xml.Namespace
 {
     public sealed class XmlNamespaceTest : XmlParserTest
     {
-        private readonly StreamFactory _factory;
+        private readonly IStreamFactory _factory;
 
         public XmlNamespaceTest()
         {

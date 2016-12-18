@@ -22,6 +22,11 @@ namespace BeanIO.Internal
     {
         private readonly ConcurrentDictionary<string, Parser.Stream> _contextMap = new ConcurrentDictionary<string, Parser.Stream>();
 
+        public DefaultStreamFactory(ISettings settings, ISchemeProvider schemeProvider)
+            : base(settings, schemeProvider)
+        {
+        }
+
         /// <summary>
         /// Gets or sets the mapping compiler to use for compiling streams
         /// </summary>
@@ -169,7 +174,7 @@ namespace BeanIO.Internal
         protected override void Init()
         {
             base.Init();
-            Compiler = new StreamCompiler();
+            Compiler = new StreamCompiler(Settings, SchemeProvider);
         }
 
         /// <summary>

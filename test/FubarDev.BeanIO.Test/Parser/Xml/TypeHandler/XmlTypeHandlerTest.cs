@@ -15,7 +15,7 @@ namespace BeanIO.Parser.Xml.TypeHandler
 {
     public sealed class XmlTypeHandlerTest : XmlParserTest
     {
-        private readonly StreamFactory _factory;
+        private readonly IStreamFactory _factory;
 
         public XmlTypeHandlerTest()
         {

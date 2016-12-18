@@ -12,7 +12,7 @@ namespace BeanIO.Parser.Xml.Collection
 {
     public sealed class XmlCollectionTest : XmlParserTest
     {
-        private readonly StreamFactory _factory;
+        private readonly IStreamFactory _factory;
 
         public XmlCollectionTest()
         {

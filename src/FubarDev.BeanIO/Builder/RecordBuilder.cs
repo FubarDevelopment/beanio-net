@@ -41,14 +41,14 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
+        /// Gets the configuration settings.
+        /// </summary>
+        protected internal override RecordConfig Config => _config;
+
+        /// <summary>
         /// Gets this.
         /// </summary>
         protected override RecordBuilder Me => this;
-
-        /// <summary>
-        /// Gets the configuration settings.
-        /// </summary>
-        protected override RecordConfig Config => _config;
 
         /// <summary>
         /// Sets the order of this record relative to other children of the same parent.

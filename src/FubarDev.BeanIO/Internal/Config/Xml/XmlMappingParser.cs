@@ -31,7 +31,9 @@ namespace BeanIO.Internal.Config.Xml
     /// </remarks>
     internal class XmlMappingParser : IPropertySource
     {
-        private static readonly bool _propertySubstitutionEnabled = Settings.Instance.GetBoolean(Settings.PROPERTY_SUBSTITUTION_ENABLED);
+        private readonly bool _propertySubstitutionEnabled;
+
+        private readonly ISchemeProvider _schemeProvider;
 
         /// <summary>
         /// used to read XML into a DOM object
@@ -63,13 +65,18 @@ namespace BeanIO.Internal.Config.Xml
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlMappingParser"/> class.
         /// </summary>
+        /// <param name="settings">The configuration settings</param>
+        /// <param name="schemeProvider">The scheme provider used to load resources</param>
         /// <param name="reader">the XML mapping reader for reading XML mapping files into a DOM object</param>
-        public XmlMappingParser([NotNull] XmlMappingReader reader)
+        public XmlMappingParser(ISettings settings, ISchemeProvider schemeProvider, [NotNull] XmlMappingReader reader)
         {
             if (reader == null)
                 throw new ArgumentNullException(nameof(reader));
 
+            _schemeProvider = schemeProvider;
             _reader = reader;
+
+            _propertySubstitutionEnabled = settings.GetBoolean(ConfigurationKeys.PROPERTY_SUBSTITUTION_ENABLED);
         }
 
         /// <summary>
@@ -299,11 +306,11 @@ namespace BeanIO.Internal.Config.Xml
                 throw new BeanIOConfigurationException($"No scheme specified for resource '{resource}'");
 
             var url = new Uri(resource);
-            var handler = Settings.Instance.GetSchemeHandler(url, false);
+            var handler = _schemeProvider.GetSchemeHandler(url.Scheme, false);
             if (handler == null)
             {
                 throw new BeanIOConfigurationException(
-                    $"Scheme of import resource name {resource} must one of: {string.Join(", ", Settings.Instance.SchemeHandlers.Keys.Select(x => $"'{x}'"))}");
+                    $"Scheme of import resource name {resource} must one of: {string.Join(", ", _schemeProvider.SupportedSchemes.Select(x => $"'{x}'"))}");
             }
 
             if (_mapping.IsLoading(url))

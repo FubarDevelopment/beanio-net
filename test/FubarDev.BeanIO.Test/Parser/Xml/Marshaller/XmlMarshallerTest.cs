@@ -9,7 +9,7 @@ namespace BeanIO.Parser.Xml.Marshaller
 {
     public sealed class XmlMarshallerTest : XmlParserTest
     {
-        private readonly StreamFactory _factory;
+        private readonly IStreamFactory _factory;
 
         public XmlMarshallerTest()
         {

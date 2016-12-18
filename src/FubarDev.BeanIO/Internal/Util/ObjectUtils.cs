@@ -4,6 +4,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -28,6 +29,25 @@ namespace BeanIO.Internal.Util
                 if (constructor == null)
                     return _getDefaultGenericMethodInfo.MakeGenericMethod(type).Invoke(null, null);
                 return constructor.Invoke(null);
+            }
+            catch (Exception ex)
+            {
+                throw new BeanIOException($"Failed to instantiate class '{type.GetAssemblyQualifiedName()}'", ex);
+            }
+        }
+
+        public static object NewInstance(this Type type, IReadOnlyCollection<object> availableObjects)
+        {
+            if (type == null)
+                return null;
+
+            var match = BeanUtil.GetBestConstructorMatch(type, availableObjects);
+            if (match == null)
+                return type.NewInstance();
+
+            try
+            {
+                return match.Constructor.Invoke(match.Arguments.ToArray());
             }
             catch (Exception ex)
             {

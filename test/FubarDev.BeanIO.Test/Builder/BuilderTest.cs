@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml;
 
+using BeanIO.Config;
 using BeanIO.Internal.Config;
 using BeanIO.Stream;
 using BeanIO.Stream.Csv;
@@ -26,7 +27,9 @@ namespace BeanIO.Builder
         [Fact]
         public void TestXmlParserBuilder()
         {
-            var b = new XmlParserBuilder();
+            var defaultSettings = DefaultConfigurationFactory.CreateDefaultSettings();
+
+            var b = new XmlParserBuilder(defaultSettings);
             var p = (XmlRecordParserFactory)b.Build().Create();
             Assert.Null(p.Indentation);
             Assert.Null(p.LineSeparator);
@@ -37,7 +40,7 @@ namespace BeanIO.Builder
             Assert.False(p.SuppressHeader);
             Assert.Null(p.NamespaceMap);
 
-            b = new XmlParserBuilder()
+            b = new XmlParserBuilder(defaultSettings)
                 .Indent()
                 .HeaderVersion(new Version(2, 0))
                 .HeaderEncoding(Encoding.ASCII)
@@ -160,6 +163,8 @@ namespace BeanIO.Builder
         [Fact]
         public void TestStreamBuilder()
         {
+            var defaultSettings = DefaultConfigurationFactory.CreateDefaultSettings();
+
             var b = new StreamBuilder("stream");
             var c = b.Build();
             Assert.Equal("stream", c.Name);
@@ -218,7 +223,7 @@ namespace BeanIO.Builder
                         Assert.Same(stringTypeHandler, handler.Create());
                     });
 
-            var xmlParser = new XmlParserBuilder();
+            var xmlParser = new XmlParserBuilder(defaultSettings);
             b = new StreamBuilder("stream", "fixedlength")
                 .WriteOnly()
                 .Parser(xmlParser);

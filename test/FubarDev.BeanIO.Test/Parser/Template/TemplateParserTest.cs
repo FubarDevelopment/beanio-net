@@ -78,8 +78,10 @@ namespace BeanIO.Parser.Template
                 .AddRecord(
                     new RecordBuilder("record", typeof(Dictionary<string, object>))
                         .AddField(new FieldBuilder("id").Type(typeof(int)).At(0))
+                        .WithLoader(DefaultSettings, DefaultSchemeProvider)
                         .LoadMapping(new Uri("resource:BeanIO.Parser.Template.template_mapping.xml, FubarDev.BeanIO.Test"))
                         .Include("t3", 1)
+                        .Builder
                         .AddField(new FieldBuilder("gender").Type(typeof(char)).At(3)));
             var factory = StreamFactory.NewInstance();
             factory.Define(b);

@@ -12,19 +12,18 @@ namespace BeanIO.Internal.Util
 {
     internal static class StringUtil
     {
-        private static readonly bool LAZY_IF_EMPTY = Settings.Instance.GetBoolean(Settings.LAZY_IF_EMPTY);
-
         /// <summary>
         /// Returns whether the given object has a value
         /// </summary>
         /// <param name="obj">the object to test</param>
+        /// <param name="lazyIfEmpty">additional check if the object is an empty string?</param>
         /// <returns>true if the object is not null (and not the empty string based on configuration)</returns>
-        public static bool HasValue(object obj)
+        public static bool HasValue(object obj, bool lazyIfEmpty)
         {
             if (obj == null)
                 return false;
 
-            if (LAZY_IF_EMPTY && ReferenceEquals(obj, string.Empty))
+            if (lazyIfEmpty && ReferenceEquals(obj, string.Empty))
                 return false;
 
             return true;

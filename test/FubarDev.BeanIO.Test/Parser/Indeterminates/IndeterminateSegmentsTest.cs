@@ -148,7 +148,7 @@ namespace BeanIO.Parser.Indeterminates
             Assert.Equal(text, m.Marshal(map).ToString());
         }
 
-        private void TestDelimitedIndeterminateFieldBeforeEOR(StreamFactory factory, string stream)
+        private void TestDelimitedIndeterminateFieldBeforeEOR(IStreamFactory factory, string stream)
         {
             var text = "v1,v2.1,v2.2,v3.1,v3.2,v4";
             var u = factory.CreateUnmarshaller(stream);

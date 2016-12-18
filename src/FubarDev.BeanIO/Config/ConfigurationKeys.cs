@@ -1,24 +1,18 @@
-// <copyright file="Settings.cs" company="Fubar Development Junker">
+﻿// <copyright file="ConfigurationKeys.cs" company="Fubar Development Junker">
 // Copyright (c) 2016 Fubar Development Junker. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-
-using BeanIO.Config;
-using BeanIO.Config.SchemeHandlers;
 
 using NodaTime;
 
-namespace BeanIO.Internal.Util
+namespace BeanIO.Config
 {
     /// <summary>
-    /// <see cref="Settings"/> is used to load and store BeanIO configuration settings.
+    /// All well-known configuration keys
     /// </summary>
-    internal class Settings
+    public static class ConfigurationKeys
     {
         /// <summary>
         /// This property is set to the fully qualified class name of the default stream factory implementation
@@ -65,7 +59,7 @@ namespace BeanIO.Internal.Util
         /// <summary>
         /// Whether the null character can be escaped using <code>\0</code> when property escaping is enabled.
         /// </summary>
-        public static readonly string NULL_ESCAPING_ENABLED = "org.beanio.propertyEscapingEnabled";
+        public static readonly string NULL_ESCAPING_ENABLED = "org.beanio.nullEscapingEnabled";
 
         /// <summary>
         /// Whether property substitution is enabled for mapping files
@@ -161,142 +155,5 @@ namespace BeanIO.Internal.Util
         /// Whether non-public fields and methods may be made accessible.
         /// </summary>
         public static readonly string ALLOW_PROTECTED_PROPERTY_ACCESS = "org.beanio.allowProtectedAccess";
-
-        private const string DEFAULT_CONFIGURATION_PATH = "FubarDev.BeanIO.Internal.Config.beanio.properties";
-
-        private static readonly object _syncRoot = new object();
-
-        private static Settings _instance;
-
-        private readonly Properties _properties;
-
-        private readonly Dictionary<string, ISchemeHandler> _schemeHandlers = new Dictionary<string, ISchemeHandler>();
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Settings"/> class.
-        /// </summary>
-        /// <param name="properties">The properties to use for this settings object.</param>
-        public Settings(Properties properties)
-        {
-            _properties = properties;
-            Add(new ResourceSchemeHandler());
-        }
-
-        /// <summary>
-        /// Gets or sets the global <see cref="Settings"/> instance.
-        /// </summary>
-        public static Settings Instance
-        {
-            get
-            {
-                lock (_syncRoot)
-                    return _instance ?? (_instance = new Settings(CreateDefaultProvider().Read()));
-            }
-            set
-            {
-                lock (_syncRoot)
-                    _instance = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets all registered scheme handlers
-        /// </summary>
-        public IReadOnlyDictionary<string, ISchemeHandler> SchemeHandlers => _schemeHandlers;
-
-        /// <summary>
-        /// Returns a BeanIO configuration setting
-        /// </summary>
-        /// <param name="key">the name of the setting</param>
-        /// <returns>the value of the setting, or null if the name is invalid</returns>
-        public string this[string key]
-        {
-            get
-            {
-                string result;
-                if (_properties.TryGetValue(key, out result))
-                    return result;
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Returns a BeanIO configuration setting
-        /// </summary>
-        /// <param name="key">the name of the setting</param>
-        /// <returns>the value of the setting, or null if the name is invalid</returns>
-        public string GetProperty(string key)
-        {
-            return this[key];
-        }
-
-        /// <summary>
-        /// Returns the boolean value of a BeanIO configuration setting
-        /// </summary>
-        /// <param name="key">the property key</param>
-        /// <returns>true if the property value is "1" or "true" (case insensitive),
-        /// or false if the property is any other value</returns>
-        public bool GetBoolean(string key)
-        {
-            var temp = this[key];
-            if (string.IsNullOrEmpty(temp))
-                return false;
-            temp = temp.Trim();
-            if (string.Equals("true", temp, StringComparison.OrdinalIgnoreCase))
-                return true;
-            return temp == "1";
-        }
-
-        /// <summary>
-        /// Returns a BeanIO configuration setting as an integer
-        /// </summary>
-        /// <param name="key">the property key</param>
-        /// <param name="defaultValue">the default value if the setting wasn't configured or invalid</param>
-        /// <returns>the <code>int</code> property value or <paramref name="defaultValue"/></returns>
-        public int GetInt(string key, int defaultValue)
-        {
-            var temp = this[key];
-            if (string.IsNullOrWhiteSpace(temp))
-                return defaultValue;
-            int result;
-            if (int.TryParse(temp, out result))
-                return result;
-
-            return defaultValue;
-        }
-
-        /// <summary>
-        /// Adds a new <see cref="ISchemeHandler"/>
-        /// </summary>
-        /// <param name="handler">the handler to add</param>
-        public void Add(ISchemeHandler handler)
-        {
-            _schemeHandlers[handler.Scheme] = handler;
-        }
-
-        public ISchemeHandler GetSchemeHandler(Uri url, bool throwIfMissing)
-        {
-            return GetSchemeHandler(url.Scheme, throwIfMissing);
-        }
-
-        public ISchemeHandler GetSchemeHandler(string scheme, bool throwIfMissing)
-        {
-            ISchemeHandler handler;
-            if (!SchemeHandlers.TryGetValue(scheme, out handler))
-            {
-                if (!throwIfMissing)
-                    return null;
-                throw new BeanIOConfigurationException(
-                    $"Scheme '{scheme}' must one of: {string.Join(", ", SchemeHandlers.Keys.Select(x => $"'{x}'"))}");
-            }
-
-            return handler;
-        }
-
-        private static IPropertiesProvider CreateDefaultProvider()
-        {
-            var defaultProvider = new PropertiesStreamProvider(typeof(Settings).GetTypeInfo().Assembly.GetManifestResourceStream(DEFAULT_CONFIGURATION_PATH));
-            return defaultProvider;
-        }
     }
 }

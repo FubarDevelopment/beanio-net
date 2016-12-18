@@ -3,6 +3,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using BeanIO.Config;
 using BeanIO.Internal.Compiler.Flat;
 using BeanIO.Internal.Config;
 
@@ -16,9 +17,10 @@ namespace BeanIO.Internal.Compiler.FixedLength
         /// <summary>
         /// Initializes a new instance of the <see cref="FixedLengthPreprocessor"/> class.
         /// </summary>
+        /// <param name="settings">The configuration settings</param>
         /// <param name="stream">the stream configuration to pre-process</param>
-        public FixedLengthPreprocessor(StreamConfig stream)
-            : base(stream)
+        public FixedLengthPreprocessor(ISettings settings, StreamConfig stream)
+            : base(settings, stream)
         {
         }
 

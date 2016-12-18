@@ -13,6 +13,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
+using BeanIO.Config;
 using BeanIO.Internal.Parser.Format.Xml;
 using BeanIO.Internal.Parser.Format.Xml.Annotations;
 using BeanIO.Internal.Util;
@@ -38,8 +39,6 @@ namespace BeanIO.Stream.Xml
     [SuppressMessage("StyleCop.CSharp.ReadabilityRules", "SA1124:DoNotUseRegions", Justification = "Reviewed.")]
     public class XmlWriter : IRecordWriter, IStatefulWriter
     {
-        private static readonly bool DELTA_ENABLED = Settings.Instance.GetBoolean(Settings.XML_WRITER_UPDATE_STATE_USING_DELTA);
-
         #region map keys for storing state information for implementing StatefulWriter
         private static readonly string OUTPUT_HEADER_KEY = "header";
         private static readonly string NAMESPACE_MAP_KEY = "nsMap";
@@ -47,6 +46,8 @@ namespace BeanIO.Stream.Xml
         private static readonly string STACK_ELEMENT_KEY = "xml";
         private static readonly string STACK_NS_MAP_KEY = "nsMap";
         #endregion
+
+        private readonly bool _deltaEnabled;
 
         /// <summary>
         /// The underlying writer
@@ -64,6 +65,8 @@ namespace BeanIO.Stream.Xml
         private readonly System.Xml.XmlWriter _out;
 
         private readonly Encoding _encoding;
+
+        private readonly ISettings _settings;
 
         /// <summary>
         /// Map of auto-generated namespaces to namespace prefixes
@@ -92,8 +95,9 @@ namespace BeanIO.Stream.Xml
         /// Initializes a new instance of the <see cref="XmlWriter"/> class.
         /// </summary>
         /// <param name="writer">the output stream to write to</param>
-        public XmlWriter([NotNull] TextWriter writer)
-            : this(writer, null)
+        /// <param name="settings">The configuration settings</param>
+        public XmlWriter([NotNull] TextWriter writer, ISettings settings)
+            : this(writer, settings, null)
         {
         }
 
@@ -101,15 +105,19 @@ namespace BeanIO.Stream.Xml
         /// Initializes a new instance of the <see cref="XmlWriter"/> class.
         /// </summary>
         /// <param name="writer">the output stream to write to</param>
+        /// <param name="settings">The configuration settings</param>
         /// <param name="config">the XML writer configuration</param>
-        public XmlWriter([NotNull] TextWriter writer, XmlParserConfiguration config)
+        public XmlWriter([NotNull] TextWriter writer, ISettings settings, XmlParserConfiguration config)
         {
             if (writer == null)
                 throw new ArgumentNullException(nameof(writer));
 
+            _settings = settings;
             _config = config ?? new XmlParserConfiguration();
             _encoding = _config.GetEncoding();
             _writer = new FilterWriter(writer);
+
+            _deltaEnabled = settings.GetBoolean(ConfigurationKeys.XML_WRITER_UPDATE_STATE_USING_DELTA);
 
             var writerSettings = new XmlWriterSettings()
             {
@@ -209,7 +217,7 @@ namespace BeanIO.Stream.Xml
                 state.Remove(GetKey(stackPrefix, STACK_NS_MAP_KEY));
             }
 
-            int to = DELTA_ENABLED ? _dirtyLevel : 0;
+            int to = _deltaEnabled ? _dirtyLevel : 0;
 
             // update dirtied stack items up to the current level
             var e = _elementStack;
@@ -666,7 +674,7 @@ namespace BeanIO.Stream.Xml
             string prefix;
             if (uri == XmlNodeUtil.Xsi.NamespaceName)
             {
-                prefix = Settings.Instance.GetProperty(Settings.DEFAULT_XSI_NAMESPACE_PREFIX) ?? "xsi";
+                prefix = _settings[ConfigurationKeys.DEFAULT_XSI_NAMESPACE_PREFIX] ?? "xsi";
             }
             else
             {

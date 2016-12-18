@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
+using BeanIO.Config;
 using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser
@@ -24,11 +25,14 @@ namespace BeanIO.Internal.Parser
         /// </summary>
         private readonly ParserLocal<object> _value = new ParserLocal<object>();
 
+        private readonly bool _lazyIfEmpty;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionParser"/> class.
         /// </summary>
-        public CollectionParser()
+        public CollectionParser(ISettings settings)
         {
+            _lazyIfEmpty = settings.GetBoolean(ConfigurationKeys.LAZY_IF_EMPTY);
             ElementType = typeof(object);
         }
 
@@ -249,7 +253,7 @@ namespace BeanIO.Internal.Parser
                     else if (!ReferenceEquals(fieldValue, Value.Missing))
                     {
                         // the field value may still be missing if 'optional' is true on a child segment
-                        if (!IsLazy || StringUtil.HasValue(fieldValue))
+                        if (!IsLazy || StringUtil.HasValue(fieldValue, _lazyIfEmpty))
                         {
                             if (collection == null)
                                 collection = CreateCollection();
