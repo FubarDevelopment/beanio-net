@@ -25,15 +25,16 @@
 			<dependency id="NodaTime" version="2.0.0-alpha20160729" />
 		</group>
 		<group targetFramework=".NETStandard1.1">
-			<dependency id="System.Collections.Concurrent" version="4.0.12" />
-			<dependency id="System.Diagnostics.Contracts" version="4.0.1" />
-			<dependency id="System.Diagnostics.Tools" version="4.0.1" />
-			<dependency id="System.Reflection.Extensions" version="4.0.1" />
-			<dependency id="System.Runtime" version="4.1.0" />
-			<dependency id="System.Text.Encoding.Extensions" version="4.0.11" />
-			<dependency id="System.Text.RegularExpressions" version="4.1.0" />
-			<dependency id="System.Xml.ReaderWriter" version="4.0.11" />
-			<dependency id="System.Xml.XDocument" version="4.0.11" />
+			<dependency id="System.Collections.Concurrent" version="4.3.0" />
+			<dependency id="System.Diagnostics.Contracts" version="4.3.0" />
+			<dependency id="System.Diagnostics.Tools" version="4.3.0" />
+      <dependency id="System.Linq.Expressions" version="4.3.0" />
+      <dependency id="System.Reflection.Extensions" version="4.3.0" />
+			<dependency id="System.Runtime" version="4.3.0" />
+			<dependency id="System.Text.Encoding.Extensions" version="4.3.0" />
+			<dependency id="System.Text.RegularExpressions" version="4.3.0" />
+			<dependency id="System.Xml.ReaderWriter" version="4.3.0" />
+			<dependency id="System.Xml.XDocument" version="4.3.0" />
 			<dependency id="NodaTime" version="2.0.0-alpha20160729" />
 		</group>
     </dependencies>
