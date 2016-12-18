@@ -4,6 +4,11 @@
 
 # Latest changes
 
+## 4.2.0
+
+* Supports multiple different configurations in the same application
+	* New interfaces `ISettings` and `ISchemeProvider`
+
 ## 4.1.0
 
 * Supports a new experimental property accessor factory `asm` which uses compiled expression trees instead of reflection

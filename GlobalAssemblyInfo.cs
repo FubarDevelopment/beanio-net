@@ -14,9 +14,9 @@ using System.Resources;
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en")]
 
-[assembly: AssemblyVersion("4.1.*")]
-[assembly: AssemblyFileVersion("4.1.0")]
-[assembly: AssemblyInformationalVersion("4.1.0")]
+[assembly: AssemblyVersion("4.2.*")]
+[assembly: AssemblyFileVersion("4.2.0")]
+[assembly: AssemblyInformationalVersion("4.2.0")]
 
 #if !TEST
 [assembly: CLSCompliant(true)]
