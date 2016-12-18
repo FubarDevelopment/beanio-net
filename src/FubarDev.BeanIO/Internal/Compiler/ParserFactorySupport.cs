@@ -43,6 +43,8 @@ namespace BeanIO.Internal.Compiler
 
         private static readonly bool _allowProtectedPropertyAccess = Settings.Instance.GetBoolean(Settings.ALLOW_PROTECTED_PROPERTY_ACCESS);
 
+        private static readonly string _propertyAccessorFactory = Settings.Instance.GetProperty(Settings.PROPERTY_ACCESSOR_METHOD);
+
         private static readonly Component _unbound = new UnboundComponent();
 
         private readonly Stack<Component> _parserStack = new Stack<Component>();
@@ -93,7 +95,19 @@ namespace BeanIO.Internal.Compiler
             // pre-process configuration settings to set defaults and validate as much as possible
             CreatePreprocessor(config).Process(config);
 
-            _accessorFactory = new ReflectionAccessorFactory();
+            if (_propertyAccessorFactory == "asm")
+            {
+                _accessorFactory = new CompiledExpressionAccessorFactory();
+            }
+            else if (string.IsNullOrEmpty(_propertyAccessorFactory) || _propertyAccessorFactory == "reflection")
+            {
+                _accessorFactory = new ReflectionAccessorFactory();
+            }
+            else
+            {
+
+                _accessorFactory = (IPropertyAccessorFactory)BeanUtil.CreateBean(_propertyAccessorFactory);
+            }
 
             try
             {

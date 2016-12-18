@@ -55,6 +55,14 @@ namespace BeanIO.Internal.Util
 
         public bool HasSetter => _setter != null || (_field != null && !_field.IsInitOnly);
 
+        public FieldInfo FieldInfo => _field;
+
+        public PropertyInfo PropertyInfo => _property;
+
+        public MethodInfo GetMethodInfo => _getter;
+
+        public MethodInfo SetMethodInfo => _setter;
+
         public string Name { get; }
 
         public bool? IsPublic
@@ -104,13 +112,25 @@ namespace BeanIO.Internal.Util
 
         private Type GuessPropertyType()
         {
+            var setterType = _setter?.GetParameters()[0].ParameterType;
             if (_field != null)
-                return _field.FieldType;
+                return GetMostSpecificType(_field.FieldType, _getter?.ReturnType, setterType);
             if (_property != null)
-                return _property.PropertyType;
-            if (_getter != null)
-                return _getter.ReturnType;
-            return _setter?.GetParameters()[0].ParameterType;
+                return GetMostSpecificType(_property.PropertyType, _getter?.ReturnType, setterType);
+            return GetMostSpecificType(_getter?.ReturnType, setterType);
+        }
+
+        private Type GetMostSpecificType(params Type[] types)
+        {
+            var result = typeof(object);
+            foreach (var type in types)
+            {
+                if (type == null)
+                    continue;
+                if (type != result && type.IsInstanceOf(result))
+                    result = type;
+            }
+            return result;
         }
     }
 }
