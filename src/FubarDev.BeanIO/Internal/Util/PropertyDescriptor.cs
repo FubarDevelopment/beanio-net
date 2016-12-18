@@ -130,6 +130,7 @@ namespace BeanIO.Internal.Util
                 if (type != result && type.IsInstanceOf(result))
                     result = type;
             }
+
             return result;
         }
     }

@@ -105,7 +105,6 @@ namespace BeanIO.Internal.Compiler
             }
             else
             {
-
                 _accessorFactory = (IPropertyAccessorFactory)BeanUtil.CreateBean(_propertyAccessorFactory);
             }
 
