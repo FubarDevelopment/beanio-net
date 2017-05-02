@@ -46,8 +46,8 @@ namespace BeanIO.Parser.Imports
         {
             var ex = Assert.Throws<BeanIOConfigurationException>(() => NewStreamFactory("circular_mapping1.xml"));
             Assert.Equal(
-                "Invalid mapping file 'resource:FubarDev.BeanIO.Test.Parser.Imports.circular_mapping1.xml, FubarDev.BeanIO.Test': " +
-                "Failed to import resource 'resource:FubarDev.BeanIO.Test.Parser.Imports.circular_mapping2.xml, FubarDev.BeanIO.Test': " +
+                "Invalid mapping file 'resource:BeanIO.Parser.Imports.circular_mapping1.xml, FubarDev.BeanIO.Test': " +
+                "Failed to import resource 'resource:BeanIO.Parser.Imports.circular_mapping2.xml, FubarDev.BeanIO.Test': " +
                 "Circular reference(s) detected",
                 ex.Message);
         }

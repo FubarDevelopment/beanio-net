@@ -15,7 +15,7 @@ namespace BeanIO.Parser.RidLength
         [Fact]
         public void TestRidLength()
         {
-            var factory = NewStreamFactory("FubarDev.BeanIO.Test.Parser.RidLength.ridlength_mapping.xml");
+            var factory = NewStreamFactory("BeanIO.Parser.RidLength.ridlength_mapping.xml");
             var reader = factory.CreateReader("r1", LoadReader("r1.txt"));
             try
             {

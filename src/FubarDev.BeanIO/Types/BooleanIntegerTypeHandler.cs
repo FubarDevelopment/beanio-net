@@ -6,12 +6,14 @@
 using System;
 using System.Globalization;
 
+using BeanIO.Config;
+
 namespace BeanIO.Types
 {
     /// <summary>
     /// Converts a <see cref="bool"/> to an <see cref="int"/> value.
     /// </summary>
-    public class BooleanIntegerTypeHandler : CultureSupport, ITypeHandler
+    public class BooleanIntegerTypeHandler : CultureSupport, IConfigurableTypeHandler
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BooleanIntegerTypeHandler"/> class.
@@ -76,6 +78,11 @@ namespace BeanIO.Types
                 return string.Format(Culture, "{0}", NullValue);
             var boolValue = (bool)value;
             return string.Format(Culture, "{0}", boolValue ? TrueValue : FalseValue);
+        }
+
+        /// <inheritdoc />
+        public virtual void Configure(Properties properties)
+        {
         }
     }
 }

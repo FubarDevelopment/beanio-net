@@ -38,7 +38,7 @@ namespace BeanIO.Internal.Parser.Format.Delimited {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FubarDev.BeanIO.Internal.Parser.Format.Delimited.DefaultMessages", typeof(DefaultMessages).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BeanIO.Internal.Parser.Format.Delimited.DefaultMessages", typeof(DefaultMessages).GetTypeInfo().Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

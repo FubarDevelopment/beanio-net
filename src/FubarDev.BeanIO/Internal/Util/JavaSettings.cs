@@ -14,7 +14,7 @@ namespace BeanIO.Internal.Util
     /// </summary>
     internal class JavaSettings : ISettings
     {
-        internal const string DEFAULT_CONFIGURATION_PATH = "FubarDev.BeanIO.Internal.Config.beanio.properties";
+        internal const string DEFAULT_CONFIGURATION_PATH = "BeanIO.Internal.Config.beanio.properties";
 
         private readonly Properties _properties;
 
