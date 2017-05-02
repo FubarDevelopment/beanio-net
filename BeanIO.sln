@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26424.2
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BB244B60-2697-4D2B-8FBB-07920BBDE863}"
 EndProject
@@ -16,11 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		stylecop.json = stylecop.json
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "FubarDev.BeanIO", "src\FubarDev.BeanIO\FubarDev.BeanIO.xproj", "{F9872CE3-A82C-463E-B875-CE0F2729931C}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E65ED37A-52A5-41A8-B7C9-B892C87AFB40}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "FubarDev.BeanIO.Test", "test\FubarDev.BeanIO.Test\FubarDev.BeanIO.Test.xproj", "{DB027EC3-C3A6-4D6D-A701-66E7E94266C9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packaging", "Packaging", "{77610794-4C34-4838-8955-D48D0A2B505F}"
 	ProjectSection(SolutionItems) = preProject
@@ -30,26 +26,30 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packaging", "Packaging", "{
 		pack-nuget.ps1 = pack-nuget.ps1
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FubarDev.BeanIO", "src\FubarDev.BeanIO\FubarDev.BeanIO.csproj", "{7AA81D28-6037-4C1F-A183-4CA9CED480BF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FubarDev.BeanIO.Test", "test\FubarDev.BeanIO.Test\FubarDev.BeanIO.Test.csproj", "{5D337D32-6B4A-423D-8C4D-A76FAF01BB61}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F9872CE3-A82C-463E-B875-CE0F2729931C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F9872CE3-A82C-463E-B875-CE0F2729931C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F9872CE3-A82C-463E-B875-CE0F2729931C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F9872CE3-A82C-463E-B875-CE0F2729931C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DB027EC3-C3A6-4D6D-A701-66E7E94266C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DB027EC3-C3A6-4D6D-A701-66E7E94266C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DB027EC3-C3A6-4D6D-A701-66E7E94266C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DB027EC3-C3A6-4D6D-A701-66E7E94266C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AA81D28-6037-4C1F-A183-4CA9CED480BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AA81D28-6037-4C1F-A183-4CA9CED480BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AA81D28-6037-4C1F-A183-4CA9CED480BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AA81D28-6037-4C1F-A183-4CA9CED480BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D337D32-6B4A-423D-8C4D-A76FAF01BB61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D337D32-6B4A-423D-8C4D-A76FAF01BB61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D337D32-6B4A-423D-8C4D-A76FAF01BB61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D337D32-6B4A-423D-8C4D-A76FAF01BB61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{F9872CE3-A82C-463E-B875-CE0F2729931C} = {BB244B60-2697-4D2B-8FBB-07920BBDE863}
-		{DB027EC3-C3A6-4D6D-A701-66E7E94266C9} = {E65ED37A-52A5-41A8-B7C9-B892C87AFB40}
+		{7AA81D28-6037-4C1F-A183-4CA9CED480BF} = {BB244B60-2697-4D2B-8FBB-07920BBDE863}
+		{5D337D32-6B4A-423D-8C4D-A76FAF01BB61} = {E65ED37A-52A5-41A8-B7C9-B892C87AFB40}
 	EndGlobalSection
 EndGlobal
