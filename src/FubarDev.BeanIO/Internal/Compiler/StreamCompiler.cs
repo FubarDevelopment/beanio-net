@@ -144,7 +144,7 @@ namespace BeanIO.Internal.Compiler
             if (typeName == null)
                 throw new BeanIOConfigurationException($"A stream definition factory is not configured for format '{format}'");
 
-            var arguments = new List<object>() {_settings, _schemeProvider};
+            var arguments = new List<object>() { _settings, _schemeProvider };
             var factory = BeanUtil.CreateBean(typeName, arguments) as IParserFactory;
             if (factory == null)
             {

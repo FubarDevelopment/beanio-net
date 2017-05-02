@@ -66,7 +66,7 @@ namespace BeanIO
 
             try
             {
-                var arguments = new List<object>() {settings, schemeProvider};
+                var arguments = new List<object>() { settings, schemeProvider };
                 var factory = (IStreamFactory)Type.GetType(className).NewInstance(arguments);
                 var abstractFactory = factory as StreamFactory;
                 abstractFactory?.Init();
