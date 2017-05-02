@@ -38,7 +38,7 @@ namespace BeanIO.Parser.FixedLength {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FubarDev.BeanIO.Test.Parser.FixedLength.f2_messages", typeof(f2_messages).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BeanIO.Parser.FixedLength.f2_messages", typeof(f2_messages).GetTypeInfo().Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

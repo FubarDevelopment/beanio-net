@@ -38,7 +38,7 @@ namespace BeanIO.Parser.Validation {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("FubarDev.BeanIO.Test.Parser.Validation.v1_messages", typeof(v1_messages).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BeanIO.Parser.Validation.v1_messages", typeof(v1_messages).GetTypeInfo().Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

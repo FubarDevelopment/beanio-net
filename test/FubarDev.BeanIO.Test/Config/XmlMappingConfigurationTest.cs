@@ -17,7 +17,7 @@ namespace BeanIO.Config
         public void TestTemplateImport()
         {
             var factory = StreamFactory.NewInstance();
-            using (var stream = typeof(ParserTest).GetTypeInfo().Assembly.GetManifestResourceStream("FubarDev.BeanIO.Test.Config.ab.xml"))
+            using (var stream = typeof(ParserTest).GetTypeInfo().Assembly.GetManifestResourceStream("BeanIO.Config.ab.xml"))
             {
                 factory.Load(stream);
             }
@@ -27,7 +27,7 @@ namespace BeanIO.Config
         public void TestImport()
         {
             var factory = StreamFactory.NewInstance();
-            using (var stream = typeof(ParserTest).GetTypeInfo().Assembly.GetManifestResourceStream("FubarDev.BeanIO.Test.Config.import.xml"))
+            using (var stream = typeof(ParserTest).GetTypeInfo().Assembly.GetManifestResourceStream("BeanIO.Config.import.xml"))
             {
                 factory.Load(stream);
             }
@@ -36,13 +36,13 @@ namespace BeanIO.Config
         [Fact(DisplayName = "Resource not found")]
         public void TestInvalidImportResourceNotFound()
         {
-            LoadInvalidMappingFile("invalidImport_ResourceNotFound.xml", "Resource 'resource:BeanIO.Test.Config.doesnotexist.xml, FubarDev.BeanIO.Test' not found in classpath for import");
+            LoadInvalidMappingFile("invalidImport_ResourceNotFound.xml", "Resource 'resource:BeanIO.Config.doesnotexist.xml, FubarDev.BeanIO.Test' not found in classpath for import");
         }
 
         [Fact(DisplayName = "Invalid resource")]
         public void TestInvalidImportInvalidResource()
         {
-            LoadInvalidMappingFile("invalidImport_InvalidResource.xml", "No scheme specified for resource 'FubarDev.BeanIO.Test.Config.imported.xml'");
+            LoadInvalidMappingFile("invalidImport_InvalidResource.xml", "No scheme specified for resource 'BeanIO.Config.imported.xml'");
         }
 
         [Fact]
@@ -122,7 +122,7 @@ namespace BeanIO.Config
         {
             var factory = StreamFactory.NewInstance();
             var asm = typeof(ParserTest).GetTypeInfo().Assembly;
-            var stream = asm.GetManifestResourceStream($"FubarDev.BeanIO.Test.Config.{name}");
+            var stream = asm.GetManifestResourceStream($"BeanIO.Config.{name}");
             Assert.NotNull(stream != null);
             var ex = Assert.Throws<BeanIOConfigurationException>(() => factory.Load(stream));
             var innermostException = ex.GetBaseException();
