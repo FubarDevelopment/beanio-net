@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Authors>Fubar Development Junker;Mark Junker</Authors>
-    <TargetFrameworks>netcoreapp1.1;net451</TargetFrameworks>
+    <TargetFrameworks>netcoreapp1.1</TargetFrameworks>
     <DefineConstants>$(DefineConstants);TEST</DefineConstants>
     <AssemblyName>FubarDev.BeanIO.Test</AssemblyName>
     <CodeAnalysisRuleSet>$(ProjectDir)..\..\BeanIO.ruleset</CodeAnalysisRuleSet>
