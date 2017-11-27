@@ -1,4 +1,9 @@
-﻿using System;
+// <copyright file="GlobalAssemblyInfo.cs" company="Fubar Development Junker">
+// Copyright (c) 2016 Fubar Development Junker. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+using System;
 using System.Reflection;
 using System.Resources;
 
@@ -9,9 +14,9 @@ using System.Resources;
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en")]
 
-[assembly: AssemblyVersion("3.1.*")]
-[assembly: AssemblyFileVersion("3.1.0")]
-[assembly: AssemblyInformationalVersion("3.1.0")]
+[assembly: AssemblyVersion("4.1.0")]
+[assembly: AssemblyFileVersion("4.1.0")]
+[assembly: AssemblyInformationalVersion("4.1.0")]
 
 #if !TEST
 [assembly: CLSCompliant(true)]

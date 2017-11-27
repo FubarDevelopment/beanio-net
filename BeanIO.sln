@@ -1,18 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeanIO", "BeanIO\BeanIO.csproj", "{E9DEE4D4-4B32-49B1-BB27-2B137BECAF4D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BB244B60-2697-4D2B-8FBB-07920BBDE863}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Other", "Other", "{715770C9-DF4E-4F00-BC10-BBFE18C00C6E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{81AE4864-EB60-48C3-B2BC-8E1E78F6E058}"
 	ProjectSection(SolutionItems) = preProject
-		beanio-logo.png = beanio-logo.png
-		LICENSE = LICENSE
-		README.md = README.md
+		BeanIO.ruleset = BeanIO.ruleset
+		GitVersion.yml = GitVersion.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeanIO.Test", "BeanIO.Test\BeanIO.Test.csproj", "{F3C4A4F6-9A91-430E-8E03-63F0D60052CD}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E65ED37A-52A5-41A8-B7C9-B892C87AFB40}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FubarDev.BeanIO", "src\FubarDev.BeanIO\FubarDev.BeanIO.csproj", "{B80A2610-0615-44E9-AD9D-1EE38FF4F01C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FubarDev.BeanIO.Test", "test\FubarDev.BeanIO.Test\FubarDev.BeanIO.Test.csproj", "{943005AC-D0EE-4224-8C54-DE82D9BBC2B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,16 +23,23 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E9DEE4D4-4B32-49B1-BB27-2B137BECAF4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E9DEE4D4-4B32-49B1-BB27-2B137BECAF4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E9DEE4D4-4B32-49B1-BB27-2B137BECAF4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E9DEE4D4-4B32-49B1-BB27-2B137BECAF4D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F3C4A4F6-9A91-430E-8E03-63F0D60052CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F3C4A4F6-9A91-430E-8E03-63F0D60052CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F3C4A4F6-9A91-430E-8E03-63F0D60052CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F3C4A4F6-9A91-430E-8E03-63F0D60052CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B80A2610-0615-44E9-AD9D-1EE38FF4F01C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B80A2610-0615-44E9-AD9D-1EE38FF4F01C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B80A2610-0615-44E9-AD9D-1EE38FF4F01C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B80A2610-0615-44E9-AD9D-1EE38FF4F01C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{943005AC-D0EE-4224-8C54-DE82D9BBC2B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{943005AC-D0EE-4224-8C54-DE82D9BBC2B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{943005AC-D0EE-4224-8C54-DE82D9BBC2B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{943005AC-D0EE-4224-8C54-DE82D9BBC2B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B80A2610-0615-44E9-AD9D-1EE38FF4F01C} = {BB244B60-2697-4D2B-8FBB-07920BBDE863}
+		{943005AC-D0EE-4224-8C54-DE82D9BBC2B3} = {E65ED37A-52A5-41A8-B7C9-B892C87AFB40}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {24189749-4E76-4001-A6CF-65AC65C1D096}
 	EndGlobalSection
 EndGlobal
