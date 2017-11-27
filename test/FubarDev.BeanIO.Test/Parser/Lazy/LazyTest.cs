@@ -79,7 +79,7 @@ namespace BeanIO.Parser.Lazy
             Assert.Equal(new[] { "kevin", "trevor" }, names);
 
             record = Assert.IsType<Dictionary<string, object>>(u.Unmarshal(","));
-            Assert.Equal(0, record.Count);
+            Assert.Empty(record);
             Assert.False(record.ContainsKey("names"));
         }
     }

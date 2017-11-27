@@ -18,10 +18,10 @@ namespace BeanIO.Types
         public void TestParse()
         {
             var handler = _factory.GetTypeHandlerFor(typeof(bool), "xml");
-            Assert.Equal(true, handler.Parse("true"));
-            Assert.Equal(true, handler.Parse("1"));
-            Assert.Equal(false, handler.Parse("false"));
-            Assert.Equal(false, handler.Parse("0"));
+            Assert.True(Assert.IsType<bool>(handler.Parse("true")));
+            Assert.True(Assert.IsType<bool>(handler.Parse("1")));
+            Assert.False(Assert.IsType<bool>(handler.Parse("false")));
+            Assert.False(Assert.IsType<bool>(handler.Parse("0")));
             Assert.Null(handler.Parse(string.Empty));
             Assert.Null(handler.Parse(null));
         }

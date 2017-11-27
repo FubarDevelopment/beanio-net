@@ -77,7 +77,7 @@ namespace BeanIO.Stream
                 };
             DelimitedReader reader = CreateReader(factory, "1,2,\\\n3,4");
             Assert.Equal(new[] { "1", "2", "3", "4" }, reader.Read());
-            Assert.Equal(reader.RecordLineNumber, 1);
+            Assert.Equal(1, reader.RecordLineNumber);
             Assert.Null(reader.Read());
         }
 
@@ -91,7 +91,7 @@ namespace BeanIO.Stream
                 };
             DelimitedReader reader = CreateReader(factory, "1,2,\\\r\n3,4");
             Assert.Equal(new[] { "1", "2", "3", "4" }, reader.Read());
-            Assert.Equal(reader.RecordLineNumber, 1);
+            Assert.Equal(1, reader.RecordLineNumber);
             Assert.Null(reader.Read());
         }
 
@@ -105,7 +105,7 @@ namespace BeanIO.Stream
                 };
             DelimitedReader reader = CreateReader(factory, "1,2,\\3,4");
             Assert.Equal(new[] { "1", "2", "\\3", "4" }, reader.Read());
-            Assert.Equal(reader.RecordLineNumber, 1);
+            Assert.Equal(1, reader.RecordLineNumber);
             Assert.Null(reader.Read());
         }
 
@@ -120,7 +120,7 @@ namespace BeanIO.Stream
                 };
             DelimitedReader reader = CreateReader(factory, "1,2,\\3,4");
             Assert.Equal(new[] { "1", "2", "\\3", "4" }, reader.Read());
-            Assert.Equal(reader.RecordLineNumber, 1);
+            Assert.Equal(1, reader.RecordLineNumber);
             Assert.Null(reader.Read());
         }
 

@@ -15,8 +15,8 @@ namespace BeanIO.Parser.Indeterminates
         public void TestDelimitedIndeterminateFieldBeforeEOR()
         {
             var factory = NewStreamFactory("indeterminates_mapping.xml");
-            TestDelimitedIndeterminateFieldBeforeEOR(factory, "d1");
-            TestDelimitedIndeterminateFieldBeforeEOR(factory, "d3");
+            TestDelimitedIndeterminateFieldBeforeEORInternal(factory, "d1");
+            TestDelimitedIndeterminateFieldBeforeEORInternal(factory, "d3");
         }
 
         [Fact]
@@ -148,7 +148,7 @@ namespace BeanIO.Parser.Indeterminates
             Assert.Equal(text, m.Marshal(map).ToString());
         }
 
-        private void TestDelimitedIndeterminateFieldBeforeEOR(StreamFactory factory, string stream)
+        private void TestDelimitedIndeterminateFieldBeforeEORInternal(StreamFactory factory, string stream)
         {
             var text = "v1,v2.1,v2.2,v3.1,v3.2,v4";
             var u = factory.CreateUnmarshaller(stream);

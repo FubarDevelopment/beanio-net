@@ -35,7 +35,7 @@ namespace BeanIO.Parser.Xml.TypeHandler
                 Assert.Equal(new DateTime(2011, 1, 1, 13, 45, 0), map["datetime"]);
                 Assert.Equal(new LocalTime(11, 12, 13), map["time"]);
                 Assert.Equal(new LocalDate(2011, 2, 1), map["customdate"]);
-                Assert.Equal(true, map["boolean"]);
+                Assert.True(Assert.IsType<bool>(map["boolean"]));
 
                 writer.Write(map);
                 writer.Close();

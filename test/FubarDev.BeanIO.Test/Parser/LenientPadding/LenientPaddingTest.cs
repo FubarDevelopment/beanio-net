@@ -35,8 +35,8 @@ namespace BeanIO.Parser.LenientPadding
 
             obj = Assert.IsType<Beans.Bean>(u.Unmarshal("aaa"));
             Assert.Equal("aaa", obj.field1);
-            Assert.Equal(null, typeof(Beans.Bean).GetField("field2", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(obj));
-            Assert.Equal(null, obj.field3);
+            Assert.Null(typeof(Beans.Bean).GetField("field2", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(obj));
+            Assert.Null(obj.field3);
 
             Assert.Throws<InvalidRecordException>(() => u.Unmarshal("aa"));
         }

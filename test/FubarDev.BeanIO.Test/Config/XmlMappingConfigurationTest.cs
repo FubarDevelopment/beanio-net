@@ -123,7 +123,7 @@ namespace BeanIO.Config
             var factory = StreamFactory.NewInstance();
             var asm = typeof(ParserTest).GetTypeInfo().Assembly;
             var stream = asm.GetManifestResourceStream($"BeanIO.Config.{name}");
-            Assert.NotNull(stream != null);
+            Assert.NotNull(stream);
             var ex = Assert.Throws<BeanIOConfigurationException>(() => factory.Load(stream));
             var innermostException = ex.GetBaseException();
             Assert.Equal(errorMessage, innermostException.Message);

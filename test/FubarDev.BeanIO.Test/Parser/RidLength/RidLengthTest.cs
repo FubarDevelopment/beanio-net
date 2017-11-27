@@ -29,10 +29,10 @@ namespace BeanIO.Parser.RidLength
                 Assert.True(map.ContainsKey("values"));
                 Assert.Equal(new[] { 1, 2, 3 }, Assert.IsType<List<int>>(map["values"]));
 
-                Assert.IsType(typeof(Dictionary<string, object>), reader.Read());
+                Assert.IsType<Dictionary<string, object>>(reader.Read());
                 Assert.Equal("acouple", reader.RecordName);
 
-                Assert.IsType(typeof(Dictionary<string, object>), reader.Read());
+                Assert.IsType<Dictionary<string, object>>(reader.Read());
                 Assert.Equal("afew", reader.RecordName);
             }
             finally

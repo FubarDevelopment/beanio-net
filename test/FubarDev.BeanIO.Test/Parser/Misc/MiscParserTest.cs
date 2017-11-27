@@ -45,7 +45,7 @@ namespace BeanIO.Parser.Misc
                 var writer = factory.CreateWriter("stream2", text);
 
                 var map = Assert.IsType<Dictionary<string, object>>(reader.Read());
-                Assert.Equal(0, map.Count);
+                Assert.Empty(map);
                 writer.Write(map);
 
                 map = Assert.IsType<Dictionary<string, object>>(reader.Read());

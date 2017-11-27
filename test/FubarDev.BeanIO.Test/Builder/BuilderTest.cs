@@ -198,12 +198,12 @@ namespace BeanIO.Builder
                 child =>
                     {
                         Assert.Equal("record", child.Name);
-                        Assert.IsType(typeof(RecordConfig), child);
+                        Assert.IsType<RecordConfig>(child);
                     },
                 child =>
                     {
                         Assert.Equal("subgroup", child.Name);
-                        Assert.IsType(typeof(GroupConfig), child);
+                        Assert.IsType<GroupConfig>(child);
                     });
             Assert.Collection(
                 c.Handlers,
@@ -225,7 +225,7 @@ namespace BeanIO.Builder
             c = b.Build();
             Assert.Equal("fixedlength", c.Format);
             Assert.Equal(AccessMode.Write, c.Mode);
-            Assert.IsType(typeof(XmlRecordParserFactory), c.ParserFactory.Create());
+            Assert.IsType<XmlRecordParserFactory>(c.ParserFactory.Create());
         }
 
         [Fact]
@@ -248,12 +248,12 @@ namespace BeanIO.Builder
                 child =>
                     {
                         Assert.Equal("record", child.Name);
-                        Assert.IsType(typeof(RecordConfig), child);
+                        Assert.IsType<RecordConfig>(child);
                     },
                 child =>
                     {
                         Assert.Equal("subgroup", child.Name);
-                        Assert.IsType(typeof(GroupConfig), child);
+                        Assert.IsType<GroupConfig>(child);
                     });
         }
 
@@ -288,12 +288,12 @@ namespace BeanIO.Builder
                 child =>
                     {
                         Assert.Equal("field", child.Name);
-                        Assert.IsType(typeof(FieldConfig), child);
+                        Assert.IsType<FieldConfig>(child);
                     },
                 child =>
                     {
                         Assert.Equal("segment", child.Name);
-                        Assert.IsType(typeof(SegmentConfig), child);
+                        Assert.IsType<SegmentConfig>(child);
                     });
 
             b = new RecordBuilder("record")
@@ -338,12 +338,12 @@ namespace BeanIO.Builder
                 child =>
                 {
                     Assert.Equal("field", child.Name);
-                    Assert.IsType(typeof(FieldConfig), child);
+                    Assert.IsType<FieldConfig>(child);
                 },
                 child =>
                 {
                     Assert.Equal("segment", child.Name);
-                    Assert.IsType(typeof(SegmentConfig), child);
+                    Assert.IsType<SegmentConfig>(child);
                 });
         }
 

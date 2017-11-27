@@ -125,7 +125,7 @@ namespace BeanIO.Parser.Xml.Bean
 
                 person = Assert.IsType<Person>(reader.Read());
                 Assert.Equal("Mary", person.FirstName);
-                Assert.Equal(0, person.AddressList.Count);
+                Assert.Empty(person.AddressList);
                 writer.Write(person);
 
                 writer.Close();

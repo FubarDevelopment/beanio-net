@@ -79,7 +79,7 @@ namespace BeanIO.Parser.DynamicOccurs
                     {
                         Assert.Equal("Rob", person.FirstName);
                         Assert.NotNull(person.Numbers);
-                        Assert.Equal(0, person.Numbers.Count);
+                        Assert.Empty(person.Numbers);
                     },
                 person =>
                     {
@@ -93,7 +93,7 @@ namespace BeanIO.Parser.DynamicOccurs
             Assert.NotNull(map);
             Assert.True(map.ContainsKey("people"));
             people = (List<Person>)map["people"];
-            Assert.Equal(0, people.Count);
+            Assert.Empty(people);
             Assert.Equal(text, m.Marshal(map).ToString());
         }
 
@@ -117,7 +117,7 @@ namespace BeanIO.Parser.DynamicOccurs
                         Assert.Equal(1, item.Key);
                         Assert.Equal("Rob", item.Value);
                     },
-                    item =>
+                item =>
                     {
                         Assert.Equal(2, item.Key);
                         Assert.Equal("Mike", item.Value);
@@ -128,7 +128,7 @@ namespace BeanIO.Parser.DynamicOccurs
             map = Assert.IsType<Dictionary<string, object>>(u.Unmarshal(text));
             inline = Assert.IsType<Dictionary<int, string>>(map["names"]);
             Assert.NotNull(inline);
-            Assert.Equal(0, inline.Count);
+            Assert.Empty(inline);
             Assert.Equal(text, m.Marshal(map).ToString());
         }
 
