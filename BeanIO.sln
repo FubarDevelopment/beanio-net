@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26424.2
+VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BB244B60-2697-4D2B-8FBB-07920BBDE863}"
 EndProject
@@ -9,22 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		BeanIO.ruleset = BeanIO.ruleset
 		GitVersion.yml = GitVersion.yml
-		global.json = global.json
-		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
-		LICENSE = LICENSE
-		README.md = README.md
-		stylecop.json = stylecop.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E65ED37A-52A5-41A8-B7C9-B892C87AFB40}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packaging", "Packaging", "{77610794-4C34-4838-8955-D48D0A2B505F}"
-	ProjectSection(SolutionItems) = preProject
-		packaging\FubarDev.BeanIO.nuspec = packaging\FubarDev.BeanIO.nuspec
-		packaging\FubarDev.BeanIO.targets = packaging\FubarDev.BeanIO.targets
-		packaging\NuGet.exe = packaging\NuGet.exe
-		pack-nuget.ps1 = pack-nuget.ps1
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FubarDev.BeanIO", "src\FubarDev.BeanIO\FubarDev.BeanIO.csproj", "{B80A2610-0615-44E9-AD9D-1EE38FF4F01C}"
 EndProject
@@ -51,5 +38,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B80A2610-0615-44E9-AD9D-1EE38FF4F01C} = {BB244B60-2697-4D2B-8FBB-07920BBDE863}
 		{943005AC-D0EE-4224-8C54-DE82D9BBC2B3} = {E65ED37A-52A5-41A8-B7C9-B892C87AFB40}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {24189749-4E76-4001-A6CF-65AC65C1D096}
 	EndGlobalSection
 EndGlobal
