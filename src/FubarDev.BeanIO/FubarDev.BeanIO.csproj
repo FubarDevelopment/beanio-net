@@ -9,11 +9,10 @@
     <CodeAnalysisRuleSet>../../BeanIO.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile Condition=" '$(Configuration)' == 'Release' ">bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <AssemblyName>FubarDev.BeanIO</AssemblyName>
-    <AssemblyOriginatorKeyFile>../../BeanIO.snk</AssemblyOriginatorKeyFile>
-    <SignAssembly>true</SignAssembly>
     <PackageId>FubarDev.BeanIO</PackageId>
     <PackageTags>BeanIO;Core;CSV;XML;fixed length;file;parse;serialize;deserialize;serialization;deserialization;parsing;marshal;marshalling;unmarshal;unmarshalling</PackageTags>
-    <PackageReleaseNotes>- Support for .NET Core</PackageReleaseNotes>
+    <PackageReleaseNotes>- Support for .NET Core
+- Assemblies are unsigned because they only cause problems when built with mono</PackageReleaseNotes>
     <PackageIconUrl>https://github.com/FubarDevelopment/beanio-net/raw/master/beanio-logo.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/FubarDevelopment/beanio-net</PackageProjectUrl>
     <PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
