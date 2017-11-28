@@ -5,7 +5,7 @@
 
 using System;
 using System.Collections.Generic;
-
+using System.Globalization;
 using Xunit;
 
 namespace BeanIO.Parser.Types
@@ -32,7 +32,8 @@ namespace BeanIO.Parser.Types
                   </record>
                 </stream>");
 
-            var text = "10.000,\"10,000\",01.02.2013 00:00:00";
+            var cultureDe = new CultureInfo("de");
+            var text = string.Format("10.000,\"10,000\",{0}", date.ToString(cultureDe));
             var map = new Dictionary<string, object>()
                 {
                     { "int1", 10000 },
