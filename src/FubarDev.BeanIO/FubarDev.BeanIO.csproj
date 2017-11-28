@@ -11,7 +11,6 @@
     <AssemblyName>FubarDev.BeanIO</AssemblyName>
     <AssemblyOriginatorKeyFile>../../BeanIO.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
-    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
     <PackageId>FubarDev.BeanIO</PackageId>
     <PackageTags>BeanIO;Core;CSV;XML;fixed length;file;parse;serialize;deserialize;serialization;deserialization;parsing;marshal;marshalling;unmarshal;unmarshalling</PackageTags>
     <PackageReleaseNotes>- Support for .NET Core</PackageReleaseNotes>

@@ -8,7 +8,6 @@
     <CodeAnalysisRuleSet>$(ProjectDir)..\..\BeanIO.ruleset</CodeAnalysisRuleSet>
     <AssemblyOriginatorKeyFile>../../BeanIO.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
-    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
     <PackageId>FubarDev.BeanIO.Test</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
