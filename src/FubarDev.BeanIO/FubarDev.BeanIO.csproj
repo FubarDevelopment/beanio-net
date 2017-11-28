@@ -4,7 +4,6 @@
     <Description>A .NET port of BeanIO which perfectly fits into the .NET world.</Description>
     <Copyright>Fubar Development, Kevin Seim 2015-2017</Copyright>
     <AssemblyTitle>BeanIO</AssemblyTitle>
-    <VersionPrefix>4.0.0</VersionPrefix>
     <Authors>Fubar Development Junker;Mark Junker</Authors>
     <TargetFrameworks>netstandard1.3;net45;netstandard2.0</TargetFrameworks>
     <CodeAnalysisRuleSet>../../BeanIO.ruleset</CodeAnalysisRuleSet>
