@@ -8,7 +8,7 @@
     <Nullable>enable</Nullable>
     <LangVersion>latestMajor</LangVersion>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)BeanIO.ruleset</CodeAnalysisRuleSet>
-    <WarningsAsErrors>true</WarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 
   </PropertyGroup>
 
