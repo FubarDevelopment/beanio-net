@@ -29,7 +29,7 @@ namespace BeanIO
         /// <remarks>
         /// Record text is not supported by XML stream formats, and null is returned instead.
         /// </remarks>
-        string RecordText { get; }
+        string? RecordText { get; }
 
         /// <summary>
         /// Gets the name of the record from the stream configuration.
@@ -37,7 +37,7 @@ namespace BeanIO
         /// <remarks>
         /// The record name may be null if was not determined before an exception was thrown.
         /// </remarks>
-        string RecordName { get; }
+        string? RecordName { get; }
 
         /// <summary>
         /// Gets a value indicating whether this record has any record or field level errors.
@@ -62,7 +62,7 @@ namespace BeanIO
         /// <summary>
         /// Returns the number of times the given field was present in the stream.
         /// </summary>
-        /// <param name="fieldName">The name of the field</param>
+        /// <param name="fieldName">The name of the field.</param>
         /// <returns>The number of times the field was present in the record.</returns>
         int GetFieldCount(string fieldName);
 
@@ -79,9 +79,9 @@ namespace BeanIO
         /// <para>If the field repeats in the stream, this method returns the field text for
         /// the first occurrence of the field.</para>
         /// </remarks>
-        /// <param name="fieldName">The name of the field</param>
-        /// <returns>The unparsed field text</returns>
-        string GetFieldText(string fieldName);
+        /// <param name="fieldName">The name of the field.</param>
+        /// <returns>The unparsed field text.</returns>
+        string? GetFieldText(string fieldName);
 
         /// <summary>
         /// Returns the raw text of a field found in this record.
@@ -94,24 +94,24 @@ namespace BeanIO
         /// <item>The field was not present in the record</item>
         /// </list>
         /// </remarks>
-        /// <param name="fieldName">The name of the field</param>
-        /// <param name="index">The index of the field (beginning at 0), for repeating fields</param>
-        /// <returns>The unparsed field text</returns>
-        string GetFieldText(string fieldName, int index);
+        /// <param name="fieldName">The name of the field.</param>
+        /// <param name="index">The index of the field (beginning at 0), for repeating fields.</param>
+        /// <returns>The unparsed field text.</returns>
+        string? GetFieldText(string fieldName, int index);
 
         /// <summary>
         /// Returns the field errors for a given field.
         /// </summary>
-        /// <param name="fieldName">The name of the field</param>
+        /// <param name="fieldName">The name of the field.</param>
         /// <returns>
         /// The collection of field errors, or null if no errors were reported for the field.
-        /// </returns>
+        /// .</returns>
         IReadOnlyList<string> GetFieldErrors(string fieldName);
 
         /// <summary>
         /// Gets a <see cref="ILookup{TKey,TItem}"/> of all field errors.
         /// </summary>
-        /// <returns>All field errors</returns>
+        /// <returns>All field errors.</returns>
         ILookup<string, string> GetFieldErrors();
     }
 }

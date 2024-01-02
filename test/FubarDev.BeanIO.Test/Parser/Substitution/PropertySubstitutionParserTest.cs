@@ -18,11 +18,11 @@ namespace BeanIO.Parser.Substitution
         [Fact]
         public void TestRuntimeSubstitution()
         {
-            var properties = new Properties(new Dictionary<string, string>()
-                {
-                    { "dateFormat", "yyyy-MM-dd" },
-                    { "type", "string" },
-                });
+            var properties = new Properties(new Dictionary<string, string?>()
+            {
+                { "dateFormat", "yyyy-MM-dd" },
+                { "type", "string" },
+            });
             var factory = StreamFactory.NewInstance();
             factory.Load(LoadStream("substitution_mapping.xml"), properties);
 
@@ -39,10 +39,10 @@ namespace BeanIO.Parser.Substitution
         [Fact]
         public void TestDefaultSubstitution()
         {
-            var properties = new Properties(new Dictionary<string, string>()
-                {
-                    { "dateFormat", "yyyy-MM-dd" },
-                });
+            var properties = new Properties(new Dictionary<string, string?>()
+            {
+                { "dateFormat", "yyyy-MM-dd" },
+            });
             var factory = StreamFactory.NewInstance();
             factory.Load(LoadStream("substitution_mapping.xml"), properties);
 

@@ -11,7 +11,7 @@ using BeanIO.Internal.Util;
 namespace BeanIO.Stream.Util
 {
     /// <summary>
-    /// Skips commented lines read from an input stream
+    /// Skips commented lines read from an input stream.
     /// </summary>
     /// <remarks>
     /// A line is considered commented if it starts with one
@@ -30,8 +30,8 @@ namespace BeanIO.Stream.Util
         /// <summary>
         /// Initializes a new instance of the <see cref="CommentReader"/> class.
         /// </summary>
-        /// <param name="reader">the input stream to read from</param>
-        /// <param name="comments">an array of comment identifying strings</param>
+        /// <param name="reader">the input stream to read from.</param>
+        /// <param name="comments">an array of comment identifying strings.</param>
         public CommentReader(MarkableTextReader reader, string[] comments)
             : this(reader, comments, null)
         {
@@ -40,9 +40,9 @@ namespace BeanIO.Stream.Util
         /// <summary>
         /// Initializes a new instance of the <see cref="CommentReader"/> class.
         /// </summary>
-        /// <param name="reader">the input stream to read from</param>
-        /// <param name="comments">an array of comment identifying strings</param>
-        /// <param name="recordTerminator">the record terminating character</param>
+        /// <param name="reader">the input stream to read from.</param>
+        /// <param name="comments">an array of comment identifying strings.</param>
+        /// <param name="recordTerminator">the record terminating character.</param>
         public CommentReader(MarkableTextReader reader, string[] comments, char? recordTerminator)
         {
             if (comments == null)
@@ -61,23 +61,23 @@ namespace BeanIO.Stream.Util
         }
 
         /// <summary>
-        /// Gets a value indicating whether the next character should be ignored if its a line feed
+        /// Gets a value indicating whether the next character should be ignored if its a line feed.
         /// </summary>
         public bool SkipLineFeed { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating whether the end of the stream was reached reading a commented line
+        /// Gets a value indicating whether the end of the stream was reached reading a commented line.
         /// </summary>
         public bool IsEof { get; private set; }
 
         /// <summary>
-        /// Skips comments in the input stream and returns the number of commented lines read
+        /// Skips comments in the input stream and returns the number of commented lines read.
         /// </summary>
         /// <remarks>
         /// If no commented lines were read, the stream is positioned just as it had been before this method is called
         /// </remarks>
-        /// <param name="initialSkipLineFeed">true if the first line feed character read should be ignored</param>
-        /// <returns>the number of skipped comment lines</returns>
+        /// <param name="initialSkipLineFeed">true if the first line feed character read should be ignored.</param>
+        /// <returns>the number of skipped comment lines.</returns>
         public int SkipComments(bool initialSkipLineFeed)
         {
             SkipLineFeed = initialSkipLineFeed;

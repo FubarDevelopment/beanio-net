@@ -23,7 +23,7 @@ namespace BeanIO.Stream.FixedLength
         /// <summary>
         /// Initializes a new instance of the <see cref="FixedLengthWriter"/> class.
         /// </summary>
-        /// <param name="writer">the output stream to write to</param>
+        /// <param name="writer">the output stream to write to.</param>
         public FixedLengthWriter(TextWriter writer)
             : this(writer, null)
         {
@@ -32,9 +32,9 @@ namespace BeanIO.Stream.FixedLength
         /// <summary>
         /// Initializes a new instance of the <see cref="FixedLengthWriter"/> class.
         /// </summary>
-        /// <param name="writer">the output stream to write to</param>
-        /// <param name="recordTerminator">the text used to terminate a record</param>
-        public FixedLengthWriter(TextWriter writer, string recordTerminator)
+        /// <param name="writer">the output stream to write to.</param>
+        /// <param name="recordTerminator">the text used to terminate a record.</param>
+        public FixedLengthWriter(TextWriter writer, string? recordTerminator)
         {
             _writer = writer;
             _recordTerminator = recordTerminator ?? writer.NewLine;
@@ -43,9 +43,14 @@ namespace BeanIO.Stream.FixedLength
         /// <summary>
         /// Writes a record object to this output stream.
         /// </summary>
-        /// <param name="record">Record the record object to write</param>
-        public void Write(object record)
+        /// <param name="record">Record the record object to write.</param>
+        public void Write(object? record)
         {
+            if (record == null)
+            {
+                throw new ArgumentNullException(nameof(record));
+            }
+
             _writer.Write(record.ToString());
             _writer.Write(_recordTerminator);
         }

@@ -13,7 +13,7 @@ namespace BeanIO.Internal.Config
     /// Stores bean information.
     /// </summary>
     /// <remarks>
-    /// A <code>Bean</code> object is used to instantiate configurable components
+    /// A <c>Bean</c> object is used to instantiate configurable components
     /// such as a type handler, record reader factory or record writer factory.
     /// </remarks>
     public interface IBeanConfig
@@ -21,11 +21,11 @@ namespace BeanIO.Internal.Config
         /// <summary>
         /// Gets or sets the fully qualified class name of the bean.
         /// </summary>
-        string ClassName { get; set; }
+        string? ClassName { get; set; }
 
         /// <summary>
         /// Gets or sets the bean properties.
         /// </summary>
-        Properties Properties { get; set; }
+        Properties? Properties { get; set; }
     }
 }

@@ -1,0 +1,18 @@
+<Project>
+  <!-- See https://aka.ms/dotnet/msbuild/customize for more details on customizing your build -->
+  <PropertyGroup>
+
+    <Product>BeanIO</Product>
+    <Authors>Fubar Development Junker;Mark Junker</Authors>
+    <Copyright>Fubar Development, Kevin Seim 2015-2017</Copyright>
+    <Nullable>enable</Nullable>
+    <LangVersion>latestMajor</LangVersion>
+    <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)BeanIO.ruleset</CodeAnalysisRuleSet>
+    <WarningsAsErrors>true</WarningsAsErrors>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" Visible="false" />
+  </ItemGroup>
+</Project>

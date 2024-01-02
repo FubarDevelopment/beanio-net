@@ -146,8 +146,8 @@ namespace BeanIO.Parser.Groups
         /// <summary>
         /// Fully parses the given file.
         /// </summary>
-        /// <param name="name">the name of the stream</param>
-        /// <param name="fileName">the name of the file to test</param>
+        /// <param name="name">the name of the stream.</param>
+        /// <param name="fileName">the name of the file to test.</param>
         private void Test(string name, string fileName)
         {
             Test(name, fileName, -1);
@@ -156,9 +156,9 @@ namespace BeanIO.Parser.Groups
         /// <summary>
         /// Fully parses the given file.
         /// </summary>
-        /// <param name="name">the name of the stream</param>
-        /// <param name="fileName">the name of the file to test</param>
-        /// <param name="errorLineNumber">the error line number</param>
+        /// <param name="name">the name of the stream.</param>
+        /// <param name="fileName">the name of the file to test.</param>
+        /// <param name="errorLineNumber">the error line number.</param>
         private void Test(string name, string fileName, int errorLineNumber)
         {
             var factory = NewStreamFactory("group.xml");
@@ -174,6 +174,7 @@ namespace BeanIO.Parser.Groups
                 if (errorLineNumber > 0)
                 {
                     // assert the line number from the exception matches expected
+                    Assert.NotNull(ex.RecordContext);
                     Assert.Equal(errorLineNumber, ex.RecordContext.LineNumber);
                 }
 

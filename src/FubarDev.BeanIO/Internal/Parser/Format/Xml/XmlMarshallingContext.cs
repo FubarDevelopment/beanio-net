@@ -17,17 +17,17 @@ namespace BeanIO.Internal.Parser.Format.Xml
     {
         private readonly Stack<IXmlNode> _groupStack;
 
-        private XDocument _document;
+        private XDocument? _document;
 
-        private XContainer _parent;
+        private XContainer? _parent;
 
         private int _ungroup;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlMarshallingContext"/> class.
         /// </summary>
-        /// <param name="groupDepth">the maximum depth of a group in the parser tree</param>
-        /// <param name="nameConversionMode">the name conversion mode</param>
+        /// <param name="groupDepth">the maximum depth of a group in the parser tree.</param>
+        /// <param name="nameConversionMode">the name conversion mode.</param>
         public XmlMarshallingContext(int groupDepth, ElementNameConversionMode nameConversionMode)
         {
             _groupStack = new Stack<IXmlNode>(groupDepth);
@@ -40,7 +40,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         public bool IsStreaming { get; set; }
 
         /// <summary>
-        /// Gets the element name conversion mode
+        /// Gets the element name conversion mode.
         /// </summary>
         public ElementNameConversionMode NameConversionMode { get; }
 
@@ -48,13 +48,13 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// Gets the record object to pass to the <see cref="IRecordWriter"/>
         /// when <see cref="MarshallingContext.WriteRecord"/> is called.
         /// </summary>
-        public object RecordObject => Document;
+        public object? RecordObject => Document;
 
         /// <summary>
-        /// Gets the document being marshalled
+        /// Gets the document being marshalled.
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.LayoutRules", "SA1513:ClosingBraceMustBeFollowedByBlankLine", Justification = "Reviewed.")]
-        public XDocument Document
+        public XDocument? Document
         {
             get
             {
@@ -70,7 +70,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Gets or sets the parent node to append in the document being marshalled.
         /// </summary>
-        public XContainer Parent
+        public XContainer? Parent
         {
             get
             {
@@ -117,7 +117,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         }
 
         /// <summary>
-        /// Clear is invoked after each bean object (record or group) is marshalled
+        /// Clear is invoked after each bean object (record or group) is marshalled.
         /// </summary>
         public override void Clear()
         {
@@ -145,7 +145,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// Adds a group to be marshalled when the next record is written to
         /// the output stream.
         /// </summary>
-        /// <param name="node">the group element to add</param>
+        /// <param name="node">the group element to add.</param>
         public virtual void OpenGroup(IXmlNode node)
         {
             _groupStack.Push(node);
@@ -154,7 +154,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Indicates a group element should be closed before marshalling the next record.
         /// </summary>
-        /// <param name="node">the <see cref="IXmlNode"/> to close</param>
+        /// <param name="node">the <see cref="IXmlNode"/> to close.</param>
         public virtual void CloseGroup(IXmlNode node)
         {
             ++_ungroup;
@@ -163,11 +163,11 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Converts a record object to a <see cref="XDocument"/>.
         /// </summary>
-        /// <param name="record">the record object to convert</param>
-        /// <returns>the <see cref="XDocument"/> result, or null if not supported</returns>
-        public override XDocument ToXDocument(object record)
+        /// <param name="record">the record object to convert.</param>
+        /// <returns>the <see cref="XDocument"/> result, or null if not supported.</returns>
+        public override XDocument? ToXDocument(object? record)
         {
-            return (XDocument)record;
+            return (XDocument?)record;
         }
 
         /// <summary>
@@ -176,8 +176,8 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// </summary>
         /// <returns>
         /// The newly created record object.
-        /// </returns>
-        protected override object ToRecordObject()
+        /// .</returns>
+        protected override object? ToRecordObject()
         {
             return Document;
         }

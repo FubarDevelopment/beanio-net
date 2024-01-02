@@ -20,7 +20,7 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="UnexpectedRecordException" /> class.
         /// </summary>
-        /// <param name="context">The record context that caused the exception</param>
+        /// <param name="context">The record context that caused the exception.</param>
         public UnexpectedRecordException(IRecordContext context)
             : base(context)
         {
@@ -29,8 +29,8 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="UnexpectedRecordException"/> class.
         /// </summary>
-        /// <param name="message">The error message</param>
-        /// <param name="context">The record context that caused the exception</param>
+        /// <param name="message">The error message.</param>
+        /// <param name="context">The record context that caused the exception.</param>
         public UnexpectedRecordException(string message, IRecordContext context)
             : base(message, context)
         {
@@ -39,9 +39,9 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="UnexpectedRecordException"/> class.
         /// </summary>
-        /// <param name="message">The error message</param>
-        /// <param name="inner">The inner exception</param>
-        /// <param name="context">The record context that caused the exception</param>
+        /// <param name="message">The error message.</param>
+        /// <param name="inner">The inner exception.</param>
+        /// <param name="context">The record context that caused the exception.</param>
         public UnexpectedRecordException(string message, Exception inner, IRecordContext context)
             : base(message, inner, context)
         {

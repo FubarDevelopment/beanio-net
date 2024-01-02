@@ -6,7 +6,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Text;
 
 using BeanIO.Internal.Util;
@@ -20,9 +19,9 @@ namespace BeanIO.Internal.Parser
     internal class CollectionParser : Aggregation
     {
         /// <summary>
-        /// the property value
+        /// the property value.
         /// </summary>
-        private readonly ParserLocal<object> _value = new ParserLocal<object>();
+        private readonly ParserLocal<object?> _value = new ParserLocal<object?>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CollectionParser"/> class.
@@ -33,7 +32,7 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Gets or sets the array element type
+        /// Gets or sets the array element type.
         /// </summary>
         public Type ElementType { get; set; }
 
@@ -43,7 +42,7 @@ namespace BeanIO.Internal.Parser
         public override bool IsProperty => PropertyType != null;
 
         /// <summary>
-        /// Gets the <see cref="IProperty"/> implementation type
+        /// Gets the <see cref="IProperty"/> implementation type.
         /// </summary>
         public override PropertyType Type => Internal.Parser.PropertyType.AggregationCollection;
 
@@ -55,8 +54,8 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns whether this parser and its children match a record being unmarshalled.
         /// </summary>
-        /// <param name="context">The <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if matched, false otherwise</returns>
+        /// <param name="context">The <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if matched, false otherwise.</returns>
         public override bool Matches(UnmarshallingContext context)
         {
             // matching repeating fields is not supported
@@ -64,22 +63,22 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Returns the length of aggregation
+        /// Returns the length of aggregation.
         /// </summary>
-        /// <param name="value">the aggregation value</param>
-        /// <returns>the length</returns>
-        public override int Length(object value)
+        /// <param name="value">the aggregation value.</param>
+        /// <returns>the length.</returns>
+        public override int Length(object? value)
         {
-            var collection = (ICollection)value;
+            var collection = (ICollection?)value;
             return collection?.Count ?? 0;
         }
 
         /// <summary>
-        /// Creates the property value and returns it
+        /// Creates the property value and returns it.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <returns>the property value</returns>
-        public override object CreateValue(ParsingContext context)
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <returns>the property value.</returns>
+        public override object? CreateValue(ParsingContext context)
         {
             var value = _value.Get(context);
 
@@ -92,7 +91,7 @@ namespace BeanIO.Internal.Parser
             return GetValue(context);
         }
 
-        public override bool Defines(object value)
+        public override bool Defines(object? value)
         {
             // TODO: implement for arrays....
             if (value == null || PropertyType == null)
@@ -111,7 +110,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Clears the current property value.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
         public override void ClearValue(ParsingContext context)
         {
             _value.Set(context, null);
@@ -124,7 +123,7 @@ namespace BeanIO.Internal.Parser
         /// This method should be overridden by subclasses that need to register
         /// one or more parser context variables.
         /// </remarks>
-        /// <param name="locals">set of local variables</param>
+        /// <param name="locals">set of local variables.</param>
         public override void RegisterLocals(ISet<IParserLocal> locals)
         {
             if (locals.Add(_value))
@@ -134,8 +133,8 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns whether this parser or any of its descendant have content for marshalling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <returns>true if there is content for marshalling, false otherwise</returns>
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <returns>true if there is content for marshalling, false otherwise.</returns>
         public override bool HasContent(ParsingContext context)
         {
             var collection = GetCollection(context);
@@ -145,9 +144,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns the unmarshalled property value.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <returns>the property value</returns>
-        public override object GetValue(ParsingContext context)
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <returns>the property value.</returns>
+        public override object? GetValue(ParsingContext context)
         {
             var value = _value.Get(context);
             return value ?? Value.Missing;
@@ -156,9 +155,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Sets the property value for marshaling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <param name="value">the property value</param>
-        public override void SetValue(ParsingContext context, object value)
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <param name="value">the property value.</param>
+        public override void SetValue(ParsingContext context, object? value)
         {
             // convert empty collections to null so that parent parsers
             // will consider this property missing during marshalling
@@ -241,7 +240,7 @@ namespace BeanIO.Internal.Parser
                     }
 
                     // collect the field value and add it to our buffered list
-                    object fieldValue = parser.GetValue(context);
+                    var fieldValue = parser.GetValue(context);
                     if (ReferenceEquals(fieldValue, Value.Invalid))
                     {
                         invalid = true;
@@ -256,7 +255,7 @@ namespace BeanIO.Internal.Parser
                             if (fieldValue == null)
                             {
                                 var elementType = collection.GetElementType();
-                                if (elementType.GetTypeInfo().IsPrimitive)
+                                if (elementType.IsPrimitive)
                                     fieldValue = elementType.NewInstance();
                             }
 
@@ -273,7 +272,7 @@ namespace BeanIO.Internal.Parser
                 context.PopIteration();
             }
 
-            object value;
+            object? value;
 
             if (count < minOccurs)
             {
@@ -294,7 +293,7 @@ namespace BeanIO.Internal.Parser
             return ReferenceEquals(value, Value.Invalid) || count > 0;
         }
 
-        protected IList GetCollection(ParsingContext context)
+        protected IList? GetCollection(ParsingContext context)
         {
             var value = _value.Get(context);
             if (ReferenceEquals(value, Value.Invalid))
@@ -304,42 +303,41 @@ namespace BeanIO.Internal.Parser
 
         protected virtual IList CreateCollection()
         {
-            var propertyTypeInfo = PropertyType.GetTypeInfo();
+            var propertyTypeInfo = PropertyType;
             Type type;
-            if (propertyTypeInfo.ContainsGenericParameters && !PropertyType.IsConstructedGenericType)
+            if (propertyTypeInfo is { ContainsGenericParameters: true, IsConstructedGenericType: false })
             {
-                Type elementType = ElementType;
-                var elementTypeInfo = elementType.GetTypeInfo();
+                var elementType = ElementType;
+                var elementTypeInfo = elementType;
                 if (!elementType.IsConstructedGenericType && elementTypeInfo.ContainsGenericParameters)
                     elementType = typeof(object);
                 type = propertyTypeInfo.MakeGenericType(elementType);
             }
             else
             {
-                type = PropertyType;
+                type = PropertyType ?? throw new InvalidOperationException("Property type not configured");
             }
 
             var result = type.NewInstance();
-            var resultAsList = result as IList;
-            if (resultAsList != null)
+            if (result is IList resultAsList)
                 return resultAsList;
             return new SetProxyList((IEnumerable)result);
         }
 
         /// <summary>
-        /// Returns a value indicating whether this iteration contained invalid values when last unmarshalled
+        /// Returns a value indicating whether this iteration contained invalid values when last unmarshalled.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <returns>true if this iteration contained invalid values</returns>
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <returns>true if this iteration contained invalid values.</returns>
         protected virtual bool IsInvalid(ParsingContext context)
         {
             return ReferenceEquals(_value.Get(context), Value.Invalid);
         }
 
         /// <summary>
-        /// Called by <see cref="TreeNode{T}.ToString"/> to append node parameters to the output
+        /// Called by <see cref="TreeNode{T}.ToString"/> to append node parameters to the output.
         /// </summary>
-        /// <param name="s">The output to append</param>
+        /// <param name="s">The output to append.</param>
         protected override void ToParamString(StringBuilder s)
         {
             base.ToParamString(s);

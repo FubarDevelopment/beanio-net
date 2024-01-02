@@ -19,23 +19,23 @@ namespace BeanIO.Beans
     public class Bean
     {
         #region simple properties
-        public string type;
-        public string text;
-        public string field1;
-        private string field2;
-        public string field3;
+        public string? type;
+        public string? text;
+        public string? field1;
+        private string? field2;
+        public string? field3;
         public LocalDate? date;
         #endregion
 
         #region collection properties
-        public Hashtable map;
-        public ArrayList list;
+        public Hashtable? map;
+        public ArrayList? list;
         #endregion
 
         #region bean properties
-        public Bean group;
-        public Bean record;
-        public Bean segment;
+        public Bean? group;
+        public Bean? record;
+        public Bean? segment;
         #endregion
     }
 }

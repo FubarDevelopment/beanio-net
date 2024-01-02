@@ -20,8 +20,8 @@ namespace BeanIO.Internal.Parser.Accessor
         /// <summary>
         /// Initializes a new instance of the <see cref="FieldReflectionAccessor"/> class.
         /// </summary>
-        /// <param name="field">the reflected <see cref="FieldInfo"/></param>
-        /// <param name="constructorArgumentIndex">the constructor argument index, or null if not a constructor argument</param>
+        /// <param name="field">the reflected <see cref="FieldInfo"/>.</param>
+        /// <param name="constructorArgumentIndex">the constructor argument index, or null if not a constructor argument.</param>
         public FieldReflectionAccessor(FieldInfo field, int? constructorArgumentIndex)
         {
             ConstructorArgumentIndex = constructorArgumentIndex;
@@ -31,9 +31,9 @@ namespace BeanIO.Internal.Parser.Accessor
         /// <summary>
         /// Returns the property value from a bean object.
         /// </summary>
-        /// <param name="bean">the bean object to get the property from</param>
-        /// <returns>the property value</returns>
-        public override object GetValue(object bean)
+        /// <param name="bean">the bean object to get the property from.</param>
+        /// <returns>the property value.</returns>
+        public override object? GetValue(object bean)
         {
             try
             {
@@ -48,9 +48,9 @@ namespace BeanIO.Internal.Parser.Accessor
         /// <summary>
         /// Sets the property value on a bean object.
         /// </summary>
-        /// <param name="bean">the bean object to set the property</param>
-        /// <param name="value">the property value</param>
-        public override void SetValue(object bean, object value)
+        /// <param name="bean">the bean object to set the property.</param>
+        /// <param name="value">the property value.</param>
+        public override void SetValue(object bean, object? value)
         {
             try
             {

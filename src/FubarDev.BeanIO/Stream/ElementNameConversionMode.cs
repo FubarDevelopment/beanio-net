@@ -24,7 +24,7 @@ namespace BeanIO.Stream
         Decapitalize = 1,
 
         /// <summary>
-        /// Capitalize the name
+        /// Capitalize the name.
         /// </summary>
         Capitalize = 2,
 
@@ -39,7 +39,7 @@ namespace BeanIO.Stream
         AllUpper = 4,
 
         /// <summary>
-        /// The mask for all flags that influence the name case conversion
+        /// The mask for all flags that influence the name case conversion.
         /// </summary>
         CasingMask = 15,
 

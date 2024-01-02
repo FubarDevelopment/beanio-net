@@ -21,7 +21,7 @@ namespace BeanIO.Internal.Compiler.FixedLength
         /// </summary>
         /// <returns>
         /// The new <see cref="IRecordParserFactory"/>
-        /// </returns>
+        /// .</returns>
         protected override IRecordParserFactory CreateDefaultRecordParserFactory()
         {
             return new FixedLengthRecordParserFactory();
@@ -30,10 +30,10 @@ namespace BeanIO.Internal.Compiler.FixedLength
         protected override IStreamFormat CreateStreamFormat(StreamConfig config)
         {
             var format = new FixedLengthStreamFormat()
-                {
-                    Name = config.Name,
-                    RecordParserFactory = CreateRecordParserFactory(config),
-                };
+            {
+                Name = config.Name ?? throw new BeanIOConfigurationException("Missing stream name"),
+                RecordParserFactory = CreateRecordParserFactory(config),
+            };
             return format;
         }
 
@@ -51,7 +51,7 @@ namespace BeanIO.Internal.Compiler.FixedLength
             return format;
         }
 
-        protected override IFieldFormat CreateFieldFormat(FieldConfig config, Type type)
+        protected override IFieldFormat CreateFieldFormat(FieldConfig config, Type? type)
         {
             var padding = new FixedLengthFieldPadding()
             {
@@ -64,25 +64,25 @@ namespace BeanIO.Internal.Compiler.FixedLength
             padding.Init();
 
             var format = new FixedLengthFieldFormat()
-                {
-                    Name = config.Name,
-                    Position = config.Position ?? 0,
-                    Until = config.Until ?? 0,
-                    IsLazy = config.MinOccurs == 0,
-                    KeepPadding = config.KeepPadding,
-                    IsLenientPadding = config.IsLenientPadding,
-                    Padding = padding,
-                };
+            {
+                Name = config.Name ?? throw new BeanIOConfigurationException("Missing field name"),
+                Position = config.Position ?? 0,
+                Until = config.Until ?? 0,
+                IsLazy = config.MinOccurs == 0,
+                KeepPadding = config.KeepPadding,
+                IsLenientPadding = config.IsLenientPadding,
+                Padding = padding,
+            };
 
             return format;
         }
 
         /// <summary>
-        /// Creates a stream configuration pre-processor
+        /// Creates a stream configuration pre-processor.
         /// </summary>
-        /// <remarks>May be overridden to return a format specific version</remarks>
-        /// <param name="config">the stream configuration to pre-process</param>
-        /// <returns>the new <see cref="Preprocessor"/></returns>
+        /// <remarks>May be overridden to return a format specific version.</remarks>
+        /// <param name="config">the stream configuration to pre-process.</param>
+        /// <returns>the new <see cref="Preprocessor"/>.</returns>
         protected override Preprocessor CreatePreprocessor(StreamConfig config)
         {
             return new FixedLengthPreprocessor(config);

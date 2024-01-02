@@ -5,7 +5,6 @@
 
 using System;
 using System.Globalization;
-using System.Reflection;
 
 using BeanIO.Config;
 
@@ -20,7 +19,7 @@ namespace BeanIO.Types
     /// </remarks>
     public class NumberTypeHandler : CultureSupport, IConfigurableTypeHandler
     {
-        private Tuple<NumberStyles, string> _pattern;
+        private (NumberStyles Styles, string Format)? _pattern;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NumberTypeHandler"/> class.
@@ -30,7 +29,7 @@ namespace BeanIO.Types
         {
             if (numberType == null)
                 throw new ArgumentNullException(nameof(numberType));
-            if (!numberType.GetTypeInfo().IsValueType)
+            if (!numberType.IsValueType)
                 throw new ArgumentOutOfRangeException(nameof(numberType));
             TargetType = numberType;
         }
@@ -38,18 +37,16 @@ namespace BeanIO.Types
         /// <summary>
         /// Gets or sets the format pattern to use to parse and format the number value.
         /// </summary>
-        public Tuple<NumberStyles, string> Pattern
+        public (NumberStyles Styles, string Format)? Pattern
         {
-            get
-            {
-                return _pattern;
-            }
-            set
-            {
-                if (value != null && string.IsNullOrEmpty(value.Item2))
-                    throw new ArgumentOutOfRangeException(nameof(value));
-                _pattern = value;
-            }
+            get => _pattern;
+            set =>
+                _pattern = value switch
+                {
+                    var (_, format) when string.IsNullOrEmpty(format) =>
+                        throw new ArgumentOutOfRangeException(nameof(value)),
+                    _ => value,
+                };
         }
 
         /// <summary>
@@ -60,48 +57,46 @@ namespace BeanIO.Types
         /// <summary>
         /// Parses field text into an object.
         /// </summary>
-        /// <param name="text">The field text to parse, which may be null if the field was not passed in the record</param>
-        /// <returns>The parsed object</returns>
-        public virtual object Parse(string text)
+        /// <param name="text">The field text to parse, which may be null if the field was not passed in the record.</param>
+        /// <returns>The parsed object.</returns>
+        public virtual object? Parse(string? text)
         {
             if (string.IsNullOrEmpty(text))
                 return null;
 
-            if (Pattern == null)
-                return CreateNumber(text);
+            if (Pattern is var (styles, _))
+                return Parse(text!, styles);
 
-            return Parse(text, Pattern.Item1);
+            return CreateNumber(text!);
         }
 
         /// <summary>
         /// Formats an object into field text.
         /// </summary>
-        /// <param name="value">The value to format, which may be null</param>
-        /// <returns>The formatted field text, or <code>null</code> to indicate the value is not present</returns>
-        public virtual string Format(object value)
+        /// <param name="value">The value to format, which may be null.</param>
+        /// <returns>The formatted field text, or <see langword="null" /> to indicate the value is not present.</returns>
+        public virtual string? Format(object? value)
         {
             if (value == null)
                 return null;
-            var fmt = value as IFormattable;
-            if (fmt == null)
+            if (value is not IFormattable fmt)
                 return value.ToString();
-            if (Pattern == null)
+            if (Pattern is var (_, format))
             {
-                var dec = Convert.ToDecimal(value);
-                return dec.ToString(Culture);
+                return fmt.ToString(format, Culture);
             }
 
-            return fmt.ToString(Pattern.Item2, Culture);
+            var dec = Convert.ToDecimal(value);
+            return dec.ToString(Culture);
         }
 
         /// <summary>
         /// Configures this type handler.
         /// </summary>
-        /// <param name="properties">The properties for customizing the instance</param>
+        /// <param name="properties">The properties for customizing the instance.</param>
         public virtual void Configure(Properties properties)
         {
-            string formatSetting;
-            if (properties.TryGetValue(DefaultTypeConfigurationProperties.FORMAT_SETTING, out formatSetting))
+            if (properties.TryGetValue(DefaultTypeConfigurationProperties.FORMAT_SETTING, out var formatSetting))
             {
                 if (!string.IsNullOrEmpty(formatSetting))
                 {
@@ -133,16 +128,15 @@ namespace BeanIO.Types
                         styles = (NumberStyles)Enum.Parse(typeof(NumberStyles), stylesAsString, true);
                     }
 
-                    Pattern = Tuple.Create(styles, format);
+                    Pattern = (styles, format);
                 }
             }
 
-            string numberType;
-            if (properties.TryGetValue(DefaultTypeConfigurationProperties.NUMBER_TYPE_SETTING, out numberType))
+            if (properties.TryGetValue(DefaultTypeConfigurationProperties.NUMBER_TYPE_SETTING, out var numberType))
             {
                 if (!string.IsNullOrEmpty(numberType))
                 {
-                    TargetType = Type.GetType(numberType, true);
+                    TargetType = Type.GetType(numberType, true)!;
                 }
             }
         }
@@ -151,9 +145,9 @@ namespace BeanIO.Types
         /// Parses a string to a number by converting the text first to a decimal number and than
         /// to the target type.
         /// </summary>
-        /// <param name="text">The text to convert</param>
-        /// <param name="styles">The number styles to use</param>
-        /// <returns>The parsed number</returns>
+        /// <param name="text">The text to convert.</param>
+        /// <param name="styles">The number styles to use.</param>
+        /// <returns>The parsed number.</returns>
         protected virtual object Parse(string text, NumberStyles styles)
         {
             // Parse the number into a System.Decimal.
@@ -166,8 +160,7 @@ namespace BeanIO.Types
             }
             else
             {
-                long temp;
-                if (!long.TryParse(text, styles, Culture, out temp))
+                if (!long.TryParse(text, styles, Culture, out var temp))
                     throw new TypeConversionException($"Invalid {TargetType} value '{text}'");
                 result = temp;
             }
@@ -186,8 +179,8 @@ namespace BeanIO.Types
         /// <summary>
         /// Parses a number from text.
         /// </summary>
-        /// <param name="text">The text to convert to a number</param>
-        /// <returns>The parsed number</returns>
+        /// <param name="text">The text to convert to a number.</param>
+        /// <returns>The parsed number.</returns>
         protected virtual object CreateNumber(string text)
         {
             return Parse(text, NumberStyles.Number);
@@ -196,8 +189,8 @@ namespace BeanIO.Types
         /// <summary>
         /// Parses a number from a <see cref="decimal"/>.
         /// </summary>
-        /// <param name="value">The <see cref="decimal"/> to convert to a number</param>
-        /// <returns>The parsed number</returns>
+        /// <param name="value">The <see cref="decimal"/> to convert to a number.</param>
+        /// <returns>The parsed number.</returns>
         protected virtual object CreateNumber(decimal value)
         {
             return Convert.ChangeType(value, TargetType, Culture);

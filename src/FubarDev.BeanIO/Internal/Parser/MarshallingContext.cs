@@ -3,6 +3,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
 
@@ -17,18 +18,24 @@ namespace BeanIO.Internal.Parser
     /// Subclasses must implement <see cref="ToRecordObject"/> which is invoked
     /// when <see cref="WriteRecord"/> is called to write a record object to the
     /// configured <see cref="IRecordWriter"/>.
-    /// </returns>
+    /// .</returns>
     internal abstract class MarshallingContext : ParsingContext
     {
+        private IRecordWriter? _recordWriter;
+
         /// <summary>
         /// Gets or sets the bean object to marshal.
         /// </summary>
-        public object Bean { get; set; }
+        public object? Bean { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="IRecordWriter"/> to write to.
         /// </summary>
-        public IRecordWriter RecordWriter { get; set; }
+        public IRecordWriter RecordWriter
+        {
+            get => _recordWriter ?? throw new InvalidOperationException("RecordWriter not initialized");
+            set => _recordWriter = value;
+        }
 
         /// <summary>
         /// Gets or sets the component name of the record or group to marshal.
@@ -36,7 +43,7 @@ namespace BeanIO.Internal.Parser
         /// <remarks>
         /// May be null if not specified.
         /// </remarks>
-        public string ComponentName { get; set; }
+        public string? ComponentName { get; set; }
 
         /// <summary>
         /// Gets the parsing mode.
@@ -44,7 +51,7 @@ namespace BeanIO.Internal.Parser
         public override ParsingMode Mode => ParsingMode.Marshalling;
 
         /// <summary>
-        /// Clear is invoked after each bean object (record or group) is marshalled
+        /// Clear is invoked after each bean object (record or group) is marshalled.
         /// </summary>
         public virtual void Clear()
         {
@@ -67,9 +74,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Converts a record object to a <see cref="string"/>[].
         /// </summary>
-        /// <param name="record">the record object to convert</param>
-        /// <returns>the <see cref="string"/> array result, or null if not supported</returns>
-        public virtual string[] ToArray(object record)
+        /// <param name="record">the record object to convert.</param>
+        /// <returns>the <see cref="string"/> array result, or null if not supported.</returns>
+        public virtual string[]? ToArray(object? record)
         {
             return null;
         }
@@ -77,9 +84,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Converts a record object to a <see cref="IList{T}"/> with T=<see cref="string"/>.
         /// </summary>
-        /// <param name="record">the record object to convert</param>
-        /// <returns>the <see cref="IList{T}"/> result, or null if not supported</returns>
-        public virtual IList<string> ToList(object record)
+        /// <param name="record">the record object to convert.</param>
+        /// <returns>the <see cref="IList{T}"/> result, or null if not supported.</returns>
+        public virtual IList<string>? ToList(object? record)
         {
             return null;
         }
@@ -87,9 +94,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Converts a record object to a <see cref="XDocument"/>.
         /// </summary>
-        /// <param name="record">the record object to convert</param>
-        /// <returns>the <see cref="XDocument"/> result, or null if not supported</returns>
-        public virtual XDocument ToXDocument(object record)
+        /// <param name="record">the record object to convert.</param>
+        /// <returns>the <see cref="XDocument"/> result, or null if not supported.</returns>
+        public virtual XDocument? ToXDocument(object? record)
         {
             return null;
         }
@@ -100,7 +107,7 @@ namespace BeanIO.Internal.Parser
         /// </summary>
         /// <returns>
         /// The newly created record object.
-        /// </returns>
-        protected abstract object ToRecordObject();
+        /// .</returns>
+        protected abstract object? ToRecordObject();
     }
 }

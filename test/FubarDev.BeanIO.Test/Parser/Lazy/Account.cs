@@ -11,8 +11,8 @@ namespace BeanIO.Parser.Lazy
     {
         public int? Number { get; set; }
 
-        public string Text { get; set; }
+        public string? Text { get; set; }
 
-        public List<Transaction> Transactions { get; set; }
+        public List<Transaction>? Transactions { get; set; }
     }
 }

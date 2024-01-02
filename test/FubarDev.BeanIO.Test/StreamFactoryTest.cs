@@ -4,7 +4,6 @@
 // </copyright>
 
 using System;
-using System.Reflection;
 
 using Xunit;
 
@@ -15,11 +14,11 @@ namespace BeanIO
         [Fact]
         public void TestLoadMappingFile()
         {
-            using (var mappingStream = typeof(StreamFactoryTest).GetTypeInfo().Assembly.GetManifestResourceStream("BeanIO.mapping.xml"))
-            {
-                var factory = StreamFactory.NewInstance();
-                factory.Load(mappingStream);
-            }
+            var asm = typeof(StreamFactoryTest).Assembly;
+            using var mappingStream = asm.GetManifestResourceStream("BeanIO.mapping.xml");
+            Assert.NotNull(mappingStream);
+            var factory = StreamFactory.NewInstance();
+            factory.Load(mappingStream);
         }
     }
 }

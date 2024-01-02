@@ -13,42 +13,42 @@ namespace BeanIO.Parser.Bean
     {
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
-        public string Model { get; set; }
+        public string? Model { get; set; }
 
-        public Widget Top { get; set; }
+        public Widget? Top { get; set; }
 
-        public Widget Bottom { get; set; }
+        public Widget? Bottom { get; set; }
 
-        public IList<Widget> PartsList { get; set; }
+        public IList<Widget?>? PartsList { get; set; }
 
-        public IDictionary<string, Widget> PartsMap { get; set; }
+        public IDictionary<string, Widget>? PartsMap { get; set; }
 
-        public IList<Widget> GetPartsList()
+        public IList<Widget?>? GetPartsList()
         {
             return PartsList;
         }
 
-        public void SetPartsList(IList<Widget> partsList)
+        public void SetPartsList(IList<Widget?>? partsList)
         {
             PartsList = partsList;
         }
 
-        public Widget GetPart(int index)
+        public Widget? GetPart(int index)
         {
-            return PartsList[index];
+            return PartsList?[index];
         }
 
-        public Widget GetPart(string key)
+        public Widget? GetPart(string key)
         {
-            return PartsMap[key];
+            return PartsMap?[key];
         }
 
-        public void AddPart(Widget w)
+        public void AddPart(Widget? w)
         {
             if (PartsList == null)
-                PartsList = new List<Widget>();
+                PartsList = new List<Widget?>();
             PartsList.Add(w);
         }
 
@@ -59,7 +59,7 @@ namespace BeanIO.Parser.Bean
                 Id,
                 Name,
                 Model,
-                PartsList.ToDebug());
+                PartsList?.ToDebug());
         }
     }
 }

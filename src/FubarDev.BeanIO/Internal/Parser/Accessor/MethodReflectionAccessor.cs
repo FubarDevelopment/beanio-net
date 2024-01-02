@@ -25,9 +25,9 @@ namespace BeanIO.Internal.Parser.Accessor
         /// <summary>
         /// Returns the property value from a bean object.
         /// </summary>
-        /// <param name="bean">the bean object to get the property from</param>
-        /// <returns>the property value</returns>
-        public override object GetValue(object bean)
+        /// <param name="bean">the bean object to get the property from.</param>
+        /// <returns>the property value.</returns>
+        public override object? GetValue(object bean)
         {
             if (_getter == null)
                 throw new BeanIOException($"There is no getter defined on bean class '{bean.GetType().GetAssemblyQualifiedName()}'");
@@ -46,9 +46,9 @@ namespace BeanIO.Internal.Parser.Accessor
         /// <summary>
         /// Sets the property value on a bean object.
         /// </summary>
-        /// <param name="bean">the bean object to set the property</param>
-        /// <param name="value">the property value</param>
-        public override void SetValue(object bean, object value)
+        /// <param name="bean">the bean object to set the property.</param>
+        /// <param name="value">the property value.</param>
+        public override void SetValue(object bean, object? value)
         {
             if (_setter == null)
                 throw new BeanIOException($"There is no setter defined on bean class '{bean.GetType().GetAssemblyQualifiedName()}'");

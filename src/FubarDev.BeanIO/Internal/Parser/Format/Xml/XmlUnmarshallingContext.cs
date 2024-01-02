@@ -3,6 +3,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Linq;
@@ -16,27 +17,27 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// This stack of elements is used to store the last XML node parsed for a field or bean collection.
         /// </summary>
-        private readonly Stack<XElement> _elementStack = new Stack<XElement>();
+        private readonly Stack<XElement?> _elementStack = new Stack<XElement?>();
 
         /// <summary>
-        /// Store previously matched groups for parsing subsequent records in a record group
+        /// Store previously matched groups for parsing subsequent records in a record group.
         /// </summary>
         private readonly IXmlNode[] _groupStack;
 
         /// <summary>
-        /// The DOM to parse
+        /// The DOM to parse.
         /// </summary>
-        private XDocument _document;
+        private XDocument? _document;
 
         /// <summary>
-        /// The last parsed node in the document, which is the parent node of the next field/bean to parse
+        /// The last parsed node in the document, which is the parent node of the next field/bean to parse.
         /// </summary>
-        private XElement _position;
+        private XElement? _position;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlUnmarshallingContext"/> class.
         /// </summary>
-        /// <param name="groupDepth">the maximum depth of an element mapped to a <see cref="Group"/> in the DOM</param>
+        /// <param name="groupDepth">the maximum depth of an element mapped to a <see cref="Group"/> in the DOM.</param>
         public XmlUnmarshallingContext(int groupDepth)
         {
             _groupStack = new IXmlNode[groupDepth];
@@ -45,18 +46,18 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Gets the XML document object model (DOM) for the current record.
         /// </summary>
-        public XDocument Document => _document;
+        public XDocument? Document => _document;
 
         /// <summary>
         /// Gets the current unmarshalled position in the DOM tree, or null
         /// if a node has not been matched yet.
         /// </summary>
-        public XElement Position => _position;
+        public XElement? Position => _position;
 
         /// <summary>
         /// Gets or sets the last parsed DOM element for a field or bean collection.
         /// </summary>
-        public XElement PreviousElement
+        public XElement? PreviousElement
         {
             get
             {
@@ -70,12 +71,12 @@ namespace BeanIO.Internal.Parser.Format.Xml
         }
 
         /// <summary>
-        /// Sets the value of the record returned from the <see cref="IRecordReader"/>
+        /// Sets the value of the record returned from the <see cref="IRecordReader"/>.
         /// </summary>
-        /// <param name="value">the record value read by a <see cref="IRecordReader"/></param>
-        public override void SetRecordValue(object value)
+        /// <param name="value">the record value read by a <see cref="IRecordReader"/>.</param>
+        public override void SetRecordValue(object? value)
         {
-            var node = (XNode)value;
+            var node = (XNode?)value ?? throw new ArgumentNullException(nameof(value));
             switch (node.NodeType)
             {
                 case XmlNodeType.Document:
@@ -97,7 +98,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// Pushes an <see cref="IIteration"/> onto a stack for adjusting
         /// field positions and indices.
         /// </summary>
-        /// <param name="iteration">the <see cref="IIteration"/> to push</param>
+        /// <param name="iteration">the <see cref="IIteration"/> to push.</param>
         public override void PushIteration(IIteration iteration)
         {
             base.PushIteration(iteration);
@@ -107,7 +108,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Pops the last <see cref="IIteration"/> pushed onto the stack.
         /// </summary>
-        /// <returns>the top most <see cref="IIteration"/></returns>
+        /// <returns>the top most <see cref="IIteration"/>.</returns>
         public override IIteration PopIteration()
         {
             _elementStack.Pop();
@@ -123,11 +124,11 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// calls to this method for subsequent records in the same group can
         /// update <see cref="Position"/> according to the depth of the record.
         /// </remarks>
-        /// <param name="node">the <see cref="IXmlNode"/> to match</param>
-        /// <param name="depth">e depth of the node in the DOM tree</param>
-        /// <param name="isGroup">whether the node is mapped to a <see cref="Group"/></param>
-        /// <returns>the matched node or null if not matched</returns>
-        public virtual XElement PushPosition(IXmlNode node, int depth, bool isGroup)
+        /// <param name="node">the <see cref="IXmlNode"/> to match.</param>
+        /// <param name="depth">e depth of the node in the DOM tree.</param>
+        /// <param name="isGroup">whether the node is mapped to a <see cref="Group"/>.</param>
+        /// <returns>the matched node or null if not matched.</returns>
+        public virtual XElement? PushPosition(IXmlNode node, int depth, bool isGroup)
         {
             // if the pushed node is a group node, add it to the group stack
             // for the workaround below
@@ -161,9 +162,9 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// Updates <see cref="Position"/> by finding a child of the current position
         /// that matches a given node.
         /// </summary>
-        /// <param name="node">the <see cref="IXmlNode"/> to match</param>
-        /// <returns>the matching element, or null if not found</returns>
-        public virtual XElement PushPosition(IXmlNode node)
+        /// <param name="node">the <see cref="IXmlNode"/> to match.</param>
+        /// <returns>the matching element, or null if not found.</returns>
+        public virtual XElement? PushPosition(IXmlNode node)
         {
             var element = FindElement(node);
             if (element == null)
@@ -193,13 +194,13 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Finds a child element of the current <see cref="Position"/>.
         /// </summary>
-        /// <param name="node">the <see cref="IXmlNode"/></param>
-        /// <returns>the matched element or null if not found</returns>
-        public virtual XElement FindElement(IXmlNode node)
+        /// <param name="node">the <see cref="IXmlNode"/>.</param>
+        /// <returns>the matched element or null if not found.</returns>
+        public virtual XElement? FindElement(IXmlNode node)
         {
             var parent = _position;
 
-            XElement element;
+            XElement? element;
             if (node.IsRepeating)
             {
                 int index = GetRelativeFieldIndex();
@@ -236,8 +237,8 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Converts a <see cref="XElement"/> to a record value.
         /// </summary>
-        /// <param name="element">The <see cref="XElement"/> to convert</param>
-        /// <returns>the record value, or null if not supported</returns>
+        /// <param name="element">The <see cref="XElement"/> to convert.</param>
+        /// <returns>the record value, or null if not supported.</returns>
         public override object ToRecordValue(XContainer element)
         {
             return element;

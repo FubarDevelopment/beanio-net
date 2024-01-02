@@ -8,25 +8,25 @@ using System.Xml;
 namespace BeanIO.Internal.Parser.Format.Xml
 {
     /// <summary>
-    /// An XML node
+    /// An XML node.
     /// </summary>
     internal interface IXmlNode
     {
         /// <summary>
-        /// Gets the XML node type
+        /// Gets the XML node type.
         /// </summary>
         XmlNodeType Type { get; }
 
         /// <summary>
         /// Gets the XML local name for this node.
         /// </summary>
-        string LocalName { get; }
+        string? LocalName { get; }
 
         /// <summary>
         /// Gets the namespace of this node.  If there is no namespace for this
-        /// node, or this node is not namespace aware, <code>null</code> is returned.
+        /// node, or this node is not namespace aware, <see langword="null" /> is returned.
         /// </summary>
-        string Namespace { get; }
+        string? Namespace { get; }
 
         /// <summary>
         /// Gets a value indicating whether a namespace was configured for this node,
@@ -35,10 +35,10 @@ namespace BeanIO.Internal.Parser.Format.Xml
         bool IsNamespaceAware { get; }
 
         /// <summary>
-        /// Gets the namespace prefix for marshaling this node, or <code>null</code>
+        /// Gets the namespace prefix for marshaling this node, or <see langword="null" />
         /// if the namespace should override the default namespace.
         /// </summary>
-        string Prefix { get; }
+        string? Prefix { get; }
 
         /// <summary>
         /// Gets a value indicating whether this node is nillable.

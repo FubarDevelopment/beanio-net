@@ -3,6 +3,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
@@ -19,11 +20,11 @@ namespace BeanIO.Internal.Parser.Format.Xml
     /// </summary>
     internal class XmlElementField : XmlFieldFormat
     {
-        private string _localName;
+        private string? _localName;
 
-        private string _namespace;
+        private string? _namespace;
 
-        private string _prefix;
+        private string? _prefix;
 
         private bool _namespaceAware;
 
@@ -32,20 +33,20 @@ namespace BeanIO.Internal.Parser.Format.Xml
         private bool _nillable;
 
         /// <summary>
-        /// Gets the XML node type
+        /// Gets the XML node type.
         /// </summary>
         public override XmlNodeType Type => XmlNodeType.Element;
 
         /// <summary>
         /// Gets the XML local name for this node.
         /// </summary>
-        public override string LocalName => _localName;
+        public override string? LocalName => _localName;
 
         /// <summary>
         /// Gets the namespace of this node.  If there is no namespace for this
-        /// node, or this node is not namespace aware, <code>null</code> is returned.
+        /// node, or this node is not namespace aware, <see langword="null" /> is returned.
         /// </summary>
-        public override string Namespace => _namespace;
+        public override string? Namespace => _namespace;
 
         /// <summary>
         /// Gets a value indicating whether a namespace was configured for this node,
@@ -54,13 +55,13 @@ namespace BeanIO.Internal.Parser.Format.Xml
         public override bool IsNamespaceAware => _namespaceAware;
 
         /// <summary>
-        /// Gets the namespace prefix for marshaling this node, or <code>null</code>
+        /// Gets the namespace prefix for marshaling this node, or <see langword="null" />
         /// if the namespace should override the default namespace.
         /// </summary>
-        public override string Prefix => _prefix;
+        public override string? Prefix => _prefix;
 
         /// <summary>
-        /// Gets a value indicating whether this field is nillable
+        /// Gets a value indicating whether this field is nillable.
         /// </summary>
         public override bool IsNillable => _nillable;
 
@@ -70,11 +71,11 @@ namespace BeanIO.Internal.Parser.Format.Xml
         public override bool IsRepeating => _repeating;
 
         /// <summary>
-        /// Inserts a field into the record during marshalling
+        /// Inserts a field into the record during marshalling.
         /// </summary>
-        /// <param name="ctx">the <see cref="XmlMarshallingContext"/> holding the record</param>
-        /// <param name="fieldText">the field text to insert</param>
-        public override void InsertText(XmlMarshallingContext ctx, string fieldText)
+        /// <param name="ctx">the <see cref="XmlMarshallingContext"/> holding the record.</param>
+        /// <param name="fieldText">the field text to insert.</param>
+        public override void InsertText(XmlMarshallingContext ctx, string? fieldText)
         {
             if (fieldText == null && IsLazy)
                 return;
@@ -113,15 +114,15 @@ namespace BeanIO.Internal.Parser.Format.Xml
                 element.Add(new XText(fieldText));
             }
 
-            var parent = ctx.Parent;
+            var parent = ctx.Parent ?? throw new InvalidOperationException("Parent is null");
             parent.Add(element);
         }
 
         /// <summary>
         /// Sets the attribute name.
         /// </summary>
-        /// <param name="localName">the attribute name</param>
-        public void SetLocalName(string localName)
+        /// <param name="localName">the attribute name.</param>
+        public void SetLocalName(string? localName)
         {
             _localName = localName;
         }
@@ -129,8 +130,8 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Sets the namespace of the attribute (typically null).
         /// </summary>
-        /// <param name="ns">the attribute namespace</param>
-        public void SetNamespace(string ns)
+        /// <param name="ns">the attribute namespace.</param>
+        public void SetNamespace(string? ns)
         {
             _namespace = ns;
         }
@@ -138,45 +139,45 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Sets the prefix to use for this attribute's namespace.
         /// </summary>
-        /// <param name="prefix">the namespace prefix</param>
-        public void SetPrefix(string prefix)
+        /// <param name="prefix">the namespace prefix.</param>
+        public void SetPrefix(string? prefix)
         {
             _prefix = prefix;
         }
 
         /// <summary>
-        /// Sets whether this attribute uses a namespace
+        /// Sets whether this attribute uses a namespace.
         /// </summary>
-        /// <param name="namespaceAware">true if this attribute uses a namespace, false otherwise</param>
+        /// <param name="namespaceAware">true if this attribute uses a namespace, false otherwise.</param>
         public void SetNamespaceAware(bool namespaceAware)
         {
             _namespaceAware = namespaceAware;
         }
 
         /// <summary>
-        /// Sets a value indicating whether this element repeats within the context of its parent
+        /// Sets a value indicating whether this element repeats within the context of its parent.
         /// </summary>
-        /// <param name="repeating">true if repeating, false otherwise</param>
+        /// <param name="repeating">true if repeating, false otherwise.</param>
         public void SetRepeating(bool repeating)
         {
             _repeating = repeating;
         }
 
         /// <summary>
-        /// Sets a value indicating whether this element is nillable
+        /// Sets a value indicating whether this element is nillable.
         /// </summary>
-        /// <param name="nillable">true if nillable, false otherwise</param>
+        /// <param name="nillable">true if nillable, false otherwise.</param>
         public void SetNillable(bool nillable)
         {
             _nillable = nillable;
         }
 
         /// <summary>
-        /// Extracts a field from a record during unmarshalling
+        /// Extracts a field from a record during unmarshalling.
         /// </summary>
-        /// <param name="context">the <see cref="XmlUnmarshallingContext"/> holding the record</param>
-        /// <returns>the extracted field text</returns>
-        protected override string ExtractText(XmlUnmarshallingContext context)
+        /// <param name="context">the <see cref="XmlUnmarshallingContext"/> holding the record.</param>
+        /// <returns>the extracted field text.</returns>
+        protected override string? ExtractText(XmlUnmarshallingContext context)
         {
             var node = context.FindElement(this);
             if (node == null)
@@ -193,7 +194,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Called by <see cref="XmlFieldFormat.ToString"/> to append attributes of this field.
         /// </summary>
-        /// <param name="s">the string builder to add the parameters to</param>
+        /// <param name="s">the string builder to add the parameters to.</param>
         protected override void ToParamString(StringBuilder s)
         {
             base.ToParamString(s);

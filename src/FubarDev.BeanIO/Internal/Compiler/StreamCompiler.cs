@@ -14,8 +14,6 @@ using BeanIO.Internal.Config.Xml;
 using BeanIO.Internal.Util;
 using BeanIO.Types;
 
-using JetBrains.Annotations;
-
 namespace BeanIO.Internal.Compiler
 {
     /// <summary>
@@ -33,48 +31,48 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Gets the default mapping configuration loader
+        /// Gets the default mapping configuration loader.
         /// </summary>
         public IConfigurationLoader DefaultConfigurationLoader { get; }
 
         /// <summary>
-        /// Gets or sets the mapping configuration loader
+        /// Gets or sets the mapping configuration loader.
         /// </summary>
-        public IConfigurationLoader ConfigurationLoader { get; set; }
+        public IConfigurationLoader? ConfigurationLoader { get; set; }
 
         /// <summary>
-        /// Creates a new Stream from its configuration
+        /// Creates a new Stream from its configuration.
         /// </summary>
-        /// <param name="config">the <see cref="StreamConfig"/></param>
-        /// <returns>the built <see cref="Parser.Stream"/> definition</returns>
+        /// <param name="config">the <see cref="StreamConfig"/>.</param>
+        /// <returns>the built <see cref="Parser.Stream"/> definition.</returns>
         public Parser.Stream Build(StreamConfig config)
         {
             var typeHandlerFactory = CreateTypeHandlerFactory(TypeHandlerFactory.Default, config.Handlers);
-            var factory = CreateParserFactory(config.Format);
-            factory.TypeHandlerFactory = typeHandlerFactory;
+            var format = config.Format ?? throw new BeanIOConfigurationException($"No format specified for stream '{config.Name}'");
+            var factory = CreateParserFactory(format, typeHandlerFactory);
             return factory.CreateStream(config);
         }
 
         /// <summary>
-        /// Loads a mapping file
+        /// Loads a mapping file.
         /// </summary>
-        /// <param name="input">the <see cref="System.IO.Stream"/> to load the mapping file from</param>
-        /// <param name="properties">the <see cref="Properties"/></param>
-        /// <returns>the <see cref="Parser.Stream"/> parsers configured in the loaded mapping file</returns>
-        public IReadOnlyCollection<Parser.Stream> LoadMapping(System.IO.Stream input, Properties properties)
+        /// <param name="input">the <see cref="System.IO.Stream"/> to load the mapping file from.</param>
+        /// <param name="properties">the <see cref="Properties"/>.</param>
+        /// <returns>the <see cref="Parser.Stream"/> parsers configured in the loaded mapping file.</returns>
+        public IReadOnlyCollection<Parser.Stream> LoadMapping(System.IO.Stream input, Properties? properties)
         {
             var loader = ConfigurationLoader ?? DefaultConfigurationLoader;
 
             var configurations = loader.LoadConfiguration(input, properties);
             if (configurations.Count == 0)
-                return ObjectUtils.Empty<Parser.Stream>();
+                return Array.Empty<Parser.Stream>();
 
             // check for duplicate stream names...
             {
                 var set = new HashSet<string>();
                 foreach (var streamConfig in configurations.SelectMany(x => x.StreamConfigurations))
                 {
-                    if (!set.Add(streamConfig.Name))
+                    if (!set.Add(streamConfig.Name ?? string.Empty))
                         throw new BeanIOConfigurationException($"Duplicate stream name '{streamConfig.Name}'");
                 }
             }
@@ -87,11 +85,11 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Creates stream definitions from a BeanIO stream mapping configuration
+        /// Creates stream definitions from a BeanIO stream mapping configuration.
         /// </summary>
-        /// <param name="config">the BeanIO stream mapping configuration</param>
-        /// <returns>the collection of stream definitions</returns>
-        protected IEnumerable<Parser.Stream> CreateStreamDefinitions([NotNull] BeanIOConfig config)
+        /// <param name="config">the BeanIO stream mapping configuration.</param>
+        /// <returns>the collection of stream definitions.</returns>
+        protected IEnumerable<Parser.Stream> CreateStreamDefinitions(BeanIOConfig config)
         {
             if (config == null)
                 throw new ArgumentNullException(nameof(config));
@@ -104,8 +102,10 @@ namespace BeanIO.Internal.Compiler
             {
                 var typeHandlerFactory = CreateTypeHandlerFactory(parent, streamConfiguration.Handlers);
 
-                var factory = CreateParserFactory(streamConfiguration.Format);
-                factory.TypeHandlerFactory = typeHandlerFactory;
+                var format =
+                    streamConfiguration.Format
+                    ?? throw new BeanIOConfigurationException($"No format specified for stream '{streamConfiguration.Name}'");
+                var factory = CreateParserFactory(format, typeHandlerFactory);
 
                 try
                 {
@@ -121,11 +121,14 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Instantiates the factory implementation to create the stream definition
+        /// Instantiates the factory implementation to create the stream definition.
         /// </summary>
-        /// <param name="format">the stream format</param>
-        /// <returns>the stream definition factory</returns>
-        protected IParserFactory CreateParserFactory(string format)
+        /// <param name="format">the stream format.</param>
+        /// <param name="typeHandlerFactory">Factory for type handlers.</param>
+        /// <returns>the stream definition factory.</returns>
+        protected IParserFactory CreateParserFactory(
+            string format,
+            TypeHandlerFactory typeHandlerFactory)
         {
             var propertyName = $"org.beanio.{format}.streamDefinitionFactory";
             var typeName = Settings.Instance[propertyName];
@@ -140,16 +143,18 @@ namespace BeanIO.Internal.Compiler
                     $"Configured stream definition factory '{typeName}' does not implement '{typeof(IParserFactory)}'");
             }
 
+            factory.TypeHandlerFactory = typeHandlerFactory;
+
             return factory;
         }
 
         /// <summary>
-        /// Creates a type handler factory for a list of configured type handlers
+        /// Creates a type handler factory for a list of configured type handlers.
         /// </summary>
-        /// <param name="parent">the parent <see cref="TypeHandlerFactory"/></param>
-        /// <param name="typeHandlerConfigurations">the list of type handler configurations</param>
-        /// <returns>the new <see cref="TypeHandlerFactory"/>, or <code>parent</code> if the configuration list was empty</returns>
-        private TypeHandlerFactory CreateTypeHandlerFactory(TypeHandlerFactory parent, IReadOnlyCollection<TypeHandlerConfig> typeHandlerConfigurations)
+        /// <param name="parent">the parent <see cref="TypeHandlerFactory"/>.</param>
+        /// <param name="typeHandlerConfigurations">the list of type handler configurations.</param>
+        /// <returns>the new <see cref="TypeHandlerFactory"/>, or <c>parent</c> if the configuration list was empty.</returns>
+        private TypeHandlerFactory CreateTypeHandlerFactory(TypeHandlerFactory parent, IReadOnlyCollection<TypeHandlerConfig>? typeHandlerConfigurations)
         {
             if (typeHandlerConfigurations == null || typeHandlerConfigurations.Count == 0)
                 return parent;
@@ -167,7 +172,9 @@ namespace BeanIO.Internal.Compiler
                     object bean;
                     try
                     {
-                        bean = BeanUtil.CreateBean(handlerConfig.ClassName, handlerConfig.Properties);
+                        bean = BeanUtil.CreateBean(
+                            handlerConfig.ClassName ?? throw new InvalidOperationException("Missing class name in type handler configuration"),
+                            handlerConfig.Properties);
                     }
                     catch (BeanIOConfigurationException ex)
                     {

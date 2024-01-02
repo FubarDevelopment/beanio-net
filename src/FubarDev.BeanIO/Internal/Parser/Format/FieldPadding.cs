@@ -4,7 +4,6 @@
 // </copyright>
 
 using System;
-using System.Reflection;
 using System.Text;
 
 using BeanIO.Builder;
@@ -67,10 +66,10 @@ namespace BeanIO.Internal.Parser.Format
         /// <summary>
         /// Gets or sets the property type of the field.
         /// </summary>
-        public Type PropertyType { get; set; }
+        public Type? PropertyType { get; set; }
 
         /// <summary>
-        /// Initializes padding settings
+        /// Initializes padding settings.
         /// </summary>
         /// <remarks>
         /// This method must be invoked before <see cref="Pad"/> or <see cref="Unpad"/> is called.
@@ -89,7 +88,7 @@ namespace BeanIO.Internal.Parser.Format
                     DefaultText = Filler.ToString();
                     IsOptional = false;
                 }
-                else if (PropertyType.GetTypeInfo().IsPrimitive)
+                else if (PropertyType.IsPrimitive)
                 {
                     if (char.IsDigit(Filler))
                     {
@@ -100,14 +99,14 @@ namespace BeanIO.Internal.Parser.Format
         }
 
         /// <summary>
-        /// Formats field text
+        /// Formats field text.
         /// </summary>
         /// <remarks>If the length of <paramref name="text"/> exceeds the padding length,
         /// the text will be truncated, otherwise it will be padded with <see cref="Filler"/>.
         /// </remarks>
-        /// <param name="text">the field text to format</param>
-        /// <returns>the formatted field text</returns>
-        public virtual string Pad(string text)
+        /// <param name="text">the field text to format.</param>
+        /// <returns>the formatted field text.</returns>
+        public virtual string Pad(string? text)
         {
             int currentLength;
             if (text == null)
@@ -147,10 +146,10 @@ namespace BeanIO.Internal.Parser.Format
         }
 
         /// <summary>
-        /// Removes padding from the field text
+        /// Removes padding from the field text.
         /// </summary>
-        /// <param name="fieldText">the field text to remove padding</param>
-        /// <returns>the unpadded field text</returns>
+        /// <param name="fieldText">the field text to remove padding.</param>
+        /// <returns>the unpadded field text.</returns>
         public virtual string Unpad(string fieldText)
         {
             fieldText = Justify == Align.Left ? fieldText.TrimEnd(Filler) : fieldText.TrimStart(Filler);

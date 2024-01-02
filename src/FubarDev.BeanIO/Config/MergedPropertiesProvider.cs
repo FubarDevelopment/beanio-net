@@ -20,8 +20,8 @@ namespace BeanIO.Config
         /// <summary>
         /// Initializes a new instance of the <see cref="MergedPropertiesProvider"/> class.
         /// </summary>
-        /// <param name="baseProperties">The base properties reader</param>
-        /// <param name="overridingProperties">The <see cref="IPropertiesProvider"/> that overrides the values from <paramref name="baseProperties"/></param>
+        /// <param name="baseProperties">The base properties reader.</param>
+        /// <param name="overridingProperties">The <see cref="IPropertiesProvider"/> that overrides the values from <paramref name="baseProperties"/>.</param>
         public MergedPropertiesProvider(IPropertiesProvider baseProperties, IPropertiesProvider overridingProperties)
         {
             _basePropertiesReader = baseProperties;
@@ -29,9 +29,9 @@ namespace BeanIO.Config
         }
 
         /// <summary>
-        /// Reads all properties
+        /// Reads all properties.
         /// </summary>
-        /// <returns>A dictionary with all properties read</returns>
+        /// <returns>A dictionary with all properties read.</returns>
         public Properties Read()
         {
             var result = _basePropertiesReader.Read()

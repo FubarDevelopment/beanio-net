@@ -25,7 +25,8 @@ namespace BeanIO.Parser.Constructor
           </stream>");
 
             var u = factory.CreateUnmarshaller("c1");
-            var color = (Color)u.Unmarshal("red,255,0,0");
+            var color = (Color?)u.Unmarshal("red,255,0,0");
+            Assert.NotNull(color);
             Assert.Equal("red", color.Name);
             Assert.Equal(255, color.R);
             Assert.Equal(0, color.G);
@@ -41,7 +42,8 @@ namespace BeanIO.Parser.Constructor
                     .AddRecord(typeof(AnnotatedColor)));
 
             var u = factory.CreateUnmarshaller("c1");
-            var color = (AnnotatedColor)u.Unmarshal("red,255,0,0");
+            var color = (AnnotatedColor?)u.Unmarshal("red,255,0,0");
+            Assert.NotNull(color);
             Assert.Equal("red", color.Name);
             Assert.Equal(255, color.R);
             Assert.Equal(0, color.G);

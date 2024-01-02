@@ -6,17 +6,17 @@
 namespace BeanIO.Internal.Parser
 {
     /// <summary>
-    /// The parsing mode
+    /// The parsing mode.
     /// </summary>
     internal enum ParsingMode
     {
         /// <summary>
-        /// Unmarshalling mode
+        /// Unmarshalling mode.
         /// </summary>
         Unmarshalling = 'U',
 
         /// <summary>
-        /// Marshalling mode
+        /// Marshalling mode.
         /// </summary>
         Marshalling = 'M',
     }

@@ -22,7 +22,7 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="BeanIOConfigurationException"/> class.
         /// </summary>
-        /// <param name="message">The error message</param>
+        /// <param name="message">The error message.</param>
         public BeanIOConfigurationException(string message)
             : base(message)
         {
@@ -31,8 +31,8 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="BeanIOConfigurationException"/> class.
         /// </summary>
-        /// <param name="message">The error message</param>
-        /// <param name="inner">The inner exception</param>
+        /// <param name="message">The error message.</param>
+        /// <param name="inner">The inner exception.</param>
         public BeanIOConfigurationException(string message, Exception inner)
             : base(message, inner)
         {

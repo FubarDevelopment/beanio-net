@@ -19,7 +19,8 @@ namespace BeanIO.Parser.Collection
             var reader = factory.CreateReader("dc1", LoadReader("dc1_valid.txt"));
             try
             {
-                var bean = (CollectionBean)reader.Read();
+                var bean = (CollectionBean?)reader.Read();
+                Assert.NotNull(bean);
                 Assert.Equal(new[] { "George", "Gary", "Jon" }, bean.List);
                 Assert.Equal(new[] { 1, 2, 3, 4 }, bean.Array);
 
@@ -40,7 +41,8 @@ namespace BeanIO.Parser.Collection
             var reader = factory.CreateReader("dc2", LoadReader("dc2_nullPrimitive.txt"));
             try
             {
-                var bean = (CollectionBean)reader.Read();
+                var bean = (CollectionBean?)reader.Read();
+                Assert.NotNull(bean);
                 Assert.Equal(new[] { 1, 0, 3 }, bean.Array);
 
                 var text = new StringWriter();
@@ -60,7 +62,8 @@ namespace BeanIO.Parser.Collection
             var reader = factory.CreateReader("fc1", LoadReader("fc1_valid.txt"));
             try
             {
-                var bean = (CollectionBean)reader.Read();
+                var bean = (CollectionBean?)reader.Read();
+                Assert.NotNull(bean);
                 Assert.Equal(new[] { 1, 100, 24 }, bean.Array);
                 Assert.Equal(new char?[] { 'A', 'B', 'C', ' ' }, bean.Set);
 
@@ -68,8 +71,10 @@ namespace BeanIO.Parser.Collection
                 factory.CreateWriter("fc1", text).Write(bean);
                 Assert.Equal("001100024ABC " + LineSeparator, text.ToString());
 
-                bean = (CollectionBean)reader.Read();
+                bean = (CollectionBean?)reader.Read();
+                Assert.NotNull(bean);
                 Assert.Equal(new[] { 0, 400, 500 }, bean.Array);
+                Assert.NotNull(bean.Set);
                 Assert.Empty(bean.Set);
 
                 text = new StringWriter();
@@ -93,8 +98,9 @@ namespace BeanIO.Parser.Collection
             var reader = factory.CreateReader("fc2", LoadReader("fc2_valid.txt"));
             try
             {
-                StringWriter text;
-                var bean = (CollectionBean)reader.Read();
+                var bean = (CollectionBean?)reader.Read();
+                Assert.NotNull(bean);
+                Assert.NotNull(bean.ObjectList);
                 Assert.Collection(
                     bean.ObjectList,
                     person =>
@@ -104,11 +110,13 @@ namespace BeanIO.Parser.Collection
                         Assert.Equal("last1", dp.LastName);
                         Assert.Equal("nick1", dp.NickName);
                     });
-                text = new StringWriter();
+                var text = new StringWriter();
                 factory.CreateWriter("fc2", text).Write(bean);
                 Assert.Equal("01firs1last1nick1" + LineSeparator, text.ToString());
 
-                bean = (CollectionBean)reader.Read();
+                bean = (CollectionBean?)reader.Read();
+                Assert.NotNull(bean);
+                Assert.NotNull(bean.ObjectList);
                 Assert.Collection(
                     bean.ObjectList,
                     person =>

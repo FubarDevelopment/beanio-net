@@ -16,7 +16,7 @@ namespace BeanIO.Internal.Compiler.FixedLength
         /// <summary>
         /// Initializes a new instance of the <see cref="FixedLengthPreprocessor"/> class.
         /// </summary>
-        /// <param name="stream">the stream configuration to pre-process</param>
+        /// <param name="stream">the stream configuration to pre-process.</param>
         public FixedLengthPreprocessor(StreamConfig stream)
             : base(stream)
         {
@@ -31,8 +31,8 @@ namespace BeanIO.Internal.Compiler.FixedLength
         /// Returns the size of a field.
         /// </summary>
         /// <remarks>null = unbounded</remarks>
-        /// <param name="field">the field to get the size from</param>
-        /// <returns>the field size</returns>
+        /// <param name="field">the field to get the size from.</param>
+        /// <returns>the field size.</returns>
         protected override int? GetSize(FieldConfig field)
         {
             return field.Length;

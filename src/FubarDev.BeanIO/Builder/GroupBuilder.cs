@@ -8,7 +8,7 @@ using BeanIO.Internal.Config;
 namespace BeanIO.Builder
 {
     /// <summary>
-    /// Builds a new group configuration
+    /// Builds a new group configuration.
     /// </summary>
     public class GroupBuilder : GroupBuilderSupport<GroupBuilder, GroupConfig>
     {
@@ -17,7 +17,7 @@ namespace BeanIO.Builder
         /// <summary>
         /// Initializes a new instance of the <see cref="GroupBuilder"/> class.
         /// </summary>
-        /// <param name="name">The group name</param>
+        /// <param name="name">The group name.</param>
         public GroupBuilder(string name)
         {
             _config = new GroupConfig()
@@ -39,8 +39,8 @@ namespace BeanIO.Builder
         /// <summary>
         /// Sets the order of this group relative to other children of the same parent.
         /// </summary>
-        /// <param name="order">the order</param>
-        /// <returns>The value of <see cref="Me"/></returns>
+        /// <param name="order">the order.</param>
+        /// <returns>The value of <see cref="Me"/>.</returns>
         public GroupBuilder Order(int order)
         {
             Config.Order = order;
@@ -50,16 +50,16 @@ namespace BeanIO.Builder
         /// <summary>
         /// Builds the group configuration.
         /// </summary>
-        /// <returns>The group configuration</returns>
+        /// <returns>The group configuration.</returns>
         public GroupConfig Build()
         {
             return Config;
         }
 
         /// <summary>
-        /// Sets the configuration settings
+        /// Sets the configuration settings.
         /// </summary>
-        /// <param name="config">The configuration settings</param>
+        /// <param name="config">The configuration settings.</param>
         protected void SetConfig(GroupConfig config)
         {
             _config = config;

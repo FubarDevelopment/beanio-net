@@ -19,7 +19,7 @@ namespace BeanIO.Internal.Parser
 
         private readonly IRecordMarshaller _recordMarshaller;
 
-        private object _recordValue;
+        private object? _recordValue;
 
         public MarshallerImpl(MarshallingContext context, ISelector layout, IRecordMarshaller recordMarshaller)
         {
@@ -31,16 +31,16 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Gets the current record value
+        /// Gets the current record value.
         /// </summary>
-        protected virtual object RecordValue => _recordValue;
+        protected virtual object? RecordValue => _recordValue;
 
         /// <summary>
         /// Marshals a single bean object.
         /// </summary>
-        /// <param name="bean">The bean object to marshal</param>
-        /// <returns>This <see cref="IMarshaller"/></returns>
-        public IMarshaller Marshal(object bean)
+        /// <param name="bean">The bean object to marshal.</param>
+        /// <returns>This <see cref="IMarshaller"/>.</returns>
+        public IMarshaller Marshal(object? bean)
         {
             return Marshal(null, bean);
         }
@@ -48,10 +48,10 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Marshals a single bean object.
         /// </summary>
-        /// <param name="recordName">The name of the record to marshal</param>
-        /// <param name="bean">The bean object to marshal</param>
-        /// <returns>This <see cref="IMarshaller"/></returns>
-        public IMarshaller Marshal(string recordName, object bean)
+        /// <param name="recordName">The name of the record to marshal.</param>
+        /// <param name="bean">The bean object to marshal.</param>
+        /// <returns>This <see cref="IMarshaller"/>.</returns>
+        public IMarshaller Marshal(string? recordName, object? bean)
         {
             _recordValue = null;
 
@@ -78,7 +78,7 @@ namespace BeanIO.Internal.Parser
                     }
 
                     throw new BeanWriterException(
-                        $"Bean identification failed: no record or group mapping for bean class '{bean.GetType()}' at the current position");
+                        $"Bean identification failed: no record or group mapping for bean class '{bean!.GetType()}' at the current position");
                 }
 
                 if (matched.IsRecordGroup)
@@ -115,7 +115,7 @@ namespace BeanIO.Internal.Parser
         /// Returns the most recent marshalled bean object as an array for CSV
         /// and delimited formatted streams.
         /// </summary>
-        /// <returns>The <see cref="string"/> array of fields</returns>
+        /// <returns>The <see cref="string"/> array of fields.</returns>
         public string[] AsArray()
         {
             var array = _context.ToArray(_recordValue);
@@ -128,7 +128,7 @@ namespace BeanIO.Internal.Parser
         /// Returns the most recent marshalled bean object as an <see cref="IList{T}"/> for CSV
         /// and delimited formatted streams.
         /// </summary>
-        /// <returns>The <see cref="string"/> list of fields</returns>
+        /// <returns>The <see cref="string"/> list of fields.</returns>
         public IList<string> AsList()
         {
             var list = _context.ToList(_recordValue);
@@ -141,7 +141,7 @@ namespace BeanIO.Internal.Parser
         /// Returns the most recent marshalled bean object as an <see cref="XDocument"/> for XML
         /// formatted streams.
         /// </summary>
-        /// <returns>The <see cref="XDocument"/></returns>
+        /// <returns>The <see cref="XDocument"/>.</returns>
         public XDocument AsDocument()
         {
             var document = _context.ToXDocument(_recordValue);
@@ -150,7 +150,7 @@ namespace BeanIO.Internal.Parser
             return document;
         }
 
-        public override string ToString()
+        public override string? ToString()
         {
             return _recordValue == null ? null : _recordMarshaller.Marshal(_recordValue);
         }
@@ -167,8 +167,8 @@ namespace BeanIO.Internal.Parser
             /// <summary>
             /// Writes a record object to this output stream.
             /// </summary>
-            /// <param name="record">Record the record object to write</param>
-            public void Write(object record)
+            /// <param name="record">Record the record object to write.</param>
+            public void Write(object? record)
             {
                 _marshaller._recordValue = record;
             }

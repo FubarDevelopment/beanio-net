@@ -13,7 +13,7 @@ namespace BeanIO.Internal.Util
     /// <summary>
     /// The node for a tree structure.
     /// </summary>
-    /// <typeparam name="T">The tree node type</typeparam>
+    /// <typeparam name="T">The tree node type.</typeparam>
     public class TreeNode<T> : IEnumerable<T>
         where T : TreeNode<T>
     {
@@ -30,7 +30,7 @@ namespace BeanIO.Internal.Util
         /// <summary>
         /// Initializes a new instance of the <see cref="TreeNode{T}"/> class.
         /// </summary>
-        /// <param name="size">The initial size of the node for accommodating children</param>
+        /// <param name="size">The initial size of the node for accommodating children.</param>
         public TreeNode(int size)
         {
             if (size <= 0 || size > 10)
@@ -40,24 +40,24 @@ namespace BeanIO.Internal.Util
         }
 
         /// <summary>
-        /// Gets or sets the name of this node
+        /// Gets or sets the name of this node.
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
-        /// Gets the immediate children of this node
+        /// Gets the immediate children of this node.
         /// </summary>
         public IReadOnlyCollection<T> Children => _children;
 
         /// <summary>
-        /// Gets the first child of this node
+        /// Gets the first child of this node.
         /// </summary>
         public T First => _children[0];
 
         /// <summary>
-        /// Adds a child to this node
+        /// Adds a child to this node.
         /// </summary>
-        /// <param name="child">The child to add</param>
+        /// <param name="child">The child to add.</param>
         public void Add(T child)
         {
             if (!IsSupportedChild(child))
@@ -66,14 +66,14 @@ namespace BeanIO.Internal.Util
         }
 
         /// <summary>
-        /// Recursively finds the first descendant with the given name
+        /// Recursively finds the first descendant with the given name.
         /// </summary>
         /// <remarks>
         /// All descendants of a child are checked first before moving to the next child.
         /// </remarks>
-        /// <param name="name">The name of the node to find</param>
-        /// <returns>The matched node, or null if not found</returns>
-        public T Find(string name)
+        /// <param name="name">The name of the node to find.</param>
+        /// <returns>The matched node, or null if not found.</returns>
+        public T? Find(string name)
         {
             if (string.Equals(Name, name, StringComparison.Ordinal))
                 return (T)this;
@@ -89,11 +89,11 @@ namespace BeanIO.Internal.Util
         }
 
         /// <summary>
-        /// Returns whether the given node is a descendant of this node or recursively one of its children
+        /// Returns whether the given node is a descendant of this node or recursively one of its children.
         /// </summary>
-        /// <param name="node">The TreeNode to test</param>
-        /// <returns>true if the given node is a descendant, false otherwise</returns>
-        public bool IsDescendant(T node)
+        /// <param name="node">The TreeNode to test.</param>
+        /// <returns>true if the given node is a descendant, false otherwise.</returns>
+        public bool IsDescendant(T? node)
         {
             if (ReferenceEquals(node, this))
                 return true;
@@ -113,17 +113,17 @@ namespace BeanIO.Internal.Util
         /// <remarks>
         /// Called by <see cref="Add"/>.
         /// </remarks>
-        /// <param name="child">the node to test</param>
-        /// <returns>true if the child is allowed</returns>
+        /// <param name="child">the node to test.</param>
+        /// <returns>true if the child is allowed.</returns>
         public virtual bool IsSupportedChild(T child)
         {
             return true;
         }
 
         /// <summary>
-        /// Sorts all descendants of this node
+        /// Sorts all descendants of this node.
         /// </summary>
-        /// <param name="comparer">The comparer to use for comparing nodes</param>
+        /// <param name="comparer">The comparer to use for comparing nodes.</param>
         public void Sort(IComparer<T> comparer)
         {
             _children.Sort(comparer);
@@ -132,9 +132,9 @@ namespace BeanIO.Internal.Util
         }
 
         /// <summary>
-        /// Returns an enumerator
+        /// Returns an enumerator.
         /// </summary>
-        /// <returns>The enumerator for the children</returns>
+        /// <returns>The enumerator for the children.</returns>
         public IEnumerator<T> GetEnumerator()
         {
             return _children.GetEnumerator();
@@ -145,7 +145,7 @@ namespace BeanIO.Internal.Util
         /// </summary>
         /// <returns>
         /// A string that represents this object.
-        /// </returns>
+        /// .</returns>
         public override string ToString()
         {
             var s = new StringBuilder()
@@ -164,9 +164,9 @@ namespace BeanIO.Internal.Util
         }
 
         /// <summary>
-        /// Called by <see cref="ToString()"/> to append node parameters to the output
+        /// Called by <see cref="ToString()"/> to append node parameters to the output.
         /// </summary>
-        /// <param name="s">The output to append</param>
+        /// <param name="s">The output to append.</param>
         protected virtual void ToParamString(StringBuilder s)
         {
         }

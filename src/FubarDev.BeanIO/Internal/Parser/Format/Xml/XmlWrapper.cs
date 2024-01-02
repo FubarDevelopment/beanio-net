@@ -16,20 +16,20 @@ namespace BeanIO.Internal.Parser.Format.Xml
     internal class XmlWrapper : DelegatingParser, IXmlNode
     {
         /// <summary>
-        /// Gets the XML node type
+        /// Gets the XML node type.
         /// </summary>
         public XmlNodeType Type => XmlNodeType.Element;
 
         /// <summary>
         /// Gets or sets the XML local name for this node.
         /// </summary>
-        public string LocalName { get; set; }
+        public string? LocalName { get; set; }
 
         /// <summary>
         /// Gets or sets the namespace of this node.  If there is no namespace for this
-        /// node, or this node is not namespace aware, <code>null</code> is returned.
+        /// node, or this node is not namespace aware, <see langword="null" /> is returned.
         /// </summary>
-        public string Namespace { get; set; }
+        public string? Namespace { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether a namespace was configured for this node,
@@ -38,10 +38,10 @@ namespace BeanIO.Internal.Parser.Format.Xml
         public bool IsNamespaceAware { get; set; }
 
         /// <summary>
-        /// Gets or sets the namespace prefix for marshaling this node, or <code>null</code>
+        /// Gets or sets the namespace prefix for marshaling this node, or <see langword="null" />
         /// if the namespace should override the default namespace.
         /// </summary>
-        public string Prefix { get; set; }
+        public string? Prefix { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this node is nillable.
@@ -66,8 +66,8 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Returns whether this parser and its children match a record being unmarshalled.
         /// </summary>
-        /// <param name="context">The <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if matched, false otherwise</returns>
+        /// <param name="context">The <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if matched, false otherwise.</returns>
         public override bool Matches(UnmarshallingContext context)
         {
             if (!IsIdentifier)
@@ -88,10 +88,10 @@ namespace BeanIO.Internal.Parser.Format.Xml
         }
 
         /// <summary>
-        /// Unmarshals a record
+        /// Unmarshals a record.
         /// </summary>
-        /// <param name="context">The <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if this component was present in the unmarshalled record, or false otherwise</returns>
+        /// <param name="context">The <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if this component was present in the unmarshalled record, or false otherwise.</returns>
         public override bool Unmarshal(UnmarshallingContext context)
         {
             var ctx = (XmlUnmarshallingContext)context;
@@ -120,10 +120,10 @@ namespace BeanIO.Internal.Parser.Format.Xml
         }
 
         /// <summary>
-        /// Marshals a record
+        /// Marshals a record.
         /// </summary>
-        /// <param name="context">The <see cref="MarshallingContext"/></param>
-        /// <returns>whether a value was marshalled</returns>
+        /// <param name="context">The <see cref="MarshallingContext"/>.</param>
+        /// <returns>whether a value was marshalled.</returns>
         public override bool Marshal(MarshallingContext context)
         {
             var contentChecked = false;
@@ -141,7 +141,8 @@ namespace BeanIO.Internal.Parser.Format.Xml
 
             // create an element for this node
             var ns = Namespace ?? (IsNamespaceAware ? string.Empty : (parentElement?.Name.NamespaceName ?? string.Empty));
-            var element = new XElement(XNamespace.Get(ns) + LocalName.ToConvertedName(ctx.NameConversionMode));
+            var localName = LocalName ?? throw new BeanIOConfigurationException("localName must be set");
+            var element = new XElement(XNamespace.Get(ns) + localName.ToConvertedName(ctx.NameConversionMode));
             var annotations = new List<object>();
 
             if (!IsNamespaceAware)
@@ -166,7 +167,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
                 element.SetAnnotation(annotation);
 
             // append the new element to its parent
-            parent.Add(element);
+            parent?.Add(element);
 
             // if nillable and there is no descendant with content, mark the element nil
             if (IsNillable && !contentChecked && !HasContent(context))
@@ -185,9 +186,9 @@ namespace BeanIO.Internal.Parser.Format.Xml
         }
 
         /// <summary>
-        /// Called by <see cref="TreeNode{T}.ToString"/> to append node parameters to the output
+        /// Called by <see cref="TreeNode{T}.ToString"/> to append node parameters to the output.
         /// </summary>
-        /// <param name="s">The output to append</param>
+        /// <param name="s">The output to append.</param>
         protected override void ToParamString(StringBuilder s)
         {
             base.ToParamString(s);

@@ -33,7 +33,8 @@ namespace BeanIO.Parser.Xml.Bean
             {
                 Person person = Assert.IsType<Person>(reader.Read());
                 Assert.Equal("John", person.FirstName);
-                Address address = person.Address;
+                var address = person.Address;
+                Assert.NotNull(address);
                 Assert.Equal("IL", address.State);
                 Assert.Equal("60610", address.Zip);
                 writer.Write(person);
@@ -66,7 +67,8 @@ namespace BeanIO.Parser.Xml.Bean
             {
                 Person person = Assert.IsType<Person>(reader.Read());
                 Assert.Equal("John", person.FirstName);
-                Address address = person.Address;
+                var address = person.Address;
+                Assert.NotNull(address);
                 Assert.Equal("IL", address.State);
                 Assert.Equal("60610", address.Zip);
                 writer.Write(person);
@@ -103,28 +105,18 @@ namespace BeanIO.Parser.Xml.Bean
             {
                 Person person = Assert.IsType<Person>(reader.Read());
                 Assert.Equal("John", person.FirstName);
-                Assert.Equal(3, person.AddressList.Count);
-                int i = 0;
-                foreach (var address in person.AddressList)
-                {
-                    switch (++i)
-                    {
-                        case 1:
-                            Assert.Equal("IL", address.State);
-                            break;
-                        case 2:
-                            Assert.Equal("CO", address.State);
-                            break;
-                        case 3:
-                            Assert.Equal("MN", address.State);
-                            break;
-                    }
-                }
+                Assert.NotNull(person.AddressList);
+                Assert.Collection(
+                    person.AddressList,
+                    address => Assert.Equal("IL", address.State),
+                    address => Assert.Equal("CO", address.State),
+                    address => Assert.Equal("MN", address.State));
 
                 writer.Write(person);
 
                 person = Assert.IsType<Person>(reader.Read());
                 Assert.Equal("Mary", person.FirstName);
+                Assert.NotNull(person.AddressList);
                 Assert.Empty(person.AddressList);
                 writer.Write(person);
 
@@ -151,7 +143,8 @@ namespace BeanIO.Parser.Xml.Bean
             {
                 Person person = Assert.IsType<Person>(reader.Read());
                 Assert.Equal("John", person.FirstName);
-                Address address = person.Address;
+                var address = person.Address;
+                Assert.NotNull(address);
                 Assert.Equal("IL", address.State);
                 Assert.Equal("60610", address.Zip);
                 writer.Write(person);

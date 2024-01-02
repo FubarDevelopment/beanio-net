@@ -8,13 +8,11 @@ using System.Xml.Linq;
 using BeanIO.Internal.Parser.Format.Xml;
 using BeanIO.Stream;
 
-using JetBrains.Annotations;
-
 namespace BeanIO.Internal.Util
 {
     internal static class DomUtil
     {
-        public static void SetAnnotation<T>([NotNull] this XObject obj, T annotation)
+        public static void SetAnnotation<T>(this XObject obj, T annotation)
             where T : class
         {
             obj.RemoveAnnotations<T>();

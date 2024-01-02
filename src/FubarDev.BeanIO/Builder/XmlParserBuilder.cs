@@ -13,16 +13,16 @@ using BeanIO.Stream.Xml;
 namespace BeanIO.Builder
 {
     /// <summary>
-    /// Builder for XML parsers
+    /// Builder for XML parsers.
     /// </summary>
     public class XmlParserBuilder : IParserBuilder
     {
         private readonly XmlRecordParserFactory _parser = new XmlRecordParserFactory();
 
         /// <summary>
-        /// Suppress the XML header?
+        /// Suppress the XML header?.
         /// </summary>
-        /// <returns>the <see cref="XmlParserBuilder"/></returns>
+        /// <returns>the <see cref="XmlParserBuilder"/>.</returns>
         public XmlParserBuilder SuppressHeader()
         {
             _parser.SuppressHeader = true;
@@ -30,10 +30,10 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
-        /// Sets the XML version
+        /// Sets the XML version.
         /// </summary>
-        /// <param name="version">the XML version to set</param>
-        /// <returns>the <see cref="XmlParserBuilder"/></returns>
+        /// <param name="version">the XML version to set.</param>
+        /// <returns>the <see cref="XmlParserBuilder"/>.</returns>
         public XmlParserBuilder HeaderVersion(Version version)
         {
             _parser.Version = version;
@@ -41,10 +41,10 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
-        /// Sets the XML encoding
+        /// Sets the XML encoding.
         /// </summary>
-        /// <param name="encoding">The XML encoding to set</param>
-        /// <returns>the <see cref="XmlParserBuilder"/></returns>
+        /// <param name="encoding">The XML encoding to set.</param>
+        /// <returns>the <see cref="XmlParserBuilder"/>.</returns>
         public XmlParserBuilder HeaderEncoding(string encoding)
         {
             _parser.Encoding = encoding;
@@ -52,10 +52,10 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
-        /// Sets the XML encoding
+        /// Sets the XML encoding.
         /// </summary>
-        /// <param name="encoding">The XML encoding to set</param>
-        /// <returns>the <see cref="XmlParserBuilder"/></returns>
+        /// <param name="encoding">The XML encoding to set.</param>
+        /// <returns>the <see cref="XmlParserBuilder"/>.</returns>
         public XmlParserBuilder HeaderEncoding(Encoding encoding)
         {
             _parser.Encoding = encoding.WebName;
@@ -63,11 +63,11 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
-        /// Sets a known prefix for an XML namespace
+        /// Sets a known prefix for an XML namespace.
         /// </summary>
-        /// <param name="prefix">The namespace prefix</param>
-        /// <param name="uri">The XML namespace</param>
-        /// <returns>the <see cref="XmlParserBuilder"/></returns>
+        /// <param name="prefix">The namespace prefix.</param>
+        /// <param name="uri">The XML namespace.</param>
+        /// <returns>the <see cref="XmlParserBuilder"/>.</returns>
         public XmlParserBuilder AddNamespace(string prefix, string uri)
         {
             _parser.AddNamespace(prefix, uri);
@@ -77,7 +77,7 @@ namespace BeanIO.Builder
         /// <summary>
         /// Sets the XML indention level to 2.
         /// </summary>
-        /// <returns>the <see cref="XmlParserBuilder"/></returns>
+        /// <returns>the <see cref="XmlParserBuilder"/>.</returns>
         public XmlParserBuilder Indent()
         {
             return Indent(2);
@@ -86,8 +86,8 @@ namespace BeanIO.Builder
         /// <summary>
         /// Sets the XML indention level.
         /// </summary>
-        /// <param name="amount">The number of characters to indent the XML</param>
-        /// <returns>the <see cref="XmlParserBuilder"/></returns>
+        /// <param name="amount">The number of characters to indent the XML.</param>
+        /// <returns>the <see cref="XmlParserBuilder"/>.</returns>
         public XmlParserBuilder Indent(int amount)
         {
             _parser.Indentation = amount;
@@ -95,10 +95,10 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
-        /// Sets the line separator to be used when indenting the XML file
+        /// Sets the line separator to be used when indenting the XML file.
         /// </summary>
-        /// <param name="sep">the line separator to use</param>
-        /// <returns>the <see cref="XmlParserBuilder"/></returns>
+        /// <param name="sep">the line separator to use.</param>
+        /// <returns>the <see cref="XmlParserBuilder"/>.</returns>
         public XmlParserBuilder LineSeparator(string sep)
         {
             _parser.LineSeparator = sep;

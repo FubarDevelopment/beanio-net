@@ -13,7 +13,7 @@ namespace BeanIO
     /// </summary>
     /// <remarks>
     /// <para>An <see cref="IUnmarshaller"/> can be used to unmarshal a bean object bound to
-    /// a <code>record</code> in a mapping file.  Unmarshalling bean objects that span multiple
+    /// a <c>record</c> in a mapping file.  Unmarshalling bean objects that span multiple
     /// records is not supported and will cause a <see cref="BeanReaderException"/>.</para>
     /// <para>An <see cref="IUnmarshaller"/> instance is stateful.  If a BeanIO mapping file declares
     /// record ordering and expected occurrences, a <see cref="BeanWriterException"/> may be thrown for
@@ -27,7 +27,7 @@ namespace BeanIO
         /// <summary>
         /// Gets the record or group name of the most recent unmarshalled bean object.
         /// </summary>
-        string RecordName { get; }
+        string? RecordName { get; }
 
         /// <summary>
         /// Gets record information for the most recent unmarshalled bean object.
@@ -40,9 +40,9 @@ namespace BeanIO
         /// <remarks>
         /// This method is supported by all stream formats.
         /// </remarks>
-        /// <param name="record">The record text to unmarshal</param>
-        /// <returns>The unmarshalled bean object</returns>
-        object Unmarshal(string record);
+        /// <param name="record">The record text to unmarshal.</param>
+        /// <returns>The unmarshalled bean object.</returns>
+        object? Unmarshal(string record);
 
         /// <summary>
         /// Unmarshals a bean object from the given list of fields.
@@ -50,9 +50,9 @@ namespace BeanIO
         /// <remarks>
         /// This method is supported by CSV and delimited formatted streams only.
         /// </remarks>
-        /// <param name="fields">The fields to unmarshal</param>
-        /// <returns>The unmarshalled bean object</returns>
-        object Unmarshal(IList<string> fields);
+        /// <param name="fields">The fields to unmarshal.</param>
+        /// <returns>The unmarshalled bean object.</returns>
+        object? Unmarshal(IList<string?> fields);
 
         /// <summary>
         /// Unmarshals a bean object from the given array of fields.
@@ -60,15 +60,15 @@ namespace BeanIO
         /// <remarks>
         /// This method is supported by CSV and delimited formatted streams only.
         /// </remarks>
-        /// <param name="fields">The fields to unmarshal</param>
-        /// <returns>The unmarshalled bean object</returns>
-        object Unmarshal(string[] fields);
+        /// <param name="fields">The fields to unmarshal.</param>
+        /// <returns>The unmarshalled bean object.</returns>
+        object? Unmarshal(string?[] fields);
 
         /// <summary>
         /// Unmarshals a bean object from the given element.
         /// </summary>
-        /// <param name="node">The <see cref="XElement"/> to unmarshal</param>
-        /// <returns>The unmarshalled bean object</returns>
-        object Unmarshal(XContainer node);
+        /// <param name="node">The <see cref="XElement"/> to unmarshal.</param>
+        /// <returns>The unmarshalled bean object.</returns>
+        object? Unmarshal(XContainer node);
     }
 }

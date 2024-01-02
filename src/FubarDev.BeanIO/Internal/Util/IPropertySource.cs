@@ -11,10 +11,10 @@ namespace BeanIO.Internal.Util
     internal interface IPropertySource
     {
         /// <summary>
-        /// Returns the property value for a given key
+        /// Returns the property value for a given key.
         /// </summary>
-        /// <param name="key">the property key</param>
-        /// <returns>the property value</returns>
-        string GetProperty(string key);
+        /// <param name="key">the property key.</param>
+        /// <returns>the property value.</returns>
+        string? GetProperty(string key);
     }
 }

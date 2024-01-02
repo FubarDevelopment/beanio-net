@@ -9,7 +9,7 @@ namespace BeanIO.Parser.Property
     {
         private int _type;
 
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         public new int GetType()
         {

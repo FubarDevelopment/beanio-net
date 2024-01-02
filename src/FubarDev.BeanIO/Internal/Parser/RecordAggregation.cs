@@ -15,14 +15,14 @@ namespace BeanIO.Internal.Parser
     internal abstract class RecordAggregation : DelegatingParser, ISelector, IProperty
     {
         /// <summary>
-        /// The property value
+        /// The property value.
         /// </summary>
-        private readonly ParserLocal<object> _value = new ParserLocal<object>(Value.Missing);
+        private readonly ParserLocal<object?> _value = new ParserLocal<object?>(Value.Missing);
 
         /// <summary>
-        /// Gets or sets the bean property type
+        /// Gets or sets the bean property type.
         /// </summary>
-        public virtual Type PropertyType { get; set; }
+        public virtual Type? PropertyType { get; set; }
 
         /// <summary>
         /// Gets the minimum number of occurrences of this component (within the context of its parent).
@@ -42,7 +42,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets the <see cref="IProperty"/> mapped to this component, or null if there is no property mapping.
         /// </summary>
-        public virtual IProperty Property => null;
+        public virtual IProperty? Property => null;
 
         /// <summary>
         /// Gets a value indicating whether this component is a record group.
@@ -50,21 +50,21 @@ namespace BeanIO.Internal.Parser
         public virtual bool IsRecordGroup => false;
 
         /// <summary>
-        /// Gets the <see cref="IProperty"/> implementation type
+        /// Gets the <see cref="IProperty"/> implementation type.
         /// </summary>
         public abstract PropertyType Type { get; }
 
         /// <summary>
-        /// Gets or sets the property accessor
+        /// Gets or sets the property accessor.
         /// </summary>
-        public virtual IPropertyAccessor Accessor { get; set; }
+        public virtual IPropertyAccessor? Accessor { get; set; }
 
         /// <summary>
-        /// Gets the child selector
+        /// Gets the child selector.
         /// </summary>
         public virtual ISelector Selector => (ISelector)Children.First();
 
-        public virtual object NullValue => CreateAggregationType();
+        public virtual object? NullValue => CreateAggregationType();
 
         public virtual bool IsLazy { get; set; }
 
@@ -86,16 +86,16 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Gets the property value
+        /// Gets the property value.
         /// </summary>
-        protected ParserLocal<object> PropertyValue => _value;
+        protected ParserLocal<object?> PropertyValue => _value;
 
         /// <summary>
         /// Returns the number of times this component was matched within the current
         /// iteration of its parent component.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <returns>the match count</returns>
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <returns>the match count.</returns>
         public virtual int GetCount(ParsingContext context)
         {
             return Selector.GetCount(context);
@@ -105,33 +105,33 @@ namespace BeanIO.Internal.Parser
         /// Sets the number of times this component was matched within the current
         /// iteration of its parent component.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <param name="value">the new count</param>
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <param name="value">the new count.</param>
         public virtual void SetCount(ParsingContext context, int value)
         {
             Selector.SetCount(context, value);
         }
 
         /// <summary>
-        /// Returns a value indicating whether this component has reached its maximum occurrences
+        /// Returns a value indicating whether this component has reached its maximum occurrences.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <returns>true if maximum occurrences has been reached</returns>
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <returns>true if maximum occurrences has been reached.</returns>
         public virtual bool IsMaxOccursReached(ParsingContext context)
         {
             return Selector.IsMaxOccursReached(context);
         }
 
         /// <summary>
-        /// Finds a parser for marshalling a bean object
+        /// Finds a parser for marshalling a bean object.
         /// </summary>
         /// <remarks>
         /// If matched by this Selector, the method
         /// should set the bean object on the property tree and return itself.
         /// </remarks>
-        /// <param name="context">the <see cref="MarshallingContext"/></param>
-        /// <returns>the matched <see cref="ISelector"/> for marshalling the bean object</returns>
-        public virtual ISelector MatchNext(MarshallingContext context)
+        /// <param name="context">the <see cref="MarshallingContext"/>.</param>
+        /// <returns>the matched <see cref="ISelector"/> for marshalling the bean object.</returns>
+        public virtual ISelector? MatchNext(MarshallingContext context)
         {
             return Selector.MatchNext(context);
         }
@@ -139,9 +139,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Finds a parser for unmarshalling a record based on the current state of the stream.
         /// </summary>
-        /// <param name="context">the <see cref="UnmarshallingContext"/></param>
-        /// <returns>the matched <see cref="ISelector"/> for unmarshalling the record</returns>
-        public virtual ISelector MatchNext(UnmarshallingContext context)
+        /// <param name="context">the <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>the matched <see cref="ISelector"/> for unmarshalling the record.</returns>
+        public virtual ISelector? MatchNext(UnmarshallingContext context)
         {
             if (Selector.MatchNext(context) != null)
                 return this;
@@ -149,15 +149,15 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Finds a parser that matches the input record
+        /// Finds a parser that matches the input record.
         /// </summary>
         /// <remarks>
         /// This method is invoked when <see cref="ISelector.MatchNext(BeanIO.Internal.Parser.UnmarshallingContext)"/> returns
         /// null, in order to differentiate between unexpected and unidentified record types.
         /// </remarks>
-        /// <param name="context">the <see cref="UnmarshallingContext"/></param>
-        /// <returns>the matched <see cref="ISelector"/></returns>
-        public virtual ISelector MatchAny(UnmarshallingContext context)
+        /// <param name="context">the <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>the matched <see cref="ISelector"/>.</returns>
+        public virtual ISelector? MatchAny(UnmarshallingContext context)
         {
             return Selector.MatchAny(context);
         }
@@ -165,7 +165,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Skips a record or group of records.
         /// </summary>
-        /// <param name="context">the <see cref="UnmarshallingContext"/></param>
+        /// <param name="context">the <see cref="UnmarshallingContext"/>.</param>
         public virtual void Skip(UnmarshallingContext context)
         {
             Selector.Skip(context);
@@ -174,9 +174,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Checks for any unsatisfied components before the stream is closed.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <returns>the first unsatisfied node</returns>
-        public virtual ISelector Close(ParsingContext context)
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <returns>the first unsatisfied node.</returns>
+        public virtual ISelector? Close(ParsingContext context)
         {
             return Selector.Close(context);
         }
@@ -184,7 +184,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Resets the component count of this Selector's children.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
         public virtual void Reset(ParsingContext context)
         {
             Selector.Reset(context);
@@ -193,31 +193,31 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Updates a <see cref="IDictionary{TKey,TValue}"/> with the current state of the Writer to allow for restoration at a later time.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <param name="ns">a <see cref="string"/> to prefix all state keys with</param>
-        /// <param name="state">the <see cref="IDictionary{TKey,TValue}"/> to update with the latest state</param>
-        public virtual void UpdateState(ParsingContext context, string ns, IDictionary<string, object> state)
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <param name="ns">a <see cref="string"/> to prefix all state keys with.</param>
+        /// <param name="state">the <see cref="IDictionary{TKey,TValue}"/> to update with the latest state.</param>
+        public virtual void UpdateState(ParsingContext context, string ns, IDictionary<string, object?> state)
         {
             Selector.UpdateState(context, ns, state);
         }
 
         /// <summary>
-        /// Restores a <see cref="IDictionary{TKey,TValue}"/> of previously stored state information
+        /// Restores a <see cref="IDictionary{TKey,TValue}"/> of previously stored state information.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <param name="ns">a <see cref="string"/> to prefix all state keys with</param>
-        /// <param name="state">the <see cref="IDictionary{TKey,TValue}"/> containing the state to restore</param>
-        public virtual void RestoreState(ParsingContext context, string ns, IReadOnlyDictionary<string, object> state)
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <param name="ns">a <see cref="string"/> to prefix all state keys with.</param>
+        /// <param name="state">the <see cref="IDictionary{TKey,TValue}"/> containing the state to restore.</param>
+        public virtual void RestoreState(ParsingContext context, string ns, IReadOnlyDictionary<string, object?> state)
         {
             Selector.RestoreState(context, ns, state);
         }
 
         /// <summary>
-        /// Creates the property value and returns it
+        /// Creates the property value and returns it.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <returns>the property value</returns>
-        public virtual object CreateValue(ParsingContext context)
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <returns>the property value.</returns>
+        public virtual object? CreateValue(ParsingContext context)
         {
             if (ReferenceEquals(_value.Get(context), Value.Missing))
                 _value.Set(context, CreateAggregationType());
@@ -227,7 +227,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Clears the current property value.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
         public override void ClearValue(ParsingContext context)
         {
             _value.Set(context, Value.Missing);
@@ -236,9 +236,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns the unmarshalled property value.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <returns>the property value</returns>
-        public override object GetValue(ParsingContext context)
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <returns>the property value.</returns>
+        public override object? GetValue(ParsingContext context)
         {
             return _value.Get(context);
         }
@@ -246,14 +246,14 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Sets the property value for marshaling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <param name="value">the property value</param>
-        public override void SetValue(ParsingContext context, object value)
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <param name="value">the property value.</param>
+        public override void SetValue(ParsingContext context, object? value)
         {
             _value.Set(context, value);
         }
 
-        public virtual bool Defines(object value)
+        public virtual bool Defines(object? value)
         {
             throw new InvalidOperationException("RecordAggregation cannot identify a bean");
         }
@@ -264,8 +264,8 @@ namespace BeanIO.Internal.Parser
         /// <remarks>
         /// Called by <see cref="TreeNode{T}.Add"/>.
         /// </remarks>
-        /// <param name="child">the node to test</param>
-        /// <returns>true if the child is allowed</returns>
+        /// <param name="child">the node to test.</param>
+        /// <returns>true if the child is allowed.</returns>
         public override bool IsSupportedChild(Component child)
         {
             return child is ISelector;
@@ -278,22 +278,22 @@ namespace BeanIO.Internal.Parser
         /// This method should be overridden by subclasses that need to register
         /// one or more parser context variables.
         /// </remarks>
-        /// <param name="locals">set of local variables</param>
+        /// <param name="locals">set of local variables.</param>
         public override void RegisterLocals(ISet<IParserLocal> locals)
         {
             if (locals.Add(_value))
                 base.RegisterLocals(locals);
         }
 
-        protected virtual object CreateAggregationType()
+        protected virtual object? CreateAggregationType()
         {
             return PropertyType.NewInstance();
         }
 
         /// <summary>
-        /// Called by <see cref="TreeNode{T}.ToString"/> to append node parameters to the output
+        /// Called by <see cref="TreeNode{T}.ToString"/> to append node parameters to the output.
         /// </summary>
-        /// <param name="s">The output to append</param>
+        /// <param name="s">The output to append.</param>
         protected override void ToParamString(StringBuilder s)
         {
             base.ToParamString(s);

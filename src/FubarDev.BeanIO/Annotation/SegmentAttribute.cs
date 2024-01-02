@@ -10,7 +10,7 @@ using System.Xml;
 namespace BeanIO.Annotation
 {
     /// <summary>
-    /// Segment annotation applied to class members or methods
+    /// Segment annotation applied to class members or methods.
     /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
     public class SegmentAttribute : Attribute
@@ -27,7 +27,7 @@ namespace BeanIO.Annotation
         /// Initializes a new instance of the <see cref="SegmentAttribute" /> class.
         /// </summary>
         /// <param name="name">The segment name.</param>
-        public SegmentAttribute(string name)
+        public SegmentAttribute(string? name)
         {
             Name = name;
             At = Until = Ordinal = int.MinValue;
@@ -38,7 +38,7 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Gets the segment name.
         /// </summary>
-        public string Name { get; private set; }
+        public string? Name { get; private set; }
 
         /// <summary>
         /// Gets or sets the absolute position of the segment.
@@ -58,17 +58,17 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Gets or sets the getter method.
         /// </summary>
-        public string Getter { get; set; }
+        public string? Getter { get; set; }
 
         /// <summary>
         /// Gets or sets the setter method.
         /// </summary>
-        public string Setter { get; set; }
+        public string? Setter { get; set; }
 
         /// <summary>
         /// Gets or sets the class bound to this segment, if one cannot be derived from the annotated field or method.
         /// </summary>
-        public Type Type { get; set; }
+        public Type? Type { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the class bound to this segment should be instantiated
@@ -83,7 +83,7 @@ namespace BeanIO.Annotation
         /// Gets or sets the collection class bound to this segment, if one cannot be derived
         /// from the annotated field or method.
         /// </summary>
-        public Type CollectionType { get; set; }
+        public Type? CollectionType { get; set; }
 
         /// <summary>
         /// Gets or sets the minimum occurrences.
@@ -101,18 +101,18 @@ namespace BeanIO.Annotation
         /// <remarks>
         /// Does not apply to XML formatted streams.
         /// </remarks>
-        public string OccursRef { get; set; }
+        public string? OccursRef { get; set; }
 
         /// <summary>
         /// Gets or sets the name of a child component to use for the key value if
         /// this segment is bound to a <see cref="Dictionary{TKey,TValue}"/>.
         /// </summary>
-        public string Key { get; set; }
+        public string? Key { get; set; }
 
         /// <summary>
         /// Gets or sets the name of a child component to use for the value of this segment in lieu of a type.
         /// </summary>
-        public string Value { get; set; }
+        public string? Value { get; set; }
 
         /// <summary>
         /// Gets or sets a value which specifies the validation mode when marshalling fields.
@@ -127,17 +127,17 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Gets or sets the XML attribute or element name.
         /// </summary>
-        public string XmlName { get; set; }
+        public string? XmlName { get; set; }
 
         /// <summary>
         /// Gets or sets the XML namespace prefix of this segment.
         /// </summary>
-        public string XmlPrefix { get; set; }
+        public string? XmlPrefix { get; set; }
 
         /// <summary>
         /// Gets or sets the XML namespace URI of this segment.
         /// </summary>
-        public string XmlNamespace { get; set; }
+        public string? XmlNamespace { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the element is nillable.

@@ -24,9 +24,9 @@ namespace BeanIO.Internal.Parser
         public abstract ParsingMode Mode { get; }
 
         /// <summary>
-        /// Gets the local heap
+        /// Gets the local heap.
         /// </summary>
-        public object[] LocalHeap { get; private set; }
+        public object[] LocalHeap { get; private set; } = Array.Empty<object>();
 
         /// <summary>
         /// Gets a value indicating whether a repeating segment or field is being parsed.
@@ -37,7 +37,7 @@ namespace BeanIO.Internal.Parser
         /// Pushes an <see cref="IIteration"/> onto a stack for adjusting
         /// field positions and indices.
         /// </summary>
-        /// <param name="iteration">the <see cref="IIteration"/> to push</param>
+        /// <param name="iteration">the <see cref="IIteration"/> to push.</param>
         public virtual void PushIteration(IIteration iteration)
         {
             _iterations.Push(iteration);
@@ -46,7 +46,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Pops the last <see cref="IIteration"/> pushed onto the stack.
         /// </summary>
-        /// <returns>the top most <see cref="IIteration"/></returns>
+        /// <returns>the top most <see cref="IIteration"/>.</returns>
         public virtual IIteration PopIteration()
         {
             var iter = _iterations.Pop();
@@ -58,8 +58,8 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Calculates a field position by adjusting for any applied iterations.
         /// </summary>
-        /// <param name="position">the field position to adjust (i.e. the position of the first occurrence of the field)</param>
-        /// <returns>the adjusted field position</returns>
+        /// <param name="position">the field position to adjust (i.e. the position of the first occurrence of the field).</param>
+        /// <returns>the adjusted field position.</returns>
         public int GetAdjustedFieldPosition(int position)
         {
             return _fieldOffset + position + _iterations.Sum(x => x.IterationSize * x.GetIterationIndex(this));
@@ -68,7 +68,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns the current field index relative to any current iteration.
         /// </summary>
-        /// <returns>the field index</returns>
+        /// <returns>the field index.</returns>
         public int GetRelativeFieldIndex()
         {
             if (_iterations.Count == 0)
@@ -79,14 +79,14 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Initializes the local heap with the given size.
         /// </summary>
-        /// <param name="size">The size of the local heap</param>
+        /// <param name="size">The size of the local heap.</param>
         public void CreateHeap(int size)
         {
             LocalHeap = new object[size];
         }
 
         /// <summary>
-        /// Clear is invoked after each bean object (record or group) is marshalled
+        /// Clear is invoked after each bean object (record or group) is marshalled.
         /// </summary>
         protected virtual void ClearOffset()
         {

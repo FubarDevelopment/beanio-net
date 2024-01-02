@@ -81,7 +81,7 @@ namespace BeanIO.Parser.Xml.Groups
         }
 
         /// <summary>
-        /// Test XML groups where <code>xmlType="none"</code>.
+        /// Test XML groups where <c>xmlType="none"</c>.
         /// </summary>
         [Fact]
         public void TestGroupXmlTypeNone()
@@ -121,7 +121,7 @@ namespace BeanIO.Parser.Xml.Groups
         }
 
         /// <summary>
-        /// Test an XML stream where <code>xmlType="none"</code>.
+        /// Test an XML stream where <c>xmlType="none"</c>.
         /// </summary>
         [Fact]
         public void TestStreamXmlTypeNone()

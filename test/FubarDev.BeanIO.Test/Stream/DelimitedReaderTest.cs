@@ -249,7 +249,7 @@ namespace BeanIO.Stream
 
             var input = new StrictStringReader("hi\\");
 
-            RecordIOException error = null;
+            RecordIOException? error = null;
 
             DelimitedReader reader = new DelimitedReader(input, config);
             try

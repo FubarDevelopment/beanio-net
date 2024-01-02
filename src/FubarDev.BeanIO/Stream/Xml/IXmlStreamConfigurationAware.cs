@@ -16,7 +16,7 @@ namespace BeanIO.Stream.Xml
         /// This method is invoked by a XML stream definition when a <see cref="IRecordReader"/>
         /// implementation is registered.
         /// </summary>
-        /// <param name="configuration">the XML stream configuration</param>
+        /// <param name="configuration">the XML stream configuration.</param>
         void Configure(IXmlStreamConfiguration configuration);
     }
 }

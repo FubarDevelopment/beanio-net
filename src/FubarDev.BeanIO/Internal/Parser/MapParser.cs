@@ -3,6 +3,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -20,19 +21,19 @@ namespace BeanIO.Internal.Parser
     internal class MapParser : Aggregation
     {
         /// <summary>
-        /// the property value
+        /// the property value.
         /// </summary>
-        private readonly ParserLocal<object> _value = new ParserLocal<object>();
+        private readonly ParserLocal<object?> _value = new ParserLocal<object?>();
 
         /// <summary>
-        /// Gets or sets the key property
+        /// Gets or sets the key property.
         /// </summary>
-        public IProperty KeyProperty { get; set; }
+        public IProperty? KeyProperty { get; set; }
 
         /// <summary>
-        /// Gets or sets the value property
+        /// Gets or sets the value property.
         /// </summary>
-        public IProperty ValueProperty { get; set; }
+        public IProperty? ValueProperty { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this aggregation is a property of its parent bean object.
@@ -40,7 +41,7 @@ namespace BeanIO.Internal.Parser
         public override bool IsProperty => PropertyType != null;
 
         /// <summary>
-        /// Gets the <see cref="IProperty"/> implementation type
+        /// Gets the <see cref="IProperty"/> implementation type.
         /// </summary>
         public override PropertyType Type => Internal.Parser.PropertyType.AggregationMap;
 
@@ -50,21 +51,21 @@ namespace BeanIO.Internal.Parser
         public override int IterationSize => Size ?? 0;
 
         /// <summary>
-        /// Returns the length of aggregation
+        /// Returns the length of aggregation.
         /// </summary>
-        /// <param name="value">the aggregation value</param>
-        /// <returns>the length</returns>
-        public override int Length(object value)
+        /// <param name="value">the aggregation value.</param>
+        /// <returns>the length.</returns>
+        public override int Length(object? value)
         {
-            var map = (IDictionary)value;
+            var map = (IDictionary?)value;
             return map?.Count ?? 0;
         }
 
         /// <summary>
-        /// Creates the property value and returns it
+        /// Creates the property value and returns it.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <returns>the property value</returns>
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <returns>the property value.</returns>
         public override object CreateValue(ParsingContext context)
         {
             var value = _value.Get(context);
@@ -80,8 +81,8 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns the unmarshalled property value.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <returns>the property value</returns>
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <returns>the property value.</returns>
         public override object GetValue(ParsingContext context)
         {
             var value = _value.Get(context);
@@ -91,7 +92,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Clears the current property value.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
         public override void ClearValue(ParsingContext context)
         {
             _value.Set(context, null);
@@ -100,9 +101,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Sets the property value for marshaling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <param name="value">the property value</param>
-        public override void SetValue(ParsingContext context, object value)
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <param name="value">the property value.</param>
+        public override void SetValue(ParsingContext context, object? value)
         {
             // convert empty collections to null so that parent parsers
             // will consider this property missing during marshalling
@@ -114,7 +115,7 @@ namespace BeanIO.Internal.Parser
             base.SetValue(context, value);
         }
 
-        public override bool Defines(object value)
+        public override bool Defines(object? value)
         {
             if (value == null || PropertyType == null)
                 return false;
@@ -132,8 +133,8 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns whether this parser and its children match a record being unmarshalled.
         /// </summary>
-        /// <param name="context">The <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if matched, false otherwise</returns>
+        /// <param name="context">The <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if matched, false otherwise.</returns>
         public override bool Matches(UnmarshallingContext context)
         {
             // matching repeating fields is not supported
@@ -147,10 +148,12 @@ namespace BeanIO.Internal.Parser
         /// This method should be overridden by subclasses that need to register
         /// one or more parser context variables.
         /// </remarks>
-        /// <param name="locals">set of local variables</param>
+        /// <param name="locals">set of local variables.</param>
         public override void RegisterLocals(ISet<IParserLocal> locals)
         {
-            ((Component)KeyProperty)?.RegisterLocals(locals);
+            var keyProperty =
+                ((Component?)KeyProperty) ?? throw new BeanIOConfigurationException("Key property not set");
+            keyProperty.RegisterLocals(locals);
             if (locals.Add(_value))
                 base.RegisterLocals(locals);
         }
@@ -158,8 +161,8 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns whether this parser or any of its descendant have content for marshalling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <returns>true if there is content for marshalling, false otherwise</returns>
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <returns>true if there is content for marshalling, false otherwise.</returns>
         public override bool HasContent(ParsingContext context)
         {
             var map = GetMap(context);
@@ -185,7 +188,7 @@ namespace BeanIO.Internal.Parser
                             return true;
                         var mapValue = map[mapKey];
                         SetIterationIndex(context, i);
-                        KeyProperty.SetValue(context, mapKey);
+                        KeyProperty?.SetValue(context, mapKey);
                         parser.SetValue(context, mapValue);
                         parser.Marshal(context);
                         ++i;
@@ -194,7 +197,7 @@ namespace BeanIO.Internal.Parser
 
                 if (i < minOccurs)
                 {
-                    KeyProperty.SetValue(context, null);
+                    KeyProperty?.SetValue(context, null);
                     parser.SetValue(context, null);
                     while (i < minOccurs)
                     {
@@ -242,11 +245,15 @@ namespace BeanIO.Internal.Parser
                     }
                     else if (!ReferenceEquals(fieldValue, Value.Missing))
                     {
-                        var mapKey = KeyProperty.GetValue(context);
-                        if (!IsLazy || StringUtil.HasValue(mapKey) || StringUtil.HasValue(fieldValue))
+                        var mapKey = KeyProperty?.GetValue(context);
+                        if (!StringUtil.HasValue(mapKey))
                         {
-                            if (map == null)
-                                map = CreateMap();
+                            throw new InvalidOperationException("Key value is missing");
+                        }
+
+                        if (!IsLazy || StringUtil.HasValue(fieldValue))
+                        {
+                            map ??= CreateMap();
                             map[mapKey] = fieldValue;
                         }
                     }
@@ -262,7 +269,7 @@ namespace BeanIO.Internal.Parser
                 context.PopIteration();
             }
 
-            object value;
+            object? value;
 
             // validate minimum occurrences have been met
             if (count < minOccurs)
@@ -284,23 +291,25 @@ namespace BeanIO.Internal.Parser
             return count > 0;
         }
 
-        protected virtual IDictionary GetMap(ParsingContext context)
+        protected virtual IDictionary? GetMap(ParsingContext context)
         {
             var value = _value.Get(context);
             if (ReferenceEquals(value, Value.Invalid))
                 return null;
-            return (IDictionary)value;
+            return (IDictionary?)value;
         }
 
         protected virtual IDictionary CreateMap()
         {
-            return (IDictionary)PropertyType.NewInstance();
+            return
+                (IDictionary?)PropertyType.NewInstance()
+                ?? throw new InvalidOperationException($"PropertyType must be set");
         }
 
         /// <summary>
-        /// Called by <see cref="TreeNode{T}.ToString"/> to append node parameters to the output
+        /// Called by <see cref="TreeNode{T}.ToString"/> to append node parameters to the output.
         /// </summary>
-        /// <param name="s">The output to append</param>
+        /// <param name="s">The output to append.</param>
         protected override void ToParamString(StringBuilder s)
         {
             base.ToParamString(s);

@@ -1,48 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>A .NET port of BeanIO which perfectly fits into the .NET world.</Description>
+    <Description>A .NET port of BeanIO for marshalling and unmarshalling, which perfectly fits into the .NET world.</Description>
     <Copyright>Fubar Development, Kevin Seim 2015-2017</Copyright>
     <AssemblyTitle>BeanIO</AssemblyTitle>
+    <Product>BeanIO</Product>
     <Authors>Fubar Development Junker;Mark Junker</Authors>
-    <TargetFrameworks>netstandard1.3;net45;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net472;net6.0;net8.0;netstandard2.0</TargetFrameworks>
     <CodeAnalysisRuleSet>../../BeanIO.ruleset</CodeAnalysisRuleSet>
-    <DocumentationFile Condition=" '$(Configuration)' == 'Release' ">bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-    <AssemblyName>FubarDev.BeanIO</AssemblyName>
-    <PackageId>FubarDev.BeanIO</PackageId>
+    <RootNamespace>BeanIO</RootNamespace>
     <PackageTags>BeanIO;Core;CSV;XML;fixed length;file;parse;serialize;deserialize;serialization;deserialization;parsing;marshal;marshalling;unmarshal;unmarshalling</PackageTags>
-    <PackageReleaseNotes>- Support for .NET Core
-- Assemblies are unsigned because they only cause problems when built with mono</PackageReleaseNotes>
+    <PackageReleaseNotes>- Upgrade to NodaTime 3
+- Explicit support for .NET 6 and .NET 8
+- Minimum .NET Framework version is 4.7.2
+- Dropped support for .NET Standard below 2.0
+- Dropped support für C++/CLI when not using PackageReference</PackageReleaseNotes>
     <PackageIconUrl>https://github.com/FubarDevelopment/beanio-net/raw/master/beanio-logo.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/FubarDevelopment/beanio-net</PackageProjectUrl>
     <PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/FubarDevelopment/beanio-net</RepositoryUrl>
-    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
-    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
-    <GenerateNeutralResourcesLanguageAttribute>false</GenerateNeutralResourcesLanguageAttribute>
-    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
-    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
-    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
-    <RootNamespace>BeanIO</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\GlobalAssemblyInfo.cs" Exclude="bin\**;obj\**;**\*.xproj;packages\**" Link="Properties\GlobalAssemblyInfo.cs" />
-    <EmbeddedResource Include="**\*.properties" Exclude="bin\**;obj\**;**\*.xproj;packages\**;@(EmbeddedResource)" />
+    <InternalsVisibleTo Include="$(AssemblyName).Test" />
+  </ItemGroup>
+
+  <ItemGroup>
     <AdditionalFiles Include="..\..\stylecop.json" Link="stylecop.json" />
-    <None Include="..\..\packaging\_._" Link="lib\native\_._">
-      <PackagePath>lib/native/</PackagePath>
-      <Pack>true</Pack>
-    </None>
-    <None Include="..\..\packaging\FubarDev.BeanIO.targets" Link="build\native\FubarDev.BeanIO.targets">
-      <PackagePath>build/native/</PackagePath>
-      <Pack>true</Pack>
-    </None>
     <None Include="Xsd\**\*">
       <PackagePath>src/Xsd/</PackagePath>
       <Pack>true</Pack>
@@ -51,32 +36,17 @@
       <PackagePath>/</PackagePath>
       <Pack>true</Pack>
     </None>
+    <EmbeddedResource Include="Internal\**\*.properties" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="11.1.0">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="NodaTime" Version="2.2.3" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta004">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="NodaTime" Version="3.1.10" />
+    <PackageReference Include="Nullable" Version="1.3.1" PrivateAssets="all" />
+    <PackageReference Include="Required" Version="1.0.0" PrivateAssets="all" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="all" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
-    <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.Contracts" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.Tools" Version="4.3.0" />
-    <PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
-    <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
-    <PackageReference Include="System.Runtime" Version="4.3.0" />
-    <PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
-    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.0" />
-    <PackageReference Include="System.Xml.ReaderWriter" Version="4.3.0" />
-    <PackageReference Include="System.Xml.XDocument" Version="4.3.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />

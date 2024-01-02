@@ -4,25 +4,24 @@
 // </copyright>
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-
-using JetBrains.Annotations;
 
 namespace BeanIO.Internal.Util
 {
     internal class PropertyDescriptor
     {
-        private readonly PropertyInfo _property;
+        private readonly PropertyInfo? _property;
 
-        private readonly FieldInfo _field;
+        private readonly FieldInfo? _field;
 
-        private readonly MethodInfo _getter;
+        private readonly MethodInfo? _getter;
 
-        private readonly MethodInfo _setter;
+        private readonly MethodInfo? _setter;
 
-        private Type _type;
+        private Type? _type;
 
-        public PropertyDescriptor([NotNull] string constructorArgument, MethodInfo getter = null, MethodInfo setter = null)
+        public PropertyDescriptor(string constructorArgument, MethodInfo? getter = null, MethodInfo? setter = null)
         {
             Name = constructorArgument;
             _field = null;
@@ -31,7 +30,7 @@ namespace BeanIO.Internal.Util
             _setter = setter;
         }
 
-        public PropertyDescriptor([NotNull] PropertyInfo property, MethodInfo getter = null, MethodInfo setter = null)
+        public PropertyDescriptor(PropertyInfo property, MethodInfo? getter = null, MethodInfo? setter = null)
         {
             Name = property.Name;
             _field = null;
@@ -42,7 +41,7 @@ namespace BeanIO.Internal.Util
             _setter = setter ?? property.SetMethod;
         }
 
-        public PropertyDescriptor([NotNull] FieldInfo field, MethodInfo getter = null, MethodInfo setter = null)
+        public PropertyDescriptor(FieldInfo field, MethodInfo? getter = null, MethodInfo? setter = null)
         {
             Name = field.Name;
             _field = field;
@@ -51,17 +50,25 @@ namespace BeanIO.Internal.Util
             _setter = setter;
         }
 
+        [MemberNotNullWhen(true, nameof(_property), nameof(PropertyInfo))]
+        public bool IsProperty => _property != null;
+
+        public bool IsConstructor => _property == null && _field == null;
+
+        [MemberNotNullWhen(true, nameof(_field), nameof(FieldInfo))]
+        public bool IsField => _field != null;
+
         public bool HasGetter => _getter != null || _field != null;
 
         public bool HasSetter => _setter != null || (_field != null && !_field.IsInitOnly);
 
-        public FieldInfo FieldInfo => _field;
+        public FieldInfo? FieldInfo => _field;
 
-        public PropertyInfo PropertyInfo => _property;
+        public PropertyInfo? PropertyInfo => _property;
 
-        public MethodInfo GetMethodInfo => _getter;
+        public MethodInfo? GetMethodInfo => _getter;
 
-        public MethodInfo SetMethodInfo => _setter;
+        public MethodInfo? SetMethodInfo => _setter;
 
         public string Name { get; }
 
@@ -69,10 +76,10 @@ namespace BeanIO.Internal.Util
         {
             get
             {
-                if (_field != null)
+                if (IsField)
                     return _field.IsPublic;
-                if (_property != null)
-                    return _getter.IsPublic;
+                if (IsProperty)
+                    return _getter?.IsPublic ?? _setter?.IsPublic;
                 if (_getter != null)
                     return _getter.IsPublic;
                 return _setter?.IsPublic;
@@ -81,26 +88,26 @@ namespace BeanIO.Internal.Util
 
         public Type PropertyType
         {
-            get { return _type ?? (_type = GuessPropertyType()); }
-            set { _type = value; }
+            get => _type ??= GuessPropertyType();
+            set => _type = value;
         }
 
-        public object GetValue(object instance)
+        public object? GetValue(object? instance)
         {
             if (_getter != null)
                 return _getter.Invoke(instance, null);
-            if (_field != null)
+            if (IsField)
                 return _field.GetValue(instance);
             throw new InvalidOperationException();
         }
 
-        public void SetValue(object instance, object value)
+        public void SetValue(object? instance, object? value)
         {
             if (_setter != null)
             {
                 _setter.Invoke(instance, new[] { value });
             }
-            else if (_field != null)
+            else if (IsField)
             {
                 _field.SetValue(instance, value);
             }
@@ -113,14 +120,14 @@ namespace BeanIO.Internal.Util
         private Type GuessPropertyType()
         {
             var setterType = _setter?.GetParameters()[0].ParameterType;
-            if (_field != null)
+            if (IsField)
                 return GetMostSpecificType(_field.FieldType, _getter?.ReturnType, setterType);
-            if (_property != null)
+            if (IsProperty)
                 return GetMostSpecificType(_property.PropertyType, _getter?.ReturnType, setterType);
             return GetMostSpecificType(_getter?.ReturnType, setterType);
         }
 
-        private Type GetMostSpecificType(params Type[] types)
+        private Type GetMostSpecificType(params Type?[] types)
         {
             var result = typeof(object);
             foreach (var type in types)

@@ -41,9 +41,11 @@ namespace BeanIO.Parser.Xml.Multiline
                 Assert.Equal(new DateTime(2012, 1, 1), order.Date);
 
                 var buyer = order.Customer;
+                Assert.NotNull(buyer);
                 Assert.Equal("George", buyer.FirstName);
                 Assert.Equal("Smith", buyer.LastName);
 
+                Assert.NotNull(order.Items);
                 Assert.Collection(
                     order.Items,
                     item =>
@@ -82,14 +84,15 @@ namespace BeanIO.Parser.Xml.Multiline
                 Assert.Equal(2, reader.Skip(2));
 
                 // Read another valid record
-                order = (Beans.Order)reader.Read();
+                var order2 = (Beans.Order?)reader.Read();
+                Assert.NotNull(order2);
                 Assert.Equal(55, reader.LineNumber);
                 Assert.Equal(3, reader.RecordCount);
                 Assert.Equal("orderGroup", reader.RecordName);
-                Assert.Equal("104", order.Id);
-                Assert.Null(order.Customer);
+                Assert.Equal("104", order2.Id);
+                Assert.Null(order2.Customer);
 
-                writer.Write(order);
+                writer.Write(order2);
                 writer.Flush();
                 writer.Close();
 

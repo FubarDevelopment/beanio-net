@@ -12,18 +12,18 @@ namespace BeanIO.Beans
     {
         public int BatchCount { get; set; }
 
-        public Order Order { get; set; }
+        public Order? Order { get; set; }
 
-        public List<Order> Orders { get; set; }
+        public List<Order>? Orders { get; set; }
 
-        public Order[] GetOrderArray()
+        public Order[]? GetOrderArray()
         {
-            return Orders.ToArray();
+            return Orders?.ToArray();
         }
 
-        public void SetOrderArray(Order[] orderArray)
+        public void SetOrderArray(Order[]? orderArray)
         {
-            Orders = orderArray.ToList();
+            Orders = orderArray?.ToList();
         }
 
         public override string ToString()

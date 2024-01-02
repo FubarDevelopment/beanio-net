@@ -24,30 +24,30 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
         }
 
         /// <summary>
-        /// Gets or sets the minimum number of fields in the record
+        /// Gets or sets the minimum number of fields in the record.
         /// </summary>
         public int MinLength { get; set; }
 
         /// <summary>
-        /// Gets or sets the maximum number of fields in the record
+        /// Gets or sets the maximum number of fields in the record.
         /// </summary>
         public int? MaxLength { get; set; }
 
         /// <summary>
-        /// Gets or sets the minimum record length for identifying a record
+        /// Gets or sets the minimum record length for identifying a record.
         /// </summary>
         public int MinMatchLength { get; set; }
 
         /// <summary>
-        /// Gets or sets the maximum record length for identifying a record
+        /// Gets or sets the maximum record length for identifying a record.
         /// </summary>
         public int? MaxMatchLength { get; set; }
 
         /// <summary>
         /// Returns whether the record meets configured matching criteria during unmarshalling.
         /// </summary>
-        /// <param name="context">the <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if the record meets all matching criteria, false otherwise</returns>
+        /// <param name="context">the <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if the record meets all matching criteria, false otherwise.</returns>
         public bool Matches(UnmarshallingContext context)
         {
             var length = ((FixedLengthUnmarshallingContext)context).RecordLength;
@@ -55,9 +55,9 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
         }
 
         /// <summary>
-        /// Validates a record during unmarshalling
+        /// Validates a record during unmarshalling.
         /// </summary>
-        /// <param name="context">the <see cref="UnmarshallingContext"/></param>
+        /// <param name="context">the <see cref="UnmarshallingContext"/>.</param>
         public void Validate(UnmarshallingContext context)
         {
             var length = ((FixedLengthUnmarshallingContext)context).RecordLength;

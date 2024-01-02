@@ -23,33 +23,33 @@ namespace BeanIO.Parser.DynamicOccurs
             var m = factory.CreateMarshaller("o1");
 
             var text = "2,one,two,0,done";
-            var map = (IDictionary)u.Unmarshal(text);
+            var map = (IDictionary?)u.Unmarshal(text);
             Assert.NotNull(map);
             Assert.False(map.Contains("occurs"));
             Assert.True(map.Contains("values"));
-            var list = (IList)map["values"];
+            var list = (IList?)map["values"];
             Assert.NotNull(list);
             Assert.Equal(new[] { "one", "two" }, list.Cast<string>());
             Assert.True(map.Contains("occurs2"));
             Assert.Equal(0, map["occurs2"]);
             Assert.True(map.Contains("values2"));
-            list = (IList)map["values2"];
+            list = (IList?)map["values2"];
             Assert.NotNull(list);
-            Assert.Equal(0, list.Count);
+            Assert.Empty(list);
             Assert.True(map.Contains("after"));
             Assert.Equal("done", map["after"]);
             Assert.Equal(text, m.Marshal(map).ToString());
 
             text = "0,1,one,done";
-            map = (IDictionary)u.Unmarshal(text);
+            map = (IDictionary?)u.Unmarshal(text);
             Assert.NotNull(map);
             Assert.True(map.Contains("values"));
-            list = (IList)map["values"];
+            list = (IList?)map["values"];
             Assert.NotNull(list);
-            Assert.Equal(0, list.Count);
+            Assert.Empty(list);
             Assert.True(map.Contains("occurs2"));
             Assert.Equal(1, map["occurs2"]);
-            list = (IList)map["values2"];
+            list = (IList?)map["values2"];
             Assert.NotNull(list);
             Assert.Equal(new[] { "one" }, list.Cast<string>());
             Assert.True(map.Contains("after"));
@@ -68,10 +68,10 @@ namespace BeanIO.Parser.DynamicOccurs
             var m = factory.CreateMarshaller("o2");
 
             var text = "02Rob 00Mike020102end";
-            var map = (Dictionary<string, object>)u.Unmarshal(text);
+            var map = (Dictionary<string, object?>?)u.Unmarshal(text);
             Assert.NotNull(map);
             Assert.True(map.ContainsKey("people"));
-            var people = (List<Person>)map["people"];
+            var people = (List<Person>?)map["people"];
             Assert.NotNull(people);
             Assert.Collection(
                 people,
@@ -89,10 +89,11 @@ namespace BeanIO.Parser.DynamicOccurs
             Assert.Equal(text, m.Marshal(map).ToString());
 
             text = "00end";
-            map = (Dictionary<string, object>)u.Unmarshal(text);
+            map = (Dictionary<string, object?>?)u.Unmarshal(text);
             Assert.NotNull(map);
             Assert.True(map.ContainsKey("people"));
-            people = (List<Person>)map["people"];
+            people = (List<Person>?)map["people"];
+            Assert.NotNull(people);
             Assert.Empty(people);
             Assert.Equal(text, m.Marshal(map).ToString());
         }
@@ -167,9 +168,11 @@ namespace BeanIO.Parser.DynamicOccurs
             Assert.Equal(text, m.Marshal(list).ToString());
 
             var exception = Assert.ThrowsAny<InvalidRecordException>(() => u.Unmarshal("0"));
+            Assert.NotNull(exception.RecordContext);
             Assert.Equal(new[] { "Expected minimum 1 occurrences" }, exception.RecordContext.GetFieldErrors("values").AsEnumerable());
 
             exception = Assert.ThrowsAny<InvalidRecordException>(() => u.Unmarshal("3,one,two,three"));
+            Assert.NotNull(exception.RecordContext);
             Assert.Equal(new[] { "Expected maximum 2 occurrences" }, exception.RecordContext.GetFieldErrors("values").AsEnumerable());
         }
 

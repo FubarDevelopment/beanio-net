@@ -13,13 +13,13 @@ using BeanIO.Internal.Util;
 namespace BeanIO.Internal.Compiler.Accessor
 {
     /// <summary>
-    /// <see cref="IPropertyAccessorFactory"/> implementations based on compiled expression trees
+    /// <see cref="IPropertyAccessorFactory"/> implementations based on compiled expression trees.
     /// </summary>
     internal class CompiledExpressionAccessorFactory : IPropertyAccessorFactory
     {
-        private delegate void SetValueDelegate(object bean, object value);
+        private delegate void SetValueDelegate(object bean, object? value);
 
-        private delegate object GetValueDelegate(object bean);
+        private delegate object? GetValueDelegate(object bean);
 
         /// <inheritdoc />
         public IPropertyAccessor CreatePropertyAccessor(Type parentType, PropertyDescriptor property, int? carg)
@@ -30,13 +30,13 @@ namespace BeanIO.Internal.Compiler.Accessor
             return new CompiledExpressionAccessor(property.Name, getDelegate, setDelegate, carg);
         }
 
-        private static GetValueDelegate CreateGetter(PropertyDescriptor info, Type parenType)
+        private static GetValueDelegate? CreateGetter(PropertyDescriptor info, Type parentType)
         {
             if (!info.HasGetter)
                 return null;
 
             var beanParameter = Expression.Parameter(typeof(object), "bean");
-            var beanExpression = Expression.Convert(beanParameter, parenType);
+            var beanExpression = Expression.Convert(beanParameter, parentType);
             Expression getExpression;
 
             if (info.GetMethodInfo != null)
@@ -60,7 +60,7 @@ namespace BeanIO.Internal.Compiler.Accessor
             return getValueLambda.Compile();
         }
 
-        private static SetValueDelegate CreateSetter(PropertyDescriptor info, Type parenType)
+        private static SetValueDelegate? CreateSetter(PropertyDescriptor info, Type parenType)
         {
             if (!info.HasSetter)
                 return null;
@@ -95,10 +95,10 @@ namespace BeanIO.Internal.Compiler.Accessor
         private class CompiledExpressionAccessor : PropertyAccessorSupport
         {
             private readonly string _propertyName;
-            private readonly GetValueDelegate _getValueDelegate;
-            private readonly SetValueDelegate _setValueDelegate;
+            private readonly GetValueDelegate? _getValueDelegate;
+            private readonly SetValueDelegate? _setValueDelegate;
 
-            public CompiledExpressionAccessor(string propertyName, GetValueDelegate getValueDelegate, SetValueDelegate setValueDelegate, int? constructorArgumentIndex)
+            public CompiledExpressionAccessor(string propertyName, GetValueDelegate? getValueDelegate, SetValueDelegate? setValueDelegate, int? constructorArgumentIndex)
             {
                 _propertyName = propertyName;
                 _getValueDelegate = getValueDelegate;
@@ -106,8 +106,11 @@ namespace BeanIO.Internal.Compiler.Accessor
                 ConstructorArgumentIndex = constructorArgumentIndex;
             }
 
-            public override object GetValue(object bean)
+            public override object? GetValue(object bean)
             {
+                if (_getValueDelegate == null)
+                    throw new BeanIOException($"There is no getter defined on bean class '{bean.GetType().GetAssemblyQualifiedName()}'");
+
                 try
                 {
                     return _getValueDelegate(bean);
@@ -124,11 +127,14 @@ namespace BeanIO.Internal.Compiler.Accessor
                 }
             }
 
-            public override void SetValue(object bean, object value)
+            public override void SetValue(object bean, object? value)
             {
+                if (_setValueDelegate == null)
+                    throw new BeanIOException($"There is no setter defined on bean class '{bean.GetType().GetAssemblyQualifiedName()}'");
+
                 try
                 {
-                    _setValueDelegate(bean, value);
+                    _setValueDelegate.Invoke(bean, value);
                 }
                 catch (Exception ex)
                 {

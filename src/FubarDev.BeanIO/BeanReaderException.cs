@@ -17,12 +17,12 @@ namespace BeanIO
     /// </remarks>
     public class BeanReaderException : BeanIOException
     {
-        private readonly IRecordContext[] _recordContexts;
+        private readonly IRecordContext[]? _recordContexts;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BeanReaderException" /> class.
         /// </summary>
-        /// <param name="contexts">The record context(s) that caused the exception</param>
+        /// <param name="contexts">The record context(s) that caused the exception.</param>
         public BeanReaderException(params IRecordContext[] contexts)
         {
             _recordContexts = contexts;
@@ -31,8 +31,8 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="BeanReaderException"/> class.
         /// </summary>
-        /// <param name="message">The error message</param>
-        /// <param name="contexts">The record context(s) that caused the exception</param>
+        /// <param name="message">The error message.</param>
+        /// <param name="contexts">The record context(s) that caused the exception.</param>
         public BeanReaderException(string message, params IRecordContext[] contexts)
             : base(message)
         {
@@ -42,9 +42,9 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="BeanReaderException"/> class.
         /// </summary>
-        /// <param name="message">The error message</param>
-        /// <param name="inner">The inner exception</param>
-        /// <param name="contexts">The record context(s) that caused the exception</param>
+        /// <param name="message">The error message.</param>
+        /// <param name="inner">The inner exception.</param>
+        /// <param name="contexts">The record context(s) that caused the exception.</param>
         public BeanReaderException(string message, Exception inner, params IRecordContext[] contexts)
             : base(message, inner)
         {
@@ -59,7 +59,7 @@ namespace BeanIO
         /// If there is more than one record context, this method returns the context of
         /// the first record and is equivalent to calling <seealso cref="RecordContexts" />[0].
         /// </remarks>
-        public IRecordContext RecordContext
+        public IRecordContext? RecordContext
         {
             get
             {
@@ -72,6 +72,6 @@ namespace BeanIO
         /// <summary>
         /// Gets the unmarshalled record contexts.
         /// </summary>
-        public IReadOnlyList<IRecordContext> RecordContexts => _recordContexts;
+        public IReadOnlyList<IRecordContext> RecordContexts => _recordContexts ?? Array.Empty<IRecordContext>();
     }
 }

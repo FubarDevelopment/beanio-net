@@ -3,6 +3,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace BeanIO.Internal.Parser
 {
     /// <summary>
@@ -13,6 +15,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets a value indicating whether this property is a constructor argument.
         /// </summary>
+        [MemberNotNullWhen(true, nameof(ConstructorArgumentIndex))]
         bool IsConstructorArgument { get; }
 
         /// <summary>
@@ -24,15 +27,15 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns the property value from a bean object.
         /// </summary>
-        /// <param name="bean">the bean object to get the property from</param>
-        /// <returns>the property value</returns>
-        object GetValue(object bean);
+        /// <param name="bean">the bean object to get the property from.</param>
+        /// <returns>the property value.</returns>
+        object? GetValue(object bean);
 
         /// <summary>
         /// Sets the property value on a bean object.
         /// </summary>
-        /// <param name="bean">the bean object to set the property</param>
-        /// <param name="value">the property value</param>
-        void SetValue(object bean, object value);
+        /// <param name="bean">the bean object to set the property.</param>
+        /// <param name="value">the property value.</param>
+        void SetValue(object bean, object? value);
     }
 }

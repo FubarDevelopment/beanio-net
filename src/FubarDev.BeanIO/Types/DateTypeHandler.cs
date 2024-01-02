@@ -10,7 +10,7 @@ using NodaTime;
 namespace BeanIO.Types
 {
     /// <summary>
-    /// Type handler for <see cref="LocalDate"/>
+    /// Type handler for <see cref="LocalDate"/>.
     /// </summary>
     public class DateTypeHandler : DateTypeHandlerSupport
     {
@@ -25,7 +25,7 @@ namespace BeanIO.Types
         /// <summary>
         /// Initializes a new instance of the <see cref="DateTypeHandler"/> class.
         /// </summary>
-        /// <param name="pattern">The pattern to use</param>
+        /// <param name="pattern">The pattern to use.</param>
         public DateTypeHandler(string pattern)
             : base(culture => culture.DateTimeFormat.ShortDatePattern, pattern)
         {
@@ -39,9 +39,9 @@ namespace BeanIO.Types
         /// <summary>
         /// Parses field text into an object.
         /// </summary>
-        /// <param name="text">The field text to parse, which may be null if the field was not passed in the record</param>
-        /// <returns>The parsed object</returns>
-        public override object Parse(string text)
+        /// <param name="text">The field text to parse, which may be null if the field was not passed in the record.</param>
+        /// <returns>The parsed object.</returns>
+        public override object? Parse(string? text)
         {
             var dt = ParseDate(text);
             return dt?.Date;
@@ -50,9 +50,9 @@ namespace BeanIO.Types
         /// <summary>
         /// Formats an object into field text.
         /// </summary>
-        /// <param name="value">The value to format, which may be null</param>
-        /// <returns>The formatted field text, or <code>null</code> to indicate the value is not present</returns>
-        public override string Format(object value)
+        /// <param name="value">The value to format, which may be null.</param>
+        /// <returns>The formatted field text, or <see langword="null" /> to indicate the value is not present.</returns>
+        public override string? Format(object? value)
         {
             if (value == null)
                 return null;

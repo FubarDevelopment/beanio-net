@@ -23,8 +23,8 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidRecordGroupException" /> class.
         /// </summary>
-        /// <param name="groupName">The group name</param>
-        /// <param name="contexts">The record context(s) that caused the exception</param>
+        /// <param name="groupName">The group name.</param>
+        /// <param name="contexts">The record context(s) that caused the exception.</param>
         public InvalidRecordGroupException(string groupName, params IRecordContext[] contexts)
             : base(contexts)
         {
@@ -34,10 +34,10 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidRecordGroupException"/> class.
         /// </summary>
-        /// <param name="message">The error message</param>
-        /// <param name="groupName">The group name</param>
-        /// <param name="contexts">The record context(s) that caused the exception</param>
-        public InvalidRecordGroupException(string message, string groupName, params IRecordContext[] contexts)
+        /// <param name="message">The error message.</param>
+        /// <param name="groupName">The group name.</param>
+        /// <param name="contexts">The record context(s) that caused the exception.</param>
+        public InvalidRecordGroupException(string message, string? groupName, params IRecordContext[] contexts)
             : base(message, contexts)
         {
             RecordName = groupName;
@@ -46,11 +46,11 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidRecordGroupException"/> class.
         /// </summary>
-        /// <param name="message">The error message</param>
-        /// <param name="inner">The inner exception</param>
-        /// <param name="groupName">The group name</param>
-        /// <param name="contexts">The record context(s) that caused the exception</param>
-        public InvalidRecordGroupException(string message, Exception inner, string groupName, params IRecordContext[] contexts)
+        /// <param name="message">The error message.</param>
+        /// <param name="inner">The inner exception.</param>
+        /// <param name="groupName">The group name.</param>
+        /// <param name="contexts">The record context(s) that caused the exception.</param>
+        public InvalidRecordGroupException(string message, Exception inner, string? groupName, params IRecordContext[] contexts)
             : base(message, inner, contexts)
         {
             RecordName = groupName;
@@ -59,7 +59,7 @@ namespace BeanIO
         /// <summary>
         /// Gets the record group name.
         /// </summary>
-        public override string RecordName { get; }
+        public override string? RecordName { get; }
 
         /// <summary>
         /// Called by <see cref="InvalidRecordException.ToString"/> to append record context details to the error message.

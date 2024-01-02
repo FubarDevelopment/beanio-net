@@ -4,10 +4,7 @@
 // </copyright>
 
 using System;
-using System.Diagnostics;
 using System.IO;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 using BeanIO.Builder;
@@ -18,16 +15,16 @@ namespace BeanIO.Parser
     {
         public TextReader LoadStream(string fileName)
         {
-            var asm = typeof(AbstractParserTest).GetTypeInfo().Assembly;
+            var asm = typeof(AbstractParserTest).Assembly;
             var resStream = asm.GetManifestResourceStream(fileName);
             if (resStream == null)
             {
-                var testClassNamespace = this.GetType().Namespace.Replace("BeanIO.", "BeanIO.Test.");
+                var testClassNamespace = this.GetType().Namespace!.Replace("BeanIO.", "FubarDev.BeanIO.Test.");
                 var resourceName = string.Format("{0}.{1}", testClassNamespace, fileName);
                 resStream = asm.GetManifestResourceStream(resourceName);
             }
 
-            if (resStream == System.IO.Stream.Null)
+            if (resStream == null)
                 throw new ArgumentOutOfRangeException(nameof(fileName));
             return new StreamReader(resStream);
         }
@@ -37,7 +34,7 @@ namespace BeanIO.Parser
             return factory.CreateReader(name, new StringReader(input));
         }
 
-        protected StreamFactory CreateFactory(string xml = null)
+        protected StreamFactory CreateFactory(string? xml = null)
         {
             StreamFactory factory = StreamFactory.NewInstance();
             if (xml != null)
@@ -49,7 +46,7 @@ namespace BeanIO.Parser
             return factory;
         }
 
-        protected StreamFactory CreateFactory(StreamBuilder builder)
+        protected StreamFactory CreateFactory(StreamBuilder? builder)
         {
             StreamFactory factory = StreamFactory.NewInstance();
             if (builder != null)

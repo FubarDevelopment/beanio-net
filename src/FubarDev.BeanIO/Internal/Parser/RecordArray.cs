@@ -19,25 +19,30 @@ namespace BeanIO.Internal.Parser
     internal class RecordArray : RecordCollection
     {
         /// <summary>
-        /// Gets the <see cref="IProperty"/> implementation type
+        /// Gets the <see cref="IProperty"/> implementation type.
         /// </summary>
         public override PropertyType Type => Internal.Parser.PropertyType.AggregationArray;
 
         /// <summary>
-        /// Gets or sets the class type of the array
+        /// Gets or sets the class type of the array.
         /// </summary>
-        public Type ElementType { get; set; }
+        public Type? ElementType { get; set; }
 
         /// <summary>
         /// Returns the unmarshalled property value.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <returns>the property value</returns>
-        public override object GetValue(ParsingContext context)
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <returns>the property value.</returns>
+        public override object? GetValue(ParsingContext context)
         {
             var collection = GetCollection(context);
             if (collection == null)
                 return null;
+
+            if (ElementType == null)
+            {
+                throw new BeanReaderException("Array element type not set");
+            }
 
             try
             {
@@ -56,18 +61,18 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Sets the property value for marshaling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <param name="value">the property value</param>
-        public override void SetValue(ParsingContext context, object value)
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <param name="value">the property value.</param>
+        public override void SetValue(ParsingContext context, object? value)
         {
-            ICollection collection = null;
+            ICollection? collection = null;
             if (value != null)
             {
                 var array = (Array)value;
                 var length = array.Length;
                 if (length > 0)
                 {
-                    var list = new List<object>(length);
+                    var list = new List<object?>(length);
                     collection = list;
                     for (var i = 0; i != length; ++i)
                         list.Add(array.GetValue(i));
@@ -79,7 +84,7 @@ namespace BeanIO.Internal.Parser
 
         protected override object CreateAggregationType()
         {
-            return new List<object>();
+            return new List<object?>();
         }
     }
 }

@@ -30,10 +30,10 @@ namespace BeanIO.Types
         public void TestFormatNotSupported()
         {
             var props = new Properties(
-                new Dictionary<string, string>()
-                    {
-                        { "format", "yyyy-MM-dd" }
-                    });
+                new Dictionary<string, string?>()
+                {
+                    { "format", "yyyy-MM-dd" }
+                });
             var factory = new TypeHandlerFactory();
             Assert.Throws<BeanIOConfigurationException>(() => factory.GetTypeHandlerFor(typeof(char), null, props));
         }
@@ -42,28 +42,28 @@ namespace BeanIO.Types
         public void TestRegisterWithNullName()
         {
             // ReSharper disable once AssignNullToNotNullAttribute
-            Assert.Throws<ArgumentNullException>(() => new TypeHandlerFactory().RegisterHandler(null, () => new IntegerTypeHandler()));
+            Assert.Throws<ArgumentNullException>(() => new TypeHandlerFactory().RegisterHandler(null!, () => new IntegerTypeHandler()));
         }
 
         [Fact]
         public void TestRegisterWithNullHandler()
         {
             // ReSharper disable once AssignNullToNotNullAttribute
-            Assert.Throws<ArgumentNullException>(() => new TypeHandlerFactory().RegisterHandler("name", null));
+            Assert.Throws<ArgumentNullException>(() => new TypeHandlerFactory().RegisterHandler("name", null!));
         }
 
         [Fact]
         public void TestGetHandlerWithNullName()
         {
             // ReSharper disable once AssignNullToNotNullAttribute
-            Assert.Throws<ArgumentNullException>(() => new TypeHandlerFactory().GetTypeHandler(null));
+            Assert.Throws<ArgumentNullException>(() => new TypeHandlerFactory().GetTypeHandler(null!));
         }
 
         [Fact]
         public void TestRegisterWithNullType()
         {
             // ReSharper disable once AssignNullToNotNullAttribute
-            Assert.Throws<ArgumentNullException>(() => new TypeHandlerFactory().RegisterHandlerFor((string)null, () => new IntegerTypeHandler()));
+            Assert.Throws<ArgumentNullException>(() => new TypeHandlerFactory().RegisterHandlerFor((string)null!, () => new IntegerTypeHandler()));
         }
 
         [Fact]
@@ -76,14 +76,14 @@ namespace BeanIO.Types
         public void TestGetHandlerWithNullType()
         {
             // ReSharper disable once AssignNullToNotNullAttribute
-            Assert.Throws<ArgumentNullException>(() => new TypeHandlerFactory().GetTypeHandlerFor((string)null));
+            Assert.Throws<ArgumentNullException>(() => new TypeHandlerFactory().GetTypeHandlerFor((string)null!));
         }
 
         [Fact]
         public void TestRegisterWithNullClass()
         {
             // ReSharper disable once AssignNullToNotNullAttribute
-            Assert.Throws<ArgumentNullException>(() => new TypeHandlerFactory().RegisterHandlerFor((Type)null, () => new IntegerTypeHandler()));
+            Assert.Throws<ArgumentNullException>(() => new TypeHandlerFactory().RegisterHandlerFor((Type)null!, () => new IntegerTypeHandler()));
         }
 
         [Fact]
@@ -96,7 +96,7 @@ namespace BeanIO.Types
         public void TestGetHandlerWithNullClass()
         {
             // ReSharper disable once AssignNullToNotNullAttribute
-            Assert.Throws<ArgumentNullException>(() => new TypeHandlerFactory().GetTypeHandlerFor((Type)null));
+            Assert.Throws<ArgumentNullException>(() => new TypeHandlerFactory().GetTypeHandlerFor((Type)null!));
         }
 
         [Fact]
@@ -135,11 +135,12 @@ namespace BeanIO.Types
             Assert.Same(timeHandler, factory.GetTypeHandlerFor("time"));
 
             var props = new Properties(
-                new Dictionary<string, string>()
-                    {
-                        { "format", "yyyy-MM-dd" }
-                    });
-            var th = (DateTypeHandler)factory.GetTypeHandlerFor("date", null, props);
+                new Dictionary<string, string?>()
+                {
+                    { "format", "yyyy-MM-dd" }
+                });
+            var th = (DateTypeHandler?)factory.GetTypeHandlerFor("date", null, props);
+            Assert.NotNull(th);
             Assert.Equal("yyyy-MM-dd", th.Pattern);
         }
     }

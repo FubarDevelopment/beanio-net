@@ -20,9 +20,9 @@ namespace BeanIO.Types
         /// <summary>
         /// Parses field text into an object.
         /// </summary>
-        /// <param name="text">The field text to parse, which may be null if the field was not passed in the record</param>
-        /// <returns>The parsed object</returns>
-        public virtual object Parse(string text)
+        /// <param name="text">The field text to parse, which may be null if the field was not passed in the record.</param>
+        /// <returns>The parsed object.</returns>
+        public virtual object? Parse(string? text)
         {
             if (string.IsNullOrEmpty(text))
                 return null;
@@ -32,9 +32,9 @@ namespace BeanIO.Types
         /// <summary>
         /// Formats an object into field text.
         /// </summary>
-        /// <param name="value">The value to format, which may be null</param>
-        /// <returns>The formatted field text, or <code>null</code> to indicate the value is not present</returns>
-        public virtual string Format(object value)
+        /// <param name="value">The value to format, which may be null.</param>
+        /// <returns>The formatted field text, or <see langword="null" /> to indicate the value is not present.</returns>
+        public virtual string? Format(object? value)
         {
             return value?.ToString();
         }

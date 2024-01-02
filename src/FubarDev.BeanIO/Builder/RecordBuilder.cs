@@ -11,7 +11,7 @@ using BeanIO.Internal.Util;
 namespace BeanIO.Builder
 {
     /// <summary>
-    /// Builds a new record configuration
+    /// Builds a new record configuration.
     /// </summary>
     public class RecordBuilder : SegmentBuilderSupport<RecordBuilder, RecordConfig>
     {
@@ -20,7 +20,7 @@ namespace BeanIO.Builder
         /// <summary>
         /// Initializes a new instance of the <see cref="RecordBuilder"/> class.
         /// </summary>
-        /// <param name="name">The segment name</param>
+        /// <param name="name">The segment name.</param>
         public RecordBuilder(string name)
             : this(name, null)
         {
@@ -29,9 +29,9 @@ namespace BeanIO.Builder
         /// <summary>
         /// Initializes a new instance of the <see cref="RecordBuilder"/> class.
         /// </summary>
-        /// <param name="name">The segment name</param>
-        /// <param name="type">The record type</param>
-        public RecordBuilder(string name, Type type)
+        /// <param name="name">The segment name.</param>
+        /// <param name="type">The record type.</param>
+        public RecordBuilder(string name, Type? type)
         {
             _config = new RecordConfig()
             {
@@ -53,8 +53,8 @@ namespace BeanIO.Builder
         /// <summary>
         /// Sets the order of this record relative to other children of the same parent.
         /// </summary>
-        /// <param name="order">the order (starting with 1)</param>
-        /// <returns>The value of <see cref="Me"/></returns>
+        /// <param name="order">the order (starting with 1).</param>
+        /// <returns>The value of <see cref="Me"/>.</returns>
         public RecordBuilder Order(int order)
         {
             Config.Order = order;
@@ -66,8 +66,8 @@ namespace BeanIO.Builder
         /// in a delimited record, or the number of characters in a fixed length
         /// record).
         /// </summary>
-        /// <param name="min">the minimum length</param>
-        /// <returns>The value of <see cref="Me"/></returns>
+        /// <param name="min">the minimum length.</param>
+        /// <returns>The value of <see cref="Me"/>.</returns>
         public RecordBuilder MinLength(int min)
         {
             Config.MinLength = min;
@@ -79,8 +79,8 @@ namespace BeanIO.Builder
         /// in a delimited record, or the number of characters in a fixed length
         /// record).
         /// </summary>
-        /// <param name="max">the maximum length, or -1 if unbounded</param>
-        /// <returns>The value of <see cref="Me"/></returns>
+        /// <param name="max">the maximum length, or -1 if unbounded.</param>
+        /// <returns>The value of <see cref="Me"/>.</returns>
         public RecordBuilder MaxLength(int max)
         {
             Config.MaxLength = max < 0 ? int.MaxValue : max;
@@ -91,8 +91,8 @@ namespace BeanIO.Builder
         /// Sets the length of the record (i.e the number of fields in a delimited
         /// record, or the number of characters in a fixed length record).
         /// </summary>
-        /// <param name="n">the length</param>
-        /// <returns>The value of <see cref="Me"/></returns>
+        /// <param name="n">the length.</param>
+        /// <returns>The value of <see cref="Me"/>.</returns>
         public RecordBuilder Length(int n)
         {
             return Length(n, n);
@@ -103,19 +103,19 @@ namespace BeanIO.Builder
         /// in a delimited record, or the number of characters in a fixed length
         /// record).
         /// </summary>
-        /// <param name="min">the minimum length</param>
-        /// <param name="max">the maximum length, or -1 if unbounded</param>
-        /// <returns>The value of <see cref="Me"/></returns>
+        /// <param name="min">the minimum length.</param>
+        /// <param name="max">the maximum length, or -1 if unbounded.</param>
+        /// <returns>The value of <see cref="Me"/>.</returns>
         public RecordBuilder Length(int min, int max)
         {
             return MinLength(min).MaxLength(max);
         }
 
         /// <summary>
-        /// Sets the length of the record for identification
+        /// Sets the length of the record for identification.
         /// </summary>
-        /// <param name="n">the length</param>
-        /// <returns>The value of <see cref="Me"/></returns>
+        /// <param name="n">the length.</param>
+        /// <returns>The value of <see cref="Me"/>.</returns>
         public RecordBuilder RidLength(int n)
         {
             return RidLength(n, n);
@@ -124,9 +124,9 @@ namespace BeanIO.Builder
         /// <summary>
         /// Sets the minimum and maximum length of the record for identification.
         /// </summary>
-        /// <param name="min">the minimum length</param>
-        /// <param name="max">the maximum length, or -1 if unbounded</param>
-        /// <returns>The value of <see cref="Me"/></returns>
+        /// <param name="min">the minimum length.</param>
+        /// <param name="max">the maximum length, or -1 if unbounded.</param>
+        /// <returns>The value of <see cref="Me"/>.</returns>
         public RecordBuilder RidLength(int min, int max)
         {
             Config.MinMatchLength = min;
@@ -135,18 +135,18 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
-        /// Builds the record configuration
+        /// Builds the record configuration.
         /// </summary>
-        /// <returns>the record configuration</returns>
+        /// <returns>the record configuration.</returns>
         public RecordConfig Build()
         {
             return Config;
         }
 
         /// <summary>
-        /// Sets the configuration settings
+        /// Sets the configuration settings.
         /// </summary>
-        /// <param name="config">The configuration settings</param>
+        /// <param name="config">The configuration settings.</param>
         protected void SetConfig(RecordConfig config)
         {
             _config = config;

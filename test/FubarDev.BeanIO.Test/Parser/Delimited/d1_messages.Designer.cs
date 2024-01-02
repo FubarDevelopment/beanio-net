@@ -38,7 +38,7 @@ namespace BeanIO.Parser.Delimited {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BeanIO.Parser.Delimited.d1_messages", typeof(d1_messages).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BeanIO.Parser.Delimited.d1_messages", typeof(d1_messages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

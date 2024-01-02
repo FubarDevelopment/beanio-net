@@ -43,7 +43,8 @@ namespace BeanIO.Parser.Xml.Marshaller
                     LastName = "Smith"
                 };
 
-            string text = m.Marshal(person).ToString();
+            var text = m.Marshal(person).ToString();
+            Assert.NotNull(text);
             Assert.Equal(personRecord, text);
 
             person = Assert.IsType<Beans.Person>(u.Unmarshal(personRecord));

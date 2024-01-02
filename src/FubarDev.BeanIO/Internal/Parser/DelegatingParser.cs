@@ -42,35 +42,35 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Gets the <see cref="IParser"/>
+        /// Gets the <see cref="IParser"/>.
         /// </summary>
         protected IParser Parser => (IParser)First;
 
         /// <summary>
         /// Returns whether this parser and its children match a record being unmarshalled.
         /// </summary>
-        /// <param name="context">The <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if matched, false otherwise</returns>
+        /// <param name="context">The <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if matched, false otherwise.</returns>
         public override bool Matches(UnmarshallingContext context)
         {
             return Parser.Matches(context);
         }
 
         /// <summary>
-        /// Unmarshals a record
+        /// Unmarshals a record.
         /// </summary>
-        /// <param name="context">The <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if this component was present in the unmarshalled record, or false otherwise</returns>
+        /// <param name="context">The <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if this component was present in the unmarshalled record, or false otherwise.</returns>
         public override bool Unmarshal(UnmarshallingContext context)
         {
             return Parser.Unmarshal(context);
         }
 
         /// <summary>
-        /// Marshals a record
+        /// Marshals a record.
         /// </summary>
-        /// <param name="context">The <see cref="MarshallingContext"/></param>
-        /// <returns>whether a value was marshalled</returns>
+        /// <param name="context">The <see cref="MarshallingContext"/>.</param>
+        /// <returns>whether a value was marshalled.</returns>
         public override bool Marshal(MarshallingContext context)
         {
             return Parser.Marshal(context);
@@ -79,7 +79,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Clears the current property value.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
         public override void ClearValue(ParsingContext context)
         {
             Parser.ClearValue(context);
@@ -88,9 +88,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Sets the property value for marshaling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <param name="value">the property value</param>
-        public override void SetValue(ParsingContext context, object value)
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <param name="value">the property value.</param>
+        public override void SetValue(ParsingContext context, object? value)
         {
             Parser.SetValue(context, value);
         }
@@ -98,9 +98,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns the unmarshalled property value.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <returns>the property value</returns>
-        public override object GetValue(ParsingContext context)
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <returns>the property value.</returns>
+        public override object? GetValue(ParsingContext context)
         {
             return Parser.GetValue(context);
         }
@@ -108,8 +108,8 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns whether this parser or any of its descendant have content for marshalling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <returns>true if there is content for marshalling, false otherwise</returns>
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <returns>true if there is content for marshalling, false otherwise.</returns>
         public override bool HasContent(ParsingContext context)
         {
             return Parser.HasContent(context);

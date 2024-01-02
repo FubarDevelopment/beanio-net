@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace BeanIO.Internal.Config
 {
     /// <summary>
-    /// Stores BeanIO stream mapping configuration settings
+    /// Stores BeanIO stream mapping configuration settings.
     /// </summary>
     internal class BeanIOConfig
     {
@@ -17,20 +17,20 @@ namespace BeanIO.Internal.Config
         private readonly List<StreamConfig> _streamList = new List<StreamConfig>();
 
         /// <summary>
-        /// Gets or sets the source of this configuration
+        /// Gets or sets the source of this configuration.
         /// </summary>
         /// <remarks>
-        /// May be <code>null</code> if unknown or not specified.
+        /// May be <see langword="null" /> if unknown or not specified.
         /// </remarks>
-        public string Source { get; set; }
+        public string? Source { get; set; }
 
         /// <summary>
-        /// Gets the list of stream mappings for this configuration
+        /// Gets the list of stream mappings for this configuration.
         /// </summary>
         public IReadOnlyList<StreamConfig> StreamConfigurations => _streamList;
 
         /// <summary>
-        /// Gets or sets the list of custom type handlers for this configuration
+        /// Gets or sets the list of custom type handlers for this configuration.
         /// </summary>
         public IReadOnlyList<TypeHandlerConfig> TypeHandlerConfigurations
         {
@@ -41,7 +41,7 @@ namespace BeanIO.Internal.Config
             set
             {
                 _handlerList.Clear();
-                if (value != null)
+                if (value != null!)
                     _handlerList.AddRange(value);
             }
         }
@@ -58,18 +58,18 @@ namespace BeanIO.Internal.Config
         }
 
         /// <summary>
-        /// Adds a custom type handler to this configuration
+        /// Adds a custom type handler to this configuration.
         /// </summary>
-        /// <param name="handler">the type handler configuration</param>
+        /// <param name="handler">the type handler configuration.</param>
         public void Add(TypeHandlerConfig handler)
         {
             _handlerList.Add(handler);
         }
 
         /// <summary>
-        /// Adds a stream mapping configuration to this configuration
+        /// Adds a stream mapping configuration to this configuration.
         /// </summary>
-        /// <param name="stream">the stream mapping configuration</param>
+        /// <param name="stream">the stream mapping configuration.</param>
         public void Add(StreamConfig stream)
         {
             _streamList.Add(stream);

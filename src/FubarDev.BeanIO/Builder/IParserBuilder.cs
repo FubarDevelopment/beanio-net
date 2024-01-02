@@ -9,7 +9,7 @@ using BeanIO.Stream;
 namespace BeanIO.Builder
 {
     /// <summary>
-    /// The basic parser builder interface
+    /// The basic parser builder interface.
     /// </summary>
     public interface IParserBuilder
     {

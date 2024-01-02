@@ -13,6 +13,6 @@ namespace BeanIO.Parser.Annotation
         public int Watts { get; set; }
 
         [Field(At = 1)]
-        public string Style { get; set; }
+        public string? Style { get; set; }
     }
 }

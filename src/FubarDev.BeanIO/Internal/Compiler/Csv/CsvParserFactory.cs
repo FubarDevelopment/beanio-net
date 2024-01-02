@@ -3,6 +3,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
+
 using BeanIO.Internal.Compiler.Delimited;
 using BeanIO.Internal.Config;
 using BeanIO.Internal.Parser;
@@ -18,7 +20,7 @@ namespace BeanIO.Internal.Compiler.Csv
         {
             var format = new CsvStreamFormat()
                 {
-                    Name = config.Name,
+                    Name = config.Name ?? throw new InvalidOperationException("No stream name specified"),
                     RecordParserFactory = CreateRecordParserFactory(config),
                 };
             return format;
@@ -29,7 +31,7 @@ namespace BeanIO.Internal.Compiler.Csv
         /// </summary>
         /// <returns>
         /// The new <see cref="IRecordParserFactory"/>
-        /// </returns>
+        /// .</returns>
         protected override IRecordParserFactory CreateDefaultRecordParserFactory()
         {
             return new CsvRecordParserFactory();

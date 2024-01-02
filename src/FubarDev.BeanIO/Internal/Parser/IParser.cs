@@ -3,8 +3,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using JetBrains.Annotations;
-
 namespace BeanIO.Internal.Parser
 {
     /// <summary>
@@ -13,9 +11,9 @@ namespace BeanIO.Internal.Parser
     internal interface IParser
     {
         /// <summary>
-        /// Gets the name of this parser component
+        /// Gets the name of this parser component.
         /// </summary>
-        string Name { get; }
+        string? Name { get; }
 
         /// <summary>
         /// Gets the size of a single occurrence of this element, which is used to offset
@@ -43,49 +41,49 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns whether this parser and its children match a record being unmarshalled.
         /// </summary>
-        /// <param name="context">The <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if matched, false otherwise</returns>
+        /// <param name="context">The <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if matched, false otherwise.</returns>
         bool Matches(UnmarshallingContext context);
 
         /// <summary>
-        /// Unmarshals a record
+        /// Unmarshals a record.
         /// </summary>
-        /// <param name="context">The <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if this component was present in the unmarshalled record, or false otherwise</returns>
+        /// <param name="context">The <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if this component was present in the unmarshalled record, or false otherwise.</returns>
         bool Unmarshal(UnmarshallingContext context);
 
         /// <summary>
-        /// Marshals a record
+        /// Marshals a record.
         /// </summary>
-        /// <param name="context">The <see cref="MarshallingContext"/></param>
-        /// <returns>whether a value was marshalled</returns>
+        /// <param name="context">The <see cref="MarshallingContext"/>.</param>
+        /// <returns>whether a value was marshalled.</returns>
         bool Marshal(MarshallingContext context);
 
         /// <summary>
         /// Returns whether this parser or any of its descendant have content for marshalling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <returns>true if there is content for marshalling, false otherwise</returns>
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <returns>true if there is content for marshalling, false otherwise.</returns>
         bool HasContent(ParsingContext context);
 
         /// <summary>
         /// Clears the current property value.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
         void ClearValue(ParsingContext context);
 
         /// <summary>
         /// Sets the property value for marshaling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <param name="value">the property value</param>
-        void SetValue(ParsingContext context, [CanBeNull] object value);
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <param name="value">the property value.</param>
+        void SetValue(ParsingContext context, object? value);
 
         /// <summary>
         /// Returns the unmarshalled property value.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <returns>the property value</returns>
-        object GetValue(ParsingContext context);
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <returns>the property value.</returns>
+        object? GetValue(ParsingContext context);
     }
 }

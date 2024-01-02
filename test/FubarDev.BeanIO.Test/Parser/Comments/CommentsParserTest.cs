@@ -19,19 +19,22 @@ namespace BeanIO.Parser.Comments
             var reader = factory.CreateReader("c1", LoadReader("c1.txt"));
             try
             {
-                var map = (IDictionary)reader.Read();
+                var map = (IDictionary?)reader.Read();
+                Assert.NotNull(map);
                 Assert.True(map.Contains("name"));
                 Assert.Equal("joe", map["name"]);
                 Assert.True(map.Contains("age"));
                 Assert.Equal("25", map["age"]);
 
-                map = (IDictionary)reader.Read();
+                map = (IDictionary?)reader.Read();
+                Assert.NotNull(map);
                 Assert.True(map.Contains("name"));
                 Assert.Equal("john", map["name"]);
                 Assert.True(map.Contains("age"));
                 Assert.Equal("42", map["age"]);
 
-                map = (IDictionary)reader.Read();
+                map = (IDictionary?)reader.Read();
+                Assert.NotNull(map);
                 Assert.True(map.Contains("name"));
                 Assert.Equal("mary", map["name"]);
                 Assert.True(map.Contains("age"));

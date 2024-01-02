@@ -38,7 +38,8 @@ namespace BeanIO.Parser.Delimited
             var reader = factory.CreateReader("d2", LoadReader("d2_optionalField.txt"));
             try
             {
-                var map = (IDictionary)reader.Read();
+                var map = (IDictionary?)reader.Read();
+                Assert.NotNull(map);
                 Assert.Equal("value1", map["field1"]);
                 Assert.Equal("value2", map["field2"]);
                 Assert.False(map.Contains("field3"));
@@ -57,7 +58,8 @@ namespace BeanIO.Parser.Delimited
             var reader = factory.CreateReader("d3", LoadReader("d3_padding.txt"));
             try
             {
-                var map = (IDictionary)reader.Read();
+                var map = (IDictionary?)reader.Read();
+                Assert.NotNull(map);
                 Assert.Equal(new[] { "1", "2", "3", string.Empty }, Assert.IsType<string[]>(map["field1"]));
 
                 var text = new StringWriter();

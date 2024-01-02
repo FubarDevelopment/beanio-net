@@ -31,36 +31,36 @@ namespace BeanIO.Internal.Config
         }
 
         /// <summary>
-        /// Gets or sets the component name used for identification in error handling
+        /// Gets or sets the component name used for identification in error handling.
         /// </summary>
         /// <remarks>
         /// Defaults to getName() if not set.
         /// </remarks>
-        public string Label { get; set; }
+        public string? Label { get; set; }
 
         /// <summary>
-        /// Gets or sets the fully qualified class name or type alias of this property
+        /// Gets or sets the fully qualified class name or type alias of this property.
         /// </summary>
         /// <remarks>
-        /// By default, <code>null</code> is returned and the property value type
+        /// By default, <see langword="null" /> is returned and the property value type
         /// is detected through bean introspection.
         /// </remarks>
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the getter method for retrieving this property's
-        /// value from its parent bean object during marshalling
+        /// value from its parent bean object during marshalling.
         /// </summary>
-        public string Getter { get; set; }
+        public string? Getter { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the setter method to use when setting this property's
         /// value on its parent bean object during unmarshalling.
         /// </summary>
-        public string Setter { get; set; }
+        public string? Setter { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this property is bound to its parent bean object
+        /// Gets or sets a value indicating whether this property is bound to its parent bean object.
         /// </summary>
         public bool IsBound { get; set; }
 
@@ -72,7 +72,7 @@ namespace BeanIO.Internal.Config
         public bool IsLazy { get; set; }
 
         /// <summary>
-        /// Gets or sets the position of this component
+        /// Gets or sets the position of this component.
         /// </summary>
         /// <remarks>
         /// <para>A negative number is counted from the end of the record (e.g. -1 is
@@ -95,10 +95,10 @@ namespace BeanIO.Internal.Config
         public int? Until { get; set; }
 
         /// <summary>
-        /// Gets or sets the collection type, or <code>null</code> if this component
+        /// Gets or sets the collection type, or <see langword="null" /> if this component
         /// is not bound to a collection or array.
         /// </summary>
-        public string Collection { get; set; }
+        public string? Collection { get; set; }
 
         /// <summary>
         /// Gets or sets the minimum number of times this component must appear in the stream.
@@ -109,16 +109,16 @@ namespace BeanIO.Internal.Config
         /// Gets or sets the maximum number of times this component may consecutively appear in a stream.
         /// </summary>
         /// <remarks>
-        /// <para>If set to <code>null</code>, one occurrence is assumed.</para>
+        /// <para>If set to <see langword="null" />, one occurrence is assumed.</para>
         /// <para>If set to any value greater than one, a collection type is expected.</para>
-        /// <para>Must be greater than the minimum occurrences, or set to <code>-1</code> to indicate the limit is unbounded.</para>
+        /// <para>Must be greater than the minimum occurrences, or set to -1 to indicate the limit is unbounded.</para>
         /// </remarks>
         public int? MaxOccurs { get; set; }
 
         /// <summary>
         /// Gets or sets the name of a field in the same record that indicates the number of occurrences for this component.
         /// </summary>
-        public string OccursRef { get; set; }
+        public string? OccursRef { get; set; }
 
         /// <summary>
         /// Gets or sets the minimum required value of the referenced occurs field.
@@ -180,7 +180,7 @@ namespace BeanIO.Internal.Config
         /// Gets the name of the property descendant to use for the Map key when
         /// <see cref="Collection"/> is set to <see cref="Dictionary{TKey,TValue}"/> (map).
         /// </summary>
-        public virtual string Key => null;
+        public virtual string? Key => null;
 
         /// <summary>
         /// Returns whether a node is a supported child of this node.
@@ -188,8 +188,8 @@ namespace BeanIO.Internal.Config
         /// <remarks>
         /// Called by <see cref="TreeNode{T}.Add"/>.
         /// </remarks>
-        /// <param name="child">the node to test</param>
-        /// <returns>true if the child is allowed</returns>
+        /// <param name="child">the node to test.</param>
+        /// <returns>true if the child is allowed.</returns>
         public override bool IsSupportedChild(ComponentConfig child)
         {
             return false;

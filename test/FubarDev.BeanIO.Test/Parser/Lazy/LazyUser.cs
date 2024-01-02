@@ -13,10 +13,10 @@ namespace BeanIO.Parser.Lazy
     [SuppressMessage("StyleCopPlus.StyleCopPlusRules", "SP0100:AdvancedNamingRules", Justification = "Reviewed. Suppression is OK here.")]
     public class LazyUser
     {
-        public string name;
+        public string? name;
 
-        public Account account;
+        public Account? account;
 
-        public List<Account> accounts;
+        public List<Account>? accounts;
     }
 }

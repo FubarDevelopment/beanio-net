@@ -6,7 +6,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
@@ -21,14 +20,14 @@ namespace BeanIO.Internal.Parser
     internal class Bean : PropertyComponent
     {
         /// <summary>
-        /// the constructor for creating this bean object (if null, the default constructor is used)
+        /// the constructor for creating this bean object (if null, the default constructor is used).
         /// </summary>
-        private readonly ParserLocal<object> _bean;
+        private readonly ParserLocal<object?> _bean;
 
         /// <summary>
-        /// used to temporarily hold constructor argument values when a constructor is specified
+        /// used to temporarily hold constructor argument values when a constructor is specified.
         /// </summary>
-        private readonly ParserLocal<object[]> _constructorArgs;
+        private readonly ParserLocal<object?[]> _constructorArgs;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Bean"/> class.
@@ -43,19 +42,19 @@ namespace BeanIO.Internal.Parser
         /// Gets or sets the <see cref="ConstructorInfo"/> used to instantiate this
         /// bean object, or null if the default constructor is used.
         /// </summary>
-        public ConstructorInfo Constructor { get; set; }
+        public ConstructorInfo? Constructor { get; set; }
 
         public bool IsLazy { get; set; }
 
         /// <summary>
-        /// Gets the <see cref="IProperty"/> implementation type
+        /// Gets the <see cref="IProperty"/> implementation type.
         /// </summary>
         public override PropertyType Type => IsMap ? Parser.PropertyType.Map : Parser.PropertyType.Complex;
 
         /// <summary>
-        /// Gets a value indicating whether the bean object implements <see cref="IDictionary"/>
+        /// Gets a value indicating whether the bean object implements <see cref="IDictionary"/>.
         /// </summary>
-        protected virtual bool IsMap => PropertyType.IsMap();
+        protected virtual bool IsMap => PropertyType?.IsMap() ?? false;
 
         /// <summary>
         /// Clears the property value.
@@ -63,7 +62,7 @@ namespace BeanIO.Internal.Parser
         /// <remarks>
         /// A subsequent call to <see cref="IProperty.GetValue"/> should return null, or <see cref="F:Value.Missing"/> for lazy property values.
         /// </remarks>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
         public override void ClearValue(ParsingContext context)
         {
             foreach (var child in Children.Cast<IProperty>())
@@ -72,13 +71,13 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Creates the property value and returns it
+        /// Creates the property value and returns it.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <returns>the property value</returns>
-        public override object CreateValue(ParsingContext context)
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <returns>the property value.</returns>
+        public override object? CreateValue(ParsingContext context)
         {
-            object b = null;
+            object? b = null;
             var hasProperties = false;
 
             // populate constructor arguments first
@@ -110,7 +109,6 @@ namespace BeanIO.Internal.Parser
                         create = create || !IsLazy || StringUtil.HasValue(value);
                     }
 
-                    Debug.Assert(accessor.ConstructorArgumentIndex != null, "accessor.ConstructorArgumentIndex != null");
                     cargs[accessor.ConstructorArgumentIndex.Value] = value;
                 }
 
@@ -121,7 +119,7 @@ namespace BeanIO.Internal.Parser
             foreach (var child in Children)
             {
                 var property = (IProperty)child;
-                if (property.Accessor.IsConstructorArgument)
+                if (property.Accessor == null || property.Accessor.IsConstructorArgument)
                     continue;
                 var value = property.GetValue(context);
                 if (CreateMissingBeans && ReferenceEquals(value, Value.Missing))
@@ -145,7 +143,10 @@ namespace BeanIO.Internal.Parser
                                 continue;
 
                             b = NewInstance(context);
-                            Backfill(context, b, child);
+                            if (b != null)
+                            {
+                                Backfill(context, b, child);
+                            }
                         }
                         else
                         {
@@ -155,10 +156,9 @@ namespace BeanIO.Internal.Parser
 
                     try
                     {
-                        var setProxyList = value as SetProxyList;
-                        if (setProxyList != null)
+                        if (value is SetProxyList setProxyList)
                             value = setProxyList.Instance;
-                        if (value.CanSetTo(property.PropertyType))
+                        if (value.CanSetTo(property.PropertyType) && b != null)
                             property.Accessor.SetValue(b, value);
                     }
                     catch (Exception ex)
@@ -186,7 +186,7 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Returns the value of this property
+        /// Returns the value of this property.
         /// </summary>
         /// <remarks>
         /// <para>When unmarshalling, this method should return <see cref="F:Value.Missing"/> if the field
@@ -195,11 +195,11 @@ namespace BeanIO.Internal.Parser
         /// segment bound to a bean object, or null if required. Null field properties should
         /// always return <see cref="F:Value.Missing"/>.</para>
         /// </remarks>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
         /// <returns>the property value,
         /// or <see cref="F:Value.Missing"/> if not present in the stream,
-        /// or <see cref="F:Value.Invalid"/> if the field was invalid</returns>
-        public override object GetValue(ParsingContext context)
+        /// or <see cref="F:Value.Invalid"/> if the field was invalid.</returns>
+        public override object? GetValue(ParsingContext context)
         {
             return _bean.Get(context);
         }
@@ -207,9 +207,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Sets the property value (before marshalling).
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <param name="value">the property value</param>
-        public override void SetValue(ParsingContext context, object value)
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <param name="value">the property value.</param>
+        public override void SetValue(ParsingContext context, object? value)
         {
             if (value == null)
             {
@@ -221,14 +221,14 @@ namespace BeanIO.Internal.Parser
 
             foreach (var property in Children.Cast<IProperty>())
             {
-                var propertyValue = property.Accessor.GetValue(b);
+                var propertyValue = property.Accessor?.GetValue(b);
                 property.SetValue(context, propertyValue);
             }
 
             _bean.Set(context, b);
         }
 
-        public override bool Defines(object bean)
+        public override bool Defines(object? bean)
         {
             if (PropertyType == null)
                 return false;
@@ -259,7 +259,7 @@ namespace BeanIO.Internal.Parser
             // check identifying properties
             foreach (var property in Children.Cast<IProperty>().Where(x => x.IsIdentifier))
             {
-                var value = property.Accessor.GetValue(bean);
+                var value = property.Accessor?.GetValue(bean);
                 if (!property.Defines(value))
                     return false;
             }
@@ -274,7 +274,7 @@ namespace BeanIO.Internal.Parser
         /// This method should be overridden by subclasses that need to register
         /// one or more parser context variables.
         /// </remarks>
-        /// <param name="locals">set of local variables</param>
+        /// <param name="locals">set of local variables.</param>
         public override void RegisterLocals(ISet<IParserLocal> locals)
         {
             if (!locals.Add(_bean))
@@ -284,11 +284,11 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Creates a new instance of this bean object
+        /// Creates a new instance of this bean object.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <returns>the new bean object</returns>
-        protected virtual object NewInstance(ParsingContext context)
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <returns>the new bean object.</returns>
+        protected virtual object? NewInstance(ParsingContext context)
         {
             var beanClass = PropertyType;
             if (beanClass == null)
@@ -310,14 +310,17 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Backfill bean properties up to the component <code>stop</code>.
+        /// Backfill bean properties up to the component <c>stop</c>.
         /// </summary>
-        /// <param name="context">the parsing context</param>
-        /// <param name="bean">the bean object</param>
-        /// <param name="stop">the component to stop at</param>
+        /// <param name="context">the parsing context.</param>
+        /// <param name="bean">the bean object.</param>
+        /// <param name="stop">the component to stop at.</param>
         private void Backfill(ParsingContext context, object bean, Component stop)
         {
-            foreach (var property in Children.TakeWhile(x => !ReferenceEquals(x, stop)).Cast<IProperty>().Where(x => !x.Accessor.IsConstructorArgument))
+            foreach (var property in Children
+                         .TakeWhile(x => !ReferenceEquals(x, stop))
+                         .Cast<IProperty>()
+                         .Where(x => x.Accessor != null && !x.Accessor!.IsConstructorArgument))
             {
                 var value = property.GetValue(context);
                 if (ReferenceEquals(value, Value.Missing))
@@ -325,7 +328,7 @@ namespace BeanIO.Internal.Parser
 
                 try
                 {
-                    property.Accessor.SetValue(bean, value);
+                    property.Accessor!.SetValue(bean, value);
                 }
                 catch (Exception ex)
                 {
@@ -334,7 +337,7 @@ namespace BeanIO.Internal.Parser
             }
         }
 
-        private class BeanParserLocal : ParserLocal<object>
+        private class BeanParserLocal : ParserLocal<object?>
         {
             private readonly PropertyComponent _owner;
 
@@ -347,14 +350,14 @@ namespace BeanIO.Internal.Parser
             /// Called when initialized to return a default value.  If not overridden,
             /// it returns the default value passed via the constructor.
             /// </summary>
-            /// <returns>the default value</returns>
-            protected override object CreateDefaultValue()
+            /// <returns>the default value.</returns>
+            protected override object? CreateDefaultValue()
             {
                 return _owner.IsRequired ? null : Value.Missing;
             }
         }
 
-        private class ConstructorArgsParserLocal : ParserLocal<object[]>
+        private class ConstructorArgsParserLocal : ParserLocal<object?[]>
         {
             private readonly Bean _owner;
 
@@ -367,10 +370,12 @@ namespace BeanIO.Internal.Parser
             /// Called when initialized to return a default value.  If not overridden,
             /// it returns the default value passed via the constructor.
             /// </summary>
-            /// <returns>the default value</returns>
-            protected override object[] CreateDefaultValue()
+            /// <returns>the default value.</returns>
+            protected override object?[] CreateDefaultValue()
             {
-                return _owner.Constructor != null ? new object[_owner.Constructor.GetParameters().Length] : null;
+                return _owner.Constructor != null
+                    ? new object?[_owner.Constructor.GetParameters().Length]
+                    : Array.Empty<object?>();
             }
         }
     }

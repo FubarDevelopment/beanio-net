@@ -23,8 +23,8 @@ namespace BeanIO.Types
         /// <summary>
         /// Parses a number from a <see cref="decimal"/>.
         /// </summary>
-        /// <param name="value">The <see cref="decimal"/> to convert to a number</param>
-        /// <returns>The parsed number</returns>
+        /// <param name="value">The <see cref="decimal"/> to convert to a number.</param>
+        /// <returns>The parsed number.</returns>
         protected override object CreateNumber(decimal value)
         {
             return value;

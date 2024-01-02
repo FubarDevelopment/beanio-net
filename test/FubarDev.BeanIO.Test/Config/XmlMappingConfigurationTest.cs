@@ -3,7 +3,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System.Reflection;
+using System;
 
 using BeanIO.Parser;
 
@@ -17,20 +17,18 @@ namespace BeanIO.Config
         public void TestTemplateImport()
         {
             var factory = StreamFactory.NewInstance();
-            using (var stream = typeof(ParserTest).GetTypeInfo().Assembly.GetManifestResourceStream("BeanIO.Config.ab.xml"))
-            {
-                factory.Load(stream);
-            }
+            using var stream = typeof(ParserTest).Assembly.GetManifestResourceStream("BeanIO.Config.ab.xml");
+            Assert.NotNull(stream);
+            factory.Load(stream!);
         }
 
         [Fact]
         public void TestImport()
         {
             var factory = StreamFactory.NewInstance();
-            using (var stream = typeof(ParserTest).GetTypeInfo().Assembly.GetManifestResourceStream("BeanIO.Config.import.xml"))
-            {
-                factory.Load(stream);
-            }
+            using var stream = typeof(ParserTest).Assembly.GetManifestResourceStream("BeanIO.Config.import.xml");
+            Assert.NotNull(stream);
+            factory.Load(stream!);
         }
 
         [Fact(DisplayName = "Resource not found")]
@@ -104,7 +102,7 @@ namespace BeanIO.Config
         {
             var errorMessage = string.Format(
                 "No readable access for property or field 'value' in class '{0}'",
-                typeof(IInterfaceBean).GetTypeInfo().AssemblyQualifiedName);
+                typeof(IInterfaceBean).AssemblyQualifiedName);
             LoadInvalidMappingFile("noReadableMethod.xml", errorMessage);
         }
 
@@ -113,7 +111,7 @@ namespace BeanIO.Config
         {
             var errorMessage = string.Format(
                 "Neither property or field found with name 'birthDate' for type '{0}'",
-                typeof(ConcreteBean).GetTypeInfo().AssemblyQualifiedName);
+                typeof(ConcreteBean).AssemblyQualifiedName);
             LoadInvalidMappingFile("noBeanProperty.xml", errorMessage);
         }
 
@@ -121,10 +119,10 @@ namespace BeanIO.Config
         private void LoadInvalidMappingFile(string name, string errorMessage)
         {
             var factory = StreamFactory.NewInstance();
-            var asm = typeof(ParserTest).GetTypeInfo().Assembly;
+            var asm = typeof(ParserTest).Assembly;
             var stream = asm.GetManifestResourceStream($"BeanIO.Config.{name}");
             Assert.NotNull(stream);
-            var ex = Assert.Throws<BeanIOConfigurationException>(() => factory.Load(stream));
+            var ex = Assert.Throws<BeanIOConfigurationException>(() => factory.Load(stream!));
             var innermostException = ex.GetBaseException();
             Assert.Equal(errorMessage, innermostException.Message);
         }

@@ -12,8 +12,6 @@ using BeanIO.Config;
 using BeanIO.Types;
 using BeanIO.Types.Xml;
 
-using JetBrains.Annotations;
-
 namespace BeanIO.Internal.Util
 {
     /// <summary>
@@ -44,7 +42,7 @@ namespace BeanIO.Internal.Util
 
         private readonly Dictionary<string, Func<ITypeHandler>> _handlerMap = new Dictionary<string, Func<ITypeHandler>>(StringComparer.OrdinalIgnoreCase);
 
-        private readonly TypeHandlerFactory _parent;
+        private readonly TypeHandlerFactory? _parent;
 
         static TypeHandlerFactory()
         {
@@ -98,38 +96,38 @@ namespace BeanIO.Internal.Util
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeHandlerFactory"/> class.
         /// </summary>
-        /// <param name="parent">The parent <see cref="TypeHandlerFactory"/></param>
-        public TypeHandlerFactory(TypeHandlerFactory parent)
+        /// <param name="parent">The parent <see cref="TypeHandlerFactory"/>.</param>
+        public TypeHandlerFactory(TypeHandlerFactory? parent)
         {
             _parent = parent;
         }
 
         /// <summary>
-        /// Gets the default <see cref="TypeHandlerFactory"/>
+        /// Gets the default <see cref="TypeHandlerFactory"/>.
         /// </summary>
         public static TypeHandlerFactory Default => _defaultFactory;
 
         /// <summary>
-        /// Returns a named type handler, or <code>null</code> if there is no type handler configured
+        /// Returns a named type handler, or <see langword="null" /> if there is no type handler configured
         /// for the given name in this factory or any of its ancestors.
         /// </summary>
-        /// <param name="name">the name of type handler was registered under</param>
-        /// <returns>the type handler, or <code>null</code> if there is no configured type handler
-        /// registered for the name</returns>
-        public ITypeHandler GetTypeHandler([NotNull] string name)
+        /// <param name="name">the name of type handler was registered under.</param>
+        /// <returns>the type handler, or <see langword="null" /> if there is no configured type handler
+        /// registered for the name.</returns>
+        public ITypeHandler? GetTypeHandler(string name)
         {
             return GetTypeHandler(name, null);
         }
 
         /// <summary>
-        /// Returns a named type handler, or <code>null</code> if there is no type handler configured
+        /// Returns a named type handler, or <see langword="null" /> if there is no type handler configured
         /// for the given name in this factory or any of its ancestors.
         /// </summary>
-        /// <param name="name">the name of type handler was registered under</param>
-        /// <param name="properties">the custom properties for configuring the type handler</param>
-        /// <returns>the type handler, or <code>null</code> if there is no configured type handler
-        /// registered for the name</returns>
-        public ITypeHandler GetTypeHandler([NotNull] string name, Properties properties)
+        /// <param name="name">the name of type handler was registered under.</param>
+        /// <param name="properties">the custom properties for configuring the type handler.</param>
+        /// <returns>the type handler, or <see langword="null" /> if there is no configured type handler
+        /// registered for the name.</returns>
+        public ITypeHandler? GetTypeHandler(string name, Properties? properties)
         {
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
@@ -137,40 +135,40 @@ namespace BeanIO.Internal.Util
         }
 
         /// <summary>
-        /// Returns the type handler for the given type, or <code>null</code> if there is no type
+        /// Returns the type handler for the given type, or <see langword="null" /> if there is no type
         /// handler configured for the type in this factory or any of its ancestors.
         /// </summary>
-        /// <param name="typeName">the class name or type alias</param>
-        /// <returns>the type handler, or <code>null</code> if there is no configured type handler
-        /// registered for the type</returns>
-        public ITypeHandler GetTypeHandlerFor([NotNull] string typeName)
+        /// <param name="typeName">the class name or type alias.</param>
+        /// <returns>the type handler, or <see langword="null" /> if there is no configured type handler
+        /// registered for the type.</returns>
+        public ITypeHandler? GetTypeHandlerFor(string typeName)
         {
             return GetTypeHandlerFor(typeName, null, null);
         }
 
         /// <summary>
-        /// Returns the type handler for the given type, or <code>null</code> if there is no type
+        /// Returns the type handler for the given type, or <see langword="null" /> if there is no type
         /// handler configured for the type in this factory or any of its ancestors.
         /// </summary>
-        /// <param name="typeName">the class name or type alias</param>
-        /// <param name="format">the stream format, or if null, format specific handlers will not be returned</param>
-        /// <returns>the type handler, or <code>null</code> if there is no configured type handler
-        /// registered for the type</returns>
-        public ITypeHandler GetTypeHandlerFor([NotNull] string typeName, string format)
+        /// <param name="typeName">the class name or type alias.</param>
+        /// <param name="format">the stream format, or if null, format specific handlers will not be returned.</param>
+        /// <returns>the type handler, or <see langword="null" /> if there is no configured type handler
+        /// registered for the type.</returns>
+        public ITypeHandler? GetTypeHandlerFor(string typeName, string? format)
         {
             return GetTypeHandlerFor(typeName, format, null);
         }
 
         /// <summary>
-        /// Returns the type handler for the given type, or <code>null</code> if there is no type
+        /// Returns the type handler for the given type, or <see langword="null" /> if there is no type
         /// handler configured for the type in this factory or any of its ancestors.
         /// </summary>
-        /// <param name="typeName">the class name or type alias</param>
-        /// <param name="format">the stream format, or if null, format specific handlers will not be returned</param>
-        /// <param name="properties">the custom properties for configuring the type handler</param>
-        /// <returns>the type handler, or <code>null</code> if there is no configured type handler
-        /// registered for the type</returns>
-        public ITypeHandler GetTypeHandlerFor([NotNull] string typeName, string format, Properties properties)
+        /// <param name="typeName">the class name or type alias.</param>
+        /// <param name="format">the stream format, or if null, format specific handlers will not be returned.</param>
+        /// <param name="properties">the custom properties for configuring the type handler.</param>
+        /// <returns>the type handler, or <see langword="null" /> if there is no configured type handler
+        /// registered for the type.</returns>
+        public ITypeHandler? GetTypeHandlerFor(string typeName, string? format, Properties? properties)
         {
             if (typeName == null)
                 throw new ArgumentNullException(nameof(typeName));
@@ -182,37 +180,37 @@ namespace BeanIO.Internal.Util
         }
 
         /// <summary>
-        /// Returns a type handler for a class, or <code>null</code> if there is no type
-        /// handler configured for the class in this factory or any of its ancestors
+        /// Returns a type handler for a class, or <see langword="null" /> if there is no type
+        /// handler configured for the class in this factory or any of its ancestors.
         /// </summary>
-        /// <param name="type">the target class to find a type handler for</param>
-        /// <returns>the type handler, or null if the class is not supported</returns>
-        public ITypeHandler GetTypeHandlerFor([NotNull] Type type)
+        /// <param name="type">the target class to find a type handler for.</param>
+        /// <returns>the type handler, or null if the class is not supported.</returns>
+        public ITypeHandler? GetTypeHandlerFor(Type type)
         {
             return GetTypeHandlerFor(type, null, null);
         }
 
         /// <summary>
-        /// Returns a type handler for a class, or <code>null</code> if there is no type
-        /// handler configured for the class in this factory or any of its ancestors
+        /// Returns a type handler for a class, or <see langword="null" /> if there is no type
+        /// handler configured for the class in this factory or any of its ancestors.
         /// </summary>
-        /// <param name="type">the target class to find a type handler for</param>
-        /// <param name="format">the stream format, or if null, format specific handlers will not be returned</param>
-        /// <returns>the type handler, or null if the class is not supported</returns>
-        public ITypeHandler GetTypeHandlerFor([NotNull] Type type, [NotNull] string format)
+        /// <param name="type">the target class to find a type handler for.</param>
+        /// <param name="format">the stream format, or if null, format specific handlers will not be returned.</param>
+        /// <returns>the type handler, or null if the class is not supported.</returns>
+        public ITypeHandler? GetTypeHandlerFor(Type type, string format)
         {
             return GetTypeHandlerFor(type, format, null);
         }
 
         /// <summary>
-        /// Returns a type handler for a class, or <code>null</code> if there is no type
-        /// handler configured for the class in this factory or any of its ancestors
+        /// Returns a type handler for a class, or <see langword="null" /> if there is no type
+        /// handler configured for the class in this factory or any of its ancestors.
         /// </summary>
-        /// <param name="type">the target class to find a type handler for</param>
-        /// <param name="format">the stream format, or if null, format specific handlers will not be returned</param>
-        /// <param name="properties">the custom properties for configuring the type handler</param>
-        /// <returns>the type handler, or null if the class is not supported</returns>
-        public ITypeHandler GetTypeHandlerFor([NotNull] Type type, string format, Properties properties)
+        /// <param name="type">the target class to find a type handler for.</param>
+        /// <param name="format">the stream format, or if null, format specific handlers will not be returned.</param>
+        /// <param name="properties">the custom properties for configuring the type handler.</param>
+        /// <returns>the type handler, or null if the class is not supported.</returns>
+        public ITypeHandler? GetTypeHandlerFor(Type type, string? format, Properties? properties)
         {
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
@@ -228,36 +226,34 @@ namespace BeanIO.Internal.Util
         }
 
         /// <summary>
-        /// Registers a type handler in this factory
+        /// Registers a type handler in this factory.
         /// </summary>
-        /// <param name="name">the name to register the type handler under</param>
-        /// <param name="createHandler">the type handler creation function to register</param>
-        public void RegisterHandler([NotNull] string name, [NotNull] Func<ITypeHandler> createHandler)
+        /// <param name="name">the name to register the type handler under.</param>
+        /// <param name="createHandler">the type handler creation function to register.</param>
+        public void RegisterHandler(string name, Func<ITypeHandler> createHandler)
         {
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
-            if (createHandler == null)
-                throw new ArgumentNullException(nameof(createHandler));
-            _handlerMap[NameKey + name] = createHandler;
+            _handlerMap[NameKey + name] = createHandler ?? throw new ArgumentNullException(nameof(createHandler));
         }
 
         /// <summary>
-        /// Registers a type handler in this factory by class type for all stream formats
+        /// Registers a type handler in this factory by class type for all stream formats.
         /// </summary>
-        /// <param name="name">the fully qualified class name or type alias to register the type handler for</param>
-        /// <param name="createHandler">the type handler creation function to register</param>
-        public void RegisterHandlerFor([NotNull] string name, [NotNull] Func<ITypeHandler> createHandler)
+        /// <param name="name">the fully qualified class name or type alias to register the type handler for.</param>
+        /// <param name="createHandler">the type handler creation function to register.</param>
+        public void RegisterHandlerFor(string name, Func<ITypeHandler> createHandler)
         {
             RegisterHandlerFor(name, createHandler, null);
         }
 
         /// <summary>
-        /// Registers a type handler in this factory by class type for a specific stream format
+        /// Registers a type handler in this factory by class type for a specific stream format.
         /// </summary>
-        /// <param name="name">the fully qualified class name or type alias to register the type handler for</param>
-        /// <param name="createHandler">the type handler creation function to register</param>
-        /// <param name="format">the stream format to register the type handler for, or if null the type handler may be returned for any format</param>
-        public void RegisterHandlerFor([NotNull] string name, [NotNull] Func<ITypeHandler> createHandler, string format)
+        /// <param name="name">the fully qualified class name or type alias to register the type handler for.</param>
+        /// <param name="createHandler">the type handler creation function to register.</param>
+        /// <param name="format">the stream format to register the type handler for, or if null the type handler may be returned for any format.</param>
+        public void RegisterHandlerFor(string name, Func<ITypeHandler> createHandler, string? format)
         {
             if (name == null)
                 throw new ArgumentNullException(nameof(name));
@@ -266,33 +262,41 @@ namespace BeanIO.Internal.Util
             if (type == null)
                 throw new ArgumentException($"Invalid type or type alias '{name}'", nameof(name));
 
-            RegisterHandlerFor(format, type.FullName, type, createHandler);
+            RegisterHandlerFor(
+                format,
+                type.FullName ?? throw new InvalidOperationException($"Type without FullName: {type}"),
+                type,
+                createHandler);
         }
 
         /// <summary>
         /// Registers a type handler in this factory for any stream format.
         /// </summary>
-        /// <param name="type">the target class to register the type handler for</param>
-        /// <param name="createHandler">the type handler creation function to register</param>
-        public void RegisterHandlerFor([NotNull] Type type, [NotNull] Func<ITypeHandler> createHandler)
+        /// <param name="type">the target class to register the type handler for.</param>
+        /// <param name="createHandler">the type handler creation function to register.</param>
+        public void RegisterHandlerFor(Type type, Func<ITypeHandler> createHandler)
         {
             RegisterHandlerFor(type, createHandler, null);
         }
 
         /// <summary>
-        /// Registers a type handler in this factory for a specific stream format
+        /// Registers a type handler in this factory for a specific stream format.
         /// </summary>
-        /// <param name="type">the target class to register the type handler for</param>
-        /// <param name="createHandler">the type handler creation function to register</param>
-        /// <param name="format">the stream format to register the type handler for, or if null the type handler may be returned for any format</param>
-        public void RegisterHandlerFor([NotNull] Type type, [NotNull] Func<ITypeHandler> createHandler, string format)
+        /// <param name="type">the target class to register the type handler for.</param>
+        /// <param name="createHandler">the type handler creation function to register.</param>
+        /// <param name="format">the stream format to register the type handler for, or if null the type handler may be returned for any format.</param>
+        public void RegisterHandlerFor(Type type, Func<ITypeHandler> createHandler, string? format)
         {
-            if (type == null)
+            if (type == null!)
                 throw new ArgumentNullException(nameof(type));
+
+            if (type.FullName == null)
+                throw new ArgumentNullException(nameof(type));
+
             RegisterHandlerFor(format, type.FullName, type, createHandler);
         }
 
-        private void RegisterHandlerFor([CanBeNull] string format, [NotNull] string typeName, [NotNull] Type expectedClass, [NotNull] Func<ITypeHandler> createHandler)
+        private void RegisterHandlerFor(string? format, string typeName, Type expectedClass, Func<ITypeHandler> createHandler)
         {
             var testInstance = createHandler();
             if (!expectedClass.IsAssignableFromThis(testInstance.TargetType))
@@ -311,7 +315,7 @@ namespace BeanIO.Internal.Util
             }
         }
 
-        private ITypeHandler GetEnumHandler([NotNull] Type enumType, Properties properties)
+        private ITypeHandler GetEnumHandler(Type enumType, Properties? properties)
         {
             var handler = new EnumTypeHandler(enumType);
             if (properties != null)
@@ -319,13 +323,12 @@ namespace BeanIO.Internal.Util
             return handler;
         }
 
-        private ITypeHandler GetHandler([NotNull] string key, string format, Properties properties)
+        private ITypeHandler? GetHandler(string key, string? format, Properties? properties)
         {
             var factory = this;
             while (factory != null)
             {
-                Func<ITypeHandler> createHandler;
-                if (format != null && factory._handlerMap.TryGetValue(format + "." + key, out createHandler))
+                if (format != null && factory._handlerMap.TryGetValue(format + "." + key, out var createHandler))
                     return GetHandler(createHandler, properties);
 
                 if (factory._handlerMap.TryGetValue(key, out createHandler))
@@ -337,7 +340,7 @@ namespace BeanIO.Internal.Util
             return null;
         }
 
-        private ITypeHandler GetHandler([NotNull] Func<ITypeHandler> createHandler, Properties properties)
+        private ITypeHandler GetHandler(Func<ITypeHandler> createHandler, Properties? properties)
         {
             var handler = createHandler();
             if (properties != null && properties.Count != 0)

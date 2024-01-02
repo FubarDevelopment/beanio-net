@@ -62,8 +62,9 @@ namespace BeanIO.Parser.Annotation
 
             for (var i = 0; i < input.Length; i++)
             {
-                var room = (AnnotatedRoom)u[i].Unmarshal(input[i]);
+                var room = (AnnotatedRoom?)u[i].Unmarshal(input[i]);
 
+                Assert.NotNull(room);
                 Assert.Equal("Bath", room.Name);
 
                 var flooring = room.GetFlooring();
@@ -147,18 +148,24 @@ namespace BeanIO.Parser.Annotation
 
             for (var i = 0; i < input.Length; i++)
             {
-                var user = (AnnotatedUser)u[i].Unmarshal(input[i]);
+                var user = (AnnotatedUser?)u[i].Unmarshal(input[i]);
+                Assert.NotNull(user);
                 Assert.Equal("joe", user.FirstName);
                 Assert.Equal("smith", user.GetSurname());
-                Assert.Equal("left", user.Hands[0]);
-                Assert.Equal("right", user.Hands[1]);
+                Assert.NotNull(user.Hands);
+                Assert.Collection(
+                    user.Hands,
+                    hand => Assert.Equal("left", hand),
+                    hand => Assert.Equal("right", hand));
                 Assert.Equal(new DateTime(1970, 1, 1), user.BirthDate);
                 Assert.Equal(28, user.Age);
-                Assert.Equal(2, user.Letters.Count);
-                Assert.Equal('A', user.Letters[0]);
-                Assert.Equal('B', user.Letters[1]);
-                Assert.Equal(1, user.Numbers.Count);
+                Assert.NotNull(user.Letters);
+                Assert.Collection(
+                    user.Letters,
+                    letter => Assert.Equal('A', letter),
+                    letter => Assert.Equal('B', letter));
                 var numbers = Assert.IsType<ArrayList>(user.Numbers);
+                Assert.Single(numbers);
                 Assert.Equal(1, numbers[0]);
                 Assert.Equal("END", user.End);
 

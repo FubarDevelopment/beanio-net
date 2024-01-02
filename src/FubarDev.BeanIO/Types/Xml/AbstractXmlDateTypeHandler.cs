@@ -51,9 +51,9 @@ namespace BeanIO.Types.Xml
             "zzzzzz",
         };
 
-        private string[] _dateTimeOffsetFormatsNonLenient;
+        private string[]? _dateTimeOffsetFormatsNonLenient;
 
-        private string[] _dateTimeOffsetFormatsLenient;
+        private string[]? _dateTimeOffsetFormatsLenient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AbstractXmlDateTypeHandler"/> class.
@@ -67,7 +67,7 @@ namespace BeanIO.Types.Xml
         /// Gets or sets a value indicating whether time zone information is allowed when parsing field text.
         /// </summary>
         /// <remarks>
-        /// Defaults to <code>true</code>
+        /// Defaults to <c>true</c>.
         /// </remarks>
         public bool IsTimeZoneAllowed { get; set; }
 
@@ -77,17 +77,17 @@ namespace BeanIO.Types.Xml
         public override Type TargetType => typeof(DateTimeOffset);
 
         /// <summary>
-        /// Gets the sequence of default time zone formats
+        /// Gets the sequence of default time zone formats.
         /// </summary>
         protected static IEnumerable<string> DefaultTimeZoneFormats => _defaultTimeZoneFormats;
 
         /// <summary>
-        /// Gets the sequence of default time formats
+        /// Gets the sequence of default time formats.
         /// </summary>
         protected static IEnumerable<string> DefaultTimeFormats => _defaultTimeFormats;
 
         /// <summary>
-        /// Gets the XML data type name
+        /// Gets the XML data type name.
         /// </summary>
         protected abstract string DatatypeQName { get; }
 
@@ -127,9 +127,9 @@ namespace BeanIO.Types.Xml
         /// <summary>
         /// Parses field text into an object.
         /// </summary>
-        /// <param name="text">The field text to parse, which may be null if the field was not passed in the record</param>
-        /// <returns>The parsed object</returns>
-        public override object Parse(string text)
+        /// <param name="text">The field text to parse, which may be null if the field was not passed in the record.</param>
+        /// <returns>The parsed object.</returns>
+        public override object? Parse(string? text)
         {
             if (string.IsNullOrEmpty(text))
                 return null;
@@ -173,9 +173,9 @@ namespace BeanIO.Types.Xml
         /// <summary>
         /// Formats an object into field text.
         /// </summary>
-        /// <param name="value">The value to format, which may be null</param>
-        /// <returns>The formatted field text, or <code>null</code> to indicate the value is not present</returns>
-        public override string Format(object value)
+        /// <param name="value">The value to format, which may be null.</param>
+        /// <returns>The formatted field text, or <see langword="null" /> to indicate the value is not present.</returns>
+        public override string? Format(object? value)
         {
             if (value == null)
                 return null;
@@ -188,7 +188,7 @@ namespace BeanIO.Types.Xml
         /// <summary>
         /// Configures this type handler.
         /// </summary>
-        /// <param name="properties">The properties for customizing the instance</param>
+        /// <param name="properties">The properties for customizing the instance.</param>
         public override void Configure(Properties properties)
         {
             base.Configure(properties);
@@ -198,10 +198,10 @@ namespace BeanIO.Types.Xml
 
         /// <summary>
         /// Returns the time zone offset in minutes for the given date,
-        /// or <code>null</code> if a time zone was not configured.
+        /// or <see langword="null" /> if a time zone was not configured.
         /// </summary>
-        /// <param name="date">the date on which to determine the time zone offset</param>
-        /// <returns>the time zone offset in minutes, or <code>null</code></returns>
+        /// <param name="date">the date on which to determine the time zone offset.</param>
+        /// <returns>the time zone offset in minutes, or <see langword="null" />.</returns>
         protected TimeSpan? GetTimeZoneOffset(ZonedDateTime date)
         {
             if (TimeZone == null)
@@ -212,7 +212,7 @@ namespace BeanIO.Types.Xml
         /// <summary>
         /// Creates a sequence of non-lenient XML date (time) formats.
         /// </summary>
-        /// <returns>a sequence of non-lenient XML date (time) formats</returns>
+        /// <returns>a sequence of non-lenient XML date (time) formats.</returns>
         protected virtual IEnumerable<string> CreateNonLenientFormats()
         {
             foreach (var timeComponent in _defaultTimeFormats)
@@ -237,9 +237,9 @@ namespace BeanIO.Types.Xml
         }
 
         /// <summary>
-        /// Returns a sequence of lenient XML date (time) formats
+        /// Returns a sequence of lenient XML date (time) formats.
         /// </summary>
-        /// <returns>a sequence of lenient XML date (time) formats</returns>
+        /// <returns>a sequence of lenient XML date (time) formats.</returns>
         protected virtual IEnumerable<string> CreateLenientFormats()
         {
             foreach (var timeComponent in _defaultTimeFormats)

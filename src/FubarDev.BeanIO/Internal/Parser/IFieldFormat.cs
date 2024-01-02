@@ -3,8 +3,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using JetBrains.Annotations;
-
 namespace BeanIO.Internal.Parser
 {
     /// <summary>
@@ -13,7 +11,7 @@ namespace BeanIO.Internal.Parser
     internal interface IFieldFormat
     {
         /// <summary>
-        /// Gets the size of the field
+        /// Gets the size of the field.
         /// </summary>
         /// <remarks>
         /// Fixed length formats should return the field length, while other formats should simply return 1.
@@ -21,7 +19,7 @@ namespace BeanIO.Internal.Parser
         int Size { get; }
 
         /// <summary>
-        /// Gets a value indicating whether this field is nillable
+        /// Gets a value indicating whether this field is nillable.
         /// </summary>
         bool IsNillable { get; }
 
@@ -42,14 +40,13 @@ namespace BeanIO.Internal.Parser
         /// stream.</para>
         /// <para>Implementations should also remove any field padding before returning the text.</para>
         /// </remarks>
-        /// <param name="context">the <see cref="UnmarshallingContext"/> holding the record</param>
-        /// <param name="reportErrors">report the errors?</param>
-        /// <returns>the field text or null if the field was not present in the record</returns>
-        [CanBeNull]
-        string Extract(UnmarshallingContext context, bool reportErrors);
+        /// <param name="context">the <see cref="UnmarshallingContext"/> holding the record.</param>
+        /// <param name="reportErrors">report the errors?.</param>
+        /// <returns>the field text or null if the field was not present in the record.</returns>
+        string? Extract(UnmarshallingContext context, bool reportErrors);
 
         /// <summary>
-        /// Inserts a value into a record
+        /// Inserts a value into a record.
         /// </summary>
         /// <remarks>
         /// <para>This method is called before type conversion.</para>
@@ -57,16 +54,16 @@ namespace BeanIO.Internal.Parser
         /// is called. If the method returns true, <see cref="InsertField"/>
         /// is not invoked.</para>
         /// </remarks>
-        /// <param name="context">the <see cref="MarshallingContext"/></param>
-        /// <param name="value">the value to insert into the record</param>
-        /// <returns>true if type conversion is required and <see cref="InsertField"/> must be invoked, false otherwise</returns>
-        bool InsertValue(MarshallingContext context, object value);
+        /// <param name="context">the <see cref="MarshallingContext"/>.</param>
+        /// <param name="value">the value to insert into the record.</param>
+        /// <returns>true if type conversion is required and <see cref="InsertField"/> must be invoked, false otherwise.</returns>
+        bool InsertValue(MarshallingContext context, object? value);
 
         /// <summary>
-        /// Inserts field text into a record
+        /// Inserts field text into a record.
         /// </summary>
-        /// <param name="context">the <see cref="MarshallingContext"/> holding the record</param>
-        /// <param name="text">the field text to insert into the record</param>
-        void InsertField(MarshallingContext context, string text);
+        /// <param name="context">the <see cref="MarshallingContext"/> holding the record.</param>
+        /// <param name="text">the field text to insert into the record.</param>
+        void InsertField(MarshallingContext context, string? text);
     }
 }

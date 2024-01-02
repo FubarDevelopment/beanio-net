@@ -11,7 +11,7 @@ namespace BeanIO.Internal.Config
 {
     /// <summary>
     /// The base class for nodes that that make up a stream configuration-groups, records,
-    /// segments, fields, constants and wrappers
+    /// segments, fields, constants and wrappers.
     /// </summary>
     /// <remarks>
     /// <p>Nodes are organized into a tree structure.</p>
@@ -31,18 +31,18 @@ namespace BeanIO.Internal.Config
     public abstract class ComponentConfig : TreeNode<ComponentConfig>
     {
         /// <summary>
-        /// Gets the component type
+        /// Gets the component type.
         /// </summary>
         /// <returns>
         /// One of <see cref="F:ComponentType.Group"/>,
         /// <see cref="F:ComponentType.Record"/>, <see cref="F:ComponentType.Segment"/>
         /// <see cref="F:ComponentType.Field"/>, <see cref="F:ComponentType.Constant"/>,
         /// <see cref="F:ComponentType.Wrapper"/>, or <see cref="F:ComponentType.Stream"/>
-        /// </returns>
+        /// .</returns>
         public abstract ComponentType ComponentType { get; }
 
         /// <summary>
-        /// Gets or sets the relative position of this component within its parent components
+        /// Gets or sets the relative position of this component within its parent components.
         /// </summary>
         public int? Ordinal { get; set; }
 
@@ -52,33 +52,33 @@ namespace BeanIO.Internal.Config
         public bool? ValidateOnMarshal { get; set; }
 
         /// <summary>
-        /// Gets or sets the XML element or attribute name of this component
+        /// Gets or sets the XML element or attribute name of this component.
         /// </summary>
         /// <remarks>
-        /// If set to <code>null</code> (default), the XML name defaults to the component name
+        /// If set to <see langword="null" /> (default), the XML name defaults to the component name
         /// </remarks>
-        public string XmlName { get; set; }
+        public string? XmlName { get; set; }
 
         /// <summary>
-        /// Gets or sets the XML namespace of this component
+        /// Gets or sets the XML namespace of this component.
         /// </summary>
         /// <remarks>
-        /// If set to <code>null</code> (default), the namespace is inherited from its parent.
+        /// If set to <see langword="null" /> (default), the namespace is inherited from its parent.
         /// </remarks>
-        public string XmlNamespace { get; set; }
+        public string? XmlNamespace { get; set; }
 
         /// <summary>
-        /// Gets or sets the XML prefix for the namespace assigned to this component
+        /// Gets or sets the XML prefix for the namespace assigned to this component.
         /// </summary>
         /// <remarks>
-        /// If set to <code>null</code> and a namespace is set, the namespace will replace the
+        /// If set to <see langword="null" /> and a namespace is set, the namespace will replace the
         /// default namespace during marshaling.
         /// A prefix should not be set if a namespace is not set.
         /// </remarks>
-        public string XmlPrefix { get; set; }
+        public string? XmlPrefix { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this component is namespace aware
+        /// Gets or sets a value indicating whether this component is namespace aware.
         /// </summary>
         public bool IsXmlNamespaceAware { get; set; }
     }

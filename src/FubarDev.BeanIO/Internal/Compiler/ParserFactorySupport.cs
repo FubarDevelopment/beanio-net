@@ -21,12 +21,11 @@ using BeanIO.Internal.Parser.Message;
 using BeanIO.Internal.Util;
 using BeanIO.Stream;
 using BeanIO.Types;
-using JetBrains.Annotations;
 
 namespace BeanIO.Internal.Compiler
 {
     /// <summary>
-    /// Base <see cref="IParserFactory"/> implementation
+    /// Base <see cref="IParserFactory"/> implementation.
     /// </summary>
     /// <remarks>
     /// A <see cref="StreamConfig"/> is "compiled" into a <see cref="Parser.Stream"/> in two passes.  First, a
@@ -43,28 +42,34 @@ namespace BeanIO.Internal.Compiler
 
         private static readonly bool _allowProtectedPropertyAccess = Settings.Instance.GetBoolean(Settings.ALLOW_PROTECTED_PROPERTY_ACCESS);
 
-        private static readonly string _propertyAccessorFactory = Settings.Instance.GetProperty(Settings.PROPERTY_ACCESSOR_METHOD);
+        private static readonly string? _propertyAccessorFactory = Settings.Instance.GetProperty(Settings.PROPERTY_ACCESSOR_METHOD);
 
         private static readonly Component _unbound = new UnboundComponent();
+
+        private static IPropertyAccessorFactory? _defaultAccessorFactory;
 
         private readonly Stack<Component> _parserStack = new Stack<Component>();
 
         private readonly Stack<Component> _propertyStack = new Stack<Component>();
 
-        private IPropertyAccessorFactory _accessorFactory;
+        private Parser.Stream? _stream;
 
-        private Parser.Stream _stream;
-
-        private string _streamFormat;
+        private string? _streamFormat;
 
         private bool _readEnabled = true;
 
         private bool _writeEnabled = true;
 
+        public static IPropertyAccessorFactory DefaultAccessorFactory
+        {
+            get => _defaultAccessorFactory ??= CreateAccessorFactory(_propertyAccessorFactory);
+            set => _defaultAccessorFactory = value;
+        }
+
         /// <summary>
-        /// Gets or sets the type handler factory to use for resolving type handlers
+        /// Gets or sets the type handler factory to use for resolving type handlers.
         /// </summary>
-        public TypeHandlerFactory TypeHandlerFactory { get; set; }
+        public required TypeHandlerFactory TypeHandlerFactory { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether the stream definition must support reading an input stream.
@@ -82,11 +87,26 @@ namespace BeanIO.Internal.Compiler
         /// </summary>
         protected bool IsBound => _propertyStack.Count != 0 && _propertyStack.Peek() != _unbound;
 
+        public static IPropertyAccessorFactory CreateAccessorFactory(string? propertyAccessorFactory)
+        {
+            if (propertyAccessorFactory == "asm")
+            {
+                return new CompiledExpressionAccessorFactory();
+            }
+
+            if (string.IsNullOrEmpty(propertyAccessorFactory) || propertyAccessorFactory == "reflection")
+            {
+                return new ReflectionAccessorFactory();
+            }
+
+            return (IPropertyAccessorFactory)BeanUtil.CreateBean(propertyAccessorFactory!);
+        }
+
         /// <summary>
-        /// Creates a new stream parser from a given stream configuration
+        /// Creates a new stream parser from a given stream configuration.
         /// </summary>
-        /// <param name="config">the stream configuration</param>
-        /// <returns>the created <see cref="Parser.Stream"/></returns>
+        /// <param name="config">the stream configuration.</param>
+        /// <returns>the created <see cref="Parser.Stream"/>.</returns>
         public virtual Parser.Stream CreateStream(StreamConfig config)
         {
             if (config.Name == null)
@@ -95,19 +115,6 @@ namespace BeanIO.Internal.Compiler
             // pre-process configuration settings to set defaults and validate as much as possible
             CreatePreprocessor(config).Process(config);
 
-            if (_propertyAccessorFactory == "asm")
-            {
-                _accessorFactory = new CompiledExpressionAccessorFactory();
-            }
-            else if (string.IsNullOrEmpty(_propertyAccessorFactory) || _propertyAccessorFactory == "reflection")
-            {
-                _accessorFactory = new ReflectionAccessorFactory();
-            }
-            else
-            {
-                _accessorFactory = (IPropertyAccessorFactory)BeanUtil.CreateBean(_propertyAccessorFactory);
-            }
-
             try
             {
                 Process(config);
@@ -115,6 +122,11 @@ namespace BeanIO.Internal.Compiler
             catch (Exception ex) when ((ex as BeanIOConfigurationException) == null)
             {
                 throw new BeanIOConfigurationException($"Failed to compile stream '{config.Name}'", ex);
+            }
+
+            if (_stream == null)
+            {
+                throw new InvalidOperationException($"Failed to create stream for {config}");
             }
 
             // calculate the heap size
@@ -127,16 +139,16 @@ namespace BeanIO.Internal.Compiler
         /// Creates the default <see cref="IRecordParserFactory"/>.
         /// </summary>
         /// <returns>
-        /// The new <see cref="IRecordParserFactory"/>
+        /// The new <see cref="IRecordParserFactory"/>.
         /// </returns>
         protected abstract IRecordParserFactory CreateDefaultRecordParserFactory();
 
         /// <summary>
-        /// Creates a stream configuration pre-processor
+        /// Creates a stream configuration pre-processor.
         /// </summary>
-        /// <remarks>May be overridden to return a format specific version</remarks>
-        /// <param name="config">the stream configuration to pre-process</param>
-        /// <returns>the new <see cref="Preprocessor"/></returns>
+        /// <remarks>May be overridden to return a format specific version.</remarks>
+        /// <param name="config">the stream configuration to pre-process.</param>
+        /// <returns>the new <see cref="Preprocessor"/>.</returns>
         protected virtual Preprocessor CreatePreprocessor(StreamConfig config)
         {
             return new Preprocessor(config);
@@ -144,9 +156,9 @@ namespace BeanIO.Internal.Compiler
 
         protected abstract IStreamFormat CreateStreamFormat(StreamConfig config);
 
-        protected abstract IRecordFormat CreateRecordFormat(RecordConfig config);
+        protected abstract IRecordFormat? CreateRecordFormat(RecordConfig config);
 
-        protected abstract IFieldFormat CreateFieldFormat(FieldConfig config, Type type);
+        protected abstract IFieldFormat CreateFieldFormat(FieldConfig config, Type? type);
 
         protected virtual void PushParser(Component component)
         {
@@ -184,7 +196,7 @@ namespace BeanIO.Internal.Compiler
             _propertyStack.Push(component);
         }
 
-        protected virtual IProperty PopProperty()
+        protected virtual IProperty? PopProperty()
         {
             var c = _propertyStack.Pop();
             if (c == _unbound)
@@ -207,10 +219,14 @@ namespace BeanIO.Internal.Compiler
         /// Updates a <see cref="Bean"/>'s constructor if one or more of its properties are
         /// constructor arguments.
         /// </summary>
-        /// <param name="bean">the <see cref="Bean"/> to check</param>
+        /// <param name="bean">the <see cref="Bean"/> to check.</param>
         protected virtual void UpdateConstructor(Bean bean)
         {
-            var args = bean.Children.Cast<IProperty>().Where(x => x.Accessor.IsConstructorArgument).OrderBy(x => x.Accessor.ConstructorArgumentIndex).ToList();
+            var args = bean.Children
+                .Cast<IProperty>()
+                .Where(x => x.Accessor is { IsConstructorArgument: true })
+                .OrderBy(x => x.Accessor!.ConstructorArgumentIndex)
+                .ToList();
 
             // return if no constructor arguments were found
             if (args.Count == 0)
@@ -219,13 +235,15 @@ namespace BeanIO.Internal.Compiler
             var count = args.Count;
 
             // verify the number of constructor arguments matches the provided constructor index
-            if (count != args[count - 1].Accessor.ConstructorArgumentIndex + 1)
+            if (count != args[count - 1].Accessor!.ConstructorArgumentIndex + 1)
                 throw new BeanIOConfigurationException($"Missing constructor argument for bean class '{bean.GetType().GetAssemblyQualifiedName()}'");
 
             // find a suitable constructor
-            ConstructorInfo constructor = null;
-            var beanType = bean.PropertyType;
-            foreach (var testConstructor in beanType.GetTypeInfo().DeclaredConstructors.Where(x => x.GetParameters().Length == count))
+            ConstructorInfo? constructor = null;
+            var beanType =
+                bean.PropertyType
+                ?? throw new InvalidOperationException($"No property type given for bean {bean.Name}");
+            foreach (var testConstructor in beanType.GetConstructors().Where(x => x.GetParameters().Length == count))
             {
                 var argsMatching = testConstructor.GetParameters().Select((p, i) => p.ParameterType.IsAssignableFromThis(args[i].PropertyType)).All(x => x);
                 if (argsMatching && (testConstructor.IsPublic || _allowProtectedPropertyAccess))
@@ -246,30 +264,29 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Initializes a stream configuration before its children have been processed
+        /// Initializes a stream configuration before its children have been processed.
         /// </summary>
-        /// <param name="config">the stream configuration to process</param>
+        /// <param name="config">the stream configuration to process.</param>
         protected override void InitializeStream(StreamConfig config)
         {
-            _streamFormat = config.Format;
-            var format = CreateStreamFormat(config);
-            _stream = new Parser.Stream(format);
+            _streamFormat = config.Format ?? throw new InvalidOperationException("Stream format not set");
 
             // set the stream mode, defaults to read/write, the stream mode may be used
             // to enforce or relax validation rules specific to marshalling or unmarshalling
             var mode = config.Mode;
-            if (mode == null || mode == AccessMode.ReadWrite)
+            AccessMode streamMode;
+            if (mode is null or AccessMode.ReadWrite)
             {
-                _stream.Mode = AccessMode.ReadWrite;
+                streamMode = AccessMode.ReadWrite;
             }
             else if (mode == AccessMode.Read)
             {
-                _stream.Mode = AccessMode.Read;
+                streamMode = AccessMode.Read;
                 _writeEnabled = false;
             }
             else if (mode == AccessMode.Write)
             {
-                _stream.Mode = AccessMode.Write;
+                streamMode = AccessMode.Write;
                 _readEnabled = false;
             }
             else
@@ -278,38 +295,49 @@ namespace BeanIO.Internal.Compiler
             }
 
             var messageFactory = new ResourceBundleMessageFactory();
-            var bundleName = Settings.Instance.GetProperty($"org.beanio.{config.Format}.messages");
+            var bundleName = Settings.Instance.GetProperty($"org.beanio.{_streamFormat}.messages");
             if (bundleName != null)
             {
-                messageFactory.DefaultResourceBundle = LoadResource(bundleName, config.Format);
+                messageFactory.DefaultResourceBundle = LoadResource(bundleName, _streamFormat);
             }
 
             // load the stream resource bundle
             bundleName = config.ResourceBundle;
             if (bundleName != null)
             {
-                messageFactory.ResourceBundle = LoadResource(bundleName, config.Format);
+                messageFactory.ResourceBundle = LoadResource(bundleName, _streamFormat);
             }
 
-            _stream.MessageFactory = messageFactory;
-            _stream.IgnoreUnidentifiedRecords = config.IgnoreUnidentifiedRecords;
+            var format = CreateStreamFormat(config);
+            _stream = new Parser.Stream(format)
+            {
+                Mode = streamMode,
+                MessageFactory = messageFactory,
+                IgnoreUnidentifiedRecords = config.IgnoreUnidentifiedRecords,
+            };
+
             InitializeGroup(config);
         }
 
         /// <summary>
-        /// Finalizes a stream configuration after its children have been processed
+        /// Finalizes a stream configuration after its children have been processed.
         /// </summary>
-        /// <param name="config">the stream configuration to finalize</param>
+        /// <param name="config">the stream configuration to finalize.</param>
         protected override void FinalizeStream(StreamConfig config)
         {
+            if (_stream == null)
+            {
+                throw new InvalidOperationException($"Stream not opened for {config}");
+            }
+
             _stream.Layout = (ISelector)_parserStack.Last();
             FinalizeGroup(config);
         }
 
         /// <summary>
-        /// Initializes a group configuration before its children have been processed
+        /// Initializes a group configuration before its children have been processed.
         /// </summary>
-        /// <param name="config">the group configuration to process</param>
+        /// <param name="config">the group configuration to process.</param>
         protected override void InitializeGroup(GroupConfig config)
         {
             if (config.Children.Count == 0)
@@ -325,7 +353,7 @@ namespace BeanIO.Internal.Compiler
             InitializeGroupMain(config, bean);
         }
 
-        protected virtual void InitializeGroupIteration(GroupConfig config, IProperty property)
+        protected virtual void InitializeGroupIteration(GroupConfig config, IProperty? property)
         {
             // wrap the segment in an iteration
             var aggregation = CreateRecordAggregation(config, property);
@@ -334,7 +362,7 @@ namespace BeanIO.Internal.Compiler
                 PushProperty(aggregation);
         }
 
-        protected virtual void InitializeGroupMain(GroupConfig config, IProperty property)
+        protected virtual void InitializeGroupMain(GroupConfig config, IProperty? property)
         {
             var group = new Group()
                 {
@@ -350,25 +378,32 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Finalizes a group configuration after its children have been processed
+        /// Finalizes a group configuration after its children have been processed.
         /// </summary>
-        /// <param name="config">the group configuration to finalize</param>
+        /// <param name="config">the group configuration to finalize.</param>
         protected override void FinalizeGroup(GroupConfig config)
         {
             var property = FinalizeGroupMain(config);
             if (config.IsBound && config.IsRepeating)
-                FinalizeGroupIteration(config, property);
+            {
+                FinalizeGroupIteration(
+                    config,
+                    property ?? throw new InvalidOperationException($"No property found for {config}"));
+            }
         }
 
-        protected virtual IProperty FinalizeGroupMain(GroupConfig config)
+        protected virtual IProperty? FinalizeGroupMain(GroupConfig config)
         {
-            IProperty property = null;
+            IProperty? property = null;
 
             // pop the group bean from the property stack
             if (config.Type != null)
             {
                 property = PopProperty();
-                ReflectPropertyType(config, property);
+                if (property != null)
+                {
+                    ReflectPropertyType(config, property);
+                }
             }
 
             // pop the record from the parser stack
@@ -394,8 +429,8 @@ namespace BeanIO.Internal.Compiler
         /// Invoked by <see cref="FinalizeGroupMain"/> to allow subclasses to perform
         /// further finalization of the created <see cref="Group"/>.
         /// </summary>
-        /// <param name="config">the group configuration</param>
-        /// <param name="group">the <see cref="Group"/> being finalized</param>
+        /// <param name="config">the group configuration.</param>
+        /// <param name="group">the <see cref="Group"/> being finalized.</param>
         protected virtual void FinalizeGroup(GroupConfig config, Group group)
         {
             var target = config.Target;
@@ -404,9 +439,9 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Initializes a record configuration before its children have been processed
+        /// Initializes a record configuration before its children have been processed.
         /// </summary>
-        /// <param name="config">the record configuration to process</param>
+        /// <param name="config">the record configuration to process.</param>
         protected override void InitializeRecord(RecordConfig config)
         {
             // determine and validate the bean class
@@ -421,7 +456,7 @@ namespace BeanIO.Internal.Compiler
             InitializeRecordMain(config, bean);
         }
 
-        protected virtual void InitializeRecordIteration(RecordConfig config, IProperty property)
+        protected virtual void InitializeRecordIteration(RecordConfig config, IProperty? property)
         {
             // wrap the segment in an iteration
             var collection = CreateRecordAggregation(config, property);
@@ -433,7 +468,7 @@ namespace BeanIO.Internal.Compiler
             }
         }
 
-        protected virtual void InitializeRecordMain(RecordConfig config, IProperty property)
+        protected virtual void InitializeRecordMain(RecordConfig config, IProperty? property)
         {
             var record = new Record()
                 {
@@ -463,21 +498,23 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Finalizes a record configuration after its children have been processed
+        /// Finalizes a record configuration after its children have been processed.
         /// </summary>
-        /// <param name="config">the record configuration to finalize</param>
+        /// <param name="config">the record configuration to finalize.</param>
         protected override void FinalizeRecord(RecordConfig config)
         {
             var property = FinalizeRecordMain(config);
             if (config.IsBound && config.IsRepeating)
             {
-                FinalizeRecordIteration(config, property);
+                FinalizeRecordIteration(
+                    config,
+                    property ?? throw new InvalidOperationException($"No property found for {config}"));
             }
         }
 
-        protected virtual IProperty FinalizeRecordMain(RecordConfig config)
+        protected virtual IProperty? FinalizeRecordMain(RecordConfig config)
         {
-            IProperty property = null;
+            IProperty? property = null;
             var record = (Record)PopParser();
 
             // pop the record bean from the property stack
@@ -525,26 +562,31 @@ namespace BeanIO.Internal.Compiler
             if (key != null)
             {
                 // aggregations only have a single descendant so calling getFirst() is safe
-                Component c = FindDescendant("key", aggregation.First, key);
+                var c = FindDescendant("key", aggregation.First, key);
                 if (c == null)
                     throw new BeanIOConfigurationException($"Key '{key}' not found");
 
-                IProperty keyProperty = c as IProperty;
+                IProperty? keyProperty = c as IProperty;
                 if (keyProperty?.PropertyType == null)
                     throw new BeanIOConfigurationException($"Key '{key}' is not a property");
 
                 Debug.Assert(recordMap != null, "recordMap != null");
+                if (recordMap == null)
+                {
+                    throw new InvalidOperationException($"No record map configured for {config}, Key={key}");
+                }
+
                 recordMap.KeyProperty = keyProperty;
             }
 
             if (recordMap != null)
             {
-                var propertyTypeInfo = recordMap.PropertyType.GetTypeInfo();
-                if (propertyTypeInfo.IsGenericTypeDefinition)
+                var propertyTypeInfo = recordMap.PropertyType;
+                if (propertyTypeInfo != null && propertyTypeInfo.IsGenericTypeDefinition)
                 {
-                    var keyType = recordMap.KeyProperty != null ? recordMap.KeyProperty.PropertyType : typeof(object);
-                    var valueType = recordMap.ValueProperty != null ? recordMap.ValueProperty.PropertyType : typeof(object);
-                    recordMap.PropertyType = recordMap.PropertyType.MakeGenericType(keyType, valueType);
+                    var keyType = recordMap.KeyProperty?.PropertyType ?? typeof(object);
+                    var valueType = recordMap.ValueProperty?.PropertyType ?? typeof(object);
+                    recordMap.PropertyType = recordMap.PropertyType?.MakeGenericType(keyType, valueType);
                 }
             }
         }
@@ -553,16 +595,16 @@ namespace BeanIO.Internal.Compiler
         /// Invoked by <see cref="FinalizeRecord(RecordConfig)"/> to allow subclasses to perform
         /// further finalization of the created <see cref="Record"/>.
         /// </summary>
-        /// <param name="config">the record configuration</param>
-        /// <param name="record">the <see cref="Record"/> being finalized</param>
+        /// <param name="config">the record configuration.</param>
+        /// <param name="record">the <see cref="Record"/> being finalized.</param>
         protected virtual void FinalizeRecord(RecordConfig config, Record record)
         {
         }
 
         /// <summary>
-        /// Initializes a segment configuration before its children have been processed
+        /// Initializes a segment configuration before its children have been processed.
         /// </summary>
-        /// <param name="config">the segment configuration to process</param>
+        /// <param name="config">the segment configuration to process.</param>
         protected override void InitializeSegment(SegmentConfig config)
         {
             var bean = CreateProperty(config);
@@ -574,9 +616,9 @@ namespace BeanIO.Internal.Compiler
         /// <summary>
         /// Called by <see cref="InitializeSegment"/> to initialize segment iteration.
         /// </summary>
-        /// <param name="config">the segment configuration</param>
-        /// <param name="property">the <see cref="IProperty"/> bound to the segment, or null if no bean was bound</param>
-        protected virtual void InitializeSegmentIteration(SegmentConfig config, IProperty property)
+        /// <param name="config">the segment configuration.</param>
+        /// <param name="property">the <see cref="IProperty"/> bound to the segment, or null if no bean was bound.</param>
+        protected virtual void InitializeSegmentIteration(SegmentConfig config, IProperty? property)
         {
             // wrap the segment in an aggregation component
             var aggregation = CreateAggregation(config, property);
@@ -595,9 +637,9 @@ namespace BeanIO.Internal.Compiler
         /// <summary>
         /// Called by <see cref="InitializeSegment"/> to initialize the segment.
         /// </summary>
-        /// <param name="config">the segment configuration</param>
-        /// <param name="property">the property bound to the segment, or null if no property was bound</param>
-        protected virtual void InitializeSegmentMain(SegmentConfig config, IProperty property)
+        /// <param name="config">the segment configuration.</param>
+        /// <param name="property">the property bound to the segment, or null if no property was bound.</param>
+        protected virtual void InitializeSegmentMain(SegmentConfig config, IProperty? property)
         {
             var name = config.Name;
             if (name == null)
@@ -634,9 +676,9 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Finalizes a segment configuration after its children have been processed
+        /// Finalizes a segment configuration after its children have been processed.
         /// </summary>
-        /// <param name="config">the segment configuration to finalize</param>
+        /// <param name="config">the segment configuration to finalize.</param>
         protected override void FinalizeSegment(SegmentConfig config)
         {
             var property = FinalizeSegmentMain(config);
@@ -647,14 +689,19 @@ namespace BeanIO.Internal.Compiler
         /// <summary>
         /// Called by <see cref="FinalizeSegment(SegmentConfig)"/> to finalize segment iteration.
         /// </summary>
-        /// <param name="config">the segment configuration</param>
-        /// <param name="property">the property bound to the segment, or null if no property was bound</param>
-        protected virtual void FinalizeSegmentIteration(SegmentConfig config, IProperty property)
+        /// <param name="config">the segment configuration.</param>
+        /// <param name="property">the property bound to the segment, or null if no property was bound.</param>
+        protected virtual void FinalizeSegmentIteration(SegmentConfig config, IProperty? property)
         {
             var aggregation = (Aggregation)PopParser();
             var mapParser = aggregation as MapParser;
             if (config.Type != null || config.Target != null)
             {
+                if (property == null)
+                {
+                    throw new ArgumentNullException(nameof(property));
+                }
+
                 PopProperty(); // pop the iteration
                 ReflectAggregationType(config, aggregation, property);
             }
@@ -664,7 +711,7 @@ namespace BeanIO.Internal.Compiler
             if (key != null)
             {
                 // aggregations only have a single descendant so calling getFirst() is safe
-                Component c = FindDescendant("key", aggregation.First, key);
+                var c = FindDescendant("key", aggregation.First, key);
                 if (c == null)
                     throw new BeanIOConfigurationException($"Key '{key}' not found");
 
@@ -672,18 +719,22 @@ namespace BeanIO.Internal.Compiler
                 if (keyProperty?.PropertyType == null)
                     throw new BeanIOConfigurationException($"Key '{key}' is not a property");
 
-                Debug.Assert(mapParser != null, "mapParser != null");
+                if (mapParser == null)
+                {
+                    throw new BeanIOConfigurationException($"No map parser given, but key '{key}' specified");
+                }
+
                 mapParser.KeyProperty = keyProperty;
             }
 
             if (mapParser != null)
             {
-                var propertyTypeInfo = mapParser.PropertyType.GetTypeInfo();
-                if (propertyTypeInfo.IsGenericTypeDefinition)
+                var propertyTypeInfo = mapParser.PropertyType;
+                if (propertyTypeInfo != null && propertyTypeInfo.IsGenericTypeDefinition)
                 {
-                    var keyType = mapParser.KeyProperty != null ? mapParser.KeyProperty.PropertyType : typeof(object);
-                    var valueType = mapParser.ValueProperty != null ? mapParser.ValueProperty.PropertyType : typeof(object);
-                    mapParser.PropertyType = mapParser.PropertyType.MakeGenericType(keyType, valueType);
+                    var keyType = mapParser.KeyProperty?.PropertyType ?? typeof(object);
+                    var valueType = mapParser.ValueProperty?.PropertyType ?? typeof(object);
+                    mapParser.PropertyType = propertyTypeInfo.MakeGenericType(keyType, valueType);
                 }
             }
         }
@@ -691,12 +742,12 @@ namespace BeanIO.Internal.Compiler
         /// <summary>
         /// Called by <see cref="FinalizeSegment(SegmentConfig)"/> to finalize the segment component.
         /// </summary>
-        /// <param name="config">the segment configuration</param>
-        /// <returns>the target property</returns>
-        protected virtual IProperty FinalizeSegmentMain(SegmentConfig config)
+        /// <param name="config">the segment configuration.</param>
+        /// <returns>the target property.</returns>
+        protected virtual IProperty? FinalizeSegmentMain(SegmentConfig config)
         {
-            IProperty property = null;
-            Segment segment = null;
+            IProperty? property = null;
+            Segment? segment = null;
 
             if (IsSegmentRequired(config))
             {
@@ -711,7 +762,11 @@ namespace BeanIO.Internal.Compiler
                 var target = config.Target;
                 if (target != null)
                 {
-                    Debug.Assert(segment != null, "segment != null");
+                    if (segment == null)
+                    {
+                        throw new InvalidOperationException($"No segment found for target {target}");
+                    }
+
                     property = FindTarget(segment, target);
                     PushProperty((Component)property);
                     PopProperty();
@@ -729,16 +784,16 @@ namespace BeanIO.Internal.Compiler
         /// Invoked by <see cref="FinalizeSegmentMain"/> to allow subclasses to perform
         /// further finalization of the created <see cref="Segment"/>.
         /// </summary>
-        /// <param name="config">the segment configuration</param>
-        /// <param name="segment">the new <see cref="Segment"/></param>
+        /// <param name="config">the segment configuration.</param>
+        /// <param name="segment">the new <see cref="Segment"/>.</param>
         protected virtual void FinalizeSegment(SegmentConfig config, Segment segment)
         {
         }
 
         /// <summary>
-        /// Processes a field configuration
+        /// Processes a field configuration.
         /// </summary>
-        /// <param name="config">the field configuration to process</param>
+        /// <param name="config">the field configuration to process.</param>
         protected override void HandleField(FieldConfig config)
         {
             if (config.Name == null)
@@ -784,7 +839,7 @@ namespace BeanIO.Internal.Compiler
             // whether or not this property is bound to a bean property, Collections targets are not
             var bind = IsBound && (config.IsBound && !config.IsRepeating);
 
-            Aggregation aggregation = null;
+            Aggregation? aggregation = null;
             if (config.IsRepeating)
             {
                 aggregation = CreateAggregation(config, field);
@@ -834,9 +889,9 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Processes a constant configuration
+        /// Processes a constant configuration.
         /// </summary>
-        /// <param name="config">the constant configuration to process</param>
+        /// <param name="config">the constant configuration to process.</param>
         protected override void HandleConstant(ConstantConfig config)
         {
             var constant = new Constant()
@@ -848,7 +903,7 @@ namespace BeanIO.Internal.Compiler
             // determine the property type
             if (config.Type != null)
             {
-                Type propertyType = config.Type.ToType();
+                var propertyType = config.Type.ToType();
                 if (propertyType == null)
                     throw new BeanIOConfigurationException($"Invalid type or type alias '{config.Type}'");
             }
@@ -877,17 +932,17 @@ namespace BeanIO.Internal.Compiler
         /// <summary>
         /// Creates an iteration for a repeating segment or field.
         /// </summary>
-        /// <param name="config">the property configuration</param>
-        /// <param name="property">the property component, may be null if the iteration is not a property of its parent bean</param>
-        /// <returns>the iteration component</returns>
-        protected virtual Aggregation CreateAggregation(PropertyConfig config, IProperty property)
+        /// <param name="config">the property configuration.</param>
+        /// <param name="property">the property component, may be null if the iteration is not a property of its parent bean.</param>
+        /// <returns>the iteration component.</returns>
+        protected virtual Aggregation CreateAggregation(PropertyConfig config, IProperty? property)
         {
             var isMap = false;
 
             var collection = config.Collection;
 
             // determine the collection type
-            Type collectionType = null;
+            Type? collectionType = null;
             if (collection != null)
             {
                 collectionType = collection.ToAggregationType(property);
@@ -909,10 +964,13 @@ namespace BeanIO.Internal.Compiler
 
                 collectionType = GetConcreteAggregationType(collectionType);
 
-                if (config.IsNillable && collectionType.IsConstructedGenericType && !collectionType.IsMap())
+                if (config.IsNillable
+                    && collectionType != null
+                    && collectionType.IsConstructedGenericType
+                    && !collectionType.IsMap())
                 {
                     var elementType = collectionType.GenericTypeArguments[0];
-                    if (elementType.GetTypeInfo().IsPrimitive)
+                    if (elementType.IsPrimitive)
                     {
                         elementType = typeof(Nullable<>).MakeGenericType(elementType);
                         collectionType = collectionType.GetGenericTypeDefinition().MakeGenericType(elementType);
@@ -924,7 +982,7 @@ namespace BeanIO.Internal.Compiler
             Aggregation aggregation;
             if (collectionType.IsArray())
             {
-                var elementType = property.PropertyType ?? typeof(object);
+                var elementType = property?.PropertyType ?? typeof(object);
                 var collParser = new ArrayParser
                     {
                         ElementType = elementType
@@ -993,13 +1051,8 @@ namespace BeanIO.Internal.Compiler
                             property.PropertyType = arrayType;
                         }
                     }
-                    else if (arrayType == null)
-                    {
-                        // default to String
-                        arrayType = typeof(string);
-                    }
 
-                    collectionParser.ElementType = arrayType;
+                    collectionParser.ElementType = arrayType ?? typeof(string);
                 }
                 else
                 {
@@ -1012,13 +1065,13 @@ namespace BeanIO.Internal.Compiler
             }
         }
 
-        protected virtual RecordAggregation CreateRecordAggregation(PropertyConfig config, IProperty property)
+        protected virtual RecordAggregation CreateRecordAggregation(PropertyConfig config, IProperty? property)
         {
             var isMap = false;
             var collection = config.Collection;
 
             // determine the collection type
-            Type collectionType = null;
+            Type? collectionType = null;
             if (collection != null)
             {
                 collectionType = collection.ToAggregationType(property);
@@ -1094,7 +1147,7 @@ namespace BeanIO.Internal.Compiler
             }
         }
 
-        protected virtual Type ReflectCollectionType(IProperty iteration, IProperty property, string getter, string setter)
+        protected virtual Type? ReflectCollectionType(IProperty iteration, IProperty property, string? getter, string? setter)
         {
             if (!IsBound)
                 return null;
@@ -1110,18 +1163,20 @@ namespace BeanIO.Internal.Compiler
                 case PropertyType.AggregationMap:
                     return null;
                 case PropertyType.Map:
-                    iteration.Accessor = new MapAccessor(iteration.Name);
+                    if (string.IsNullOrEmpty(iteration.Name))
+                        throw new BeanIOConfigurationException("Missing map key name");
+                    iteration.Accessor = new MapAccessor(iteration.Name!);
                     return null;
             }
 
             // parse the constructor argument index from the 'setter'
-            int? construtorArgumentIndex = null;
+            int? constructorArgumentIndex = null;
             if (setter != null && setter.StartsWith(CONSTRUCTOR_PREFIX))
             {
                 try
                 {
-                    construtorArgumentIndex = int.Parse(setter.Substring(1)) - 1;
-                    if (construtorArgumentIndex < 0)
+                    constructorArgumentIndex = int.Parse(setter.Substring(1)) - 1;
+                    if (constructorArgumentIndex < 0)
                         throw new BeanIOConfigurationException("Invalid setter method");
                 }
                 catch (FormatException ex)
@@ -1133,14 +1188,14 @@ namespace BeanIO.Internal.Compiler
             }
 
             // set the property descriptor on the field
-            var descriptor = GetPropertyDescriptor(iteration.Name, getter, setter, (construtorArgumentIndex ?? -1) >= 0);
+            var propertyName = iteration.Name ?? throw new BeanIOConfigurationException("Property name not configured");
+            var descriptor = GetPropertyDescriptor(propertyName, getter, setter, (constructorArgumentIndex ?? -1) >= 0);
             var reflectedType = descriptor.PropertyType;
 
-            iteration.Accessor = _accessorFactory.CreatePropertyAccessor(parent.PropertyType, descriptor, construtorArgumentIndex);
-
-            // reflectedType may be null for read-only streams using a constructor argument
-            if (reflectedType == null)
-                return null;
+            iteration.Accessor = DefaultAccessorFactory.CreatePropertyAccessor(
+                parent.PropertyType ?? throw new BeanIOException($"No property type given for {parent}."),
+                descriptor,
+                constructorArgumentIndex);
 
             var type = property.PropertyType;
             if (iteration.PropertyType.IsArray())
@@ -1168,7 +1223,7 @@ namespace BeanIO.Internal.Compiler
                 {
                     if (reflectedType.IsConstructedGenericType)
                     {
-                        if (iteration.PropertyType.IsConstructedGenericType)
+                        if (iteration.PropertyType is { IsConstructedGenericType: true })
                         {
                             var propType = iteration.PropertyType;
                             propType = propType.GetGenericTypeDefinition();
@@ -1176,7 +1231,8 @@ namespace BeanIO.Internal.Compiler
                             iteration.PropertyType = propType;
                         }
                     }
-                    else if (reflectedType.IsInstanceOf(typeof(IList)) && iteration.PropertyType.IsList())
+                    else if (reflectedType.IsInstanceOf(typeof(IList))
+                             && iteration.PropertyType.IsList())
                     {
                         iteration.PropertyType = reflectedType;
                     }
@@ -1205,8 +1261,8 @@ namespace BeanIO.Internal.Compiler
         /// <summary>
         /// Sets the property type and accessor using bean introspection.
         /// </summary>
-        /// <param name="config">the property configuration</param>
-        /// <param name="property">the property</param>
+        /// <param name="config">the property configuration.</param>
+        /// <param name="property">the property.</param>
         protected virtual void ReflectPropertyType(PropertyConfig config, IProperty property)
         {
             // check for constructor arguments
@@ -1227,7 +1283,8 @@ namespace BeanIO.Internal.Compiler
                 case PropertyType.AggregationMap:
                     return;
                 case PropertyType.Map:
-                    property.Accessor = new MapAccessor(config.Name);
+                    property.Accessor = new MapAccessor(
+                        config.Name ?? throw new ArgumentNullException(nameof(config.Name)));
                     return;
             }
 
@@ -1253,10 +1310,17 @@ namespace BeanIO.Internal.Compiler
             }
 
             // set the property descriptor on the field
-            var descriptor = GetPropertyDescriptor(config.Name, getter, setter, (construtorArgumentIndex ?? -1) >= 0);
+            var descriptor = GetPropertyDescriptor(
+                config.Name ?? throw new BeanIOConfigurationException("Missing property name"),
+                getter,
+                setter,
+                (construtorArgumentIndex ?? -1) >= 0);
             var reflectedType = descriptor.PropertyType;
 
-            property.Accessor = _accessorFactory.CreatePropertyAccessor(parent.PropertyType, descriptor, construtorArgumentIndex);
+            property.Accessor = DefaultAccessorFactory.CreatePropertyAccessor(
+                parent.PropertyType ?? throw new BeanIOException($"No property type given for {parent}."),
+                descriptor,
+                construtorArgumentIndex);
 
             // validate the reflected type
             var type = property.PropertyType;
@@ -1264,7 +1328,7 @@ namespace BeanIO.Internal.Compiler
             {
                 property.PropertyType = reflectedType;
             }
-            else if (reflectedType != null)
+            else
             {
                 if (!reflectedType.IsAssignableFromThis(type))
                 {
@@ -1272,11 +1336,11 @@ namespace BeanIO.Internal.Compiler
                     throw new BeanIOConfigurationException($"Property type '{config.Type}' is not assignable to bean property type '{reflectedType.GetAssemblyQualifiedName()}'");
                 }
 
-                if (reflectedType.GetTypeInfo().IsPrimitive)
+                if (reflectedType.IsPrimitive)
                 {
                     property.PropertyType = reflectedType;
                 }
-                else if (!type.IsConstructedGenericType && type.GetTypeInfo().IsGenericType)
+                else if (!type.IsConstructedGenericType && type.IsGenericType)
                 {
                     if (reflectedType.IsConstructedGenericType)
                     {
@@ -1287,12 +1351,12 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Creates a property for holding other properties
+        /// Creates a property for holding other properties.
         /// </summary>
-        /// <param name="config">the <see cref="PropertyConfig"/></param>
+        /// <param name="config">the <see cref="PropertyConfig"/>.</param>
         /// <returns>the created <see cref="IProperty"/> or null if the
-        /// <see cref="PropertyConfig"/> was not bound to a bean class</returns>
-        protected virtual IProperty CreateProperty(PropertyConfig config)
+        /// <see cref="PropertyConfig"/> was not bound to a bean class.</returns>
+        protected virtual IProperty? CreateProperty(PropertyConfig config)
         {
             var beanClass = GetBeanClass(config);
             if (beanClass == null)
@@ -1336,20 +1400,20 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Returns the bean class for a segment configuration
+        /// Returns the bean class for a segment configuration.
         /// </summary>
-        /// <param name="config">the property configuration</param>
-        /// <returns>the bean class</returns>
-        protected virtual Type GetBeanClass(PropertyConfig config)
+        /// <param name="config">the property configuration.</param>
+        /// <returns>the bean class.</returns>
+        protected virtual Type? GetBeanClass(PropertyConfig config)
         {
             // determine the bean class associated with this record
-            Type beanClass = null;
+            Type? beanClass = null;
             if (config.Type != null)
             {
                 beanClass = config.Type.ToBeanType();
                 if (beanClass == null)
                     throw new BeanIOConfigurationException($"Invalid bean class '{config.Type}'");
-                var beanTypeInfo = beanClass.GetTypeInfo();
+                var beanTypeInfo = beanClass;
                 if (IsReadEnabled && (beanTypeInfo.IsInterface || beanTypeInfo.IsAbstract))
                     throw new BeanIOConfigurationException($"Class must be concrete unless stream mode is set to '{AccessMode.Write}'");
             }
@@ -1360,10 +1424,10 @@ namespace BeanIO.Internal.Compiler
         /// <summary>
         /// Parses a default field value.
         /// </summary>
-        /// <param name="field">the field</param>
-        /// <param name="text">the text to parse</param>
-        /// <returns>the default value</returns>
-        protected virtual object ParseDefaultValue(Field field, string text)
+        /// <param name="field">the field.</param>
+        /// <param name="text">the text to parse.</param>
+        /// <returns>the default value.</returns>
+        protected virtual object? ParseDefaultValue(Field field, string? text)
         {
             if (text == null)
                 return null;
@@ -1392,14 +1456,14 @@ namespace BeanIO.Internal.Compiler
         /// <summary>
         /// Creates the <see cref="IRecordParserFactory"/> for a stream configuration.
         /// </summary>
-        /// <param name="config">the stream configuration</param>
-        /// <returns>the created <see cref="IRecordParserFactory"/></returns>
+        /// <param name="config">the stream configuration.</param>
+        /// <returns>the created <see cref="IRecordParserFactory"/>.</returns>
         protected virtual IRecordParserFactory CreateRecordParserFactory(StreamConfig config)
         {
             IRecordParserFactory factory;
 
             // configure the record writer factory
-            BeanConfig<IRecordParserFactory> parserFactoryBean = config.ParserFactory;
+            var parserFactoryBean = config.ParserFactory;
             if (parserFactoryBean == null)
             {
                 factory = CreateDefaultRecordParserFactory();
@@ -1416,12 +1480,10 @@ namespace BeanIO.Internal.Compiler
                 }
                 else
                 {
-                    factory = BeanUtil.CreateBean(parserFactoryBean.ClassName) as IRecordParserFactory;
-                    if (factory == null)
-                    {
-                        throw new BeanIOConfigurationException(
+                    factory =
+                        BeanUtil.CreateBean(parserFactoryBean.ClassName) as IRecordParserFactory
+                        ?? throw new BeanIOConfigurationException(
                             $"Configured writer factory class '{parserFactoryBean.ClassName}' does not implement RecordWriterFactory");
-                    }
                 }
 
                 BeanUtil.Configure(factory, parserFactoryBean.Properties);
@@ -1429,7 +1491,6 @@ namespace BeanIO.Internal.Compiler
 
             try
             {
-                Debug.Assert(factory != null, "factory != null");
                 factory.Init();
                 return factory;
             }
@@ -1440,11 +1501,11 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Load a resource manager for a given bundle name and format
+        /// Load a resource manager for a given bundle name and format.
         /// </summary>
-        /// <param name="bundleName">The (assembly qualified) name of the resource</param>
-        /// <param name="format">The format for this resource</param>
-        /// <returns>The resource manager</returns>
+        /// <param name="bundleName">The (assembly qualified) name of the resource.</param>
+        /// <param name="format">The format for this resource.</param>
+        /// <returns>The resource manager.</returns>
         protected virtual ResourceManager LoadResource(string bundleName, string format)
         {
             try
@@ -1466,12 +1527,19 @@ namespace BeanIO.Internal.Compiler
                     // The type must contain a "ResourceManager" property
                     var prop = resType.GetRuntimeProperty("ResourceManager");
                     if (prop == null)
-                        throw new BeanIOConfigurationException($"Missing property ResourceManager in resource bundle {bundleName} for stream format '{format}'");
+                    {
+                        throw new BeanIOConfigurationException(
+                            $"Missing property ResourceManager in resource bundle {bundleName} for stream format '{format}'");
+                    }
 
-                    resMgr = (ResourceManager)prop.GetValue(null);
+                    resMgr =
+                        (ResourceManager?)prop.GetValue(null)
+                        ?? throw new InvalidOperationException(
+                            $"ResourceManager property in bundle {bundleName} for stream format '{format}' is null");
                 }
 
                 // Test if the resource data could be loaded successfully
+                // ReSharper disable once ResourceItemNotResolved
                 resMgr.GetString("ignore");
 
                 return resMgr;
@@ -1486,9 +1554,9 @@ namespace BeanIO.Internal.Compiler
             }
         }
 
-        private IProperty FindTarget([NotNull] Component segment, [NotNull] string name)
+        private IProperty FindTarget(Component segment, string name)
         {
-            Component c = FindDescendant("value", segment, name);
+            var c = FindDescendant("value", segment, name);
             if (c == null)
                 throw new BeanIOConfigurationException($"Descendant value '{name}' not found");
 
@@ -1499,7 +1567,7 @@ namespace BeanIO.Internal.Compiler
             return property;
         }
 
-        private Component FindDescendant([NotNull] string type, [NotNull] Component c, [NotNull] string name)
+        private Component? FindDescendant(string type, Component c, string name)
         {
             if (string.Equals(name, c.Name, StringComparison.Ordinal))
                 return c;
@@ -1534,15 +1602,15 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Returns a concrete <see cref="Type"/> implementation for an aggregation type
+        /// Returns a concrete <see cref="Type"/> implementation for an aggregation type.
         /// </summary>
-        /// <param name="type">the configured <see cref="IDictionary"/> or <see cref="ICollection"/> type</param>
-        /// <returns>the concrete aggregation Class type</returns>
-        private Type GetConcreteAggregationType(Type type)
+        /// <param name="type">the configured <see cref="IDictionary"/> or <see cref="ICollection"/> type.</param>
+        /// <returns>the concrete aggregation Class type.</returns>
+        private Type? GetConcreteAggregationType(Type? type)
         {
             if (type == null)
                 return null;
-            if (!type.IsArray() && (type.GetTypeInfo().IsInterface || type.GetTypeInfo().IsAbstract))
+            if (!type.IsArray() && (type.IsInterface || type.IsAbstract))
             {
                 if (type.IsSet())
                     return typeof(HashSet<>).Instantiate(type);
@@ -1560,15 +1628,20 @@ namespace BeanIO.Internal.Compiler
         /// Returns the <see cref="PropertyDescriptor"/> for getting and setting a property value from
         /// current bean class on the property stack.
         /// </summary>
-        /// <param name="property">the property name</param>
-        /// <param name="getter">the getter method name, or null to use the default</param>
-        /// <param name="setter">the setter method name, or null to use the default</param>
-        /// <param name="isConstructorArgument">is this a constructor argument?</param>
-        /// <returns>the <see cref="PropertyDescriptor"/></returns>
-        private PropertyDescriptor GetPropertyDescriptor(string property, string getter, string setter, bool isConstructorArgument)
+        /// <param name="property">the property name.</param>
+        /// <param name="getter">the getter method name, or null to use the default.</param>
+        /// <param name="setter">the setter method name, or null to use the default.</param>
+        /// <param name="isConstructorArgument">is this a constructor argument?.</param>
+        /// <returns>the <see cref="PropertyDescriptor"/>.</returns>
+        private PropertyDescriptor GetPropertyDescriptor(string property, string? getter, string? setter, bool isConstructorArgument)
         {
             var beanClass = ((IProperty)_propertyStack.Peek()).PropertyType;
-            var descriptor = BeanUtil.GetPropertyDescriptor(beanClass, property, getter, setter, isConstructorArgument);
+            var descriptor = BeanUtil.GetPropertyDescriptor(
+                beanClass ?? throw new InvalidOperationException($"No bean type found on stack for {property}."),
+                property,
+                getter,
+                setter,
+                isConstructorArgument);
 
             // validate a read method is found for mapping configurations that write streams
             if (!isConstructorArgument && IsReadEnabled && !descriptor.HasSetter)
@@ -1589,25 +1662,25 @@ namespace BeanIO.Internal.Compiler
         /// <summary>
         /// Updates a simple property with its type and accessor, and returns a type handler for it.
         /// </summary>
-        /// <param name="config">the property configuration</param>
-        /// <param name="field">the property to update</param>
-        /// <returns>a type handler for the property</returns>
+        /// <param name="config">the property configuration.</param>
+        /// <param name="field">the property to update.</param>
+        /// <returns>a type handler for the property.</returns>
         private ITypeHandler FindTypeHandler(SimplePropertyConfig config, IProperty field)
         {
             var propertyType = field.PropertyType;
 
             // configure type handler properties
-            Properties typeHandlerProperties = null;
+            Properties? typeHandlerProperties = null;
             if (config.Format != null)
             {
-                typeHandlerProperties = new Properties(new Dictionary<string, string>()
-                    {
-                        { DefaultTypeConfigurationProperties.FORMAT_SETTING, config.Format },
-                    });
+                typeHandlerProperties = new Properties(new Dictionary<string, string?>()
+                {
+                    { DefaultTypeConfigurationProperties.FORMAT_SETTING, config.Format },
+                });
             }
 
             // determine the type handler based on the named handler or the field class
-            ITypeHandler handler = null;
+            ITypeHandler? handler = null;
             if (config.TypeHandlerInstance != null)
             {
                 handler = config.TypeHandlerInstance;

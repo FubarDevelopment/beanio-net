@@ -13,7 +13,7 @@ namespace BeanIO.Internal.Config
     /// Stores bean information.
     /// </summary>
     /// <remarks>
-    /// A <code>Bean</code> object is used to instantiate configurable components
+    /// A <c>Bean</c> object is used to instantiate configurable components
     /// such as a type handler, record reader factory or record writer factory.
     /// </remarks>
     /// <typeparam name="T">The bean type</typeparam>
@@ -30,8 +30,8 @@ namespace BeanIO.Internal.Config
         /// <summary>
         /// Initializes a new instance of the <see cref="BeanConfig{T}"/> class.
         /// </summary>
-        /// <param name="create">the function to create an instance of <typeparamref name="T"/></param>
-        public BeanConfig(Func<T> create)
+        /// <param name="create">the function to create an instance of <typeparamref name="T"/>.</param>
+        public BeanConfig(Func<T>? create)
         {
             Create = create;
         }
@@ -39,16 +39,16 @@ namespace BeanIO.Internal.Config
         /// <summary>
         /// Gets or sets the fully qualified class name of the bean.
         /// </summary>
-        public string ClassName { get; set; }
+        public string? ClassName { get; set; }
 
         /// <summary>
         /// Gets or sets the bean properties.
         /// </summary>
-        public Properties Properties { get; set; }
+        public Properties? Properties { get; set; }
 
         /// <summary>
         /// Gets the configured bean instance.
         /// </summary>
-        public Func<T> Create { get; private set; }
+        public Func<T>? Create { get; private set; }
     }
 }

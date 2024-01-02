@@ -17,7 +17,7 @@ namespace BeanIO.Stream.Delimited
 {
     /// <summary>
     /// A <see cref="DelimitedReader"/> is used to parse delimited flat files into
-    /// records of <code>String</code> arrays.
+    /// records of <c>String</c> arrays.
     /// </summary>
     /// <remarks>
     /// <para>Records must be terminated by a single configurable character,
@@ -28,18 +28,18 @@ namespace BeanIO.Stream.Delimited
     /// escaped in a field by placing the escape character immediately before
     /// the delimiter.  The escape character may also be used to escape itself.
     /// For example, using a comma delimiter and backslash escape:
-    /// <code>
+    /// <c>
     /// Field1,Field2\,Field3,Field\\4,Field\5
-    /// </code>
-    /// The record would be parsed as "Field1", "Field2,Field3", "Field\4", "Field\5"</para>
+    /// </c>
+    /// The record would be parsed as "Field1", "Field2,Field3", "Field\4", "Field\5".</para>
     /// <para>Additionally, if a record may span multiple lines, a single line continuation
     /// character can be configured.  The line continuation character must immediately
     /// precede the record termination character. For example, using a comma delimiter
     /// and backslash line continuation character:
-    /// <code>
+    /// <c>
     /// Field1,Field2\
     /// Field3
-    /// </code>
+    /// </c>
     /// The 2 lines would be parsed as a single record with values "Field1", "Field2", "Field3".</para>
     /// <para>The same character can be used for line continuation and escaping, but neither
     /// can match the delimiter.</para>
@@ -54,11 +54,11 @@ namespace BeanIO.Stream.Delimited
 
         private readonly char? _recordTerminator;
 
-        private readonly CommentReader _commentReader;
+        private readonly CommentReader? _commentReader;
 
         private readonly TextReader _in;
 
-        private IList<string> _fieldList = new List<string>();
+        private List<string>? _fieldList = new List<string>();
 
         private int _lineNumber;
 
@@ -69,7 +69,7 @@ namespace BeanIO.Stream.Delimited
         /// <summary>
         /// Initializes a new instance of the <see cref="DelimitedReader"/> class.
         /// </summary>
-        /// <param name="textReader">the input stream to read from</param>
+        /// <param name="textReader">the input stream to read from.</param>
         public DelimitedReader(TextReader textReader)
             : this(textReader, null)
         {
@@ -78,8 +78,8 @@ namespace BeanIO.Stream.Delimited
         /// <summary>
         /// Initializes a new instance of the <see cref="DelimitedReader"/> class.
         /// </summary>
-        /// <param name="textReader">the input stream to read from</param>
-        /// <param name="delimiter">the field delimiting character</param>
+        /// <param name="textReader">the input stream to read from.</param>
+        /// <param name="delimiter">the field delimiting character.</param>
         public DelimitedReader(TextReader textReader, char delimiter)
             : this(textReader, new DelimitedParserConfiguration(delimiter))
         {
@@ -88,19 +88,18 @@ namespace BeanIO.Stream.Delimited
         /// <summary>
         /// Initializes a new instance of the <see cref="DelimitedReader"/> class.
         /// </summary>
-        /// <param name="textReader">the input stream to read from</param>
-        /// <param name="config">the reader configuration settings or <code>null</code> to use default values</param>
-        public DelimitedReader(TextReader textReader, DelimitedParserConfiguration config)
+        /// <param name="textReader">the input stream to read from.</param>
+        /// <param name="config">the reader configuration settings or <see langword="null" /> to use default values.</param>
+        public DelimitedReader(TextReader textReader, DelimitedParserConfiguration? config)
         {
-            if (config == null)
-                config = new DelimitedParserConfiguration();
+            config ??= new DelimitedParserConfiguration();
 
             _in = textReader;
             _delim = config.Delimiter;
 
             _escapeChar = config.Escape;
             if (_escapeChar != null && _delim == _escapeChar)
-                throw new BeanIOConfigurationException("The field delimiter canot match the escape character");
+                throw new BeanIOConfigurationException("The field delimiter cannot match the escape character");
 
             _lineContinuationChar = config.LineContinuationCharacter;
             if (_lineContinuationChar != null && _lineContinuationChar == _delim)
@@ -143,7 +142,7 @@ namespace BeanIO.Stream.Delimited
         /// <remarks>The type of object returned depends on the format of the stream.</remarks>
         /// <returns>
         /// The record value, or null if the end of the stream was reached.
-        /// </returns>
+        /// .</returns>
         public int RecordLineNumber => _recordLineNumber < 0 ? -1 : (_recordTerminator == null ? _recordLineNumber : 0);
 
         /// <summary>
@@ -151,18 +150,18 @@ namespace BeanIO.Stream.Delimited
         /// </summary>
         /// <returns>
         /// The unparsed text of the last record read
-        /// </returns>
-        public string RecordText { get; private set; }
+        /// .</returns>
+        public string? RecordText { get; private set; }
 
         /// <summary>
         /// Reads a single record from this input stream.
         /// </summary>
         /// <returns>
         /// The type of object returned depends on the format of the stream.
-        /// </returns>
+        /// .</returns>
         /// <returns>The record value, or null if the end of the stream was reached.</returns>
         [SuppressMessage("StyleCopPlus.StyleCopPlusRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
-        public object Read()
+        public object? Read()
         {
             // fieldList is set to null when the end of stream is reached
             if (_fieldList == null)
@@ -345,12 +344,12 @@ namespace BeanIO.Stream.Delimited
         }
 
         /// <summary>
-        /// Returns <code>true</code> if the given character matches the record separator. This
+        /// Returns <c>true</c> if the given character matches the record separator. This
         /// method also updates the internal <see cref="F:_skipLineFeed"/> flag.
         /// </summary>
-        /// <param name="ch">the character to test</param>
-        /// <param name="skipLineFeed">the value to set if the character is a carriage return</param>
-        /// <returns><code>true</code> if the character signifies the end of the record</returns>
+        /// <param name="ch">the character to test.</param>
+        /// <param name="skipLineFeed">the value to set if the character is a carriage return.</param>
+        /// <returns><c>true</c> if the character signifies the end of the record.</returns>
         private bool IsEndOfRecord(char ch, bool skipLineFeed)
         {
             if (_recordTerminator == null)

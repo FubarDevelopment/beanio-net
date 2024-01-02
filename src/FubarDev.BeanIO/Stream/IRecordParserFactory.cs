@@ -8,7 +8,7 @@ using System.IO;
 namespace BeanIO.Stream
 {
     /// <summary>
-    /// Factory interface for creating record parsers
+    /// Factory interface for creating record parsers.
     /// </summary>
     /// <remarks>
     /// <p>The Java object bound to a <i>record</i> depends on the stream format.
@@ -20,11 +20,11 @@ namespace BeanIO.Stream
     /// </tr>
     ///  <tr>
     ///   <td>Fixed Length</td>
-    ///   <td><code>String</code></td>
+    ///   <td><c>String</c></td>
     /// </tr>
     /// <tr>
     ///   <td>CSV, Delimited</td>
-    ///   <td><code>String[]</code></td>
+    ///   <td><c>String[]</c></td>
     /// </tr>
     /// <tr>
     ///   <td>XML</td>
@@ -54,7 +54,7 @@ namespace BeanIO.Stream
     ///   <td><see cref="CreateMarshaller()"/></td>
     /// </tr>
     /// </table>
-    /// <p>A <code>RecordParserFactory</code> implementation must be thread safe (after all of its properties have been set).</p>
+    /// <p>A <c>RecordParserFactory</c> implementation must be thread safe (after all of its properties have been set).</p>
     /// </remarks>
     public interface IRecordParserFactory
     {
@@ -71,27 +71,27 @@ namespace BeanIO.Stream
         /// <summary>
         /// Creates a parser for reading records from an input stream.
         /// </summary>
-        /// <param name="reader">The input stream to read from</param>
-        /// <returns>The created <see cref="IRecordReader"/></returns>
+        /// <param name="reader">The input stream to read from.</param>
+        /// <returns>The created <see cref="IRecordReader"/>.</returns>
         IRecordReader CreateReader(TextReader reader);
 
         /// <summary>
         /// Creates a parser for writing records to an output stream.
         /// </summary>
-        /// <param name="writer">The output stream to write to</param>
-        /// <returns>The new <see cref="IRecordWriter"/></returns>
+        /// <param name="writer">The output stream to write to.</param>
+        /// <returns>The new <see cref="IRecordWriter"/>.</returns>
         IRecordWriter CreateWriter(TextWriter writer);
 
         /// <summary>
         /// Creates a parser for marshalling records.
         /// </summary>
-        /// <returns>The created <see cref="IRecordMarshaller"/></returns>
+        /// <returns>The created <see cref="IRecordMarshaller"/>.</returns>
         IRecordMarshaller CreateMarshaller();
 
         /// <summary>
         /// Creates a parser for unmarshalling records.
         /// </summary>
-        /// <returns>The created <see cref="IRecordUnmarshaller"/></returns>
+        /// <returns>The created <see cref="IRecordUnmarshaller"/>.</returns>
         IRecordUnmarshaller CreateUnmarshaller();
     }
 }

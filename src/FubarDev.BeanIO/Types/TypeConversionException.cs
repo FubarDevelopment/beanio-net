@@ -22,7 +22,7 @@ namespace BeanIO.Types
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeConversionException"/> class.
         /// </summary>
-        /// <param name="message">The error message</param>
+        /// <param name="message">The error message.</param>
         public TypeConversionException(string message)
             : base(message)
         {
@@ -31,8 +31,8 @@ namespace BeanIO.Types
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeConversionException"/> class.
         /// </summary>
-        /// <param name="message">The error message</param>
-        /// <param name="inner">The inner exception</param>
+        /// <param name="message">The error message.</param>
+        /// <param name="inner">The inner exception.</param>
         public TypeConversionException(string message, Exception inner)
             : base(message, inner)
         {

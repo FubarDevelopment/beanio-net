@@ -10,17 +10,17 @@ using BeanIO.Stream.Csv;
 namespace BeanIO.Builder
 {
     /// <summary>
-    /// Builder for CSV parsers
+    /// Builder for CSV parsers.
     /// </summary>
     public class CsvParserBuilder : IParserBuilder
     {
         private readonly CsvRecordParserFactory _parser = new CsvRecordParserFactory();
 
         /// <summary>
-        /// Sets the delimiter character
+        /// Sets the delimiter character.
         /// </summary>
-        /// <param name="delimiter">The delimiter to set</param>
-        /// <returns>the <see cref="CsvParserBuilder"/></returns>
+        /// <param name="delimiter">The delimiter to set.</param>
+        /// <returns>the <see cref="CsvParserBuilder"/>.</returns>
         public CsvParserBuilder Delimiter(char delimiter)
         {
             _parser.Delimiter = delimiter;
@@ -28,10 +28,10 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
-        /// Sets the quote character
+        /// Sets the quote character.
         /// </summary>
-        /// <param name="quote">The quote character to set</param>
-        /// <returns>the <see cref="CsvParserBuilder"/></returns>
+        /// <param name="quote">The quote character to set.</param>
+        /// <returns>the <see cref="CsvParserBuilder"/>.</returns>
         public CsvParserBuilder Quote(char quote)
         {
             _parser.Quote = quote;
@@ -39,10 +39,10 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
-        /// Sets the escape character
+        /// Sets the escape character.
         /// </summary>
-        /// <param name="escape">The escape character to set</param>
-        /// <returns>the <see cref="CsvParserBuilder"/></returns>
+        /// <param name="escape">The escape character to set.</param>
+        /// <returns>the <see cref="CsvParserBuilder"/>.</returns>
         public CsvParserBuilder Escape(char escape)
         {
             _parser.Escape = escape;
@@ -50,10 +50,10 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
-        /// Sets the record terminator
+        /// Sets the record terminator.
         /// </summary>
-        /// <param name="terminator">The record terminator to set</param>
-        /// <returns>the <see cref="CsvParserBuilder"/></returns>
+        /// <param name="terminator">The record terminator to set.</param>
+        /// <returns>the <see cref="CsvParserBuilder"/>.</returns>
         public CsvParserBuilder RecordTerminator(string terminator)
         {
             _parser.RecordTerminator = terminator;
@@ -61,10 +61,10 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
-        /// Enables the detection of comments using the following comment indicators
+        /// Enables the detection of comments using the following comment indicators.
         /// </summary>
-        /// <param name="comments">The comment indicators to set</param>
-        /// <returns>the <see cref="CsvParserBuilder"/></returns>
+        /// <param name="comments">The comment indicators to set.</param>
+        /// <returns>the <see cref="CsvParserBuilder"/>.</returns>
         public CsvParserBuilder EnableComments(params string[] comments)
         {
             _parser.Comments = comments;
@@ -72,9 +72,9 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
-        /// Enables multi line records
+        /// Enables multi line records.
         /// </summary>
-        /// <returns>the <see cref="CsvParserBuilder"/></returns>
+        /// <returns>the <see cref="CsvParserBuilder"/>.</returns>
         public CsvParserBuilder EnableMultiline()
         {
             _parser.IsMultilineEnabled = true;
@@ -82,9 +82,9 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
-        /// Allow unquoted whitespace characters
+        /// Allow unquoted whitespace characters.
         /// </summary>
-        /// <returns>the <see cref="CsvParserBuilder"/></returns>
+        /// <returns>the <see cref="CsvParserBuilder"/>.</returns>
         public CsvParserBuilder AllowUnquotedWhitespace()
         {
             _parser.IsWhitespaceAllowed = true;
@@ -92,9 +92,9 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
-        /// Allow unquoted quotes
+        /// Allow unquoted quotes.
         /// </summary>
-        /// <returns>the <see cref="CsvParserBuilder"/></returns>
+        /// <returns>the <see cref="CsvParserBuilder"/>.</returns>
         public CsvParserBuilder AllowUnquotedQuotes()
         {
             _parser.UnquotedQuotesAllowed = true;
@@ -102,9 +102,9 @@ namespace BeanIO.Builder
         }
 
         /// <summary>
-        /// Always quote all field values
+        /// Always quote all field values.
         /// </summary>
-        /// <returns>the <see cref="CsvParserBuilder"/></returns>
+        /// <returns>the <see cref="CsvParserBuilder"/>.</returns>
         public CsvParserBuilder AlwaysQuote()
         {
             _parser.AlwaysQuote = true;

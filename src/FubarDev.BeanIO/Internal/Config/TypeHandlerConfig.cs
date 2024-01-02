@@ -28,8 +28,8 @@ namespace BeanIO.Internal.Config
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeHandlerConfig"/> class.
         /// </summary>
-        /// <param name="create">the function to create an instance of <see cref="ITypeHandler"/></param>
-        public TypeHandlerConfig(Func<ITypeHandler> create)
+        /// <param name="create">the function to create an instance of <see cref="ITypeHandler"/>.</param>
+        public TypeHandlerConfig(Func<ITypeHandler>? create)
             : base(create)
         {
         }
@@ -37,17 +37,17 @@ namespace BeanIO.Internal.Config
         /// <summary>
         /// Gets or sets the name of the type handler.
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// Gets or sets the class name to register this type handler under.
         /// </summary>
-        public string Type { get; set; }
+        public string? Type { get; set; }
 
         /// <summary>
         /// Gets or sets the stream format to register this type handler for, or null
         /// if the type handler is used for all formats.
         /// </summary>
-        public string Format { get; set; }
+        public string? Format { get; set; }
     }
 }

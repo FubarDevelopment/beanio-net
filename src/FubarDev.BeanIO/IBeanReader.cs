@@ -8,7 +8,7 @@ using System;
 namespace BeanIO
 {
     /// <summary>
-    /// Default bean reader interface
+    /// Default bean reader interface.
     /// </summary>
     public interface IBeanReader : IDisposable
     {
@@ -21,7 +21,7 @@ namespace BeanIO
         /// Gets the record or group name of the most recent bean object read from this reader,
         /// or null if the end of the stream was reached.
         /// </summary>
-        string RecordName { get; }
+        string? RecordName { get; }
 
         /// <summary>
         /// Gets the starting line number of the first record for the most recent bean
@@ -43,8 +43,8 @@ namespace BeanIO
         /// If a bean object can span multiple records, <see cref="RecordCount"/> can be used
         /// to determine how many records were read from the stream.
         /// </summary>
-        /// <param name="index">the index of the record, starting at 0</param>
-        /// <returns>the <see cref="IRecordContext"/></returns>
+        /// <param name="index">the index of the record, starting at 0.</param>
+        /// <returns>the <see cref="IRecordContext"/>.</returns>
         IRecordContext GetRecordContext(int index);
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace BeanIO
         /// If the end of the stream is reached, null is returned.
         /// </remarks>
         /// <returns>The bean read, or null if the end of the stream was reached.</returns>
-        object Read();
+        object? Read();
 
         /// <summary>
         /// Skips ahead in the input stream.
@@ -69,7 +69,7 @@ namespace BeanIO
         /// </param>
         /// <returns>the number of skipped bean objects, which may be less than <paramref name="count"/>
         /// if the end of the stream was reached
-        /// </returns>
+        /// .</returns>
         int Skip(int count);
 
         /// <summary>

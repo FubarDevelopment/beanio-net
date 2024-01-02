@@ -21,10 +21,10 @@ namespace BeanIO.Parser.Validation
               </record>
             </stream>");
             var m = factory.CreateMarshaller("s");
-            var bean = new Dictionary<string, object>()
-                {
-                    { "field", null },
-                };
+            var bean = new Dictionary<string, object?>()
+            {
+                { "field", null },
+            };
             Assert.Throws<InvalidBeanException>(() => m.Marshal(bean));
         }
 
@@ -38,10 +38,10 @@ namespace BeanIO.Parser.Validation
               </record>
             </stream>");
             var m = factory.CreateMarshaller("s");
-            var bean = new Dictionary<string, object>()
-                {
-                    { "field", "ab" },
-                };
+            var bean = new Dictionary<string, object?>()
+            {
+                { "field", "ab" },
+            };
             Assert.Throws<InvalidBeanException>(() => m.Marshal(bean));
         }
 
@@ -55,10 +55,10 @@ namespace BeanIO.Parser.Validation
               </record>
             </stream>");
             var m = factory.CreateMarshaller("s");
-            var bean = new Dictionary<string, object>()
-                {
-                    { "field", "abcd" },
-                };
+            var bean = new Dictionary<string, object?>()
+            {
+                { "field", "abcd" },
+            };
             Assert.Throws<InvalidBeanException>(() => m.Marshal(bean));
         }
 
@@ -72,7 +72,7 @@ namespace BeanIO.Parser.Validation
               </record>
             </stream>");
             var m = factory.CreateMarshaller("s");
-            var bean = new Dictionary<string, object>()
+            var bean = new Dictionary<string, object?>()
                 {
                     { "field", "abc" },
                 };

@@ -29,22 +29,23 @@ namespace BeanIO.Internal.Util
         [InlineData("${missing,1}", "1")]
         [InlineData("${missing,}", "")]
         [InlineData("$", "$")]
-        public void TestSuccessful(string source, string expected)
+        public void TestSuccessful(string? source, string? expected)
         {
-            var props = new Properties(new Dictionary<string, string>()
-                {
-                    { "1", "1" },
-                    { "2", "2" },
-                    { string.Empty, "empty" },
-                    { " space ", " " },
-                });
+            var props = new Properties(new Dictionary<string, string?>()
+            {
+                { "1", "1" },
+                { "2", "2" },
+                { string.Empty, "empty" },
+                { " space ", " " },
+            });
+
             Assert.Equal(expected, StringUtil.DoPropertySubstitution(source, props));
         }
 
         [Fact]
         public void TestMissingProperty()
         {
-            Assert.Throws<ArgumentException>(() => StringUtil.DoPropertySubstitution("${missing}", (Properties)null));
+            Assert.Throws<ArgumentException>(() => StringUtil.DoPropertySubstitution("${missing}", (Properties?)null));
         }
     }
 }

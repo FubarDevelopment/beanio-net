@@ -21,7 +21,8 @@ namespace BeanIO.Parser.Bean
             var reader = factory.CreateReader("w1", LoadReader("w1_position.txt"));
             try
             {
-                var w = (Widget)reader.Read();
+                var w = (Widget?)reader.Read();
+                Assert.NotNull(w);
                 Assert.Equal(3, w.Id);
                 Assert.Equal("Widget3", w.Name);
                 Assert.NotNull(w.Top);
@@ -48,11 +49,20 @@ namespace BeanIO.Parser.Bean
             var reader = factory.CreateReader("w2", LoadReader("w2_collections.txt"));
             try
             {
-                var w = (Widget)reader.Read();
+                var w = (Widget?)reader.Read();
+                Assert.NotNull(w);
                 Assert.Equal("3", w.Name);
+                Assert.NotNull(w.PartsList);
                 Assert.True(w.PartsList.Count > 1);
-                Assert.True(w.PartsList[1].PartsList.Count > 1);
-                Assert.Equal("2B", w.GetPart(1).GetPart(1).Name);
+                var subPartList = w.PartsList[1];
+                Assert.NotNull(subPartList);
+                Assert.NotNull(subPartList.PartsList);
+                Assert.True(subPartList.PartsList.Count > 1);
+                var subPartList2 = w.GetPart(1);
+                Assert.NotNull(subPartList2);
+                var subPartList3 = subPartList2.GetPart(1);
+                Assert.NotNull(subPartList3);
+                Assert.Equal("2B", subPartList3.Name);
 
                 var text = new StringWriter();
                 factory.CreateWriter("w2", text).Write(w);
@@ -71,7 +81,8 @@ namespace BeanIO.Parser.Bean
             var reader = factory.CreateReader("w3", LoadReader("w3_fixedLength.txt"));
             try
             {
-                var w = (Widget)reader.Read();
+                var w = (Widget?)reader.Read();
+                Assert.NotNull(w);
                 Assert.Equal(1, w.Id);
                 Assert.Equal("name1", w.Name);
                 Assert.Equal("mode1", w.Model);
@@ -80,34 +91,41 @@ namespace BeanIO.Parser.Bean
                 factory.CreateWriter("w3", text).Write(w);
                 Assert.Equal(" 1name1mode1" + LineSeparator, text.ToString());
 
-                w = (Widget)reader.Read();
+                w = (Widget?)reader.Read();
+                Assert.NotNull(w);
                 Assert.Equal(1, w.Id);
                 Assert.Equal("name1", w.Name);
                 Assert.Equal("mode1", w.Model);
+                Assert.NotNull(w.PartsList);
                 Assert.Collection(
                     w.PartsList,
                     part =>
-                        {
-                            Assert.Equal(2, part.Id);
-                            Assert.Equal("name2", part.Name);
-                            Assert.Equal("mode2", part.Model);
-                        },
+                    {
+                        Assert.NotNull(part);
+                        Assert.Equal(2, part.Id);
+                        Assert.Equal("name2", part.Name);
+                        Assert.Equal("mode2", part.Model);
+                    },
                     part =>
-                        {
-                            Assert.Equal(3, part.Id);
-                        },
+                    {
+                        Assert.NotNull(part);
+                        Assert.Equal(3, part.Id);
+                    },
                     part =>
-                        {
-                            Assert.Equal(4, part.Id);
-                            Assert.Equal("name4", part.Name);
-                            Assert.Equal(string.Empty, part.Model);
-                        });
+                    {
+                        Assert.NotNull(part);
+                        Assert.Equal(4, part.Id);
+                        Assert.Equal("name4", part.Name);
+                        Assert.Equal(string.Empty, part.Model);
+                    });
 
                 text = new StringWriter();
                 factory.CreateWriter("w3", text).Write(w);
                 Assert.Equal(" 1name1mode1 2name2mode2 3           4name4     " + LineSeparator, text.ToString());
 
-                w = (Widget)reader.Read();
+                w = (Widget?)reader.Read();
+                Assert.NotNull(w);
+
                 text = new StringWriter();
                 factory.CreateWriter("w3", text).Write(w);
                 Assert.Equal(" 1name1mode1 2name2mode2 0           4name4mode4" + LineSeparator, text.ToString());
@@ -125,23 +143,25 @@ namespace BeanIO.Parser.Bean
             var reader = factory.CreateReader("w4", LoadReader("w4_map.txt"));
             try
             {
-                var w = (Widget)reader.Read();
+                var w = (Widget?)reader.Read();
+                Assert.NotNull(w);
                 Assert.Equal(1, w.Id);
                 Assert.Equal("name1", w.Name);
                 Assert.NotNull(w.PartsMap);
                 Assert.True(w.PartsMap.ContainsKey("part1"));
-                Assert.Equal(2, w.GetPart("part1").Id);
-                Assert.Equal("name2", w.GetPart("part1").Name);
+                Assert.Equal(2, w.GetPart("part1")?.Id);
+                Assert.Equal("name2", w.GetPart("part1")?.Name);
 
                 var text = new StringWriter();
                 factory.CreateWriter("w4", text).Write(w);
                 Assert.Equal("1name12name2" + LineSeparator, text.ToString());
 
-                w = (Widget)reader.Read();
+                w = (Widget?)reader.Read();
+                Assert.NotNull(w);
                 Assert.NotNull(w.PartsMap);
                 Assert.True(w.PartsMap.ContainsKey("part2"));
-                Assert.Equal(3, w.GetPart("part2").Id);
-                Assert.Equal("name3", w.GetPart("part2").Name);
+                Assert.Equal(3, w.GetPart("part2")?.Id);
+                Assert.Equal("name3", w.GetPart("part2")?.Name);
 
                 text = new StringWriter();
                 factory.CreateWriter("w4", text).Write(w);
@@ -160,8 +180,10 @@ namespace BeanIO.Parser.Bean
             var reader = factory.CreateReader("w5", LoadReader("w5_outOfOrder.txt"));
             try
             {
-                var map = (IDictionary)reader.Read();
-                var w = (Widget)map["part3"];
+                var map = (IDictionary?)reader.Read();
+                Assert.NotNull(map);
+                var w = (Widget?)map["part3"];
+                Assert.NotNull(w);
                 Assert.Equal(3, w.Id);
                 Assert.Equal("name3", w.Name);
 
@@ -288,7 +310,8 @@ namespace BeanIO.Parser.Bean
             var reader = factory.CreateReader("w9", LoadReader("w9_flcollections.txt"));
             try
             {
-                var w = (Widget)reader.Read();
+                var w = (Widget?)reader.Read();
+                Assert.NotNull(w);
                 Assert.Equal(1, w.Id);
                 Assert.Equal("name", w.Name);
 
@@ -310,16 +333,17 @@ namespace BeanIO.Parser.Bean
             try
             {
                 reader.Read();
-                var map = (IDictionary)reader.Read();
+                var map = (IDictionary?)reader.Read();
+                Assert.NotNull(map);
                 Assert.True(map.Contains("eof"));
                 Assert.Equal("eof", map["eof"]);
 
                 Assert.True(map.Contains("b1"));
-                var list = (IList)map["b1"];
+                var list = (IList?)map["b1"];
                 Assert.NotNull(list);
                 Assert.Equal(2, list.Count);
 
-                var b1 = (IDictionary)list[0];
+                var b1 = (IDictionary?)list[0];
                 Assert.NotNull(b1);
                 Assert.True(b1.Contains("f0"));
                 Assert.Equal("a", b1["f0"]);
@@ -327,33 +351,34 @@ namespace BeanIO.Parser.Bean
                 Assert.Equal("d", b1["f2"]);
 
                 Assert.True(b1.Contains("b2"));
-                var b2List = (IList)b1["b2"];
+                var b2List = (IList?)b1["b2"];
                 Assert.NotNull(b2List);
                 Assert.Equal(2, b2List.Count);
-                var b2Map0 = (IDictionary)b2List[0];
+                var b2Map0 = (IDictionary?)b2List[0];
                 Assert.NotNull(b2Map0);
                 Assert.True(b2Map0.Contains("f1"));
                 Assert.Equal("b", b2Map0["f1"]);
-                b1 = (IDictionary)b2List[1];
+                b1 = (IDictionary?)b2List[1];
                 Assert.NotNull(b1);
                 Assert.True(b1.Contains("f1"));
                 Assert.Equal("c", b1["f1"]);
 
-                b1 = (IDictionary)list[1];
+                b1 = (IDictionary?)list[1];
+                Assert.NotNull(b1);
                 Assert.True(b1.Contains("f0"));
                 Assert.Equal("e", b1["f0"]);
                 Assert.True(b1.Contains("f2"));
                 Assert.Equal("h", b1["f2"]);
 
                 Assert.True(b1.Contains("b2"));
-                b2List = (IList)b1["b2"];
+                b2List = (IList?)b1["b2"];
                 Assert.NotNull(b2List);
                 Assert.Equal(2, b2List.Count);
-                b2Map0 = (IDictionary)b2List[0];
+                b2Map0 = (IDictionary?)b2List[0];
                 Assert.NotNull(b2Map0);
                 Assert.True(b2Map0.Contains("f1"));
                 Assert.Equal("f", b2Map0["f1"]);
-                b1 = (IDictionary)b2List[1];
+                b1 = (IDictionary?)b2List[1];
                 Assert.NotNull(b1);
                 Assert.True(b1.Contains("f1"));
                 Assert.Equal("g", b1["f1"]);
@@ -376,12 +401,14 @@ namespace BeanIO.Parser.Bean
             var u = factory.CreateUnmarshaller("w11");
             var m = factory.CreateMarshaller("w11");
 
-            var bean = (Beans.Bean)u.Unmarshal("value1,00000000");
+            var bean = (Beans.Bean?)u.Unmarshal("value1,00000000");
+            Assert.NotNull(bean);
             Assert.Equal("value1", bean.field1);
             Assert.Null(bean.date);
             Assert.Equal("value1,00000000", m.Marshal(bean).ToString());
 
-            bean = (Beans.Bean)u.Unmarshal("value1,19901231");
+            bean = (Beans.Bean?)u.Unmarshal("value1,19901231");
+            Assert.NotNull(bean);
             Assert.Equal("value1", bean.field1);
             Assert.NotNull(bean.date);
             Assert.Equal(new NodaTime.LocalDate(1990, 12, 31), bean.date.Value);

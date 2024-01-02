@@ -5,8 +5,6 @@
 
 using BeanIO.Builder;
 
-using JetBrains.Annotations;
-
 namespace BeanIO.Internal.Config
 {
     /// <summary>
@@ -23,22 +21,21 @@ namespace BeanIO.Internal.Config
     public class FieldConfig : SimplePropertyConfig
     {
         /// <summary>
-        /// Gets the component type
+        /// Gets the component type.
         /// </summary>
         /// <returns>
         /// One of <see cref="F:ComponentType.Group"/>,
         /// <see cref="F:ComponentType.Record"/>, <see cref="F:ComponentType.Segment"/>
         /// <see cref="F:ComponentType.Field"/>, <see cref="F:ComponentType.Constant"/>,
         /// <see cref="F:ComponentType.Wrapper"/>, or <see cref="F:ComponentType.Stream"/>
-        /// </returns>
+        /// .</returns>
         public override ComponentType ComponentType => ComponentType.Field;
 
         /// <summary>
         /// Gets or sets the textual representation of the default value for
         /// this field when the field is not present or empty during unmarshalling.
         /// </summary>
-        [CanBeNull]
-        public string DefaultValue { get; set; }
+        public string? DefaultValue { get; set; }
 
         /// <summary>
         /// Gets or sets the minimum length of this field in characters, or null
@@ -49,7 +46,7 @@ namespace BeanIO.Internal.Config
         /// <summary>
         /// Gets or sets the maximum length of this field in characters.
         /// </summary>
-        /// <returns>null if a maximum length will not be enforced</returns>
+        /// <returns>null if a maximum length will not be enforced.</returns>
         public int? MaxLength { get; set; }
 
         /// <summary>
@@ -65,7 +62,7 @@ namespace BeanIO.Internal.Config
         /// If set, unmarshalled field text must match the literal text, and likewise, the
         /// literal text is always marshalled for this field.
         /// </remarks>
-        public string Literal { get; set; }
+        public string? Literal { get; set; }
 
         /// <summary>
         /// Gets or sets the regular expression pattern for validating the field text
@@ -75,7 +72,7 @@ namespace BeanIO.Internal.Config
         /// Field text is only validated using the regular expression after trimming
         /// (if enabled) and when its not the empty string.
         /// </remarks>
-        public string RegEx { get; set; }
+        public string? RegEx { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this field is required when unmarshalled.

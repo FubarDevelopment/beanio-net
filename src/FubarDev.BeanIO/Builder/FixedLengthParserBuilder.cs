@@ -19,8 +19,8 @@ namespace BeanIO.Builder
         /// <summary>
         /// Sets the record terminator.
         /// </summary>
-        /// <param name="terminator">the record termination character</param>
-        /// <returns>the current builder instance</returns>
+        /// <param name="terminator">the record termination character.</param>
+        /// <returns>the current builder instance.</returns>
         public FixedLengthParserBuilder RecordTerminator(string terminator)
         {
             _parser.RecordTerminator = terminator;
@@ -30,8 +30,8 @@ namespace BeanIO.Builder
         /// <summary>
         /// Enables the given line continuation character.
         /// </summary>
-        /// <param name="c">the line continuation character</param>
-        /// <returns>the current builder instance</returns>
+        /// <param name="c">the line continuation character.</param>
+        /// <returns>the current builder instance.</returns>
         public FixedLengthParserBuilder EnableLineContinuation(char c)
         {
             _parser.LineContinuationCharacter = c;
@@ -41,8 +41,8 @@ namespace BeanIO.Builder
         /// <summary>
         /// Enables one or more line prefixes that indicate a commented line.
         /// </summary>
-        /// <param name="comments">the list of prefixes</param>
-        /// <returns>the current builder instance</returns>
+        /// <param name="comments">the list of prefixes.</param>
+        /// <returns>the current builder instance.</returns>
         public FixedLengthParserBuilder EnableComments(params string[] comments)
         {
             _parser.Comments = comments;

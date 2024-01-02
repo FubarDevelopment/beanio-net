@@ -324,7 +324,7 @@ namespace BeanIO.Parser.Xml.Namespace
         }
 
         /// <summary>
-        /// Test xmlPrefix=""
+        /// Test xmlPrefix="".
         /// </summary>
         [Fact]
         public void TestEmptyPrefix()
@@ -344,7 +344,7 @@ namespace BeanIO.Parser.Xml.Namespace
         }
 
         /// <summary>
-        /// Test xmlPrefix=""
+        /// Test xmlPrefix="".
         /// </summary>
         [Fact]
         public void TestEmptyPrefix2()
@@ -363,7 +363,7 @@ namespace BeanIO.Parser.Xml.Namespace
         }
 
         /// <summary>
-        /// Test xmlPrefix=""
+        /// Test xmlPrefix="".
         /// </summary>
         [Fact]
         public void TestEmptyPrefix3()

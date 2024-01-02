@@ -3,6 +3,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,23 +19,23 @@ namespace BeanIO.Internal.Parser.Format.Delimited
     /// </remarks>
     internal class DelimitedUnmarshallingContext : UnmarshallingContext
     {
-        private string[] _fields;
+        private string?[]? _fields;
 
         /// <summary>
         /// Gets the number of fields read from the input stream.
         /// </summary>
-        public int FieldCount => _fields.Length;
+        public int FieldCount => _fields?.Length ?? 0;
 
         /// <summary>
         /// Returns the field text at the given position in the record.
         /// </summary>
-        /// <param name="fieldName">the field name</param>
-        /// <param name="position">the position of the field within the record</param>
+        /// <param name="fieldName">the field name.</param>
+        /// <param name="position">the position of the field within the record.</param>
         /// <param name="until">the maximum position of the field as an offset
         /// of the field count, for example -2 to indicate the any position
-        /// except the last two fields in the record</param>
-        /// <returns>the field text</returns>
-        public string GetFieldText(string fieldName, int position, int until)
+        /// except the last two fields in the record.</param>
+        /// <returns>the field text.</returns>
+        public string? GetFieldText(string fieldName, int position, int until)
         {
             if (position < 0)
             {
@@ -51,26 +52,31 @@ namespace BeanIO.Internal.Parser.Format.Delimited
                     return null;
             }
 
+            if (_fields == null)
+            {
+                throw new InvalidOperationException("Fields aren't set");
+            }
+
             var text = _fields[position];
             SetFieldText(fieldName, text);
             return text;
         }
 
         /// <summary>
-        /// Sets the value of the record returned from the <see cref="IRecordReader"/>
+        /// Sets the value of the record returned from the <see cref="IRecordReader"/>.
         /// </summary>
-        /// <param name="value">the record value read by a <see cref="IRecordReader"/></param>
-        public override void SetRecordValue(object value)
+        /// <param name="value">the record value read by a <see cref="IRecordReader"/>.</param>
+        public override void SetRecordValue(object? value)
         {
-            _fields = (string[])value;
+            _fields = (string?[]?)value;
         }
 
         /// <summary>
         /// Converts a <see cref="string"/>[] to a record value.
         /// </summary>
-        /// <param name="array">the <see cref="string"/>[] to convert</param>
-        /// <returns>the record value, or null if not supported</returns>
-        public override object ToRecordValue(string[] array)
+        /// <param name="array">the <see cref="string"/>[] to convert.</param>
+        /// <returns>the record value, or null if not supported.</returns>
+        public override object ToRecordValue(string?[] array)
         {
             return array;
         }
@@ -78,9 +84,9 @@ namespace BeanIO.Internal.Parser.Format.Delimited
         /// <summary>
         /// Converts a <see cref="List{T}"/> to a record value.
         /// </summary>
-        /// <param name="list">the <see cref="List{T}"/> to convert</param>
-        /// <returns>the record value, or null if not supported</returns>
-        public override object ToRecordValue(IList<string> list)
+        /// <param name="list">the <see cref="List{T}"/> to convert.</param>
+        /// <returns>the record value, or null if not supported.</returns>
+        public override object ToRecordValue(IList<string?> list)
         {
             return list.ToArray();
         }

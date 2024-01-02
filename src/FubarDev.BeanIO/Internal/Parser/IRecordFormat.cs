@@ -13,14 +13,14 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns whether the record meets configured matching criteria during unmarshalling.
         /// </summary>
-        /// <param name="context">the <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if the record meets all matching criteria, false otherwise</returns>
+        /// <param name="context">the <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if the record meets all matching criteria, false otherwise.</returns>
         bool Matches(UnmarshallingContext context);
 
         /// <summary>
-        /// Validates a record during unmarshalling
+        /// Validates a record during unmarshalling.
         /// </summary>
-        /// <param name="context">the <see cref="UnmarshallingContext"/></param>
+        /// <param name="context">the <see cref="UnmarshallingContext"/>.</param>
         void Validate(UnmarshallingContext context);
     }
 }

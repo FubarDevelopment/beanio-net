@@ -11,18 +11,18 @@ using BeanIO.Types;
 namespace BeanIO.Internal.Util
 {
     /// <summary>
-    /// Default <see cref="Enum"/> type handler
+    /// Default <see cref="Enum"/> type handler.
     /// </summary>
     internal class EnumTypeHandler : IConfigurableTypeHandler
     {
-        private string _enumFormat;
+        private string? _enumFormat;
 
         private EnumFormatMode _enumFormatMode = EnumFormatMode.String;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EnumTypeHandler"/> class.
         /// </summary>
-        /// <param name="enumType">The type derived from <see cref="Enum"/></param>
+        /// <param name="enumType">The type derived from <see cref="Enum"/>.</param>
         public EnumTypeHandler(Type enumType)
         {
             TargetType = enumType;
@@ -44,9 +44,9 @@ namespace BeanIO.Internal.Util
         /// <summary>
         /// Parses field text into an object.
         /// </summary>
-        /// <param name="text">The field text to parse, which may be null if the field was not passed in the record</param>
-        /// <returns>The parsed object</returns>
-        public object Parse(string text)
+        /// <param name="text">The field text to parse, which may be null if the field was not passed in the record.</param>
+        /// <returns>The parsed object.</returns>
+        public object? Parse(string? text)
         {
             if (string.IsNullOrEmpty(text))
                 return null;
@@ -64,33 +64,32 @@ namespace BeanIO.Internal.Util
         /// <summary>
         /// Formats an object into field text.
         /// </summary>
-        /// <param name="value">The value to format, which may be null</param>
-        /// <returns>The formatted field text, or <code>null</code> to indicate the value is not present</returns>
-        public string Format(object value)
+        /// <param name="value">The value to format, which may be null.</param>
+        /// <returns>The formatted field text, or <see langword="null" /> to indicate the value is not present.</returns>
+        public string? Format(object? value)
         {
             if (value == null)
                 return null;
             switch (_enumFormatMode)
             {
                 case EnumFormatMode.LowerString:
-                    return value.ToString().ToLowerInvariant();
+                    return value.ToString()?.ToLowerInvariant();
                 case EnumFormatMode.UpperString:
-                    return value.ToString().ToUpperInvariant();
+                    return value.ToString()?.ToUpperInvariant();
                 case EnumFormatMode.String:
                     return value.ToString();
             }
 
-            return Enum.Format(TargetType, value, _enumFormat);
+            return Enum.Format(TargetType, value, _enumFormat ?? "g");
         }
 
         /// <summary>
         /// Configures this type handler.
         /// </summary>
-        /// <param name="properties">The properties for customizing the instance</param>
+        /// <param name="properties">The properties for customizing the instance.</param>
         public void Configure(Properties properties)
         {
-            string format;
-            if (properties.TryGetValue("format", out format))
+            if (properties.TryGetValue("format", out var format))
             {
                 if (string.IsNullOrEmpty(format) || format == "name")
                 {

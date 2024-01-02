@@ -3,6 +3,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using BeanIO.Stream;
+
 namespace BeanIO.Internal.Parser.Format.Delimited
 {
     /// <summary>
@@ -10,20 +12,23 @@ namespace BeanIO.Internal.Parser.Format.Delimited
     /// </summary>
     internal class DelimitedStreamFormat : StreamFormatSupport
     {
-        /// <summary>
-        /// Creates a new unmarshalling context
-        /// </summary>
-        /// <returns>the new <see cref="UnmarshallingContext"/></returns>
-        public override UnmarshallingContext CreateUnmarshallingContext()
+        /// <inheritdoc />
+        public override required IRecordParserFactory RecordParserFactory { get; set; }
+
+        /// <inheritdoc />
+        public override UnmarshallingContext CreateUnmarshallingContext(IMessageFactory messageFactory)
         {
-            return new DelimitedUnmarshallingContext();
+            return new DelimitedUnmarshallingContext()
+            {
+                MessageFactory = messageFactory,
+            };
         }
 
         /// <summary>
-        /// Creates a new marshalling context
+        /// Creates a new marshalling context.
         /// </summary>
-        /// <param name="streaming">true if marshalling to a stream</param>
-        /// <returns>the new <see cref="MarshallingContext"/></returns>
+        /// <param name="streaming">true if marshalling to a stream.</param>
+        /// <returns>the new <see cref="MarshallingContext"/>.</returns>
         public override MarshallingContext CreateMarshallingContext(bool streaming)
         {
             return new DelimitedMarshallingContext();

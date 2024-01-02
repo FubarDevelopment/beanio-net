@@ -16,16 +16,14 @@ using BeanIO.Internal.Config.Annotation;
 using BeanIO.Internal.Util;
 using BeanIO.Stream;
 
-using JetBrains.Annotations;
-
 namespace BeanIO.Internal.Config.Xml
 {
     /// <summary>
-    /// Parses a mapping file into <see cref="BeanIOConfig"/> objects
+    /// Parses a mapping file into <see cref="BeanIOConfig"/> objects.
     /// </summary>
     /// <remarks>
     /// <para>A <see cref="BeanIOConfig"/> is produced for each mapping file imported by the
-    /// mapping file being parsed, and the entire collection is returned from <see cref="LoadConfiguration"/></para>
+    /// mapping file being parsed, and the entire collection is returned from <see cref="LoadConfiguration"/>.</para>
     /// <para>This class is not thread safe and a new instance should be created for parsing
     /// each input stream.</para>
     /// </remarks>
@@ -34,42 +32,40 @@ namespace BeanIO.Internal.Config.Xml
         private static readonly bool _propertySubstitutionEnabled = Settings.Instance.GetBoolean(Settings.PROPERTY_SUBSTITUTION_ENABLED);
 
         /// <summary>
-        /// used to read XML into a DOM object
+        /// used to read XML into a DOM object.
         /// </summary>
         private readonly XmlMappingReader _reader;
 
         private readonly Stack<Include> _includes = new Stack<Include>();
 
         /// <summary>
-        /// custom Properties provided by the client for property expansion
+        /// custom Properties provided by the client for property expansion.
         /// </summary>
-        private Properties _properties;
+        private Properties? _properties;
 
         /// <summary>
-        /// the mapping currently being parsed
+        /// the mapping currently being parsed.
         /// </summary>
         private XmlMapping _mapping;
 
         /// <summary>
-        /// a Dictionary of all loaded mappings (including the root)
+        /// a Dictionary of all loaded mappings (including the root).
         /// </summary>
         private Dictionary<Uri, XmlMapping> _mappings;
 
         /// <summary>
-        /// whether the current record class was annotated
+        /// whether the current record class was annotated.
         /// </summary>
         private bool _annotatedRecord = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlMappingParser"/> class.
         /// </summary>
-        /// <param name="reader">the XML mapping reader for reading XML mapping files into a DOM object</param>
-        public XmlMappingParser([NotNull] XmlMappingReader reader)
+        /// <param name="reader">the XML mapping reader for reading XML mapping files into a DOM object.</param>
+        public XmlMappingParser(XmlMappingReader reader)
         {
-            if (reader == null)
-                throw new ArgumentNullException(nameof(reader));
-
-            _reader = reader;
+            _reader = reader ?? throw new ArgumentNullException(nameof(reader));
+            (_mappings, _mapping) = CreateDefaultMappings();
         }
 
         /// <summary>
@@ -97,17 +93,13 @@ namespace BeanIO.Internal.Config.Xml
         /// configurations, one for the input stream and one for each imported
         /// mapping file (if specified).
         /// </summary>
-        /// <param name="input">the input stream to read from</param>
-        /// <param name="properties">the <see cref="Properties"/> to use for property substitution</param>
-        /// <returns>the collection of parsed BeanIO configuration objects</returns>
-        public ICollection<BeanIOConfig> LoadConfiguration([NotNull] System.IO.Stream input, [CanBeNull] Properties properties)
+        /// <param name="input">the input stream to read from.</param>
+        /// <param name="properties">the <see cref="Properties"/> to use for property substitution.</param>
+        /// <returns>the collection of parsed BeanIO configuration objects.</returns>
+        public ICollection<BeanIOConfig> LoadConfiguration(System.IO.Stream input, Properties? properties)
         {
             _properties = properties;
-            _mapping = new XmlMapping();
-            _mappings = new Dictionary<Uri, XmlMapping>
-                {
-                    { new Uri("root:"), _mapping },
-                };
+            (_mappings, _mapping) = CreateDefaultMappings();
 
             try
             {
@@ -136,13 +128,13 @@ namespace BeanIO.Internal.Config.Xml
         }
 
         /// <summary>
-        /// Returns the property value for a given key
+        /// Returns the property value for a given key.
         /// </summary>
-        /// <param name="key">the property key</param>
-        /// <returns>the property value</returns>
-        public string GetProperty(string key)
+        /// <param name="key">the property key.</param>
+        /// <returns>the property value.</returns>
+        public string? GetProperty(string key)
         {
-            string value = null;
+            string? value = null;
             if (_properties != null)
             {
                 value = _properties[key];
@@ -161,23 +153,25 @@ namespace BeanIO.Internal.Config.Xml
         }
 
         /// <summary>
-        /// Includes a template
+        /// Includes a template.
         /// </summary>
-        /// <param name="config">the parent bean configuration</param>
-        /// <param name="element">the <code>include</code> DOM element to parse</param>
+        /// <param name="config">the parent bean configuration.</param>
+        /// <param name="element">the <c>include</c> DOM element to parse.</param>
         public void IncludeTemplate(ComponentConfig config, XElement element)
         {
-            var template = GetAttribute(element, "template");
+            var template =
+                GetAttribute(element, "template")
+                ?? throw new InvalidOperationException($"Template attribute not specified for element '{element}'");
             var offset = GetIntAttribute(element, "offset") ?? 0;
             IncludeTemplate(config, template, offset);
         }
 
         /// <summary>
-        /// Includes a template
+        /// Includes a template.
         /// </summary>
-        /// <param name="config">the parent bean configuration</param>
-        /// <param name="template">the name of the template to include</param>
-        /// <param name="offset">the value to offset configured positions by</param>
+        /// <param name="config">the parent bean configuration.</param>
+        /// <param name="template">the name of the template to include.</param>
+        /// <param name="offset">the value to offset configured positions by.</param>
         public void IncludeTemplate(ComponentConfig config, string template, int offset)
         {
             var element = _mapping.FindTemplate(template);
@@ -203,17 +197,17 @@ namespace BeanIO.Internal.Config.Xml
         }
 
         /// <summary>
-        /// Initiates the parsing of an imported mapping file
+        /// Initiates the parsing of an imported mapping file.
         /// </summary>
         /// <remarks>
-        /// After parsing completes, <see cref="Pop"/> must be invoked before continuing
+        /// After parsing completes, <see cref="Pop"/> must be invoked before continuing.
         /// </remarks>
-        /// <param name="name">the name of the imported mapping file</param>
+        /// <param name="name">the name of the imported mapping file.</param>
         /// <param name="location">the location of the imported mapping file
         /// (this should be an absolute URL so that importing the
-        /// same mapping more than once can be detected)</param>
+        /// same mapping more than once can be detected).</param>
         /// <returns>the new Mapping object pushed onto the stack
-        /// (this can also be accessed by calling <see cref="Mapping"/></returns>
+        /// (this can also be accessed by calling <see cref="Mapping"/>.</returns>
         protected XmlMapping Push(string name, Uri location)
         {
             var m = new XmlMapping(name, location, _mapping);
@@ -224,28 +218,28 @@ namespace BeanIO.Internal.Config.Xml
         }
 
         /// <summary>
-        /// Completes the parsing of an imported mapping file
+        /// Completes the parsing of an imported mapping file.
         /// </summary>
         /// <seealso cref="Push"/>
         protected void Pop()
         {
-            _mapping = _mapping.Parent;
+            _mapping = _mapping.Parent ?? throw new InvalidOperationException("XML mapping parser stack is empty");
         }
 
         /// <summary>
-        /// Loads a mapping file from an input stream
+        /// Loads a mapping file from an input stream.
         /// </summary>
-        /// <param name="input">the input stream to read from</param>
+        /// <param name="input">the input stream to read from.</param>
         protected virtual void LoadMapping(System.IO.Stream input)
         {
             var doc = _reader.LoadDocument(input);
-            LoadMapping(doc.Root);
+            LoadMapping(doc.Root ?? throw new InvalidOperationException("XML document contains no root element"));
         }
 
         /// <summary>
-        /// Parses a BeanIO configuration from a DOM element
+        /// Parses a BeanIO configuration from a DOM element.
         /// </summary>
-        /// <param name="element">the root <code>beanio</code> DOM element to parse</param>
+        /// <param name="element">the root <c>beanio</c> DOM element to parse.</param>
         protected virtual void LoadMapping(XElement element)
         {
             var config = _mapping.Configuration;
@@ -259,7 +253,7 @@ namespace BeanIO.Internal.Config.Xml
                         break;
                     case "property":
                         {
-                            var key = GetAttribute(child, "name");
+                            var key = GetAttribute(child, "name") ?? throw new InvalidOperationException("\"name\" attribute missing or empty");
                             var value = GetAttribute(child, "value");
                             _mapping.SetProperty(key, value);
                         }
@@ -285,13 +279,14 @@ namespace BeanIO.Internal.Config.Xml
         }
 
         /// <summary>
-        /// Parses an <code>import</code> DOM element and loads its mapping file
+        /// Parses an <c>import</c> DOM element and loads its mapping file.
         /// </summary>
-        /// <param name="element">the <code>import</code> DOM element</param>
-        /// <returns>a new <see cref="XmlMapping"/> for the imported resource or file</returns>
+        /// <param name="element">the <c>import</c> DOM element.</param>
+        /// <returns>a new <see cref="XmlMapping"/> for the imported resource or file.</returns>
         protected XmlMapping ImportConfiguration(XElement element)
         {
-            var resource = GetAttribute(element, "resource");
+            var resource = GetAttribute(element, "resource")
+                           ?? throw new BeanIOConfigurationException($"Element {element} contains no resource attribute");
             var name = resource;
 
             var colonIndex = resource.IndexOf(':');
@@ -310,8 +305,7 @@ namespace BeanIO.Internal.Config.Xml
                 throw new BeanIOConfigurationException($"Failed to import resource '{name}': Circular reference(s) detected");
 
             // check to see if the mapping file has already been loaded
-            XmlMapping m;
-            if (_mappings.TryGetValue(url, out m))
+            if (_mappings.TryGetValue(url, out var m))
             {
                 _mapping.AddImport(m);
                 return m;
@@ -343,10 +337,10 @@ namespace BeanIO.Internal.Config.Xml
         }
 
         /// <summary>
-        /// Parses a <see cref="TypeHandlerConfig"/> from a DOM element
+        /// Parses a <see cref="TypeHandlerConfig"/> from a DOM element.
         /// </summary>
-        /// <param name="element">the DOM element to parse</param>
-        /// <returns>the new <see cref="TypeHandlerConfig"/></returns>
+        /// <param name="element">the DOM element to parse.</param>
+        /// <returns>the new <see cref="TypeHandlerConfig"/>.</returns>
         protected virtual TypeHandlerConfig CreateHandlerConfig(XElement element)
         {
             var config = new TypeHandlerConfig
@@ -361,22 +355,24 @@ namespace BeanIO.Internal.Config.Xml
         }
 
         /// <summary>
-        /// Adds a template to the active mapping
+        /// Adds a template to the active mapping.
         /// </summary>
-        /// <param name="element">the DOM element that defines the template</param>
+        /// <param name="element">the DOM element that defines the template.</param>
         protected virtual void CreateTemplate(XElement element)
         {
-            var templateName = GetAttribute(element, "name");
+            var templateName =
+                GetAttribute(element, "name")
+                ?? throw new BeanIOConfigurationException($"Element {element} contains nor template name attribute");
             if (!_mapping.AddTemplate(templateName, element))
                 throw new BeanIOConfigurationException($"Duplicate template named '{templateName}'");
         }
 
         /// <summary>
-        /// Parses a <code>Bean</code> from a DOM element
+        /// Parses a <c>Bean</c> from a DOM element.
         /// </summary>
-        /// <typeparam name="T">the bean type</typeparam>
-        /// <param name="element">the DOM element to parse</param>
-        /// <returns>the new <code>Bean</code></returns>
+        /// <typeparam name="T">the bean type.</typeparam>
+        /// <param name="element">the DOM element to parse.</param>
+        /// <returns>the new <c>Bean</c>.</returns>
         protected BeanConfig<T> CreateBeanFactory<T>(XElement element)
         {
             return new BeanConfig<T>()
@@ -387,24 +383,22 @@ namespace BeanIO.Internal.Config.Xml
         }
 
         /// <summary>
-        /// Parses <see cref="Properties"/> from a DOM element
+        /// Parses <see cref="Properties"/> from a DOM element.
         /// </summary>
-        /// <param name="element">the DOM element to parse</param>
-        /// <returns>the new <see cref="Properties"/></returns>
+        /// <param name="element">the DOM element to parse.</param>
+        /// <returns>the new <see cref="Properties"/>.</returns>
         protected Properties CreateProperties(XElement element)
         {
-            var props = new Dictionary<string, string>();
+            var props = new Dictionary<string, string?>();
             foreach (var child in element.Elements())
             {
                 switch (child.Name.LocalName)
                 {
                     case "property":
-                        {
-                            var name = GetAttribute(child, "name");
-                            var value = GetAttribute(child, "value");
-                            props[name] = value ?? string.Empty;
-                        }
-
+                        var name = GetAttribute(child, "name")
+                                   ?? throw new BeanIOConfigurationException($"Element contains nor name attribute");
+                        var value = GetAttribute(child, "value");
+                        props[name] = value ?? string.Empty;
                         break;
                 }
             }
@@ -413,29 +407,30 @@ namespace BeanIO.Internal.Config.Xml
         }
 
         /// <summary>
-        /// Parses a field configuration from a DOM element
+        /// Parses a field configuration from a DOM element.
         /// </summary>
-        /// <param name="element">the <code>field</code> DOM element to parse</param>
-        /// <returns>the parsed field configuration</returns>
+        /// <param name="element">the <c>field</c> DOM element to parse.</param>
+        /// <returns>the parsed field configuration.</returns>
         protected FieldConfig CreateFieldConfig(XElement element)
         {
             var config = new FieldConfig()
-                {
-                    MinLength = GetIntAttribute(element, "minLength"),
-                    MaxLength = GetUnboundedIntAttribute(element, "maxLength"),
-                    RegEx = GetAttribute(element, "regex"),
-                    Literal = GetAttribute(element, "literal"),
-                    TypeHandler = GetTypeHandler(element, "typeHandler"),
-                    Type = GetAttribute(element, "type"),
-                    Format = GetAttribute(element, "format"),
-                    DefaultValue = GetOptionalAttribute(element, "default"),
-                    Length = GetUnboundedIntAttribute(element, "length", -1),
-                    Padding = GetCharacterAttribute(element, "padding"),
-                    XmlType = GetEnumAttribute<XmlNodeType>(element, "xmlType"),
-                    XmlName = GetAttribute(element, "xmlName"),
-                    XmlNamespace = GetOptionalAttribute(element, "xmlNamespace"),
-                    XmlPrefix = GetOptionalAttribute(element, "xmlPrefix")
-                };
+            {
+                Name = GetAttribute(element, "name"),
+                MinLength = GetIntAttribute(element, "minLength"),
+                MaxLength = GetUnboundedIntAttribute(element, "maxLength"),
+                RegEx = GetAttribute(element, "regex"),
+                Literal = GetAttribute(element, "literal"),
+                TypeHandler = GetTypeHandler(element, "typeHandler"),
+                Type = GetAttribute(element, "type"),
+                Format = GetAttribute(element, "format"),
+                DefaultValue = GetOptionalAttribute(element, "default"),
+                Length = GetUnboundedIntAttribute(element, "length", -1),
+                Padding = GetCharacterAttribute(element, "padding"),
+                XmlType = GetEnumAttribute<XmlNodeType>(element, "xmlType"),
+                XmlName = GetAttribute(element, "xmlName"),
+                XmlNamespace = GetOptionalAttribute(element, "xmlNamespace"),
+                XmlPrefix = GetOptionalAttribute(element, "xmlPrefix")
+            };
 
             PopulatePropertyConfig(config, element);
 
@@ -482,10 +477,10 @@ namespace BeanIO.Internal.Config.Xml
         }
 
         /// <summary>
-        /// Parses a constant component configuration from a DOM element
+        /// Parses a constant component configuration from a DOM element.
         /// </summary>
-        /// <param name="element">the <code>property</code> DOM element to parse</param>
-        /// <returns>the parsed constant configuration</returns>
+        /// <param name="element">the <c>property</c> DOM element to parse.</param>
+        /// <returns>the parsed constant configuration.</returns>
         protected ConstantConfig CreateConstantConfig(XElement element)
         {
             var name = GetAttribute(element, "name");
@@ -513,10 +508,10 @@ namespace BeanIO.Internal.Config.Xml
         }
 
         /// <summary>
-        /// Parses a <see cref="StreamConfig"/> from a DOM element
+        /// Parses a <see cref="StreamConfig"/> from a DOM element.
         /// </summary>
-        /// <param name="element">the <code>stream</code> DOM element to parse</param>
-        /// <returns>the new <see cref="StreamConfig"/></returns>
+        /// <param name="element">the <c>stream</c> DOM element to parse.</param>
+        /// <returns>the new <see cref="StreamConfig"/>.</returns>
         protected StreamConfig CreateStreamConfig(XElement element)
         {
             var config = new StreamConfig()
@@ -558,10 +553,10 @@ namespace BeanIO.Internal.Config.Xml
         }
 
         /// <summary>
-        /// Parses a group configuration from a DOM element
+        /// Parses a group configuration from a DOM element.
         /// </summary>
-        /// <param name="element">the <code>group</code> DOM element to parse</param>
-        /// <returns>the parsed group configuration</returns>
+        /// <param name="element">the <c>group</c> DOM element to parse.</param>
+        /// <returns>the parsed group configuration.</returns>
         protected GroupConfig CreateGroupConfig(XElement element)
         {
             var typeName = GetAttribute(element, "class");
@@ -570,15 +565,16 @@ namespace BeanIO.Internal.Config.Xml
                 return config;
 
             config = new GroupConfig()
-                {
-                    Type = typeName,
-                    Order = GetIntAttribute(element, "order"),
-                    Target = GetAttribute(element, "value"),
-                    XmlName = GetAttribute(element, "xmlName"),
-                    XmlNamespace = GetOptionalAttribute(element, "xmlNamespace"),
-                    XmlPrefix = GetOptionalAttribute(element, "xmlPrefix"),
-                    XmlType = GetOptionalEnumAttribute<XmlNodeType>(element, "xmlType"),
-                };
+            {
+                Name = GetAttribute(element, "name"),
+                Type = typeName,
+                Order = GetIntAttribute(element, "order"),
+                Target = GetAttribute(element, "value"),
+                XmlName = GetAttribute(element, "xmlName"),
+                XmlNamespace = GetOptionalAttribute(element, "xmlNamespace"),
+                XmlPrefix = GetOptionalAttribute(element, "xmlPrefix"),
+                XmlType = GetOptionalEnumAttribute<XmlNodeType>(element, "xmlType"),
+            };
             PopulatePropertyConfig(config, element);
             config.SetKey(GetAttribute(element, "key"));
 
@@ -599,10 +595,10 @@ namespace BeanIO.Internal.Config.Xml
         }
 
         /// <summary>
-        /// Parses a record configuration from the given DOM element
+        /// Parses a record configuration from the given DOM element.
         /// </summary>
-        /// <param name="element">the <code>record</code> DOM element to parse</param>
-        /// <returns>the parsed record configuration</returns>
+        /// <param name="element">the <c>record</c> DOM element to parse.</param>
+        /// <returns>the parsed record configuration.</returns>
         protected RecordConfig CreateRecordConfig(XElement element)
         {
             var typeName = GetAttribute(element, "class");
@@ -612,6 +608,7 @@ namespace BeanIO.Internal.Config.Xml
 
             config = new RecordConfig()
                 {
+                    Name = GetAttribute(element, "name"),
                     Type = typeName,
                     Order = GetIntAttribute(element, "order"),
                     MinLength = GetIntAttribute(element, "minLength"),
@@ -652,14 +649,15 @@ namespace BeanIO.Internal.Config.Xml
         }
 
         /// <summary>
-        /// Parses a segment component configuration from a DOM element
+        /// Parses a segment component configuration from a DOM element.
         /// </summary>
-        /// <param name="element">the <code>segment</code> DOM element to parse</param>
-        /// <returns>the parsed segment configuration</returns>
+        /// <param name="element">the <c>segment</c> DOM element to parse.</param>
+        /// <returns>the parsed segment configuration.</returns>
         protected SegmentConfig CreateSegmentConfig(XElement element)
         {
             var config = new SegmentConfig()
                 {
+                    Name = GetAttribute(element, "name"),
                     Type = GetAttribute(element, "class"),
                     XmlName = GetAttribute(element, "xmlName"),
                     XmlNamespace = GetOptionalAttribute(element, "xmlNamespace"),
@@ -693,10 +691,10 @@ namespace BeanIO.Internal.Config.Xml
         }
 
         /// <summary>
-        /// Parses bean properties from the given DOM element
+        /// Parses bean properties from the given DOM element.
         /// </summary>
-        /// <param name="config">the enclosing bean configuration to add the properties to</param>
-        /// <param name="element">the <code>bean</code> or <code>record</code> DOM element to parse</param>
+        /// <param name="config">the enclosing bean configuration to add the properties to.</param>
+        /// <param name="element">the <c>bean</c> or <c>record</c> DOM element to parse.</param>
         protected void AddProperties(ComponentConfig config, XElement element)
         {
             foreach (var child in element.Elements())
@@ -722,7 +720,18 @@ namespace BeanIO.Internal.Config.Xml
             }
         }
 
-        private string GetTypeHandler(XElement element, string name)
+        private static (Dictionary<Uri, XmlMapping> Mappings, XmlMapping Mapping) CreateDefaultMappings()
+        {
+            var mapping = new XmlMapping();
+            var mappings = new Dictionary<Uri, XmlMapping>
+            {
+                { new Uri("root:"), mapping },
+            };
+
+            return (mappings, mapping);
+        }
+
+        private string? GetTypeHandler(XElement element, string name)
         {
             var handler = GetAttribute(element, name);
             /*
@@ -733,7 +742,7 @@ namespace BeanIO.Internal.Config.Xml
             return handler;
         }
 
-        private string DoPropertySubstitution(string text)
+        private string? DoPropertySubstitution(string? text)
         {
             try
             {
@@ -745,7 +754,7 @@ namespace BeanIO.Internal.Config.Xml
             }
         }
 
-        private string GetOptionalAttribute(XElement element, string name)
+        private string? GetOptionalAttribute(XElement element, string name)
         {
             var attr = element.Attribute(name);
             if (attr == null)
@@ -758,10 +767,10 @@ namespace BeanIO.Internal.Config.Xml
             return element.Attribute(name) != null;
         }
 
-        private string GetAttribute(XElement element, string name)
+        private string? GetAttribute(XElement element, string name)
         {
             var attr = element.Attribute(name);
-            string value;
+            string? value;
             if (attr == null)
                 value = null;
             else if (string.IsNullOrEmpty(attr.Value))
@@ -794,7 +803,7 @@ namespace BeanIO.Internal.Config.Xml
             var text = GetAttribute(element, name);
             if (string.IsNullOrEmpty(text))
                 return null;
-            return text[0];
+            return text![0];
         }
 
         private bool? GetBoolAttribute(XElement element, string name)
@@ -811,8 +820,7 @@ namespace BeanIO.Internal.Config.Xml
             var text = GetAttribute(element, name);
             if (string.IsNullOrEmpty(text))
                 return null;
-            T result;
-            if (Enum.TryParse(text, true, out result))
+            if (Enum.TryParse(text, true, out T result))
                 return result;
             throw new BeanIOConfigurationException(string.Format("Invalid {1} '{0}'", text, name));
         }
@@ -826,7 +834,7 @@ namespace BeanIO.Internal.Config.Xml
             return (T)Enum.Parse(typeof(T), text, true);
         }
 
-        private Range GetRangeAttribute(XElement element, string name)
+        private Range? GetRangeAttribute(XElement element, string name)
         {
             // parse occurs (e.g. '1', '0-1', '0+', '1+' etc)
             var range = GetAttribute(element, name);
@@ -867,7 +875,6 @@ namespace BeanIO.Internal.Config.Xml
 
         private void PopulatePropertyConfig(PropertyConfig config, XElement element)
         {
-            config.Name = GetAttribute(element, "name");
             config.ValidateOnMarshal = GetBoolAttribute(element, "validateOnMarshal");
             config.Getter = GetAttribute(element, "getter");
             config.Setter = GetAttribute(element, "setter");

@@ -19,12 +19,12 @@ namespace BeanIO.Internal.Parser.Format.Xml
     internal class XmlSelectorWrapper : ParserComponent, ISelector, IXmlNode
     {
         /// <summary>
-        /// map key used to store the state of the 'addToHierarchy' attribute
+        /// map key used to store the state of the 'addToHierarchy' attribute.
         /// </summary>
         private static readonly string WRITTEN_KEY = "written";
 
         /// <summary>
-        /// state attributes
+        /// state attributes.
         /// </summary>
         private readonly ParserLocal<bool> _written = new ParserLocal<bool>(false);
 
@@ -81,7 +81,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Gets the <see cref="IProperty"/> mapped to this component, or null if there is no property mapping.
         /// </summary>
-        public IProperty Property => ChildSelector.Property;
+        public IProperty? Property => ChildSelector.Property;
 
         /// <summary>
         /// Gets a value indicating whether this component is a record group.
@@ -89,20 +89,20 @@ namespace BeanIO.Internal.Parser.Format.Xml
         public bool IsRecordGroup => false;
 
         /// <summary>
-        /// Gets the XML node type
+        /// Gets the XML node type.
         /// </summary>
         public XmlNodeType Type => XmlNodeType.Element;
 
         /// <summary>
         /// Gets or sets the XML local name for this node.
         /// </summary>
-        public string LocalName { get; set; }
+        public string? LocalName { get; set; }
 
         /// <summary>
         /// Gets or sets the namespace of this node.  If there is no namespace for this
-        /// node, or this node is not namespace aware, <code>null</code> is returned.
+        /// node, or this node is not namespace aware, <see langword="null" /> is returned.
         /// </summary>
-        public string Namespace { get; set; }
+        public string? Namespace { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether a namespace was configured for this node,
@@ -111,10 +111,10 @@ namespace BeanIO.Internal.Parser.Format.Xml
         public bool IsNamespaceAware { get; set; }
 
         /// <summary>
-        /// Gets or sets the namespace prefix for marshaling this node, or <code>null</code>
+        /// Gets or sets the namespace prefix for marshaling this node, or <see langword="null" />
         /// if the namespace should override the default namespace.
         /// </summary>
-        public string Prefix { get; set; }
+        public string? Prefix { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this node is nillable.
@@ -127,7 +127,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         public bool IsRepeating => false;
 
         /// <summary>
-        /// Gets the child selector of this component wraps
+        /// Gets the child selector of this component wraps.
         /// </summary>
         public ISelector ChildSelector => (ISelector)First;
 
@@ -138,8 +138,8 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Returns whether this parser and its children match a record being unmarshalled.
         /// </summary>
-        /// <param name="context">The <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if matched, false otherwise</returns>
+        /// <param name="context">The <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if matched, false otherwise.</returns>
         public override bool Matches(UnmarshallingContext context)
         {
             // a group is never used to match a record
@@ -147,20 +147,20 @@ namespace BeanIO.Internal.Parser.Format.Xml
         }
 
         /// <summary>
-        /// Unmarshals a record
+        /// Unmarshals a record.
         /// </summary>
-        /// <param name="context">The <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if this component was present in the unmarshalled record, or false otherwise</returns>
+        /// <param name="context">The <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if this component was present in the unmarshalled record, or false otherwise.</returns>
         public override bool Unmarshal(UnmarshallingContext context)
         {
             return ChildSelector.Unmarshal(context);
         }
 
         /// <summary>
-        /// Marshals a record
+        /// Marshals a record.
         /// </summary>
-        /// <param name="context">The <see cref="MarshallingContext"/></param>
-        /// <returns>whether a value was marshalled</returns>
+        /// <param name="context">The <see cref="MarshallingContext"/>.</param>
+        /// <returns>whether a value was marshalled.</returns>
         public override bool Marshal(MarshallingContext context)
         {
             var ctx = (XmlMarshallingContext)context;
@@ -193,7 +193,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
             node = XElement.Parse(node.ToString());
             foreach (var annotation in annotations)
                 node.SetAnnotation(annotation);
-            parent.Add(node);
+            parent?.Add(node);
 
             ctx.Parent = node;
             var b = ChildSelector.Marshal(context);
@@ -207,8 +207,8 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Returns whether this parser or any of its descendant have content for marshalling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <returns>true if there is content for marshalling, false otherwise</returns>
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <returns>true if there is content for marshalling, false otherwise.</returns>
         public override bool HasContent(ParsingContext context)
         {
             return ChildSelector.HasContent(context);
@@ -217,7 +217,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Clears the current property value.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
         public override void ClearValue(ParsingContext context)
         {
             ChildSelector.ClearValue(context);
@@ -226,9 +226,9 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Sets the property value for marshaling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <param name="value">the property value</param>
-        public override void SetValue(ParsingContext context, object value)
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <param name="value">the property value.</param>
+        public override void SetValue(ParsingContext context, object? value)
         {
             ChildSelector.SetValue(context, value);
         }
@@ -236,9 +236,9 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Returns the unmarshalled property value.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <returns>the property value</returns>
-        public override object GetValue(ParsingContext context)
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <returns>the property value.</returns>
+        public override object? GetValue(ParsingContext context)
         {
             return ChildSelector.GetValue(context);
         }
@@ -247,8 +247,8 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// Returns the number of times this component was matched within the current
         /// iteration of its parent component.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <returns>the match count</returns>
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <returns>the match count.</returns>
         public int GetCount(ParsingContext context)
         {
             return ChildSelector.GetCount(context);
@@ -258,33 +258,33 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// Sets the number of times this component was matched within the current
         /// iteration of its parent component.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <param name="value">the new count</param>
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <param name="value">the new count.</param>
         public void SetCount(ParsingContext context, int value)
         {
             ChildSelector.SetCount(context, value);
         }
 
         /// <summary>
-        /// Returns a value indicating whether this component has reached its maximum occurrences
+        /// Returns a value indicating whether this component has reached its maximum occurrences.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <returns>true if maximum occurrences has been reached</returns>
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <returns>true if maximum occurrences has been reached.</returns>
         public bool IsMaxOccursReached(ParsingContext context)
         {
             return ChildSelector.IsMaxOccursReached(context);
         }
 
         /// <summary>
-        /// Finds a parser for marshalling a bean object
+        /// Finds a parser for marshalling a bean object.
         /// </summary>
         /// <remarks>
         /// If matched by this Selector, the method
         /// should set the bean object on the property tree and return itself.
         /// </remarks>
-        /// <param name="context">the <see cref="MarshallingContext"/></param>
-        /// <returns>the matched <see cref="ISelector"/> for marshalling the bean object</returns>
-        public ISelector MatchNext(MarshallingContext context)
+        /// <param name="context">the <see cref="MarshallingContext"/>.</param>
+        /// <returns>the matched <see cref="ISelector"/> for marshalling the bean object.</returns>
+        public ISelector? MatchNext(MarshallingContext context)
         {
             var ctx = (XmlMarshallingContext)context;
 
@@ -338,23 +338,23 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Finds a parser for unmarshalling a record based on the current state of the stream.
         /// </summary>
-        /// <param name="context">the <see cref="UnmarshallingContext"/></param>
-        /// <returns>the matched <see cref="ISelector"/> for unmarshalling the record</returns>
-        public ISelector MatchNext(UnmarshallingContext context)
+        /// <param name="context">the <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>the matched <see cref="ISelector"/> for unmarshalling the record.</returns>
+        public ISelector? MatchNext(UnmarshallingContext context)
         {
             return Match(context, true);
         }
 
         /// <summary>
-        /// Finds a parser that matches the input record
+        /// Finds a parser that matches the input record.
         /// </summary>
         /// <remarks>
         /// This method is invoked when <see cref="ISelector.MatchNext(BeanIO.Internal.Parser.UnmarshallingContext)"/> returns
         /// null, in order to differentiate between unexpected and unidentified record types.
         /// </remarks>
-        /// <param name="context">the <see cref="UnmarshallingContext"/></param>
-        /// <returns>the matched <see cref="ISelector"/></returns>
-        public ISelector MatchAny(UnmarshallingContext context)
+        /// <param name="context">the <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>the matched <see cref="ISelector"/>.</returns>
+        public ISelector? MatchAny(UnmarshallingContext context)
         {
             return Match(context, false);
         }
@@ -362,7 +362,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Skips a record or group of records.
         /// </summary>
-        /// <param name="context">the <see cref="UnmarshallingContext"/></param>
+        /// <param name="context">the <see cref="UnmarshallingContext"/>.</param>
         public void Skip(UnmarshallingContext context)
         {
             ChildSelector.Skip(context);
@@ -371,9 +371,9 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Checks for any unsatisfied components before the stream is closed.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <returns>the first unsatisfied node</returns>
-        public ISelector Close(ParsingContext context)
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <returns>the first unsatisfied node.</returns>
+        public ISelector? Close(ParsingContext context)
         {
             return ChildSelector.Close(context);
         }
@@ -381,7 +381,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Resets the component count of this Selector's children.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
         public void Reset(ParsingContext context)
         {
             _written.Set(context, false);
@@ -391,10 +391,10 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Updates a <see cref="IDictionary{TKey,TValue}"/> with the current state of the Writer to allow for restoration at a later time.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <param name="ns">a <see cref="string"/> to prefix all state keys with</param>
-        /// <param name="state">the <see cref="IDictionary{TKey,TValue}"/> to update with the latest state</param>
-        public void UpdateState(ParsingContext context, string ns, IDictionary<string, object> state)
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <param name="ns">a <see cref="string"/> to prefix all state keys with.</param>
+        /// <param name="state">the <see cref="IDictionary{TKey,TValue}"/> to update with the latest state.</param>
+        public void UpdateState(ParsingContext context, string ns, IDictionary<string, object?> state)
         {
             state[GetKey(ns, WRITTEN_KEY)] = _written.Get(context);
 
@@ -404,15 +404,15 @@ namespace BeanIO.Internal.Parser.Format.Xml
         }
 
         /// <summary>
-        /// Restores a <see cref="IDictionary{TKey,TValue}"/> of previously stored state information
+        /// Restores a <see cref="IDictionary{TKey,TValue}"/> of previously stored state information.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <param name="ns">a <see cref="string"/> to prefix all state keys with</param>
-        /// <param name="state">the <see cref="IDictionary{TKey,TValue}"/> containing the state to restore</param>
-        public void RestoreState(ParsingContext context, string ns, IReadOnlyDictionary<string, object> state)
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <param name="ns">a <see cref="string"/> to prefix all state keys with.</param>
+        /// <param name="state">the <see cref="IDictionary{TKey,TValue}"/> containing the state to restore.</param>
+        public void RestoreState(ParsingContext context, string ns, IReadOnlyDictionary<string, object?> state)
         {
             var key = GetKey(ns, WRITTEN_KEY);
-            var written = (bool)state[key];
+            var written = (bool?)state[key] ?? false;
             _written.Set(context, written);
 
             // allow children to restore their state
@@ -423,8 +423,8 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// <summary>
         /// Creates a DOM made up of all <see cref="XmlSelectorWrapper"/> descendants that wrap a group or record.
         /// </summary>
-        /// <param name="nameConversionMode">The element and attribute name conversion mode</param>
-        /// <returns>the created <see cref="XDocument"/></returns>
+        /// <param name="nameConversionMode">The element and attribute name conversion mode.</param>
+        /// <returns>the created <see cref="XDocument"/>.</returns>
         public virtual XDocument CreateBaseDocument(ElementNameConversionMode nameConversionMode)
         {
             var doc = new XDocument();
@@ -439,7 +439,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
         /// This method should be overridden by subclasses that need to register
         /// one or more parser context variables.
         /// </remarks>
-        /// <param name="locals">set of local variables</param>
+        /// <param name="locals">set of local variables.</param>
         public override void RegisterLocals(ISet<IParserLocal> locals)
         {
             if (locals.Add(_written))
@@ -447,20 +447,20 @@ namespace BeanIO.Internal.Parser.Format.Xml
         }
 
         /// <summary>
-        /// Returns a Map key for accessing state information for this Node
+        /// Returns a Map key for accessing state information for this Node.
         /// </summary>
-        /// <param name="ns">the assigned namespace for the key</param>
-        /// <param name="name">the state information to access</param>
-        /// <returns>the fully qualified key</returns>
+        /// <param name="ns">the assigned namespace for the key.</param>
+        /// <param name="name">the state information to access.</param>
+        /// <returns>the fully qualified key.</returns>
         protected virtual string GetKey(string ns, string name)
         {
             return $"{ns}.{Name}.{name}";
         }
 
         /// <summary>
-        /// Called by <see cref="TreeNode{T}.ToString"/> to append node parameters to the output
+        /// Called by <see cref="TreeNode{T}.ToString"/> to append node parameters to the output.
         /// </summary>
-        /// <param name="s">The output to append</param>
+        /// <param name="s">The output to append.</param>
         protected override void ToParamString(StringBuilder s)
         {
             base.ToParamString(s);
@@ -476,8 +476,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
 
         private void CreateBaseDocument(XContainer parent, Component node, ElementNameConversionMode nameConversionMode)
         {
-            var wrapper = node as XmlSelectorWrapper;
-            if (wrapper != null)
+            if (node is XmlSelectorWrapper wrapper)
             {
                 if (!wrapper.IsGroup)
                     return;
@@ -492,11 +491,11 @@ namespace BeanIO.Internal.Parser.Format.Xml
                 {
                     annotations.Add(new NamespaceModeAnnotation(NamespaceHandlingMode.DefaultNamespace));
                 }
-                else if (string.Equals(Prefix, string.Empty))
+                else if (string.Equals(wrapper.Prefix, string.Empty))
                 {
                     annotations.Add(new NamespaceModeAnnotation(NamespaceHandlingMode.NoPrefix));
                 }
-                else if (Prefix != null)
+                else if (wrapper.Prefix != null)
                 {
                     element.SetAttributeValue(XNamespace.Xmlns + wrapper.Prefix, wrapper.Namespace);
                 }
@@ -517,12 +516,12 @@ namespace BeanIO.Internal.Parser.Format.Xml
         }
 
         /// <summary>
-        /// Matches a child <see cref="ISelector"/>
+        /// Matches a child <see cref="ISelector"/>.
         /// </summary>
-        /// <param name="context">the <see cref="UnmarshallingContext"/></param>
-        /// <param name="stateful">whether to check the state of the matched child</param>
-        /// <returns>the matched <see cref="ISelector"/>, or null if no match was made</returns>
-        private ISelector Match(UnmarshallingContext context, bool stateful)
+        /// <param name="context">the <see cref="UnmarshallingContext"/>.</param>
+        /// <param name="stateful">whether to check the state of the matched child.</param>
+        /// <returns>the matched <see cref="ISelector"/>, or null if no match was made.</returns>
+        private ISelector? Match(UnmarshallingContext context, bool stateful)
         {
             // validate the next element in the document matches this record
             var ctx = (XmlUnmarshallingContext)context;
@@ -532,7 +531,7 @@ namespace BeanIO.Internal.Parser.Format.Xml
             if (matchedDomNode == null)
                 return null;
 
-            ISelector match = null;
+            ISelector? match = null;
             try
             {
                 if (stateful)

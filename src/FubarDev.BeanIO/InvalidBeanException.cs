@@ -23,7 +23,7 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidBeanException"/> class.
         /// </summary>
-        /// <param name="message">the error message</param>
+        /// <param name="message">the error message.</param>
         public InvalidBeanException(string message)
             : base(message)
         {
@@ -32,8 +32,8 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidBeanException"/> class.
         /// </summary>
-        /// <param name="message">the error message</param>
-        /// <param name="innerException">the root cause</param>
+        /// <param name="message">the error message.</param>
+        /// <param name="innerException">the root cause.</param>
         public InvalidBeanException(string message, Exception innerException)
             : base(message, innerException)
         {

@@ -8,7 +8,7 @@ using System.Text;
 namespace BeanIO.Internal.Parser.Format.FixedLength
 {
     /// <summary>
-    /// <see cref="FieldPadding"/> implementation for a fixed length field
+    /// <see cref="FieldPadding"/> implementation for a fixed length field.
     /// </summary>
     /// <remarks>
     /// Fixed length padding differs from other field padding in that a completely blank
@@ -18,7 +18,7 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
     internal class FixedLengthFieldPadding : FieldPadding
     {
         /// <summary>
-        /// Initializes padding settings
+        /// Initializes padding settings.
         /// </summary>
         /// <remarks>
         /// This method must be invoked before <see cref="FieldPadding.Pad"/> or <see cref="FieldPadding.Unpad"/> is called.
@@ -35,10 +35,10 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
         }
 
         /// <summary>
-        /// Removes padding from the field text
+        /// Removes padding from the field text.
         /// </summary>
-        /// <param name="fieldText">the field text to remove padding</param>
-        /// <returns>the unpadded field text</returns>
+        /// <param name="fieldText">the field text to remove padding.</param>
+        /// <returns>the unpadded field text.</returns>
         public override string Unpad(string fieldText)
         {
             // return empty string if the field is all spaces, to allow for optional

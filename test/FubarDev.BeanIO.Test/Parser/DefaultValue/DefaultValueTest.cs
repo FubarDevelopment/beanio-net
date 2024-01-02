@@ -27,14 +27,16 @@ namespace BeanIO.Parser.DefaultValue
             var u = factory.CreateUnmarshaller("s");
             var m = factory.CreateMarshaller("s");
 
-            var bean = (Beans.Bean)u.Unmarshal("value1,value2,00000000");
+            var bean = (Beans.Bean?)u.Unmarshal("value1,value2,00000000");
+            Assert.NotNull(bean);
             Assert.Equal("value1", bean.field1);
-            Assert.Equal("value2", bean.GetType().GetField("field2", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(bean));
+            Assert.Equal("value2", bean.GetType().GetField("field2", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(bean));
             Assert.Equal("value1,value2,00000000", m.Marshal(bean).ToString());
 
-            bean = (Beans.Bean)u.Unmarshal(string.Empty);
+            bean = (Beans.Bean?)u.Unmarshal(string.Empty);
+            Assert.NotNull(bean);
             Assert.Equal("default1", bean.field1);
-            Assert.Equal("default2", bean.GetType().GetField("field2", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(bean));
+            Assert.Equal("default2", bean.GetType().GetField("field2", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(bean));
             Assert.Equal("default1,default2,00000000", m.Marshal(bean).ToString());
         }
 
@@ -51,11 +53,15 @@ namespace BeanIO.Parser.DefaultValue
             var u = factory.CreateUnmarshaller("s");
             var m = factory.CreateMarshaller("s");
 
-            var bean = (Beans.Bean)u.Unmarshal("value1,value2");
+            var bean = (Beans.Bean?)u.Unmarshal("value1,value2");
+            Assert.NotNull(bean);
+            Assert.NotNull(bean.list);
             Assert.Equal(new[] { "value1", "value2" }, bean.list.Cast<string>());
             Assert.Equal("value1,value2", m.Marshal(bean).ToString());
 
-            bean = (Beans.Bean)u.Unmarshal(string.Empty);
+            bean = (Beans.Bean?)u.Unmarshal(string.Empty);
+            Assert.NotNull(bean);
+            Assert.NotNull(bean.list);
             Assert.Equal(new[] { "default" }, bean.list.Cast<string>());
             Assert.Equal("default", m.Marshal(bean).ToString());
         }

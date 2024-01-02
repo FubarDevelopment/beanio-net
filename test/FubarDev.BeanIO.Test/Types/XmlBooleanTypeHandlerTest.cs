@@ -18,6 +18,7 @@ namespace BeanIO.Types
         public void TestParse()
         {
             var handler = _factory.GetTypeHandlerFor(typeof(bool), "xml");
+            Assert.NotNull(handler);
             Assert.True(Assert.IsType<bool>(handler.Parse("true")));
             Assert.True(Assert.IsType<bool>(handler.Parse("1")));
             Assert.False(Assert.IsType<bool>(handler.Parse("false")));

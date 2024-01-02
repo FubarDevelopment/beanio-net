@@ -7,20 +7,19 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 
 using BeanIO.Internal.Parser;
 
-using JetBrains.Annotations;
-
 using NodaTime;
 
 namespace BeanIO.Internal.Util
 {
     /// <summary>
-    /// Type utility functions
+    /// Type utility functions.
     /// </summary>
     internal static class TypeUtil
     {
@@ -80,8 +79,8 @@ namespace BeanIO.Internal.Util
         /// <summary>
         /// Get all the well known names for a given type.
         /// </summary>
-        /// <param name="type">The type to return the well known names for</param>
-        /// <returns>The well known names of the given <paramref name="type"/></returns>
+        /// <param name="type">The type to return the well known names for.</param>
+        /// <returns>The well known names of the given <paramref name="type"/>.</returns>
         public static IEnumerable<string> GetWellKnownNamesFor(this Type type)
         {
             var fullName = type.GetAssemblyQualifiedName();
@@ -92,8 +91,8 @@ namespace BeanIO.Internal.Util
         /// Returns true if the type alias is not used to register a
         /// type handler for its associated class.
         /// </summary>
-        /// <param name="alias">the type alias to check</param>
-        /// <returns>true if the type alias is only an alias</returns>
+        /// <param name="alias">the type alias to check.</param>
+        /// <returns>true if the type alias is only an alias.</returns>
         public static bool IsAliasOnly(this string alias)
         {
             Type result;
@@ -105,32 +104,35 @@ namespace BeanIO.Internal.Util
         }
 #endif
 
-        public static bool CanSetTo(this object value, Type type)
+        public static bool CanSetTo(this object? value, Type? type)
         {
-            return value != null || !type.GetTypeInfo().IsPrimitive || Nullable.GetUnderlyingType(type) != null;
+            if (type == null)
+            {
+                return false;
+            }
+
+            return value != null || !type.IsPrimitive || Nullable.GetUnderlyingType(type) != null;
         }
 
         /// <summary>
         /// Returns the type object for a class name or type alias.  A type alias is not case sensitive.
         /// </summary>
-        /// <param name="typeName">the fully qualified class name or type alias</param>
-        /// <returns>the class, or null if the type name is invalid</returns>
-        [CanBeNull]
-        public static Type ToType(this string typeName)
+        /// <param name="typeName">the fully qualified class name or type alias.</param>
+        /// <returns>the class, or null if the type name is invalid.</returns>
+        public static Type? ToType(this string typeName)
         {
-            Type result;
-            if (!_wellKnownTypes.TryGetValue(typeName, out result))
+            if (!_wellKnownTypes.TryGetValue(typeName, out var result))
                 result = Type.GetType(typeName, false);
             return result;
         }
 
         /// <summary>
-        /// Returns the collection <see cref="Type"/> object for a collection class name or type alias
+        /// Returns the collection <see cref="Type"/> object for a collection class name or type alias.
         /// </summary>
-        /// <param name="type">the fully qualified class name or type alias of the collection</param>
-        /// <returns>the collection class, or <see cref="Array"/> for array,
-        /// or <code>null</code> if the type name is invalid</returns>
-        public static Type ToCollectionType(this string type)
+        /// <param name="type">the fully qualified class name or type alias of the collection.</param>
+        /// <returns>the collection class, or <see cref="Array"/> for
+        /// array, or <see langword="null" /> if the type name is invalid.</returns>
+        public static Type? ToCollectionType(this string type)
         {
             switch (type.ToLowerInvariant())
             {
@@ -144,14 +146,14 @@ namespace BeanIO.Internal.Util
             }
 
             var clazz = Type.GetType(type);
-            if (!typeof(IList).IsAssignableFromThis(clazz))
+            if (clazz is null || !typeof(IList).IsAssignableFromThis(clazz))
                 return null;
             return clazz;
         }
 
-        public static Type CreateDefaultType(this Type type)
+        public static Type? CreateDefaultType(this Type type)
         {
-            var typeInfo = type.GetTypeInfo();
+            var typeInfo = type;
             if (!type.IsConstructedGenericType && typeInfo.ContainsGenericParameters)
             {
                 if (type.IsMap())
@@ -166,9 +168,9 @@ namespace BeanIO.Internal.Util
             return type;
         }
 
-        public static Type ToAggregationType(this string type, IProperty property)
+        public static Type? ToAggregationType(this string type, IProperty? property)
         {
-            Type propertyType;
+            Type? propertyType;
             if (property?.PropertyType != null)
             {
                 propertyType = property.PropertyType.CreateDefaultType();
@@ -216,7 +218,7 @@ namespace BeanIO.Internal.Util
 
             if (clazz.IsSet())
             {
-                if (propertyType != null && !clazz.IsConstructedGenericType && clazz.GetTypeInfo().ContainsGenericParameters)
+                if (propertyType != null && !clazz.IsConstructedGenericType && clazz.ContainsGenericParameters)
                 {
                     return clazz.MakeGenericType(propertyType);
                 }
@@ -226,7 +228,7 @@ namespace BeanIO.Internal.Util
 
             if (clazz.IsList())
             {
-                if (propertyType != null && !clazz.IsConstructedGenericType && clazz.GetTypeInfo().ContainsGenericParameters)
+                if (propertyType != null && !clazz.IsConstructedGenericType && clazz.ContainsGenericParameters)
                 {
                     return clazz.MakeGenericType(propertyType);
                 }
@@ -246,9 +248,9 @@ namespace BeanIO.Internal.Util
         /// Gets type <see cref="Type"/> for a given type name.
         /// </summary>
         /// <param name="typeName">The type name (<see cref="Type.AssemblyQualifiedName"/>).</param>
-        /// <param name="returnInterface">Return interface instead of concrete class</param>
+        /// <param name="returnInterface">Return interface instead of concrete class.</param>
         /// <returns>The type for the given type name or null if it wasn't found.</returns>
-        public static Type ToBeanType(this string typeName, bool returnInterface = false)
+        public static Type? ToBeanType(this string? typeName, bool returnInterface = false)
         {
             if (typeName == null)
                 return null;
@@ -274,35 +276,50 @@ namespace BeanIO.Internal.Util
         }
 
         /// <summary>
-        /// Is the <paramref name="refType"/> assignable from an instance of <paramref name="testType"/>?
+        /// Determines whether the <paramref name="refType"/> is assignable from an instance of <paramref name="testType"/>.
         /// </summary>
-        /// <param name="refType">The reference type to test against</param>
-        /// <param name="testType">The type to test for being an instance of <paramref name="refType"/></param>
-        /// <returns>true, if <paramref name="testType"/> is an instance of <paramref name="refType"/></returns>
-        public static bool IsAssignableFromThis(this Type refType, Type testType)
+        /// <param name="refType">The reference type to test against.</param>
+        /// <param name="testType">The type to test for being an instance of <paramref name="refType"/>.</param>
+        /// <returns>true, if <paramref name="testType"/> is an instance of <paramref name="refType"/>.</returns>
+        public static bool IsAssignableFromThis(
+            [NotNullWhen(true)] this Type? refType,
+            [NotNullWhen(true)] Type? testType)
         {
+            if (refType == null)
+            {
+                return false;
+            }
+
             return IsInstanceOf(testType, refType);
         }
 
         /// <summary>
-        /// Is the <paramref name="testType"/> an instance of <paramref name="refType"/>?
+        /// Determines whether the <paramref name="testType"/> is an instance of <paramref name="refType"/>.
         /// </summary>
-        /// <param name="testType">The type to test for being an instance of <paramref name="refType"/></param>
-        /// <param name="refType">The reference type to test against</param>
-        /// <returns>true, if <paramref name="testType"/> is an instance of <paramref name="refType"/></returns>
-        public static bool IsInstanceOf(this Type testType, Type refType)
+        /// <param name="testType">The type to test for being an instance of <paramref name="refType"/>.</param>
+        /// <param name="refType">The reference type to test against.</param>
+        /// <returns>true, if <paramref name="testType"/> is an instance of <paramref name="refType"/>.</returns>
+        public static bool IsInstanceOf(
+            [NotNullWhen(true)] this Type? testType,
+            [NotNullWhen(true)] Type? refType)
         {
+            if (testType == null || refType == null)
+            {
+                return false;
+            }
+
             var key = string.Concat(testType.GetAssemblyQualifiedName(), "|", refType.GetAssemblyQualifiedName());
             bool result = _isInstanceOfCache.GetOrAdd(key, _ => testType.IsInstanceOfInternal(refType));
             return result;
         }
 
         /// <summary>
-        /// Get the assembly qualified name using the <see cref="Type.Namespace"/>, <see cref="P:Type.Name"/>, and <see cref="Assembly.FullName"/>
+        /// Get the assembly qualified name using the <see cref="Type.Namespace"/>, <see cref="P:Type.Name"/>, and <see cref="Assembly.FullName"/>.
         /// </summary>
-        /// <param name="t">The type to get the assembly qualified name for</param>
-        /// <returns>The assembly qualified type name</returns>
-        public static string GetAssemblyQualifiedName([CanBeNull] this Type t)
+        /// <param name="t">The type to get the assembly qualified name for.</param>
+        /// <returns>The assembly qualified type name.</returns>
+        [return: NotNullIfNotNull(nameof(t))]
+        public static string? GetAssemblyQualifiedName(this Type? t)
         {
             if (t == null)
                 return null;
@@ -318,21 +335,22 @@ namespace BeanIO.Internal.Util
                 result.Append(t.Name);
             }
 
-            result.AppendFormat(", {0}", t.GetTypeInfo().Assembly.FullName);
+            result.AppendFormat(", {0}", t.Assembly.FullName);
             return result.ToString();
         }
 
         /// <summary>
-        /// Returns <code>true</code>, when the type is a numeric type
+        /// Returns <see langword="true"/>, when the type is a numeric type.
         /// </summary>
-        /// <param name="type">The <see cref="Type"/> to test</param>
-        /// <returns><code>true</code>, when the type is a numeric type</returns>
-        public static bool IsNumber(this Type type)
+        /// <param name="type">The <see cref="Type"/> to test.</param>
+        /// <returns><c>true</c>, when the type is a numeric type.</returns>
+        public static bool IsNumber(this Type? type)
         {
-            return type.GetTypeInfo().IsPrimitive || Nullable.GetUnderlyingType(type) != null;
+            return type != null && (type.IsPrimitive || Nullable.GetUnderlyingType(type) != null);
         }
 
-        public static IList AsList(this object value)
+        [return: NotNullIfNotNull(nameof(value))]
+        public static IList? AsList(this object? value)
         {
             if (value == null)
                 return null;
@@ -349,53 +367,76 @@ namespace BeanIO.Internal.Util
                 || listType.IsInstanceOf(typeof(IReadOnlyCollection<>)))
                 return listType.GenericTypeArguments[0];
             if (listType.IsArray)
-                return listType.GetElementType();
+                return listType.GetElementType() ?? typeof(object);
             if (listType.IsInstanceOf(typeof(ISet<>)))
                 return listType.GenericTypeArguments[0];
             return typeof(object);
         }
 
-        public static bool IsArray(this Type type)
+        public static bool IsArray(this Type? type)
         {
-            return type.IsArray || type == typeof(Array);
+            return type != null && (type.IsArray || type == typeof(Array));
         }
 
-        public static bool IsCollection(this Type type)
+        public static bool IsCollection(
+            [NotNullWhen(true)] this Type? type)
         {
+            if (type == null)
+            {
+                return false;
+            }
+
             return typeof(ICollection).IsAssignableFromThis(type)
                    || typeof(ICollection<>).IsAssignableFromThis(type)
                    || typeof(IReadOnlyCollection<>).IsAssignableFromThis(type);
         }
 
-        public static bool IsList(this Type type)
+        public static bool IsList(
+            [NotNullWhen(true)] this Type? type)
         {
+            if (type == null)
+            {
+                return false;
+            }
+
             return typeof(IList).IsAssignableFromThis(type)
                    || typeof(IList<>).IsAssignableFromThis(type)
                    || typeof(IReadOnlyList<>).IsAssignableFromThis(type)
                    || (type.IsCollection() && !type.IsMap());
         }
 
-        public static bool IsMap(this Type type)
+        public static bool IsMap(
+            [NotNullWhen(true)] this Type? type)
         {
+            if (type == null)
+            {
+                return false;
+            }
+
             return typeof(IDictionary).IsAssignableFromThis(type)
                    || typeof(IDictionary<,>).IsAssignableFromThis(type)
                    || typeof(IReadOnlyDictionary<,>).IsAssignableFromThis(type);
         }
 
-        public static bool IsSet(this Type type)
+        public static bool IsSet([NotNullWhen(true)] this Type? type)
         {
+            if (type == null)
+            {
+                return false;
+            }
+
             return typeof(ISet<>).IsAssignableFromThis(type);
         }
 
         /// <summary>
-        /// Instantiate a generic type using the type arguments from <paramref name="with"/>
+        /// Instantiate a generic type using the type arguments from <paramref name="with"/>.
         /// </summary>
-        /// <param name="type">The new types instance</param>
-        /// <param name="with">The type to get the generic arguments from</param>
-        /// <returns>The constructed generic type from <paramref name="type"/></returns>
-        public static Type Instantiate(this Type type, Type with)
+        /// <param name="type">The new types instance.</param>
+        /// <param name="with">The type to get the generic arguments from.</param>
+        /// <returns>The constructed generic type from <paramref name="type"/>.</returns>
+        public static Type Instantiate(this Type type, Type? with)
         {
-            var typeInfo = type.GetTypeInfo();
+            var typeInfo = type;
             if (!type.IsConstructedGenericType && typeInfo.IsGenericTypeDefinition && (with == null || with == typeof(object)))
             {
                 if (type.IsMap())
@@ -408,18 +449,18 @@ namespace BeanIO.Internal.Util
                 return type;
             }
 
-            var withInfo = with.GetTypeInfo();
-            if (typeInfo.GenericTypeParameters.Length != withInfo.GenericTypeArguments.Length)
+            var withInfo = with;
+            if (typeInfo.GetGenericArguments().Length != withInfo.GenericTypeArguments.Length)
                 throw new InvalidOperationException("The number of type arguments must match");
             return type.MakeGenericType(with.GenericTypeArguments);
         }
 
         /// <summary>
-        /// Is the <paramref name="testType"/> an instance of <paramref name="refType"/>?
+        /// Determines whether the <paramref name="testType"/> is an instance of <paramref name="refType"/>.
         /// </summary>
-        /// <param name="testType">The type to test for being an instance of <paramref name="refType"/></param>
-        /// <param name="refType">The reference type to test against</param>
-        /// <returns>true, if <paramref name="testType"/> is an instance of <paramref name="refType"/></returns>
+        /// <param name="testType">The type to test for being an instance of <paramref name="refType"/>.</param>
+        /// <param name="refType">The reference type to test against.</param>
+        /// <returns>true, if <paramref name="testType"/> is an instance of <paramref name="refType"/>.</returns>
         private static bool IsInstanceOfInternal(this Type testType, Type refType)
         {
             if (testType.IsConstructedGenericType && !refType.IsConstructedGenericType)
@@ -432,8 +473,8 @@ namespace BeanIO.Internal.Util
                 refType = nonNullableType ?? refType.GetGenericTypeDefinition();
             }
 
-            var refTypeInfo = refType.GetTypeInfo();
-            var testTypeInfo = testType.GetTypeInfo();
+            var refTypeInfo = refType;
+            var testTypeInfo = testType;
             if (refTypeInfo.IsAssignableFrom(testTypeInfo))
                 return true;
 
@@ -442,34 +483,30 @@ namespace BeanIO.Internal.Util
             if (comparer.Compare(refType, testType) == 0)
                 return true;
 
-            foreach (var implementedInterface in testTypeInfo.ImplementedInterfaces)
+            foreach (var implementedInterface in testTypeInfo.GetInterfaces())
             {
                 if (comparer.Compare(refType, implementedInterface) == 0)
                     return true;
 
                 if (!testTypeInfo.IsInterface)
                 {
-                    var ifMap = testTypeInfo.GetRuntimeInterfaceMap(implementedInterface);
-                    if (ifMap.InterfaceType != null)
-                    {
-                        if (comparer.Compare(refType, ifMap.InterfaceType) == 0)
-                            return true;
-                    }
+                    var ifMap = testTypeInfo.GetInterfaceMap(implementedInterface);
+                    if (comparer.Compare(refType, ifMap.InterfaceType) == 0)
+                        return true;
                 }
             }
 
-            if (testTypeInfo.ImplementedInterfaces.Any(x => comparer.Compare(refType, x) == 0))
+            if (testTypeInfo.GetInterfaces().Any(x => comparer.Compare(refType, x) == 0))
                 return true;
 
-            testType = testTypeInfo.BaseType;
-            while (testType != null)
+            var baseType = testTypeInfo.BaseType;
+            while (baseType != null && baseType != typeof(object))
             {
-                if (comparer.Compare(refType, testType) == 0)
+                if (comparer.Compare(refType, baseType) == 0)
                     return true;
-                testTypeInfo = testType.GetTypeInfo();
-                if (refTypeInfo.IsAssignableFrom(testTypeInfo))
+                if (refTypeInfo.IsAssignableFrom(baseType))
                     return true;
-                testType = testTypeInfo.BaseType;
+                baseType = baseType.BaseType;
             }
 
             return false;
@@ -480,7 +517,7 @@ namespace BeanIO.Internal.Util
         /// </summary>
         private class TypeComparer : IComparer<Type>
         {
-            public int Compare(Type x, Type y)
+            public int Compare(Type? x, Type? y)
             {
                 if (ReferenceEquals(x, y))
                     return 0;

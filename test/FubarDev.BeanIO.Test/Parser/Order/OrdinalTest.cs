@@ -39,19 +39,19 @@ namespace BeanIO.Parser.Order
         public class Man
         {
             [Field]
-            public string Company { get; set; }
+            public string? Company { get; set; }
 
             [Field(Ordinal = 3)]
             public int Age { get; set; }
 
             [Field]
-            public string Ext { get; set; }
+            public string? Ext { get; set; }
 
             [Field(Ordinal = 2)]
-            public string LastName { get; set; }
+            public string? LastName { get; set; }
 
             [Field(Ordinal = 1)]
-            public string FirstName { get; set; }
+            public string? FirstName { get; set; }
         }
     }
 }

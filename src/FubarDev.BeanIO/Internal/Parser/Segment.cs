@@ -23,15 +23,15 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets or sets the <see cref="IProperty"/> mapped to this component, or null if there is no property mapping.
         /// </summary>
-        public IProperty Property { get; set; }
+        public IProperty? Property { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the existence is known to be true when unmarshal is called
+        /// Gets or sets a value indicating whether the existence is known to be true when unmarshal is called.
         /// </summary>
         public bool IsExistencePredetermined { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the segment repeats
+        /// Gets or sets a value indicating whether the segment repeats.
         /// </summary>
         public bool IsRepeating { get; set; }
 
@@ -61,18 +61,18 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns whether this parser and its children match a record being unmarshalled.
         /// </summary>
-        /// <param name="context">The <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if matched, false otherwise</returns>
+        /// <param name="context">The <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if matched, false otherwise.</returns>
         public override bool Matches(UnmarshallingContext context)
         {
             return !IsIdentifier || Children.Cast<IParser>().All(x => x.Matches(context));
         }
 
         /// <summary>
-        /// Unmarshals a record
+        /// Unmarshals a record.
         /// </summary>
-        /// <param name="context">The <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if this component was present in the unmarshalled record, or false otherwise</returns>
+        /// <param name="context">The <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if this component was present in the unmarshalled record, or false otherwise.</returns>
         public override bool Unmarshal(UnmarshallingContext context)
         {
             var missing = _missing.Get(context);
@@ -119,10 +119,10 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Marshals a record
+        /// Marshals a record.
         /// </summary>
-        /// <param name="context">The <see cref="MarshallingContext"/></param>
-        /// <returns>whether a value was marshalled</returns>
+        /// <param name="context">The <see cref="MarshallingContext"/>.</param>
+        /// <returns>whether a value was marshalled.</returns>
         public override bool Marshal(MarshallingContext context)
         {
             if (IsOptional && !IsRepeating)
@@ -142,8 +142,8 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns whether this parser or any of its descendant have content for marshalling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <returns>true if there is content for marshalling, false otherwise</returns>
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <returns>true if there is content for marshalling, false otherwise.</returns>
         public override bool HasContent(ParsingContext context)
         {
             if (Property != null)
@@ -155,7 +155,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Clears the current property value.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
         public override void ClearValue(ParsingContext context)
         {
             Property?.ClearValue(context);
@@ -164,9 +164,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Sets the property value for marshaling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <param name="value">the property value</param>
-        public override void SetValue(ParsingContext context, object value)
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <param name="value">the property value.</param>
+        public override void SetValue(ParsingContext context, object? value)
         {
             Property?.SetValue(context, value);
         }
@@ -174,9 +174,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns the unmarshalled property value.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <returns>the property value</returns>
-        public override object GetValue(ParsingContext context)
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <returns>the property value.</returns>
+        public override object? GetValue(ParsingContext context)
         {
             return Property?.GetValue(context);
         }
@@ -188,10 +188,10 @@ namespace BeanIO.Internal.Parser
         /// This method should be overridden by subclasses that need to register
         /// one or more parser context variables.
         /// </remarks>
-        /// <param name="locals">set of local variables</param>
+        /// <param name="locals">set of local variables.</param>
         public override void RegisterLocals(ISet<IParserLocal> locals)
         {
-            ((Component)Property)?.RegisterLocals(locals);
+            ((Component?)Property)?.RegisterLocals(locals);
 
             if (locals.Add(_missing))
                 base.RegisterLocals(locals);
@@ -201,7 +201,7 @@ namespace BeanIO.Internal.Parser
         /// Sets the size of a single occurrence of this element, which is used to offset
         /// field positions for repeating segments and fields.
         /// </summary>
-        /// <param name="size">the size of a single occurrence of this element</param>
+        /// <param name="size">the size of a single occurrence of this element.</param>
         public void SetSize(int size)
         {
             _size = size;
@@ -210,16 +210,16 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Sets a value indicating whether this node must exist during unmarshalling.
         /// </summary>
-        /// <param name="optional">a value indicating whether this node must exist during unmarshalling</param>
+        /// <param name="optional">a value indicating whether this node must exist during unmarshalling.</param>
         public void SetOptional(bool optional)
         {
             _optional = optional;
         }
 
         /// <summary>
-        /// Called by <see cref="TreeNode{T}.ToString"/> to append node parameters to the output
+        /// Called by <see cref="TreeNode{T}.ToString"/> to append node parameters to the output.
         /// </summary>
-        /// <param name="s">The output to append</param>
+        /// <param name="s">The output to append.</param>
         protected override void ToParamString(StringBuilder s)
         {
             base.ToParamString(s);

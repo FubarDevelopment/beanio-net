@@ -22,9 +22,9 @@ namespace BeanIO.Internal.Compiler.Xml
         }
 
         /// <summary>
-        /// Initializes a group configuration before its children have been processed
+        /// Initializes a group configuration before its children have been processed.
         /// </summary>
-        /// <param name="config">the group configuration to process</param>
+        /// <param name="config">the group configuration to process.</param>
         protected override void InitializeGroup(GroupConfig config)
         {
             base.InitializeGroup(config);
@@ -80,9 +80,9 @@ namespace BeanIO.Internal.Compiler.Xml
         }
 
         /// <summary>
-        /// Initializes a segment configuration before its children have been processed
+        /// Initializes a segment configuration before its children have been processed.
         /// </summary>
-        /// <param name="config">the segment configuration to process</param>
+        /// <param name="config">the segment configuration to process.</param>
         protected override void InitializeSegment(SegmentConfig config)
         {
             base.InitializeSegment(config);
@@ -109,9 +109,8 @@ namespace BeanIO.Internal.Compiler.Xml
                     throw new BeanIOConfigurationException("Missing namespace for configured XML prefix");
             }
 
-            if (config.XmlNamespace == null)
+            if (config.XmlNamespace == null && Parent is { } parent)
             {
-                var parent = Parent;
                 config.XmlPrefix = parent.XmlPrefix;
                 config.XmlNamespace = parent.XmlNamespace;
                 config.IsXmlNamespaceAware = parent.IsXmlNamespaceAware;
@@ -135,9 +134,9 @@ namespace BeanIO.Internal.Compiler.Xml
         }
 
         /// <summary>
-        /// Processes a field configuration
+        /// Processes a field configuration.
         /// </summary>
-        /// <param name="config">the field configuration to process</param>
+        /// <param name="config">the field configuration to process.</param>
         protected override void HandleField(FieldConfig config)
         {
             if (config.XmlName == null)
@@ -203,9 +202,8 @@ namespace BeanIO.Internal.Compiler.Xml
                     config.XmlNamespace = null;
                     config.IsXmlNamespaceAware = false;
                 }
-                else
+                else if (Parent is { } parent)
                 {
-                    var parent = Parent;
                     config.XmlPrefix = parent.XmlPrefix;
                     config.XmlNamespace = parent.XmlNamespace;
                     config.IsXmlNamespaceAware = parent.IsXmlNamespaceAware;
@@ -244,7 +242,7 @@ namespace BeanIO.Internal.Compiler.Xml
         /// This method validates a record identifying field has a literal or regular expression
         /// configured for identifying a record.
         /// </summary>
-        /// <param name="field">the record identifying field configuration to validate</param>
+        /// <param name="field">the record identifying field configuration to validate.</param>
         protected override void ValidateRecordIdentifyingCriteria(FieldConfig field)
         {
             if (field.XmlType == XmlNodeType.Text)

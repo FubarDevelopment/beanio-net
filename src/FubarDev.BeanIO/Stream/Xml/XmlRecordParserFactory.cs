@@ -3,8 +3,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.IO;
-using System.Xml.Linq;
 
 namespace BeanIO.Stream.Xml
 {
@@ -13,7 +13,7 @@ namespace BeanIO.Stream.Xml
     /// </summary>
     public class XmlRecordParserFactory : XmlParserConfiguration, IRecordParserFactory, IXmlStreamConfigurationAware
     {
-        private IXmlStreamConfiguration _source;
+        private IXmlStreamConfiguration? _source;
 
         /// <summary>
         /// Initializes the factory.
@@ -30,19 +30,24 @@ namespace BeanIO.Stream.Xml
         /// <summary>
         /// Creates a parser for reading records from an input stream.
         /// </summary>
-        /// <param name="reader">The input stream to read from</param>
-        /// <returns>The created <see cref="IRecordReader"/></returns>
+        /// <param name="reader">The input stream to read from.</param>
+        /// <returns>The created <see cref="IRecordReader"/>.</returns>
         public IRecordReader CreateReader(TextReader reader)
         {
-            XDocument doc = _source?.CreateDocument();
+            if (_source == null)
+            {
+                throw new InvalidOperationException("No XML stream configuration set");
+            }
+
+            var doc = _source.CreateDocument();
             return new XmlReader(reader, doc);
         }
 
         /// <summary>
         /// Creates a parser for writing records to an output stream.
         /// </summary>
-        /// <param name="writer">The output stream to write to</param>
-        /// <returns>The new <see cref="IRecordWriter"/></returns>
+        /// <param name="writer">The output stream to write to.</param>
+        /// <returns>The new <see cref="IRecordWriter"/>.</returns>
         public IRecordWriter CreateWriter(TextWriter writer)
         {
             return new XmlWriter(writer, this);
@@ -51,7 +56,7 @@ namespace BeanIO.Stream.Xml
         /// <summary>
         /// Creates a parser for marshalling records.
         /// </summary>
-        /// <returns>The created <see cref="IRecordMarshaller"/></returns>
+        /// <returns>The created <see cref="IRecordMarshaller"/>.</returns>
         public IRecordMarshaller CreateMarshaller()
         {
             return new XmlRecordMarshaller(this);
@@ -60,7 +65,7 @@ namespace BeanIO.Stream.Xml
         /// <summary>
         /// Creates a parser for unmarshalling records.
         /// </summary>
-        /// <returns>The created <see cref="IRecordUnmarshaller"/></returns>
+        /// <returns>The created <see cref="IRecordUnmarshaller"/>.</returns>
         public IRecordUnmarshaller CreateUnmarshaller()
         {
             return new XmlRecordUnmarshaller();
@@ -70,7 +75,7 @@ namespace BeanIO.Stream.Xml
         /// This method is invoked by a XML stream definition when a <see cref="IRecordReader"/>
         /// implementation is registered.
         /// </summary>
-        /// <param name="configuration">the XML stream configuration</param>
+        /// <param name="configuration">the XML stream configuration.</param>
         public void Configure(IXmlStreamConfiguration configuration)
         {
             _source = configuration;

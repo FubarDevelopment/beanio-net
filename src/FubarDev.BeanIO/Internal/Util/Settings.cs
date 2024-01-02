@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 using BeanIO.Config;
 using BeanIO.Config.SchemeHandlers;
@@ -21,64 +20,64 @@ namespace BeanIO.Internal.Util
     internal class Settings
     {
         /// <summary>
-        /// This property is set to the fully qualified class name of the default stream factory implementation
+        /// This property is set to the fully qualified class name of the default stream factory implementation.
         /// </summary>
         public static readonly string STREAM_FACTORY_CLASS = "org.beanio.streamFactory";
 
         /// <summary>
-        /// The default locale used by type handlers
+        /// The default locale used by type handlers.
         /// </summary>
         public static readonly string DEFAULT_LOCALE = "org.beanio.defaultTypeHandlerLocale";
 
         /// <summary>
-        /// The default date format pattern for fields assigned type alias <see cref="DateTime"/>
+        /// The default date format pattern for fields assigned type alias <see cref="DateTime"/>.
         /// </summary>
         public static readonly string DEFAULT_DATE_FORMAT = "org.beanio.defaultDateFormat";
 
         /// <summary>
-        /// The default date format pattern for fields assigned type alias <see cref="DateTime"/> or of type <see cref="LocalDate"/>
+        /// The default date format pattern for fields assigned type alias <see cref="DateTime"/> or of type <see cref="LocalDate"/>.
         /// </summary>
         public static readonly string DEFAULT_DATETIME_FORMAT = "org.beanio.defaultDateTimeFormat";
 
         /// <summary>
-        /// The default date format pattern for fields assigned type alias <see cref="LocalTime"/>
+        /// The default date format pattern for fields assigned type alias <see cref="LocalTime"/>.
         /// </summary>
         public static readonly string DEFAULT_TIME_FORMAT = "org.beanio.defaultTimeFormat";
 
         /// <summary>
-        /// Whether property values support the following escape sequences
+        /// Whether property values support the following escape sequences.
         /// </summary>
         /// <remarks>
         /// <list type="bullet">
-        /// <item><code>\\</code> - Backslash</item>
-        /// <item><code>\n</code> - Line Feed</item>
-        /// <item><code>\r</code> - Carriage Return</item>
-        /// <item><code>\t</code> - Tab</item>
-        /// <item><code>\f</code> - Form Feed</item>
-        /// <item><code>\0</code> - Null</item>
+        /// <item><c>\\</c> - Backslash</item>
+        /// <item><c>\n</c> - Line Feed</item>
+        /// <item><c>\r</c> - Carriage Return</item>
+        /// <item><c>\t</c> - Tab</item>
+        /// <item><c>\f</c> - Form Feed</item>
+        /// <item><c>\0</c> - Null</item>
         /// </list>
         /// <para>A backslash preceding any other character is ignored.</para>
-        /// <para>Set to <code>false</code> to disable.</para>
+        /// <para>Set to <see langword="false" /> to disable.</para>
         /// </remarks>
         public static readonly string PROPERTY_ESCAPING_ENABLED = "org.beanio.propertyEscapingEnabled";
 
         /// <summary>
-        /// Whether the null character can be escaped using <code>\0</code> when property escaping is enabled.
+        /// Whether the null character can be escaped using <c>\0</c> when property escaping is enabled.
         /// </summary>
         public static readonly string NULL_ESCAPING_ENABLED = "org.beanio.propertyEscapingEnabled";
 
         /// <summary>
-        /// Whether property substitution is enabled for mapping files
+        /// Whether property substitution is enabled for mapping files.
         /// </summary>
         public static readonly string PROPERTY_SUBSTITUTION_ENABLED = "org.beanio.propertySubstitutionEnabled";
 
         /// <summary>
-        /// The default XML type for a field definition, set to <code>element</code> or <code>attribute</code>.
+        /// The default XML type for a field definition, set to <c>element</c> or <c>attribute</c>.
         /// </summary>
         public static readonly string DEFAULT_XML_TYPE = "org.beanio.xml.defaultXmlType";
 
         /// <summary>
-        /// The default namespace prefix for 'http://www.w3.org/2001/XMLSchema-instance'
+        /// The default namespace prefix for 'http://www.w3.org/2001/XMLSchema-instance'.
         /// </summary>
         public static readonly string DEFAULT_XSI_NAMESPACE_PREFIX = "org.beanio.xml.xsiNamespacePrefix";
 
@@ -92,13 +91,13 @@ namespace BeanIO.Internal.Util
 
         /// <summary>
         /// Whether a configured field default is marshalled for null property values. The default configuration
-        /// sets this property to <code>true</code>.
+        /// sets this property to <c>true</c>.
         /// </summary>
         public static readonly string DEFAULT_MARSHALLING_ENABLED = "org.beanio.marshalDefaultEnabled";
 
         /// <summary>
         /// Whether a configured field default is unmarshalled on initialization. The default configuration
-        /// sets this property to <code>true</code>.
+        /// sets this property to <c>true</c>.
         /// </summary>
         /// <remarks>
         /// This is useful when the default value cannot be represented using the underlying type.
@@ -116,12 +115,12 @@ namespace BeanIO.Internal.Util
         public static readonly string DEFAULT_RECORD_MIN_OCCURS = "org.beanio.record.minOccurs";
 
         /// <summary>
-        /// The default minOccurs setting for a field (after appending the stream format)
+        /// The default minOccurs setting for a field (after appending the stream format).
         /// </summary>
         public static readonly string DEFAULT_FIELD_MIN_OCCURS = "org.beanio.field.minOccurs";
 
         /// <summary>
-        /// The method of property access to use, <code>reflection</code> (default) or <code>asm</code> is supported
+        /// The method of property access to use, <c>reflection</c> (default) or <c>asm</c> is supported.
         /// </summary>
         public static readonly string PROPERTY_ACCESSOR_METHOD = "org.beanio.propertyAccessorFactory";
 
@@ -137,17 +136,17 @@ namespace BeanIO.Internal.Util
         public static readonly string LAZY_IF_EMPTY = "org.beanio.lazyIfEmpty";
 
         /// <summary>
-        /// Whether null field values should throw an exception if bound to a primitive
+        /// Whether null field values should throw an exception if bound to a primitive.
         /// </summary>
         public static readonly string ERROR_IF_NULL_PRIMITIVE = "org.beanio.errorIfNullPrimitive";
 
         /// <summary>
-        /// Whether default field values apply to missing fields
+        /// Whether default field values apply to missing fields.
         /// </summary>
         public static readonly string USE_DEFAULT_IF_MISSING = "org.beanio.useDefaultIfMissing";
 
         /// <summary>
-        /// Whether to validate marshalled fields
+        /// Whether to validate marshalled fields.
         /// </summary>
         public static readonly string VALIDATE_ON_MARSHAL = "org.beanio.validateOnMarshal";
 
@@ -166,7 +165,7 @@ namespace BeanIO.Internal.Util
 
         private static readonly object _syncRoot = new object();
 
-        private static Settings _instance;
+        private static Settings? _instance;
 
         private readonly Properties _properties;
 
@@ -190,7 +189,7 @@ namespace BeanIO.Internal.Util
             get
             {
                 lock (_syncRoot)
-                    return _instance ?? (_instance = new Settings(CreateDefaultProvider().Read()));
+                    return _instance ??= new Settings(CreateDefaultProvider().Read());
             }
             set
             {
@@ -200,89 +199,86 @@ namespace BeanIO.Internal.Util
         }
 
         /// <summary>
-        /// Gets all registered scheme handlers
+        /// Gets all registered scheme handlers.
         /// </summary>
         public IReadOnlyDictionary<string, ISchemeHandler> SchemeHandlers => _schemeHandlers;
 
         /// <summary>
-        /// Returns a BeanIO configuration setting
+        /// Returns a BeanIO configuration setting.
         /// </summary>
-        /// <param name="key">the name of the setting</param>
-        /// <returns>the value of the setting, or null if the name is invalid</returns>
-        public string this[string key]
+        /// <param name="key">the name of the setting.</param>
+        /// <returns>the value of the setting, or null if the name is invalid.</returns>
+        public string? this[string key]
         {
             get
             {
-                string result;
-                if (_properties.TryGetValue(key, out result))
+                if (_properties.TryGetValue(key, out var result))
                     return result;
                 return null;
             }
         }
 
         /// <summary>
-        /// Returns a BeanIO configuration setting
+        /// Returns a BeanIO configuration setting.
         /// </summary>
-        /// <param name="key">the name of the setting</param>
-        /// <returns>the value of the setting, or null if the name is invalid</returns>
-        public string GetProperty(string key)
+        /// <param name="key">the name of the setting.</param>
+        /// <returns>the value of the setting, or null if the name is invalid.</returns>
+        public string? GetProperty(string key)
         {
             return this[key];
         }
 
         /// <summary>
-        /// Returns the boolean value of a BeanIO configuration setting
+        /// Returns the boolean value of a BeanIO configuration setting.
         /// </summary>
-        /// <param name="key">the property key</param>
+        /// <param name="key">the property key.</param>
         /// <returns>true if the property value is "1" or "true" (case insensitive),
-        /// or false if the property is any other value</returns>
+        /// or false if the property is any other value.</returns>
         public bool GetBoolean(string key)
         {
             var temp = this[key];
             if (string.IsNullOrEmpty(temp))
                 return false;
-            temp = temp.Trim();
+            temp = temp!.Trim();
             if (string.Equals("true", temp, StringComparison.OrdinalIgnoreCase))
                 return true;
             return temp == "1";
         }
 
         /// <summary>
-        /// Returns a BeanIO configuration setting as an integer
+        /// Returns a BeanIO configuration setting as an integer.
         /// </summary>
-        /// <param name="key">the property key</param>
-        /// <param name="defaultValue">the default value if the setting wasn't configured or invalid</param>
-        /// <returns>the <code>int</code> property value or <paramref name="defaultValue"/></returns>
+        /// <param name="key">the property key.</param>
+        /// <param name="defaultValue">the default value if the setting wasn't configured or invalid.</param>
+        /// <returns>the <c>int</c> property value or <paramref name="defaultValue"/>.</returns>
         public int GetInt(string key, int defaultValue)
         {
             var temp = this[key];
             if (string.IsNullOrWhiteSpace(temp))
                 return defaultValue;
-            int result;
-            if (int.TryParse(temp, out result))
+            if (int.TryParse(temp, out var result))
                 return result;
 
             return defaultValue;
         }
 
         /// <summary>
-        /// Adds a new <see cref="ISchemeHandler"/>
+        /// Adds a new <see cref="ISchemeHandler"/>.
         /// </summary>
-        /// <param name="handler">the handler to add</param>
+        /// <param name="handler">the handler to add.</param>
         public void Add(ISchemeHandler handler)
         {
-            _schemeHandlers[handler.Scheme] = handler;
+            _schemeHandlers[handler.Schema] = handler;
         }
 
-        public ISchemeHandler GetSchemeHandler(Uri url, bool throwIfMissing)
+        public ISchemeHandler? GetSchemeHandler(Uri url, bool throwIfMissing)
         {
             return GetSchemeHandler(url.Scheme, throwIfMissing);
         }
 
-        public ISchemeHandler GetSchemeHandler(string scheme, bool throwIfMissing)
+        public ISchemeHandler? GetSchemeHandler(string scheme, bool throwIfMissing)
         {
-            ISchemeHandler handler;
-            if (!SchemeHandlers.TryGetValue(scheme, out handler))
+            if (!SchemeHandlers.TryGetValue(scheme, out var handler))
             {
                 if (!throwIfMissing)
                     return null;
@@ -295,7 +291,9 @@ namespace BeanIO.Internal.Util
 
         private static IPropertiesProvider CreateDefaultProvider()
         {
-            var defaultProvider = new PropertiesStreamProvider(typeof(Settings).GetTypeInfo().Assembly.GetManifestResourceStream(DEFAULT_CONFIGURATION_PATH));
+            var stream = typeof(Settings).Assembly.GetManifestResourceStream(DEFAULT_CONFIGURATION_PATH)
+                         ?? throw new InvalidOperationException("Default configuration not found");
+            var defaultProvider = new PropertiesStreamProvider(stream);
             return defaultProvider;
         }
     }

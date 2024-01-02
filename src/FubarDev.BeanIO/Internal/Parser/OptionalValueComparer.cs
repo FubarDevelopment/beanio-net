@@ -23,12 +23,12 @@ namespace BeanIO.Internal.Parser
         public static OptionalValueComparer IgnoreCase { get; } = new OptionalValueComparer(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
-        /// Compares to objects
+        /// Compares to objects.
         /// </summary>
-        /// <returns>0, if equal, &lt;0 if less and &gt;0 if greater</returns>
+        /// <returns>0, if equal, &lt;0 if less and &gt;0 if greater.</returns>
         /// <param name="x">The value to compare with.</param>
         /// <param name="y">The value to compare to.</param>
-        public int Compare(OptionalValue x, OptionalValue y)
+        public int Compare(OptionalValue? x, OptionalValue? y)
         {
             if (ReferenceEquals(x, y))
                 return 0;
@@ -50,12 +50,12 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Determines whether both objects are equal
+        /// Determines whether both objects are equal.
         /// </summary>
-        /// <returns>true, when both objects are equal, false otherwise</returns>
+        /// <returns>true, when both objects are equal, false otherwise.</returns>
         /// <param name="x">The value to compare with.</param>
         /// <param name="y">The value to compare to.</param>
-        public bool Equals(OptionalValue x, OptionalValue y)
+        public bool Equals(OptionalValue? x, OptionalValue? y)
         {
             return Compare(x, y) == 0;
         }
@@ -65,29 +65,34 @@ namespace BeanIO.Internal.Parser
         /// </summary>
         /// <returns>
         /// The hash code for the given object.
-        /// </returns>
-        /// <param name="obj">The <see cref="OptionalValue"/> to return the hash code for</param>
-        public int GetHashCode(OptionalValue obj)
+        /// .</returns>
+        /// <param name="obj">The <see cref="OptionalValue"/> to return the hash code for.</param>
+        public int GetHashCode(OptionalValue? obj)
         {
+            if (ReferenceEquals(obj, null))
+            {
+                return 0;
+            }
+
             var result = obj.StatusHashCode;
             if (obj.HasText)
                 result ^= (obj.Text ?? string.Empty).GetHashCode();
             return result;
         }
 
-        int IComparer.Compare(object x, object y)
+        int IComparer.Compare(object? x, object? y)
         {
-            return Compare((OptionalValue)x, (OptionalValue)y);
+            return Compare((OptionalValue?)x, (OptionalValue?)y);
         }
 
-        bool IEqualityComparer.Equals(object x, object y)
+        bool IEqualityComparer.Equals(object? x, object? y)
         {
-            return Equals((OptionalValue)x, (OptionalValue)y);
+            return Equals((OptionalValue?)x, (OptionalValue?)y);
         }
 
-        int IEqualityComparer.GetHashCode(object obj)
+        int IEqualityComparer.GetHashCode(object? obj)
         {
-            return GetHashCode((OptionalValue)obj);
+            return GetHashCode((OptionalValue?)obj);
         }
     }
 }

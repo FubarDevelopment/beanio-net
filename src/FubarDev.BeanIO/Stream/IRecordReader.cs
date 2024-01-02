@@ -18,7 +18,7 @@ namespace BeanIO.Stream
         /// <remarks>The type of object returned depends on the format of the stream.</remarks>
         /// <returns>
         /// The record value, or null if the end of the stream was reached.
-        /// </returns>
+        /// .</returns>
         int RecordLineNumber { get; }
 
         /// <summary>
@@ -26,17 +26,17 @@ namespace BeanIO.Stream
         /// </summary>
         /// <returns>
         /// The unparsed text of the last record read
-        /// </returns>
-        string RecordText { get; }
+        /// .</returns>
+        string? RecordText { get; }
 
         /// <summary>
         /// Reads a single record from this input stream.
         /// </summary>
         /// <returns>
         /// The type of object returned depends on the format of the stream.
-        /// </returns>
+        /// .</returns>
         /// <returns>The record value, or null if the end of the stream was reached.</returns>
-        object Read();
+        object? Read();
 
         /// <summary>
         /// Closes this input stream.

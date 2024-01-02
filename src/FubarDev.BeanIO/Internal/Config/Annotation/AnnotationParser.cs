@@ -6,14 +6,13 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
 
 using BeanIO.Annotation;
 using BeanIO.Internal.Util;
-
-using JetBrains.Annotations;
 
 namespace BeanIO.Internal.Config.Annotation
 {
@@ -28,9 +27,9 @@ namespace BeanIO.Internal.Config.Annotation
         /// Creates a <see cref="GroupConfig"/> from the given type, if the type is annotated
         /// using <see cref="GroupAttribute"/>.
         /// </summary>
-        /// <param name="typeName">The bean type name</param>
-        /// <returns>the <see cref="GroupConfig"/> or null if the class was not annotated</returns>
-        public static GroupConfig CreateGroupConfig(string typeName)
+        /// <param name="typeName">The bean type name.</param>
+        /// <returns>the <see cref="GroupConfig"/> or null if the class was not annotated.</returns>
+        public static GroupConfig? CreateGroupConfig(string? typeName)
         {
             var clazz = typeName.ToBeanType();
             if (clazz == null)
@@ -42,9 +41,9 @@ namespace BeanIO.Internal.Config.Annotation
         /// Creates a <see cref="GroupConfig"/> from the given type, if the type is annotated
         /// using <see cref="GroupAttribute"/>.
         /// </summary>
-        /// <typeparam name="T">The group type</typeparam>
-        /// <returns>the <see cref="GroupConfig"/> or null if the class was not annotated</returns>
-        public static GroupConfig CreateGroupConfig<T>()
+        /// <typeparam name="T">The group type.</typeparam>
+        /// <returns>the <see cref="GroupConfig"/> or null if the class was not annotated.</returns>
+        public static GroupConfig? CreateGroupConfig<T>()
         {
             return CreateGroupConfig(typeof(T));
         }
@@ -53,11 +52,11 @@ namespace BeanIO.Internal.Config.Annotation
         /// Creates a <see cref="GroupConfig"/> from the given type, if the type is annotated
         /// using <see cref="GroupAttribute"/>.
         /// </summary>
-        /// <param name="type">the group type</param>
-        /// <returns>the <see cref="GroupConfig"/> or null if the class was not annotated</returns>
-        public static GroupConfig CreateGroupConfig(Type type)
+        /// <param name="type">the group type.</param>
+        /// <returns>the <see cref="GroupConfig"/> or null if the class was not annotated.</returns>
+        public static GroupConfig? CreateGroupConfig(Type type)
         {
-            var typeInfo = type.GetTypeInfo();
+            var typeInfo = type;
             var group = typeInfo.GetCustomAttribute<GroupAttribute>();
             if (group == null)
                 return null;
@@ -78,9 +77,9 @@ namespace BeanIO.Internal.Config.Annotation
         /// Creates a <see cref="RecordConfig"/> from the given type, if the type is annotated
         /// using <see cref="RecordAttribute"/>.
         /// </summary>
-        /// <param name="typeName">The bean type name</param>
-        /// <returns>the <see cref="RecordConfig"/> or null if the class was not annotated</returns>
-        public static RecordConfig CreateRecordConfig(string typeName)
+        /// <param name="typeName">The bean type name.</param>
+        /// <returns>the <see cref="RecordConfig"/> or null if the class was not annotated.</returns>
+        public static RecordConfig? CreateRecordConfig(string? typeName)
         {
             var clazz = typeName.ToBeanType();
             if (clazz == null)
@@ -92,9 +91,9 @@ namespace BeanIO.Internal.Config.Annotation
         /// Creates a <see cref="RecordConfig"/> from the given type, if the type is annotated
         /// using <see cref="RecordAttribute"/>.
         /// </summary>
-        /// <typeparam name="T">The record type</typeparam>
-        /// <returns>the <see cref="RecordConfig"/> or null if the class was not annotated</returns>
-        public static RecordConfig CreateRecordConfig<T>()
+        /// <typeparam name="T">The record type.</typeparam>
+        /// <returns>the <see cref="RecordConfig"/> or null if the class was not annotated.</returns>
+        public static RecordConfig? CreateRecordConfig<T>()
         {
             return CreateRecordConfig(typeof(T));
         }
@@ -103,11 +102,11 @@ namespace BeanIO.Internal.Config.Annotation
         /// Creates a <see cref="RecordConfig"/> from the given type, if the type is annotated
         /// using <see cref="RecordAttribute"/>.
         /// </summary>
-        /// <param name="type">the record type</param>
-        /// <returns>the <see cref="RecordConfig"/> or null if the class was not annotated</returns>
-        public static RecordConfig CreateRecordConfig(Type type)
+        /// <param name="type">the record type.</param>
+        /// <returns>the <see cref="RecordConfig"/> or null if the class was not annotated.</returns>
+        public static RecordConfig? CreateRecordConfig(Type type)
         {
-            var typeInfo = type.GetTypeInfo();
+            var typeInfo = type;
             var record = typeInfo.GetCustomAttribute<RecordAttribute>();
             if (record == null)
                 return null;
@@ -134,23 +133,26 @@ namespace BeanIO.Internal.Config.Annotation
                 maxOccurs = 1;
 
             var gc = new GroupConfig()
-                {
-                    Name = info.Name,
-                    Type = info.PropertyName,
-                    Collection = info.CollectionName,
+            {
+                Name = info.Name,
+                Type = info.PropertyName,
+                Collection = info.CollectionName,
 
-                    MinOccurs = minOccurs,
-                    MaxOccurs = maxOccurs,
+                MinOccurs = minOccurs,
+                MaxOccurs = maxOccurs,
 
-                    ValidateOnMarshal = ToValue(group.ValidationMode),
+                ValidateOnMarshal = ToValue(group.ValidationMode),
 
-                    XmlType = group.XmlType.ToValue(),
-                    XmlName = group.XmlName.ToValue(),
-                    XmlNamespace = group.XmlNamespace.ToValue(),
-                    XmlPrefix = group.XmlPrefix.ToValue(),
-                };
+                XmlType = group.XmlType.ToValue(),
+                XmlName = group.XmlName.ToValue(),
+                XmlNamespace = group.XmlNamespace.ToValue(),
+                XmlPrefix = group.XmlPrefix.ToValue(),
+            };
 
-            AddAllChildren(gc, info.PropertyType);
+            if (info.PropertyType != null)
+            {
+                AddAllChildren(gc, info.PropertyType);
+            }
 
             return gc;
         }
@@ -190,7 +192,7 @@ namespace BeanIO.Internal.Config.Annotation
                 XmlPrefix = record.XmlPrefix.ToValue(),
             };
 
-            var fields = info.PropertyType.GetTypeInfo().GetCustomAttributes<FieldAttribute>();
+            var fields = info.PropertyType?.GetCustomAttributes<FieldAttribute>();
             if (fields != null)
             {
                 foreach (var field in fields)
@@ -199,14 +201,18 @@ namespace BeanIO.Internal.Config.Annotation
                 }
             }
 
-            HandleConstructor(rc, info.PropertyType);
-            AddAllChildren(rc, info.PropertyType);
+            if (info.PropertyType != null)
+            {
+                HandleConstructor(rc, info.PropertyType);
+                AddAllChildren(rc, info.PropertyType);
+            }
+
             rc.Sort(_ordinalComparer);
 
             return rc;
         }
 
-        private static FieldConfig CreateField(TypeInfo info, FieldAttribute fa)
+        private static FieldConfig CreateField(TypeInfo? info, FieldAttribute fa)
         {
             FieldConfig fc;
             if (info != null)
@@ -240,7 +246,7 @@ namespace BeanIO.Internal.Config.Annotation
             {
                 fc = new FieldConfig()
                     {
-                        Name = fa.Name.ToValue(),
+                        Name = fa.Name.ToValue() ?? throw new BeanIOConfigurationException($"Name is required for field {fa}"),
                         Label = fa.Name.ToValue(),
                         IsBound = false,
                     };
@@ -289,7 +295,7 @@ namespace BeanIO.Internal.Config.Annotation
             return fc;
         }
 
-        private static SegmentConfig CreateSegment(TypeInfo info, SegmentAttribute sa, IReadOnlyCollection<FieldAttribute> fields)
+        private static SegmentConfig CreateSegment(TypeInfo info, SegmentAttribute sa, IReadOnlyCollection<FieldAttribute>? fields)
         {
             UpdateTypeInfo(info, sa.Type, sa.CollectionType);
 
@@ -334,14 +340,18 @@ namespace BeanIO.Internal.Config.Annotation
                 }
             }
 
-            fields = info.PropertyType.GetTypeInfo().GetCustomAttributes<FieldAttribute>().ToList();
+            fields = info.PropertyType?.GetCustomAttributes<FieldAttribute>().ToList()
+                     ?? (IReadOnlyCollection<FieldAttribute>)Array.Empty<FieldAttribute>();
             foreach (var field in fields)
             {
                 sc.Add(CreateField(null, field));
             }
 
-            HandleConstructor(sc, info.PropertyType);
-            AddAllChildren(sc, info.PropertyType);
+            if (info.PropertyType != null)
+            {
+                HandleConstructor(sc, info.PropertyType);
+                AddAllChildren(sc, info.PropertyType);
+            }
 
             return sc;
         }
@@ -350,8 +360,8 @@ namespace BeanIO.Internal.Config.Annotation
         {
             try
             {
-                var typeInfo = clazz.GetTypeInfo();
-                foreach (var constructor in typeInfo.DeclaredConstructors)
+                var typeInfo = clazz;
+                foreach (var constructor in typeInfo.GetConstructors())
                 {
                     var parameters = constructor.GetParameters();
                     for (var i = 0; i != parameters.Length; ++i)
@@ -362,11 +372,12 @@ namespace BeanIO.Internal.Config.Annotation
                             continue;
 
                         var info = new TypeInfo
-                            {
-                                ArgumentIndex = i + 1,
-                                Name = fa.Name.ToValue() ?? parameter.Name,
-                                Type = parameter.ParameterType,
-                            };
+                        {
+                            ArgumentIndex = i + 1,
+                            Name = fa.Name.ToValue() ?? parameter.Name
+                                ?? throw new InvalidOperationException("Parameter name is required"),
+                            Type = parameter.ParameterType,
+                        };
 
                         config.Add(CreateField(info, fa));
                     }
@@ -382,7 +393,7 @@ namespace BeanIO.Internal.Config.Annotation
 
         private static void AddAllChildren(ComponentConfig config, Type type)
         {
-            var typeInfo = type.GetTypeInfo();
+            var typeInfo = type;
 
             var baseClass = typeInfo.BaseType;
             if (baseClass != null && baseClass != typeof(object))
@@ -390,7 +401,7 @@ namespace BeanIO.Internal.Config.Annotation
                 AddAllChildren(config, baseClass);
             }
 
-            foreach (var interfaceType in typeInfo.ImplementedInterfaces)
+            foreach (var interfaceType in typeInfo.GetInterfaces())
             {
                 AddAllChildren(config, interfaceType);
             }
@@ -408,9 +419,16 @@ namespace BeanIO.Internal.Config.Annotation
 
         private static void AddGroupChildren(ComponentConfig config, Type parent)
         {
-            var typeInfo = parent.GetTypeInfo();
+            var typeInfo = parent;
 
-            var fieldsAndProperties = typeInfo.DeclaredFields.Cast<MemberInfo>().Union(typeInfo.DeclaredProperties);
+            var fieldsAndProperties = typeInfo
+                .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                .Where(x => x.DeclaringType == typeInfo)
+                .Where(x => !x.Name.EndsWith(">k__BackingField"))
+                .Cast<MemberInfo>()
+                .Union(typeInfo
+                    .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                    .Where(x => x.DeclaringType == typeInfo));
 
             // Fields and properties
             foreach (var fieldOrProperty in fieldsAndProperties)
@@ -430,11 +448,14 @@ namespace BeanIO.Internal.Config.Annotation
                 Debug.Assert(fieldInfo != null || propInfo != null, "fieldInfo != null || propInfo != null");
 
                 var info = new TypeInfo
-                    {
-                        IsBound = true,
-                        Name = fieldOrProperty.Name,
-                        Type = fieldInfo == null ? propInfo.PropertyType : fieldInfo.FieldType,
-                    };
+                {
+                    IsBound = true,
+                    Name = fieldOrProperty.Name,
+                    Type =
+                        fieldInfo != null
+                            ? fieldInfo.FieldType
+                            : propInfo!.PropertyType,
+                };
 
                 PropertyConfig child;
                 try
@@ -442,7 +463,7 @@ namespace BeanIO.Internal.Config.Annotation
                     if (ra != null)
                         child = CreateRecord(info, ra);
                     else
-                        child = CreateGroup(info, ga);
+                        child = CreateGroup(info, ga!);
                 }
                 catch (ArgumentException ex)
                 {
@@ -455,7 +476,7 @@ namespace BeanIO.Internal.Config.Annotation
             }
 
             // Methods (setter/getter)
-            foreach (var method in typeInfo.DeclaredMethods)
+            foreach (var method in typeInfo.GetMethods())
             {
                 var ga = method.GetCustomAttribute<GroupAttribute>();
                 var ra = method.GetCustomAttribute<RecordAttribute>();
@@ -469,7 +490,7 @@ namespace BeanIO.Internal.Config.Annotation
 
                 Type clazz;
                 var name = method.Name;
-                string getter, setter;
+                string? getter, setter;
 
                 var parameters = method.GetParameters();
                 if (method.ReturnType != typeof(void) && parameters.Length == 0)
@@ -513,7 +534,7 @@ namespace BeanIO.Internal.Config.Annotation
                     if (ra != null)
                         child = CreateRecord(info, ra);
                     else
-                        child = CreateGroup(info, ga);
+                        child = CreateGroup(info, ga!);
                 }
                 catch (ArgumentException ex)
                 {
@@ -526,9 +547,18 @@ namespace BeanIO.Internal.Config.Annotation
 
         private static void AddRecordChildren(ComponentConfig config, Type parent)
         {
-            var typeInfo = parent.GetTypeInfo();
+            var typeInfo = parent;
 
-            var fieldsAndProperties = typeInfo.DeclaredFields.Cast<MemberInfo>().Union(typeInfo.DeclaredProperties);
+            var fieldsAndProperties = typeInfo
+                .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                .Where(x => x.DeclaringType == typeInfo)
+                .Where(x => !x.Name.EndsWith(">k__BackingField"))
+                .Cast<MemberInfo>()
+                .Union(typeInfo
+                    .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                    .Where(x => x.DeclaringType == typeInfo));
+
+            // Fields and properties
             foreach (var fieldOrProperty in fieldsAndProperties)
             {
                 var fas = fieldOrProperty.GetCustomAttributes<FieldAttribute>().ToList();
@@ -548,7 +578,7 @@ namespace BeanIO.Internal.Config.Annotation
                 var info = new TypeInfo
                 {
                     Name = fieldOrProperty.Name,
-                    Type = fieldInfo == null ? propInfo.PropertyType : fieldInfo.FieldType,
+                    Type = fieldInfo == null ? propInfo!.PropertyType : fieldInfo.FieldType,
                 };
 
                 PropertyConfig child;
@@ -570,7 +600,7 @@ namespace BeanIO.Internal.Config.Annotation
             }
 
             // Methods (setter/getter)
-            foreach (var method in typeInfo.DeclaredMethods)
+            foreach (var method in typeInfo.GetMethods())
             {
                 var fas = method.GetCustomAttributes<FieldAttribute>().ToList();
                 var sa = method.GetCustomAttribute<SegmentAttribute>();
@@ -584,7 +614,7 @@ namespace BeanIO.Internal.Config.Annotation
 
                 Type clazz;
                 var name = method.Name;
-                string getter, setter;
+                string? getter, setter;
 
                 var parameters = method.GetParameters();
                 if (method.ReturnType != typeof(void) && parameters.Length == 0)
@@ -639,11 +669,11 @@ namespace BeanIO.Internal.Config.Annotation
             }
         }
 
-        private static void UpdateTypeInfo(TypeInfo info, Type annotatedType, Type annotatedCollection)
+        private static void UpdateTypeInfo(TypeInfo info, Type? annotatedType, Type? annotatedCollection)
         {
             annotatedType = annotatedType.ToValue();
 
-            string collectionName;
+            string? collectionName;
             var propertyType = info.Type;
 
             if (propertyType.IsArray || propertyType == typeof(Array))
@@ -717,7 +747,7 @@ namespace BeanIO.Internal.Config.Annotation
             info.CollectionName = collectionName;
         }
 
-        private static Type ToValue([CanBeNull] this Type type)
+        private static Type? ToValue(this Type? type)
         {
             return type == null || type == typeof(void) ? null : type;
         }
@@ -732,7 +762,7 @@ namespace BeanIO.Internal.Config.Annotation
             return n == int.MinValue ? (int?)null : n;
         }
 
-        private static string ToValue([CanBeNull] this string s)
+        private static string? ToValue(this string? s)
         {
             return string.IsNullOrEmpty(s) ? null : s;
         }
@@ -742,6 +772,7 @@ namespace BeanIO.Internal.Config.Annotation
             return n == XmlNodeType.None ? (XmlNodeType?)null : n;
         }
 
+        [return: NotNullIfNotNull(nameof(n))]
         private static int? ToUnboundedValue(this int? n)
         {
             var val = n.ToValue();
@@ -758,7 +789,9 @@ namespace BeanIO.Internal.Config.Annotation
 
         private static int? ToUnboundedValue(this int n)
         {
-            return ToUnboundedValue((int?)n);
+            if (n == int.MinValue)
+                return null;
+            return ToUnboundedValue((int?)n).Value;
         }
 
         private static bool? ToValue(ValidationMode mode)
@@ -776,30 +809,30 @@ namespace BeanIO.Internal.Config.Annotation
 
             public int? ArgumentIndex { get; set; }
 
-            public string Name { get; set; }
+            public required string Name { get; set; }
 
-            public Type Type { get; set; }
+            public required Type Type { get; set; }
 
             /// <summary>
-            /// Gets or sets the class name of propertyType(?)
+            /// Gets or sets the class name of propertyType(?).
             /// </summary>
-            public string PropertyName { get; set; }
+            public string? PropertyName { get; set; }
 
-            public string CollectionName { get; set; }
+            public string? CollectionName { get; set; }
 
-            public Type PropertyType { get; set; }
+            public Type? PropertyType { get; set; }
 
-            public string Getter { get; set; }
+            public string? Getter { get; set; }
 
-            public string Setter { get; set; }
+            public string? Setter { get; set; }
         }
 
         private class OrdinalComparer : IComparer<ComponentConfig>, IEqualityComparer<ComponentConfig>
         {
-            public int Compare(ComponentConfig x, ComponentConfig y)
+            public int Compare(ComponentConfig? x, ComponentConfig? y)
             {
-                var o1 = x.Ordinal;
-                var o2 = y.Ordinal;
+                var o1 = x?.Ordinal;
+                var o2 = y?.Ordinal;
                 if (o1 == null)
                     return o2 == null ? 0 : 1;
                 if (o2 == null)
@@ -807,16 +840,16 @@ namespace BeanIO.Internal.Config.Annotation
                 return o1.Value.CompareTo(o2.Value);
             }
 
-            public bool Equals(ComponentConfig x, ComponentConfig y)
+            public bool Equals(ComponentConfig? x, ComponentConfig? y)
             {
                 if (ReferenceEquals(x, y))
                     return true;
                 return Compare(x, y) == 0;
             }
 
-            public int GetHashCode(ComponentConfig obj)
+            public int GetHashCode(ComponentConfig? obj)
             {
-                return obj.Ordinal.GetValueOrDefault().GetHashCode();
+                return obj?.Ordinal.GetValueOrDefault().GetHashCode() ?? 0;
             }
         }
     }

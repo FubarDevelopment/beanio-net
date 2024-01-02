@@ -26,7 +26,7 @@ namespace BeanIO.Annotation
         /// Initializes a new instance of the <see cref="GroupAttribute" /> class.
         /// </summary>
         /// <param name="name">The group name.</param>
-        public GroupAttribute(string name)
+        public GroupAttribute(string? name)
         {
             Name = name;
             MinOccurs = MaxOccurs = int.MinValue;
@@ -37,18 +37,18 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Gets the group name.
         /// </summary>
-        public string Name { get; private set; }
+        public string? Name { get; private set; }
 
         /// <summary>
         /// Gets or sets the group type, if it cannot be determined from the annotated field or method declaration.
         /// </summary>
-        public Type Type { get; set; }
+        public Type? Type { get; set; }
 
         /// <summary>
         /// Gets or sets the collection type for repeating group bound to a parent group class, if
         /// it cannot be determined from the annotated field or method declaration.
         /// </summary>
-        public Type CollectionType { get; set; }
+        public Type? CollectionType { get; set; }
 
         /// <summary>
         /// Gets or sets the minimum occurrences of the record.
@@ -69,7 +69,7 @@ namespace BeanIO.Annotation
         /// Gets or sets the name of child component to use for the value of this record in
         /// lieu of a type.
         /// </summary>
-        public string Value { get; set; }
+        public string? Value { get; set; }
 
         /// <summary>
         /// Gets or sets a value which specifies the validation mode when marshalling fields.
@@ -84,16 +84,16 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Gets or sets the XML attribute or element name.
         /// </summary>
-        public string XmlName { get; set; }
+        public string? XmlName { get; set; }
 
         /// <summary>
         /// Gets or sets the XML namespace prefix of this record.
         /// </summary>
-        public string XmlPrefix { get; set; }
+        public string? XmlPrefix { get; set; }
 
         /// <summary>
         /// Gets or sets the XML namespace URI of this record.
         /// </summary>
-        public string XmlNamespace { get; set; }
+        public string? XmlNamespace { get; set; }
     }
 }

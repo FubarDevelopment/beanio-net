@@ -6,12 +6,12 @@
 namespace BeanIO.Internal.Parser
 {
     /// <summary>
-    /// Default selector state keys
+    /// Default selector state keys.
     /// </summary>
     internal static class DefaultSelectorStateKeys
     {
         /// <summary>
-        /// map key used to store the state of the 'count' attribute
+        /// map key used to store the state of the 'count' attribute.
         /// </summary>
         public static readonly string CountKey = "count";
     }

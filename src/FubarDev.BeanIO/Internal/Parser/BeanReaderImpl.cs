@@ -4,27 +4,23 @@
 // </copyright>
 
 using System;
-using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
-
-using JetBrains.Annotations;
 
 namespace BeanIO.Internal.Parser
 {
     internal class BeanReaderImpl : BeanReader
     {
-        [CanBeNull]
-        private UnmarshallingContext _context;
+        private UnmarshallingContext? _context;
 
-        [CanBeNull]
-        private ISelector _layout;
+        private ISelector? _layout;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BeanReaderImpl"/> class.
         /// </summary>
-        /// <param name="context">the <see cref="UnmarshallingContext"/></param>
-        /// <param name="layout">the root component of the parser tree</param>
-        public BeanReaderImpl([NotNull] UnmarshallingContext context, [CanBeNull] ISelector layout)
+        /// <param name="context">the <see cref="UnmarshallingContext"/>.</param>
+        /// <param name="layout">the root component of the parser tree.</param>
+        public BeanReaderImpl(UnmarshallingContext context, ISelector? layout)
         {
             _context = context;
             _layout = layout;
@@ -39,17 +35,20 @@ namespace BeanIO.Internal.Parser
         public override int RecordCount => _context?.RecordCount ?? 0;
 
         /// <summary>
-        /// Gets or sets a value indicating whether to ignore unidentified records
+        /// Gets or sets a value indicating whether to ignore unidentified records.
         /// </summary>
         public bool IgnoreUnidentifiedRecords { get; set; }
+
+        [MemberNotNullWhen(true, nameof(_context), nameof(_layout))]
+        private bool IsOpen => _context != null;
 
         /// <summary>
         /// Gets the record information for all bean objects read from this reader.
         /// If a bean object can span multiple records, <see cref="IBeanReader.RecordCount"/> can be used
         /// to determine how many records were read from the stream.
         /// </summary>
-        /// <param name="index">the index of the record, starting at 0</param>
-        /// <returns>the <see cref="IRecordContext"/></returns>
+        /// <param name="index">the index of the record, starting at 0.</param>
+        /// <returns>the <see cref="IRecordContext"/>.</returns>
         public override IRecordContext GetRecordContext(int index)
         {
             if (_context == null)
@@ -64,10 +63,9 @@ namespace BeanIO.Internal.Parser
         /// If the end of the stream is reached, null is returned.
         /// </remarks>
         /// <returns>The bean read, or null if the end of the stream was reached.</returns>
-        public override object Read()
+        public override object? Read()
         {
-            EnsureOpen();
-            Debug.Assert(_context != null, "_context != null");
+            EnsureOpen(IsOpen);
 
             while (true)
             {
@@ -111,10 +109,10 @@ namespace BeanIO.Internal.Parser
         /// </param>
         /// <returns>the number of skipped bean objects, which may be less than <paramref name="count"/>
         /// if the end of the stream was reached
-        /// </returns>
+        /// .</returns>
         public override int Skip(int count)
         {
-            EnsureOpen();
+            EnsureOpen(IsOpen);
 
             if (_layout == null)
                 return 0;
@@ -145,12 +143,14 @@ namespace BeanIO.Internal.Parser
         /// </summary>
         public override void Close()
         {
-            EnsureOpen();
-            Debug.Assert(_context != null, "_context != null");
+            if (!IsOpen)
+            {
+                return;
+            }
 
             try
             {
-                _context.RecordReader.Close();
+                _context.RecordReader?.Close();
             }
             catch (IOException ex)
             {
@@ -162,17 +162,17 @@ namespace BeanIO.Internal.Parser
             }
         }
 
-        private void EnsureOpen()
+        private void EnsureOpen([DoesNotReturnIf(false)] bool isOpen)
         {
-            if (_context == null)
+            if (!isOpen)
                 throw new BeanReaderIOException("Stream closed");
         }
 
-        private object InternalRead()
+        private object? InternalRead()
         {
-            Debug.Assert(_context != null, "_context != null");
+            EnsureOpen(IsOpen);
 
-            ISelector parser = null;
+            ISelector? parser = null;
             try
             {
                 // match the next record, parser may be null if EOF was reached
@@ -208,13 +208,12 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Reads the next record from the input stream and returns the matching record node.
         /// </summary>
-        /// <returns>the next matching record node, or <code>null</code> if the end of the stream was reached</returns>
-        private ISelector NextRecord()
+        /// <returns>the next matching record node, or <see langword="null" /> if the end of the stream was reached.</returns>
+        private ISelector? NextRecord()
         {
-            Debug.Assert(_context != null, "_context != null");
-            Debug.Assert(_layout != null, "_layout != null");
+            EnsureOpen(IsOpen);
 
-            ISelector parser = null;
+            ISelector? parser = null;
 
             // clear the current record name
             RecordName = null;
@@ -230,7 +229,7 @@ namespace BeanIO.Internal.Parser
                     try
                     {
                         // calling close will determine if all min occurs have been met
-                        var unsatisfied = _layout.Close(_context);
+                        var unsatisfied = _layout?.Close(_context);
                         if (unsatisfied != null)
                         {
                             if (unsatisfied.IsRecordGroup)
@@ -252,7 +251,7 @@ namespace BeanIO.Internal.Parser
 
                 try
                 {
-                    parser = _layout.MatchNext(_context);
+                    parser = _layout?.MatchNext(_context);
                 }
                 catch (UnexpectedRecordException)
                 {
@@ -268,7 +267,7 @@ namespace BeanIO.Internal.Parser
 
             if (parser == null)
             {
-                parser = _layout.MatchAny(_context);
+                parser = _layout?.MatchAny(_context);
 
                 if (parser != null)
                     throw _context.RecordUnexpectedException(parser.Name);

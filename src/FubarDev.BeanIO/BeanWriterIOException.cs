@@ -23,7 +23,7 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="BeanWriterIOException"/> class.
         /// </summary>
-        /// <param name="message">The error message</param>
+        /// <param name="message">The error message.</param>
         public BeanWriterIOException(string message)
             : base(message)
         {
@@ -32,8 +32,8 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="BeanWriterIOException"/> class.
         /// </summary>
-        /// <param name="message">The error message</param>
-        /// <param name="inner">The inner exception</param>
+        /// <param name="message">The error message.</param>
+        /// <param name="inner">The inner exception.</param>
         public BeanWriterIOException(string message, IOException inner)
             : base(message, inner)
         {
@@ -43,6 +43,6 @@ namespace BeanIO
         /// <summary>
         /// Gets the IO exception or null.
         /// </summary>
-        public IOException Clause { get; }
+        public IOException? Clause { get; }
     }
 }

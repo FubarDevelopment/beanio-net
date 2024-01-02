@@ -23,7 +23,7 @@ namespace BeanIO.Types
         /// <summary>
         /// Configures this type handler.
         /// </summary>
-        /// <param name="properties">The properties for customizing the instance</param>
+        /// <param name="properties">The properties for customizing the instance.</param>
         void Configure(Properties properties);
     }
 }

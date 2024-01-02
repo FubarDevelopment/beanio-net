@@ -28,7 +28,7 @@ namespace BeanIO.Internal.Util
             return string.Concat("!", option);
         }
 
-        public static string FormatPadding(this FieldPadding padding)
+        public static string FormatPadding(this FieldPadding? padding)
         {
             if (padding == null)
                 return string.Empty;
@@ -61,8 +61,7 @@ namespace BeanIO.Internal.Util
                     writer.Append(", ");
                 }
 
-                var debuggable = item as IDebuggable;
-                if (debuggable != null)
+                if (item is IDebuggable debuggable)
                 {
                     writer.Append(debuggable.ToDebug());
                 }

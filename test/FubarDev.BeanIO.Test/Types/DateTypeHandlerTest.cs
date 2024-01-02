@@ -52,14 +52,14 @@ namespace BeanIO.Types
         public void TestConfigure()
         {
             var handler = new DateTimeTypeHandler();
-            handler.Configure(new Properties(new Dictionary<string, string>()));
+            handler.Configure(new Properties(new Dictionary<string, string?>()));
             Assert.Null(handler.Pattern);
             Assert.Null(handler.TimeZoneId);
 
             handler = new DateTimeTypeHandler();
             handler.Configure(
                 new Properties(
-                    new Dictionary<string, string>
+                    new Dictionary<string, string?>
                         {
                             { "format", string.Empty },
                         }));
@@ -68,7 +68,7 @@ namespace BeanIO.Types
             handler = new DateTimeTypeHandler();
             handler.Configure(
                 new Properties(
-                    new Dictionary<string, string>
+                    new Dictionary<string, string?>
                         {
                             { "format", "yyyy-MM-dd" },
                         }));

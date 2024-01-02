@@ -35,20 +35,20 @@ namespace BeanIO.Internal.Config
         }
 
         /// <summary>
-        /// Gets the component type
+        /// Gets the component type.
         /// </summary>
         /// <returns>
         /// One of <see cref="F:ComponentType.Group"/>,
         /// <see cref="F:ComponentType.Record"/>, <see cref="F:ComponentType.Segment"/>
         /// <see cref="F:ComponentType.Field"/>, <see cref="F:ComponentType.Constant"/>,
         /// <see cref="F:ComponentType.Wrapper"/>, or <see cref="F:ComponentType.Stream"/>
-        /// </returns>
+        /// .</returns>
         public override ComponentType ComponentType => ComponentType.Stream;
 
         /// <summary>
         /// Gets or sets the format of this stream.
         /// </summary>
-        public string Format { get; set; }
+        public string? Format { get; set; }
 
         /// <summary>
         /// Gets or sets the allowed mode(s) of operation for this stream.
@@ -56,12 +56,12 @@ namespace BeanIO.Internal.Config
         public AccessMode? Mode { get; set; }
 
         /// <summary>
-        /// Gets or sets the full class name of the resource bundle containing customized error messages for this stream
+        /// Gets or sets the full class name of the resource bundle containing customized error messages for this stream.
         /// </summary>
-        public string ResourceBundle { get; set; }
+        public string? ResourceBundle { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="ElementNameConversionMode"/>
+        /// Gets or sets the <see cref="ElementNameConversionMode"/>.
         /// </summary>
         public ElementNameConversionMode NameConversionMode { get; set; }
 
@@ -73,7 +73,7 @@ namespace BeanIO.Internal.Config
         /// <summary>
         /// Gets or sets the record parser factory configuration bean.
         /// </summary>
-        public BeanConfig<IRecordParserFactory> ParserFactory { get; set; }
+        public BeanConfig<IRecordParserFactory>? ParserFactory { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether BeanIO should calculate and enforce strict record ordering
@@ -90,7 +90,7 @@ namespace BeanIO.Internal.Config
         /// <summary>
         /// Adds a custom type handler to this stream.
         /// </summary>
-        /// <param name="handler">the type handler to add</param>
+        /// <param name="handler">the type handler to add.</param>
         public void AddHandler(TypeHandlerConfig handler)
         {
             _typeHandlerConfigs.Add(handler);

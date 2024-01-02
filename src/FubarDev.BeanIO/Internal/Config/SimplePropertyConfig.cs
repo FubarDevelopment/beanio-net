@@ -16,21 +16,21 @@ namespace BeanIO.Internal.Config
     {
         /// <summary>
         /// Gets or sets the name of the custom type handler used for type
-        /// conversion by this component, or <code>null</code> if the default
+        /// conversion by this component, or <see langword="null" /> if the default
         /// type handler is sufficient.
         /// </summary>
-        public string TypeHandler { get; set; }
+        public string? TypeHandler { get; set; }
 
         /// <summary>
         /// Gets or sets the type handler instance used for type conversion
         /// by this component, or null if the default type handler is sufficient.
         /// </summary>
-        public ITypeHandler TypeHandlerInstance { get; set; }
+        public ITypeHandler? TypeHandlerInstance { get; set; }
 
         /// <summary>
         /// Gets or sets the pattern used by date and number type handlers to parse
         /// and format the property value.
         /// </summary>
-        public string Format { get; set; }
+        public string? Format { get; set; }
     }
 }

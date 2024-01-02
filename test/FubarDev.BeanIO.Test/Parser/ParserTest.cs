@@ -4,10 +4,7 @@
 // </copyright>
 
 using System;
-using System.Diagnostics;
 using System.IO;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 
 using Xunit;
 
@@ -33,8 +30,8 @@ namespace BeanIO.Parser
         /// <summary>
         /// Loads the contents of a resource into a String.
         /// </summary>
-        /// <param name="resourceName">the name of the resource to load</param>
-        /// <returns>the resource contents</returns>
+        /// <param name="resourceName">the name of the resource to load.</param>
+        /// <returns>the resource contents.</returns>
         public virtual string Load(string resourceName)
         {
             using (var resStream = LoadStreamInternal(resourceName, 2))
@@ -76,6 +73,7 @@ namespace BeanIO.Parser
                 Assert.Equal(lineNumber, reader.LineNumber);
 
                 var ctx = ex.RecordContext;
+                Assert.NotNull(ctx);
                 Assert.Equal(recordName, ctx.RecordName);
                 Assert.Equal(lineNumber, ctx.LineNumber);
 
@@ -86,12 +84,12 @@ namespace BeanIO.Parser
             }
         }
 
-        protected virtual void AssertFieldError(IBeanReader reader, int lineNumber, string recordName, string fieldName, string fieldText, string message)
+        protected virtual void AssertFieldError(IBeanReader reader, int lineNumber, string recordName, string fieldName, string? fieldText, string message)
         {
             AssertFieldError(reader, lineNumber, recordName, fieldName, 0, fieldText, message);
         }
 
-        protected virtual void AssertFieldError(IBeanReader reader, int lineNumber, string recordName, string fieldName, int fieldIndex, string fieldText, string message)
+        protected virtual void AssertFieldError(IBeanReader reader, int lineNumber, string recordName, string fieldName, int fieldIndex, string? fieldText, string message)
         {
             try
             {
@@ -104,6 +102,7 @@ namespace BeanIO.Parser
                 Assert.Equal(lineNumber, reader.LineNumber);
 
                 var ctx = ex.RecordContext;
+                Assert.NotNull(ctx);
                 Assert.Equal(recordName, ctx.RecordName);
                 Assert.Equal(lineNumber, ctx.LineNumber);
                 Assert.Equal(fieldText, ctx.GetFieldText(fieldName, fieldIndex));
@@ -117,7 +116,7 @@ namespace BeanIO.Parser
 
         private System.IO.Stream LoadStreamInternal(string fileName, int levels)
         {
-            var asm = typeof(AbstractParserTest).GetTypeInfo().Assembly;
+            var asm = typeof(AbstractParserTest).Assembly;
             var resStream = asm.GetManifestResourceStream(fileName);
 
             if (resStream == null)
@@ -127,7 +126,7 @@ namespace BeanIO.Parser
             }
 
             if (resStream == null)
-                throw new ArgumentOutOfRangeException("fileName");
+                throw new ArgumentOutOfRangeException(nameof(fileName));
             return resStream;
         }
     }

@@ -6,8 +6,6 @@
 using System;
 using System.IO;
 
-using JetBrains.Annotations;
-
 namespace BeanIO.Stream
 {
     public class StrictStringReader : TextReader
@@ -16,7 +14,7 @@ namespace BeanIO.Stream
 
         private int _pos;
 
-        public StrictStringReader([NotNull] string s)
+        public StrictStringReader(string s)
         {
             _c = s.ToCharArray();
         }

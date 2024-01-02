@@ -6,6 +6,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -13,12 +14,10 @@ using System.Text;
 using BeanIO.Config;
 using BeanIO.Types;
 
-using JetBrains.Annotations;
-
 namespace BeanIO.Internal.Util
 {
     /// <summary>
-    /// Utility class for instantiating configurable bean classes
+    /// Utility class for instantiating configurable bean classes.
     /// </summary>
     internal static class BeanUtil
     {
@@ -39,19 +38,19 @@ namespace BeanIO.Internal.Util
         public static void Add(this ICollection collection, object value)
         {
             var t = collection.GetType();
-            var i = t.GetTypeInfo();
-            var addMethod = i.DeclaredMethods.FirstOrDefault(x => x.IsPublic && !x.IsStatic && x.Name == "Add" && x.GetParameters().Length == 1);
+            var i = t;
+            var addMethod = i.GetMethods().First(x => x.IsPublic && !x.IsStatic && x.Name == "Add" && x.GetParameters().Length == 1);
             addMethod.Invoke(collection, new[] { value });
         }
 
-        public static object CreateBean([NotNull] string className, Properties properties)
+        public static object CreateBean(string className, Properties? properties)
         {
             var bean = CreateBean(className);
             Configure(bean, properties);
             return bean;
         }
 
-        public static object CreateBean([NotNull] string className)
+        public static object CreateBean(string className)
         {
             if (className == null)
                 throw new ArgumentNullException(nameof(className));
@@ -60,7 +59,7 @@ namespace BeanIO.Internal.Util
             try
             {
                 // load the class
-                type = Type.GetType(className, true);
+                type = Type.GetType(className, true)!;
             }
             catch (Exception ex)
             {
@@ -78,7 +77,7 @@ namespace BeanIO.Internal.Util
             }
         }
 
-        public static void Configure(object bean, Properties properties)
+        public static void Configure(object bean, Properties? properties)
         {
             // if no properties, we're done...
             if (properties == null || properties.Count == 0)
@@ -115,7 +114,7 @@ namespace BeanIO.Internal.Util
             }
         }
 
-        public static PropertyDescriptor GetPropertyDescriptor(Type type, string property, string getter, string setter, bool isConstructorArgument)
+        public static PropertyDescriptor GetPropertyDescriptor(Type type, string property, string? getter, string? setter, bool isConstructorArgument)
         {
             var detector = new PropertyDescriptorDetector(type, property, getter, setter, isConstructorArgument);
             return detector.Create();
@@ -123,23 +122,23 @@ namespace BeanIO.Internal.Util
 
         private class PropertyDescriptorDetector
         {
-            private readonly TypeInfo _typeInfo;
+            private readonly Type _typeInfo;
 
             private readonly string _property;
 
-            private readonly string _getter;
+            private readonly string? _getter;
 
-            private readonly string _setter;
+            private readonly string? _setter;
 
             private readonly bool _isConstructorArgument;
 
-            private MethodInfo _getterInfo;
+            private MethodInfo? _getterInfo;
 
-            private MethodInfo _setterInfo;
+            private MethodInfo? _setterInfo;
 
-            public PropertyDescriptorDetector(Type type, string property, string getter, string setter, bool isConstructorArgument)
+            public PropertyDescriptorDetector(Type type, string property, string? getter, string? setter, bool isConstructorArgument)
             {
-                _typeInfo = type.GetTypeInfo();
+                _typeInfo = type;
                 _property = property;
                 _getter = getter;
                 _setter = setter;
@@ -150,23 +149,23 @@ namespace BeanIO.Internal.Util
             {
                 if (!string.IsNullOrEmpty(_getter))
                 {
-                    _getterInfo = LoadMethodInfo(_getter);
+                    _getterInfo = LoadMethodInfo(_getter!);
                     if (_getterInfo == null)
                     {
-                        _getterInfo = FindGetter(RemovePrefixForGetter(_getter));
+                        _getterInfo = FindGetter(RemovePrefixForGetter(_getter!));
                         if (_getterInfo == null)
-                            ThrowMethodMissingException("Getter", _getter);
+                            ThrowMethodMissingException("Getter", _getter!);
                     }
                 }
 
                 if (!string.IsNullOrEmpty(_setter))
                 {
-                    _setterInfo = LoadMethodInfo(_setter);
+                    _setterInfo = LoadMethodInfo(_setter!);
                     if (_setterInfo == null)
                     {
-                        _setterInfo = FindSetter(RemovePrefixForSetter(_setter));
+                        _setterInfo = FindSetter(RemovePrefixForSetter(_setter!));
                         if (_setterInfo == null)
-                            ThrowMethodMissingException("Setter", _setter);
+                            ThrowMethodMissingException("Setter", _setter!);
                     }
                 }
 
@@ -178,8 +177,8 @@ namespace BeanIO.Internal.Util
                         "_" + Introspector.Decapitalize(_property),
                         "m_" + Introspector.Decapitalize(_property),
                     };
-                PropertyInfo propertyInfo = null;
-                FieldInfo fieldInfo = null;
+                PropertyInfo? propertyInfo = null;
+                FieldInfo? fieldInfo = null;
                 foreach (var propertyName in propertyNamesToTest)
                 {
                     propertyInfo = GetDeclaredProperty(propertyName);
@@ -228,39 +227,40 @@ namespace BeanIO.Internal.Util
                 return descriptor;
             }
 
-            private PropertyInfo GetDeclaredProperty(string name)
+            private PropertyInfo? GetDeclaredProperty(string name)
             {
                 var typeInfo = _typeInfo;
-                while (typeInfo.AsType() != typeof(object))
+                while (typeInfo != typeof(object))
                 {
                     var result = typeInfo
-                        .DeclaredProperties
-                        .Where(x => !(x.GetMethod ?? x.SetMethod).IsStatic)
+                        .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                         .SingleOrDefault(x => x.Name == name);
                     if (result != null)
                         return result;
                     if (typeInfo.BaseType == null)
                         break;
-                    typeInfo = typeInfo.BaseType.GetTypeInfo();
+                    typeInfo = typeInfo.BaseType;
                 }
 
                 return null;
             }
 
-            private FieldInfo GetDeclaredField(string name)
+            private FieldInfo? GetDeclaredField(string name)
             {
                 var typeInfo = _typeInfo;
-                while (typeInfo.AsType() != typeof(object))
+                while (typeInfo != typeof(object))
                 {
                     var result = typeInfo
-                    .DeclaredFields
-                    .Where(x => !x.IsStatic)
+                        .GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                        .Where(x => x.DeclaringType == typeInfo)
+                        .Where(x => !x.Name.EndsWith(">k__BackingField"))
+                        .Where(x => !x.IsStatic)
                         .SingleOrDefault(x => x.Name == name);
                     if (result != null)
                         return result;
                     if (typeInfo.BaseType == null)
                         break;
-                    typeInfo = typeInfo.BaseType.GetTypeInfo();
+                    typeInfo = typeInfo.BaseType;
                 }
 
                 return null;
@@ -292,19 +292,19 @@ namespace BeanIO.Internal.Util
                 return name;
             }
 
-            private MethodInfo FindSetterForGetter(string getterName)
+            private MethodInfo? FindSetterForGetter(string getterName)
             {
                 var name = RemovePrefixForGetter(getterName);
                 return FindSetter(name);
             }
 
-            private MethodInfo FindGetterForSetter(string setterName)
+            private MethodInfo? FindGetterForSetter(string setterName)
             {
                 var name = RemovePrefixForSetter(setterName);
                 return FindGetter(name);
             }
 
-            private MethodInfo FindGetter(string name)
+            private MethodInfo? FindGetter(string name)
             {
                 var probableGetterNames = new[]
                     {
@@ -325,7 +325,7 @@ namespace BeanIO.Internal.Util
                 return null;
             }
 
-            private MethodInfo FindSetter(string name)
+            private MethodInfo? FindSetter(string name)
             {
                 var probableSetterNames = new[]
                     {
@@ -346,26 +346,26 @@ namespace BeanIO.Internal.Util
                 return null;
             }
 
-            private MethodInfo LoadMethodInfo(string name)
+            private MethodInfo? LoadMethodInfo(string name)
             {
                 if (string.IsNullOrEmpty(name))
                     return null;
-                MethodInfo methodInfo = null;
+                MethodInfo? methodInfo = null;
                 var typeInfo = _typeInfo;
-                while (typeInfo.GetType() != typeof(object))
+                while (typeInfo != typeof(object))
                 {
-                    methodInfo = typeInfo.GetDeclaredMethod(name);
+                    methodInfo = typeInfo.GetMethod(name);
                     if (methodInfo != null)
                         break;
                     if (typeInfo.BaseType == null)
                         break;
-                    typeInfo = typeInfo.BaseType.GetTypeInfo();
+                    typeInfo = typeInfo.BaseType;
                 }
 
                 return methodInfo;
             }
 
-            [ContractAnnotation("=> halt")]
+            [DoesNotReturn]
             private void ThrowMethodMissingException(string getterOrSetter, string name)
             {
                 if (string.IsNullOrEmpty(_property))
@@ -374,7 +374,7 @@ namespace BeanIO.Internal.Util
                         string.Format(
                             "{2} '{0}' not found in type '{1}'",
                             name,
-                            _typeInfo.GetType().GetAssemblyQualifiedName(),
+                            _typeInfo.GetAssemblyQualifiedName(),
                             getterOrSetter));
                 }
 
@@ -383,7 +383,7 @@ namespace BeanIO.Internal.Util
                         "{3} '{0}' not found for property/field '{1}' of type '{2}'",
                         name,
                         _property,
-                        _typeInfo.GetType().GetAssemblyQualifiedName(),
+                        _typeInfo.GetAssemblyQualifiedName(),
                         getterOrSetter));
             }
         }
@@ -398,14 +398,14 @@ namespace BeanIO.Internal.Util
             /// <summary>
             /// Parses field text into an object.
             /// </summary>
-            /// <param name="text">The field text to parse, which may be null if the field was not passed in the record</param>
-            /// <returns>The parsed object</returns>
-            public object Parse(string text)
+            /// <param name="text">The field text to parse, which may be null if the field was not passed in the record.</param>
+            /// <returns>The parsed object.</returns>
+            public object? Parse(string? text)
             {
                 if (string.IsNullOrEmpty(text))
                     return null;
 
-                var ch = text[0];
+                var ch = text![0];
                 if (text.Length == 1 || ch != '\\')
                     return ch;
 
@@ -434,9 +434,9 @@ namespace BeanIO.Internal.Util
             /// <summary>
             /// Formats an object into field text.
             /// </summary>
-            /// <param name="value">The value to format, which may be null</param>
-            /// <returns>The formatted field text, or <code>null</code> to indicate the value is not present</returns>
-            public string Format(object value)
+            /// <param name="value">The value to format, which may be null.</param>
+            /// <returns>The formatted field text, or <see langword="null" /> to indicate the value is not present.</returns>
+            public string Format(object? value)
             {
                 throw new NotSupportedException();
             }
@@ -452,9 +452,9 @@ namespace BeanIO.Internal.Util
             /// <summary>
             /// Parses field text into an object.
             /// </summary>
-            /// <param name="text">The field text to parse, which may be null if the field was not passed in the record</param>
-            /// <returns>The parsed object</returns>
-            public object Parse(string text)
+            /// <param name="text">The field text to parse, which may be null if the field was not passed in the record.</param>
+            /// <returns>The parsed object.</returns>
+            public object? Parse(string? text)
             {
                 if (text == null)
                     return null;
@@ -523,9 +523,9 @@ namespace BeanIO.Internal.Util
             /// <summary>
             /// Formats an object into field text.
             /// </summary>
-            /// <param name="value">The value to format, which may be null</param>
-            /// <returns>The formatted field text, or <code>null</code> to indicate the value is not present</returns>
-            public string Format(object value)
+            /// <param name="value">The value to format, which may be null.</param>
+            /// <returns>The formatted field text, or <see langword="null" /> to indicate the value is not present.</returns>
+            public string Format(object? value)
             {
                 throw new NotSupportedException();
             }
@@ -541,14 +541,14 @@ namespace BeanIO.Internal.Util
             /// <summary>
             /// Parses field text into an object.
             /// </summary>
-            /// <param name="text">The field text to parse, which may be null if the field was not passed in the record</param>
-            /// <returns>The parsed object</returns>
-            public object Parse(string text)
+            /// <param name="text">The field text to parse, which may be null if the field was not passed in the record.</param>
+            /// <returns>The parsed object.</returns>
+            public object? Parse(string? text)
             {
                 if (string.IsNullOrEmpty(text))
                     return null;
 
-                var pos = text.IndexOf(',');
+                var pos = text!.IndexOf(',');
                 if (pos < 0)
                     return new[] { text };
 
@@ -587,9 +587,9 @@ namespace BeanIO.Internal.Util
             /// <summary>
             /// Formats an object into field text.
             /// </summary>
-            /// <param name="value">The value to format, which may be null</param>
-            /// <returns>The formatted field text, or <code>null</code> to indicate the value is not present</returns>
-            public string Format(object value)
+            /// <param name="value">The value to format, which may be null.</param>
+            /// <returns>The formatted field text, or <see langword="null" /> to indicate the value is not present.</returns>
+            public string Format(object? value)
             {
                 throw new NotSupportedException();
             }

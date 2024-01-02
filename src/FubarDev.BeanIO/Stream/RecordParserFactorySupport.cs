@@ -9,7 +9,7 @@ using System.IO;
 namespace BeanIO.Stream
 {
     /// <summary>
-    /// A base class for implementing a custom <see cref="IRecordParserFactory"/>
+    /// A base class for implementing a custom <see cref="IRecordParserFactory"/>.
     /// </summary>
     public class RecordParserFactorySupport : IRecordParserFactory
     {
@@ -28,8 +28,8 @@ namespace BeanIO.Stream
         /// <summary>
         /// Creates a parser for reading records from an input stream.
         /// </summary>
-        /// <param name="reader">The input stream to read from</param>
-        /// <returns>The created <see cref="IRecordReader"/></returns>
+        /// <param name="reader">The input stream to read from.</param>
+        /// <returns>The created <see cref="IRecordReader"/>.</returns>
         public IRecordReader CreateReader(TextReader reader)
         {
             throw new NotSupportedException("BeanReader not supported");
@@ -38,8 +38,8 @@ namespace BeanIO.Stream
         /// <summary>
         /// Creates a parser for writing records to an output stream.
         /// </summary>
-        /// <param name="writer">The output stream to write to</param>
-        /// <returns>The new <see cref="IRecordWriter"/></returns>
+        /// <param name="writer">The output stream to write to.</param>
+        /// <returns>The new <see cref="IRecordWriter"/>.</returns>
         public IRecordWriter CreateWriter(TextWriter writer)
         {
             throw new NotSupportedException("BeanWriter not supported");
@@ -48,7 +48,7 @@ namespace BeanIO.Stream
         /// <summary>
         /// Creates a parser for marshalling records.
         /// </summary>
-        /// <returns>The created <see cref="IRecordMarshaller"/></returns>
+        /// <returns>The created <see cref="IRecordMarshaller"/>.</returns>
         public IRecordMarshaller CreateMarshaller()
         {
             throw new NotSupportedException("Marshaller not supported");
@@ -57,7 +57,7 @@ namespace BeanIO.Stream
         /// <summary>
         /// Creates a parser for unmarshalling records.
         /// </summary>
-        /// <returns>The created <see cref="IRecordUnmarshaller"/></returns>
+        /// <returns>The created <see cref="IRecordUnmarshaller"/>.</returns>
         public IRecordUnmarshaller CreateUnmarshaller()
         {
             throw new NotSupportedException("Unmarshaller not supported");

@@ -42,11 +42,10 @@ namespace BeanIO.Stream.Csv
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvRecordParser"/> class.
         /// </summary>
-        /// <param name="config">The parser configuration</param>
-        public CsvRecordParser(CsvParserConfiguration config)
+        /// <param name="config">The parser configuration.</param>
+        public CsvRecordParser(CsvParserConfiguration? config)
         {
-            if (config == null)
-                config = new CsvParserConfiguration();
+            config ??= new CsvParserConfiguration();
 
             _delim = config.Delimiter;
             if (_delim == ' ')
@@ -64,20 +63,20 @@ namespace BeanIO.Stream.Csv
         }
 
         /// <summary>
-        /// Marshals a single record object to a <code>String</code>.
+        /// Marshals a single record object to a <c>String</c>.
         /// </summary>
-        /// <param name="record">Record the record object to marshal</param>
-        /// <returns>The marshalled record text</returns>
+        /// <param name="record">Record the record object to marshal.</param>
+        /// <returns>The marshalled record text.</returns>
         public string Marshal(object record)
         {
             return Marshal((string[])record);
         }
 
         /// <summary>
-        /// Marshals a single record object to a <code>String</code>.
+        /// Marshals a single record object to a <c>String</c>.
         /// </summary>
-        /// <param name="record">Record the record object to marshal</param>
-        /// <returns>The marshalled record text</returns>
+        /// <param name="record">Record the record object to marshal.</param>
+        /// <returns>The marshalled record text.</returns>
         public string Marshal(string[] record)
         {
             var text = new StringBuilder();
@@ -110,8 +109,8 @@ namespace BeanIO.Stream.Csv
         /// <summary>
         /// Unmarshals a single record.
         /// </summary>
-        /// <param name="text">The record text to unmarshal</param>
-        /// <returns>The unmarshalled record object</returns>
+        /// <param name="text">The record text to unmarshal.</param>
+        /// <returns>The unmarshalled record object.</returns>
         [SuppressMessage("StyleCopPlus.StyleCopPlusRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         public object Unmarshal(string text)
         {

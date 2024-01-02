@@ -11,11 +11,9 @@ namespace BeanIO.Internal.Parser
 {
     internal class ErrorContext : IRecordContext
     {
-        private static readonly List<string> _noErrors = new List<string>();
-
         private readonly List<string> _recordErrors = new List<string>();
 
-        private readonly Dictionary<string, string> _fieldTexts = new Dictionary<string, string>();
+        private readonly Dictionary<string, string?> _fieldTexts = new Dictionary<string, string?>();
 
         private readonly Dictionary<string, Counter> _fieldCounters = new Dictionary<string, Counter>();
 
@@ -51,7 +49,7 @@ namespace BeanIO.Internal.Parser
         /// <remarks>
         /// Record text is not supported by XML stream formats, and null is returned instead.
         /// </remarks>
-        public string RecordText { get; set; }
+        public string? RecordText { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the record from the stream configuration.
@@ -59,7 +57,7 @@ namespace BeanIO.Internal.Parser
         /// <remarks>
         /// The record name may be null if was not determined before an exception was thrown.
         /// </remarks>
-        public string RecordName { get; set; }
+        public string? RecordName { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this record has any record or field level errors.
@@ -84,12 +82,11 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns the number of times the given field was present in the stream.
         /// </summary>
-        /// <param name="fieldName">The name of the field</param>
+        /// <param name="fieldName">The name of the field.</param>
         /// <returns>The number of times the field was present in the record.</returns>
         public int GetFieldCount(string fieldName)
         {
-            Counter counter;
-            if (_fieldCounters.TryGetValue(fieldName, out counter))
+            if (_fieldCounters.TryGetValue(fieldName, out var counter))
                 return counter.Count;
             return _fieldTexts.ContainsKey(fieldName) ? 1 : 0;
         }
@@ -107,9 +104,9 @@ namespace BeanIO.Internal.Parser
         /// <para>If the field repeats in the stream, this method returns the field text for
         /// the first occurrence of the field.</para>
         /// </remarks>
-        /// <param name="fieldName">The name of the field</param>
-        /// <returns>The unparsed field text</returns>
-        public string GetFieldText(string fieldName)
+        /// <param name="fieldName">The name of the field.</param>
+        /// <returns>The unparsed field text.</returns>
+        public string? GetFieldText(string fieldName)
         {
             return GetFieldText(fieldName, 0);
         }
@@ -125,16 +122,15 @@ namespace BeanIO.Internal.Parser
         /// <item>The field was not present in the record</item>
         /// </list>
         /// </remarks>
-        /// <param name="fieldName">The name of the field</param>
-        /// <param name="index">The index of the field (beginning at 0), for repeating fields</param>
-        /// <returns>The unparsed field text</returns>
-        public string GetFieldText(string fieldName, int index)
+        /// <param name="fieldName">The name of the field.</param>
+        /// <param name="index">The index of the field (beginning at 0), for repeating fields.</param>
+        /// <returns>The unparsed field text.</returns>
+        public string? GetFieldText(string fieldName, int index)
         {
             var key = !_fieldCounters.ContainsKey(fieldName) && index == 0
                           ? fieldName
                           : $"{index}:{fieldName}";
-            string fieldText;
-            if (_fieldTexts.TryGetValue(key, out fieldText))
+            if (_fieldTexts.TryGetValue(key, out var fieldText))
                 return fieldText;
             return null;
         }
@@ -142,22 +138,21 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns the field errors for a given field.
         /// </summary>
-        /// <param name="fieldName">The name of the field</param>
+        /// <param name="fieldName">The name of the field.</param>
         /// <returns>
         /// The collection of field errors, or null if no errors were reported for the field.
-        /// </returns>
+        /// .</returns>
         public IReadOnlyList<string> GetFieldErrors(string fieldName)
         {
-            List<string> errors;
-            if (_fieldErrors.TryGetValue(fieldName, out errors))
+            if (_fieldErrors.TryGetValue(fieldName, out var errors))
                 return errors;
-            return _noErrors;
+            return Array.Empty<string>();
         }
 
         /// <summary>
         /// Gets a <see cref="ILookup{TKey,TItem}"/> of all field errors.
         /// </summary>
-        /// <returns>All field errors</returns>
+        /// <returns>All field errors.</returns>
         public ILookup<string, string> GetFieldErrors()
         {
             return _fieldErrors
@@ -166,7 +161,7 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Clears this context
+        /// Clears this context.
         /// </summary>
         public void Clear()
         {
@@ -181,8 +176,7 @@ namespace BeanIO.Internal.Parser
 
         public void AddFieldError(string fieldName, string message)
         {
-            List<string> errors;
-            if (!_fieldErrors.TryGetValue(fieldName, out errors))
+            if (!_fieldErrors.TryGetValue(fieldName, out var errors))
                 _fieldErrors.Add(fieldName, errors = new List<string>());
             errors.Add(message);
         }
@@ -192,12 +186,11 @@ namespace BeanIO.Internal.Parser
             _recordErrors.Add(message);
         }
 
-        public void SetFieldText(string fieldName, string text, bool isRepeating)
+        public void SetFieldText(string fieldName, string? text, bool isRepeating)
         {
             if (isRepeating)
             {
-                Counter counter;
-                if (!_fieldCounters.TryGetValue(fieldName, out counter))
+                if (!_fieldCounters.TryGetValue(fieldName, out var counter))
                     _fieldCounters.Add(fieldName, counter = new Counter());
 
                 _fieldTexts.Add($"{counter.Count}:{fieldName}", text);

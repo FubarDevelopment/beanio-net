@@ -26,16 +26,16 @@ namespace BeanIO.Parser.LenientPadding
             var u = factory.CreateUnmarshaller("s");
             var obj = Assert.IsType<Beans.Bean>(u.Unmarshal("aaabb"));
             Assert.Equal("aaa", obj.field1);
-            Assert.Equal("bb", typeof(Beans.Bean).GetField("field2", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(obj));
+            Assert.Equal("bb", typeof(Beans.Bean).GetField("field2", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(obj));
 
             obj = Assert.IsType<Beans.Bean>(u.Unmarshal("aaabb c"));
             Assert.Equal("aaa", obj.field1);
-            Assert.Equal("bb", typeof(Beans.Bean).GetField("field2", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(obj));
+            Assert.Equal("bb", typeof(Beans.Bean).GetField("field2", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(obj));
             Assert.Equal("c", obj.field3);
 
             obj = Assert.IsType<Beans.Bean>(u.Unmarshal("aaa"));
             Assert.Equal("aaa", obj.field1);
-            Assert.Null(typeof(Beans.Bean).GetField("field2", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(obj));
+            Assert.Null(typeof(Beans.Bean).GetField("field2", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(obj));
             Assert.Null(obj.field3);
 
             Assert.Throws<InvalidRecordException>(() => u.Unmarshal("aa"));

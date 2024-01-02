@@ -8,20 +8,20 @@ using System;
 namespace BeanIO
 {
     /// <summary>
-    /// Abstract basic bean reader implementation
+    /// Abstract basic bean reader implementation.
     /// </summary>
     public abstract class BeanReader : IBeanReader
     {
         /// <summary>
         /// Error handler to handle exceptions thrown by <see cref="IBeanReader.Read"/>.
         /// </summary>
-        public event BeanReaderErrorHandlerDelegate Error;
+        public event BeanReaderErrorHandlerDelegate? Error;
 
         /// <summary>
         /// Gets or sets the record or group name of the most recent bean object read from this reader,
         /// or null if the end of the stream was reached.
         /// </summary>
-        public string RecordName { get; protected set; }
+        public string? RecordName { get; protected set; }
 
         /// <summary>
         /// Gets or sets the starting line number of the first record for the most recent bean
@@ -43,8 +43,8 @@ namespace BeanIO
         /// If a bean object can span multiple records, <see cref="IBeanReader.RecordCount"/> can be used
         /// to determine how many records were read from the stream.
         /// </summary>
-        /// <param name="index">the index of the record, starting at 0</param>
-        /// <returns>the <see cref="IRecordContext"/></returns>
+        /// <param name="index">the index of the record, starting at 0.</param>
+        /// <returns>the <see cref="IRecordContext"/>.</returns>
         public abstract IRecordContext GetRecordContext(int index);
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace BeanIO
         /// If the end of the stream is reached, null is returned.
         /// </remarks>
         /// <returns>The bean read, or null if the end of the stream was reached.</returns>
-        public abstract object Read();
+        public abstract object? Read();
 
         /// <summary>
         /// Skips ahead in the input stream.
@@ -69,7 +69,7 @@ namespace BeanIO
         /// </param>
         /// <returns>the number of skipped bean objects, which may be less than <paramref name="count"/>
         /// if the end of the stream was reached
-        /// </returns>
+        /// .</returns>
         public abstract int Skip(int count);
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace BeanIO
         public abstract void Close();
 
         /// <summary>
-        /// Disposes this resource
+        /// Disposes this resource.
         /// </summary>
         public void Dispose()
         {
@@ -89,7 +89,7 @@ namespace BeanIO
         /// Triggers the <see cref="Error" /> event or throws the exception when no event handler was given.
         /// </summary>
         /// <param name="exception">The exception to be passed to the event.</param>
-        /// <returns>true when the error was passed to an event handler</returns>
+        /// <returns>true when the error was passed to an event handler.</returns>
         protected virtual bool OnError(BeanReaderException exception)
         {
             var tmp = Error;

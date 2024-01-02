@@ -16,41 +16,41 @@ namespace BeanIO.Internal.Compiler.Flat
     internal class FlatPreprocessor : Preprocessor
     {
         /// <summary>
-        /// the list of components at the end of the record following the unbounded component
+        /// the list of components at the end of the record following the unbounded component.
         /// </summary>
         private readonly List<PropertyConfig> _endComponents = new List<PropertyConfig>();
 
         /// <summary>
-        /// stack of non-record segments
+        /// stack of non-record segments.
         /// </summary>
         private readonly Stack<SegmentConfig> _segmentStack = new Stack<SegmentConfig>();
 
         /// <summary>
-        /// list of field components belonging to a record, used for validating dynamic occurrences
+        /// list of field components belonging to a record, used for validating dynamic occurrences.
         /// </summary>
         private readonly List<FieldConfig> _fieldComponents = new List<FieldConfig>();
 
         /// <summary>
-        /// the current default field position
+        /// the current default field position.
         /// </summary>
         private int? _defaultPosition;
 
         /// <summary>
         /// position must be set for all fields or for no fields, this attribute
-        /// is set when the first field is processed and all other fields must adhere to it
+        /// is set when the first field is processed and all other fields must adhere to it.
         /// </summary>
         private bool? _positionRequired;
 
         /// <summary>
         /// the field or segment that requires a maximum position set on it to test for more occurrences
-        /// of an indefinitely repeating field or segment
+        /// of an indefinitely repeating field or segment.
         /// </summary>
-        private PropertyConfig _unboundedComponent;
+        private PropertyConfig? _unboundedComponent;
 
         /// <summary>
-        /// the component that immediately follows the unbounded component
+        /// the component that immediately follows the unbounded component.
         /// </summary>
-        private PropertyConfig _unboundedComponentFollower;
+        private PropertyConfig? _unboundedComponentFollower;
 
         public FlatPreprocessor(StreamConfig stream)
             : base(stream)
@@ -68,9 +68,9 @@ namespace BeanIO.Internal.Compiler.Flat
         }
 
         /// <summary>
-        /// Initializes a record configuration before its children have been processed
+        /// Initializes a record configuration before its children have been processed.
         /// </summary>
-        /// <param name="record">the record configuration to process</param>
+        /// <param name="record">the record configuration to process.</param>
         protected override void InitializeRecord(RecordConfig record)
         {
             base.InitializeRecord(record);
@@ -84,9 +84,9 @@ namespace BeanIO.Internal.Compiler.Flat
         }
 
         /// <summary>
-        /// Finalizes a record configuration after its children have been processed
+        /// Finalizes a record configuration after its children have been processed.
         /// </summary>
-        /// <param name="record">the record configuration to finalize</param>
+        /// <param name="record">the record configuration to finalize.</param>
         protected override void FinalizeRecord(RecordConfig record)
         {
             base.FinalizeRecord(record);
@@ -124,9 +124,9 @@ namespace BeanIO.Internal.Compiler.Flat
         }
 
         /// <summary>
-        /// Initializes a segment configuration before its children have been processed
+        /// Initializes a segment configuration before its children have been processed.
         /// </summary>
-        /// <param name="segment">the segment configuration to process</param>
+        /// <param name="segment">the segment configuration to process.</param>
         protected override void InitializeSegment(SegmentConfig segment)
         {
             if (segment.ComponentType == ComponentType.Segment)
@@ -146,16 +146,16 @@ namespace BeanIO.Internal.Compiler.Flat
         }
 
         /// <summary>
-        /// Finalizes a segment configuration after its children have been processed
+        /// Finalizes a segment configuration after its children have been processed.
         /// </summary>
-        /// <param name="segment">the segment configuration to finalize</param>
+        /// <param name="segment">the segment configuration to finalize.</param>
         [SuppressMessage("StyleCopPlus.StyleCopPlusRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         protected override void FinalizeSegment(SegmentConfig segment)
         {
             base.FinalizeSegment(segment);
 
-            PropertyConfig first = null;
-            PropertyConfig last = null;
+            PropertyConfig? first = null;
+            PropertyConfig? last = null;
             int position = 0;
             int minSize = 0;
             int maxSize = -1;
@@ -213,9 +213,9 @@ namespace BeanIO.Internal.Compiler.Flat
                     maxSize = 0;
                 }
             }
-            else if (maxSize < 0)
+            else if (maxSize < 0 && first != null)
             {
-                position = first.Position.Value;
+                position = first.Position.GetValueOrDefault();
                 if (last.Position.GetValueOrDefault() < 0 && first.Position.GetValueOrDefault() >= 0)
                 {
                     if (!isRecord && segment.IsRepeating)
@@ -247,7 +247,7 @@ namespace BeanIO.Internal.Compiler.Flat
                     if (config.ComponentType == ComponentType.Constant)
                         continue;
 
-                    minSize += config.MinSize * config.MinOccurs.Value;
+                    minSize += config.MinSize * config.MinOccurs ?? 0;
 
                     var n = config.Position;
                     if (first == null || ComparePosition(n, first.Position) < 0)
@@ -269,14 +269,17 @@ namespace BeanIO.Internal.Compiler.Flat
                     last = first;
                 }
 
-                if (first.Position.GetValueOrDefault() >= 0 && last.Position.GetValueOrDefault() < 0)
+                if (first != null && last != null)
                 {
-                    // go with counted min size
-                }
-                else
-                {
-                    minSize = Math.Abs(last.Position.GetValueOrDefault() - first.Position.GetValueOrDefault())
-                              + (last.MaxSize * last.MinOccurs.GetValueOrDefault());
+                    if (first.Position.GetValueOrDefault() >= 0 && last.Position.GetValueOrDefault() < 0)
+                    {
+                        // go with counted min size
+                    }
+                    else
+                    {
+                        minSize = Math.Abs(last.Position.GetValueOrDefault() - first.Position.GetValueOrDefault())
+                                  + (last.MaxSize * last.MinOccurs.GetValueOrDefault());
+                    }
                 }
             }
 
@@ -357,9 +360,9 @@ namespace BeanIO.Internal.Compiler.Flat
         }
 
         /// <summary>
-        /// Processes a field configuration
+        /// Processes a field configuration.
         /// </summary>
-        /// <param name="field">the field configuration to process</param>
+        /// <param name="field">the field configuration to process.</param>
         protected override void HandleField(FieldConfig field)
         {
             base.HandleField(field);
@@ -468,24 +471,24 @@ namespace BeanIO.Internal.Compiler.Flat
         /// <summary>
         /// Returns the size of a field.
         /// </summary>
-        /// <remarks>null = unbounded</remarks>
-        /// <param name="field">the field to get the size from</param>
-        /// <returns>the field size</returns>
+        /// <remarks>null = unbounded.</remarks>
+        /// <param name="field">the field to get the size from.</param>
+        /// <returns>the field size.</returns>
         protected virtual int? GetSize(FieldConfig field)
         {
             return IsFixedLength ? field.Length : 1;
         }
 
         /// <summary>
-        /// compares two positions
+        /// compares two positions.
         /// </summary>
-        /// <param name="p1">position 1</param>
-        /// <param name="p2">position 2</param>
+        /// <param name="p1">position 1.</param>
+        /// <param name="p2">position 2.</param>
         /// <returns>
         ///  1,  0 returns 1 (greater than)
         /// -1, -2 returns 1 (greater than)
         ///  5, -1 returns -1 (less than)
-        /// </returns>
+        /// .</returns>
         private static int ComparePosition(int? p1, int? p2)
         {
             if (p1 > 0 && p2 < 0)
@@ -518,7 +521,7 @@ namespace BeanIO.Internal.Compiler.Flat
 
             // search in reverse to find the most recent field in case multiple
             // fields share the same name (gc0080)
-            FieldConfig occurs = _fieldComponents.FirstOrDefault(fc => string.Equals(fc.Name, config.OccursRef));
+            var occurs = _fieldComponents.FirstOrDefault(fc => string.Equals(fc.Name, config.OccursRef));
             if (occurs == null)
             {
                 throw new BeanIOConfigurationException($"Referenced field '{config.OccursRef}' not found");
@@ -558,7 +561,7 @@ namespace BeanIO.Internal.Compiler.Flat
         /// <summary>
         /// Calculates and sets the default field position.
         /// </summary>
-        /// <param name="config">the field configuration to calculate the position for</param>
+        /// <param name="config">the field configuration to calculate the position for.</param>
         private void CalculateDefaultPosition(FieldConfig config)
         {
             var isVariableSized = IsVariableSized(config);

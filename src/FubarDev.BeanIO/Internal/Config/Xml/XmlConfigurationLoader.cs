@@ -10,7 +10,7 @@ using BeanIO.Config;
 namespace BeanIO.Internal.Config.Xml
 {
     /// <summary>
-    /// Loads BeanIO mapping files in XML format
+    /// Loads BeanIO mapping files in XML format.
     /// </summary>
     /// <remarks>
     /// This class is made thread safe by delegating most of the parsing logic
@@ -33,20 +33,20 @@ namespace BeanIO.Internal.Config.Xml
         protected virtual XmlMappingReader Reader { get; }
 
         /// <summary>
-        /// Loads a BeanIO configuration from an input stream
+        /// Loads a BeanIO configuration from an input stream.
         /// </summary>
-        /// <param name="input">the input stream to read the configuration from</param>
-        /// <param name="properties">the <see cref="Properties"/> for expansion in the mapping file</param>
-        /// <returns>a collection of loaded BeanIO configurations</returns>
-        public ICollection<BeanIOConfig> LoadConfiguration(System.IO.Stream input, Properties properties)
+        /// <param name="input">the input stream to read the configuration from.</param>
+        /// <param name="properties">the <see cref="Properties"/> for expansion in the mapping file.</param>
+        /// <returns>a collection of loaded BeanIO configurations.</returns>
+        public ICollection<BeanIOConfig> LoadConfiguration(System.IO.Stream input, Properties? properties)
         {
             return CreateParser().LoadConfiguration(input, properties);
         }
 
         /// <summary>
-        /// Creates a <see cref="XmlMappingParser"/> for reading an mapping input stream
+        /// Creates a <see cref="XmlMappingParser"/> for reading an mapping input stream.
         /// </summary>
-        /// <returns>a new XML mapping parser</returns>
+        /// <returns>a new XML mapping parser.</returns>
         protected virtual XmlMappingParser CreateParser()
         {
             return new XmlMappingParser(Reader);

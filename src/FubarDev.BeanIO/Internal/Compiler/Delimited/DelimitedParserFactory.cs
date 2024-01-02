@@ -22,7 +22,7 @@ namespace BeanIO.Internal.Compiler.Delimited
         /// </summary>
         /// <returns>
         /// The new <see cref="IRecordParserFactory"/>
-        /// </returns>
+        /// .</returns>
         protected override IRecordParserFactory CreateDefaultRecordParserFactory()
         {
             return new DelimitedRecordParserFactory();
@@ -31,10 +31,10 @@ namespace BeanIO.Internal.Compiler.Delimited
         protected override IStreamFormat CreateStreamFormat(StreamConfig config)
         {
             var format = new DelimitedStreamFormat
-                {
-                    Name = config.Name,
-                    RecordParserFactory = CreateRecordParserFactory(config)
-                };
+            {
+                Name = config.Name ?? throw new BeanIOConfigurationException("Missing stream name"),
+                RecordParserFactory = CreateRecordParserFactory(config)
+            };
             return format;
         }
 
@@ -54,23 +54,24 @@ namespace BeanIO.Internal.Compiler.Delimited
             return format;
         }
 
-        protected override IFieldFormat CreateFieldFormat(FieldConfig config, Type type)
+        protected override IFieldFormat CreateFieldFormat(FieldConfig config, Type? type)
         {
             var format = new DelimitedFieldFormat()
-                {
-                    Name = config.Name,
-                    Until = config.Until.GetValueOrDefault(),
-                };
+            {
+                Name = config.Name ?? throw new BeanIOConfigurationException("Missing field name"),
+                Until = config.Until.GetValueOrDefault(),
+            };
 
             if (config.Length != null)
             {
                 var padding = new FieldPadding()
-                    {
-                        Length = config.Length.Value,
-                        Justify = config.Justify,
-                        IsOptional = !config.IsRequired,
-                        PropertyType = type,
-                    };
+                {
+                    Length = config.Length.Value,
+                    Justify = config.Justify,
+                    IsOptional = !config.IsRequired,
+                    PropertyType = type,
+                };
+
                 padding.Filler = config.Padding ?? padding.Filler;
                 padding.Init();
                 format.Padding = padding;

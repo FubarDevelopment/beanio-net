@@ -57,7 +57,7 @@ namespace BeanIO.Internal.Util
             Assert.Equal(typeof(ISet<object>), "set".ToAggregationType(null));
             Assert.Equal(typeof(Array), "array".ToAggregationType(null));
             Assert.Equal(typeof(IList<>), "System.Collections.Generic.IList`1".ToAggregationType(null));
-            Assert.Equal(typeof(ArrayList).FullName, "System.Collections.ArrayList".ToAggregationType(null).FullName);
+            Assert.Equal(typeof(ArrayList).FullName, "System.Collections.ArrayList".ToAggregationType(null)?.FullName);
             Assert.Equal(typeof(IDictionary<,>), "map".ToAggregationType(null));
             Assert.Equal(typeof(IDictionary<,>), "System.Collections.Generic.IDictionary`2".ToAggregationType(null));
             Assert.Null("BeanIO.Types.NoClass".ToAggregationType(null));

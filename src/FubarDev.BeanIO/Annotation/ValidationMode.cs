@@ -11,17 +11,17 @@ namespace BeanIO.Annotation
     public enum ValidationMode
     {
         /// <summary>
-        /// Copy the configuration from the parent element (or Settings)
+        /// Copy the configuration from the parent element (or Settings).
         /// </summary>
         SameAsParent,
 
         /// <summary>
-        /// Validate on marshal
+        /// Validate on marshal.
         /// </summary>
         ValidateOnMarshal,
 
         /// <summary>
-        /// Don't validate on marshal
+        /// Don't validate on marshal.
         /// </summary>
         NoValidateOnMarshal,
     }

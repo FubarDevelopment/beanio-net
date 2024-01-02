@@ -9,7 +9,7 @@ using System.Globalization;
 namespace BeanIO.Types
 {
     /// <summary>
-    /// Support for culture specific types
+    /// Support for culture specific types.
     /// </summary>
     public abstract class CultureSupport
     {
@@ -18,7 +18,7 @@ namespace BeanIO.Types
         private CultureInfo _culture = _cultureEnUs;
 
         /// <summary>
-        /// Gets or sets the culture
+        /// Gets or sets the culture.
         /// </summary>
         public CultureInfo Culture
         {

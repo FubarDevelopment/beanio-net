@@ -14,7 +14,8 @@ namespace BeanIO.Parser.Direct
         {
             var factory = NewStreamFactory("direct_mapping.xml");
             var u = factory.CreateUnmarshaller("d1");
-            var p = (DirectUser)u.Unmarshal("george,true");
+            var p = (DirectUser?)u.Unmarshal("george,true");
+            Assert.NotNull(p);
             Assert.Equal("george", p.FirstName);
             Assert.True(p.Enabled);
         }

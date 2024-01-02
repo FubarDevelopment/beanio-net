@@ -40,9 +40,9 @@ namespace BeanIO.Internal.Parser
         public int Order { get; set; }
 
         /// <summary>
-        /// Gets or sets the record format
+        /// Gets or sets the record format.
         /// </summary>
-        public IRecordFormat RecordFormat { get; set; }
+        public IRecordFormat? RecordFormat { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this component is a record group.
@@ -53,8 +53,8 @@ namespace BeanIO.Internal.Parser
         /// Returns the number of times this component was matched within the current
         /// iteration of its parent component.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <returns>the match count</returns>
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <returns>the match count.</returns>
         public int GetCount(ParsingContext context)
         {
             return _count.Get(context);
@@ -64,33 +64,33 @@ namespace BeanIO.Internal.Parser
         /// Sets the number of times this component was matched within the current
         /// iteration of its parent component.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <param name="value">the new count</param>
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <param name="value">the new count.</param>
         public void SetCount(ParsingContext context, int value)
         {
             _count.Set(context, value);
         }
 
         /// <summary>
-        /// Returns a value indicating whether this component has reached its maximum occurrences
+        /// Returns a value indicating whether this component has reached its maximum occurrences.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <returns>true if maximum occurrences has been reached</returns>
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <returns>true if maximum occurrences has been reached.</returns>
         public bool IsMaxOccursReached(ParsingContext context)
         {
             return MaxOccurs != null && GetCount(context) >= MaxOccurs;
         }
 
         /// <summary>
-        /// Finds a parser for marshalling a bean object
+        /// Finds a parser for marshalling a bean object.
         /// </summary>
         /// <remarks>
         /// If matched by this Selector, the method
         /// should set the bean object on the property tree and return itself.
         /// </remarks>
-        /// <param name="context">the <see cref="MarshallingContext"/></param>
-        /// <returns>the matched <see cref="ISelector"/> for marshalling the bean object</returns>
-        public ISelector MatchNext(MarshallingContext context)
+        /// <param name="context">the <see cref="MarshallingContext"/>.</param>
+        /// <returns>the matched <see cref="ISelector"/> for marshalling the bean object.</returns>
+        public ISelector? MatchNext(MarshallingContext context)
         {
             var property = Property;
             if (property != null)
@@ -123,9 +123,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Finds a parser for unmarshalling a record based on the current state of the stream.
         /// </summary>
-        /// <param name="context">the <see cref="UnmarshallingContext"/></param>
-        /// <returns>the matched <see cref="ISelector"/> for unmarshalling the record</returns>
-        public ISelector MatchNext(UnmarshallingContext context)
+        /// <param name="context">the <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>the matched <see cref="ISelector"/> for unmarshalling the record.</returns>
+        public ISelector? MatchNext(UnmarshallingContext context)
         {
             if (Matches(context))
             {
@@ -137,15 +137,15 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Finds a parser that matches the input record
+        /// Finds a parser that matches the input record.
         /// </summary>
         /// <remarks>
         /// This method is invoked when <see cref="ISelector.MatchNext(BeanIO.Internal.Parser.UnmarshallingContext)"/> returns
         /// null, in order to differentiate between unexpected and unidentified record types.
         /// </remarks>
-        /// <param name="context">the <see cref="UnmarshallingContext"/></param>
-        /// <returns>the matched <see cref="ISelector"/></returns>
-        public ISelector MatchAny(UnmarshallingContext context)
+        /// <param name="context">the <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>the matched <see cref="ISelector"/>.</returns>
+        public ISelector? MatchAny(UnmarshallingContext context)
         {
             return Matches(context) ? this : null;
         }
@@ -153,7 +153,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Skips a record or group of records.
         /// </summary>
-        /// <param name="context">the <see cref="UnmarshallingContext"/></param>
+        /// <param name="context">the <see cref="UnmarshallingContext"/>.</param>
         public void Skip(UnmarshallingContext context)
         {
             context.RecordSkipped();
@@ -162,9 +162,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Checks for any unsatisfied components before the stream is closed.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <returns>the first unsatisfied node</returns>
-        public ISelector Close(ParsingContext context)
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <returns>the first unsatisfied node.</returns>
+        public ISelector? Close(ParsingContext context)
         {
             return GetCount(context) < MinOccurs ? this : null;
         }
@@ -172,7 +172,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Resets the component count of this Selector's children.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
         public void Reset(ParsingContext context)
         {
         }
@@ -180,27 +180,26 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Updates a <see cref="IDictionary{TKey,TValue}"/> with the current state of the Writer to allow for restoration at a later time.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <param name="ns">a <see cref="string"/> to prefix all state keys with</param>
-        /// <param name="state">the <see cref="IDictionary{TKey,TValue}"/> to update with the latest state</param>
-        public void UpdateState(ParsingContext context, string ns, IDictionary<string, object> state)
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <param name="ns">a <see cref="string"/> to prefix all state keys with.</param>
+        /// <param name="state">the <see cref="IDictionary{TKey,TValue}"/> to update with the latest state.</param>
+        public void UpdateState(ParsingContext context, string ns, IDictionary<string, object?> state)
         {
             state[GetKey(ns, DefaultSelectorStateKeys.CountKey)] = _count.Get(context);
         }
 
         /// <summary>
-        /// Restores a <see cref="IDictionary{TKey,TValue}"/> of previously stored state information
+        /// Restores a <see cref="IDictionary{TKey,TValue}"/> of previously stored state information.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <param name="ns">a <see cref="string"/> to prefix all state keys with</param>
-        /// <param name="state">the <see cref="IDictionary{TKey,TValue}"/> containing the state to restore</param>
-        public void RestoreState(ParsingContext context, string ns, IReadOnlyDictionary<string, object> state)
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <param name="ns">a <see cref="string"/> to prefix all state keys with.</param>
+        /// <param name="state">the <see cref="IDictionary{TKey,TValue}"/> containing the state to restore.</param>
+        public void RestoreState(ParsingContext context, string ns, IReadOnlyDictionary<string, object?> state)
         {
             var key = GetKey(ns, DefaultSelectorStateKeys.CountKey);
-            object n;
-            if (!state.TryGetValue(key, out n))
+            if (!state.TryGetValue(key, out var n))
                 throw new InvalidOperationException($"Missing state information for key '{key}'");
-            _count.Set(context, (int)n);
+            _count.Set(context, (int?)n ?? 0);
         }
 
         /// <summary>
@@ -210,7 +209,7 @@ namespace BeanIO.Internal.Parser
         /// This method should be overridden by subclasses that need to register
         /// one or more parser context variables.
         /// </remarks>
-        /// <param name="locals">set of local variables</param>
+        /// <param name="locals">set of local variables.</param>
         public override void RegisterLocals(ISet<IParserLocal> locals)
         {
             if (locals.Add(_count))
@@ -218,10 +217,10 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Marshals a record
+        /// Marshals a record.
         /// </summary>
-        /// <param name="context">The <see cref="MarshallingContext"/></param>
-        /// <returns>whether a value was marshalled</returns>
+        /// <param name="context">The <see cref="MarshallingContext"/>.</param>
+        /// <returns>whether a value was marshalled.</returns>
         public override bool Marshal(MarshallingContext context)
         {
             try
@@ -238,10 +237,10 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Unmarshals a record
+        /// Unmarshals a record.
         /// </summary>
-        /// <param name="context">The <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if this component was present in the unmarshalled record, or false otherwise</returns>
+        /// <param name="context">The <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if this component was present in the unmarshalled record, or false otherwise.</returns>
         public override bool Unmarshal(UnmarshallingContext context)
         {
             try
@@ -270,8 +269,8 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns whether this parser and its children match a record being unmarshalled.
         /// </summary>
-        /// <param name="context">The <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if matched, false otherwise</returns>
+        /// <param name="context">The <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if matched, false otherwise.</returns>
         public override bool Matches(UnmarshallingContext context)
         {
             if (RecordFormat != null && !RecordFormat.Matches(context))
@@ -280,9 +279,9 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Called by <see cref="TreeNode{T}.ToString"/> to append node parameters to the output
+        /// Called by <see cref="TreeNode{T}.ToString"/> to append node parameters to the output.
         /// </summary>
-        /// <param name="s">The output to append</param>
+        /// <param name="s">The output to append.</param>
         protected override void ToParamString(StringBuilder s)
         {
             s
@@ -295,9 +294,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns a <see cref="IDictionary{TKey,TValue}"/> key for accessing state information for this <see cref="ISelector"/>.
         /// </summary>
-        /// <param name="ns">the assigned namespace for the key</param>
-        /// <param name="name">the state information to access</param>
-        /// <returns>the fully qualified key</returns>
+        /// <param name="ns">the assigned namespace for the key.</param>
+        /// <param name="name">the state information to access.</param>
+        /// <returns>the fully qualified key.</returns>
         protected string GetKey(string ns, string name)
         {
             return $"{ns}.{Name}.{name}";

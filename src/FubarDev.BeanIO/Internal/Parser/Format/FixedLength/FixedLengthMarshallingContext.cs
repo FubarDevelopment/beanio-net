@@ -18,12 +18,12 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
     internal class FixedLengthMarshallingContext : MarshallingContext
     {
         /// <summary>
-        /// the list of entries for creating the record (may be unordered)
+        /// the list of entries for creating the record (may be unordered).
         /// </summary>
         private readonly List<Entry> _entries = new List<Entry>();
 
         /// <summary>
-        /// the index of the last committed field in the record
+        /// the index of the last committed field in the record.
         /// </summary>
         private int _committed;
 
@@ -36,18 +36,18 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
         }
 
         /// <summary>
-        /// Gets or sets the filler character for missing fields
+        /// Gets or sets the filler character for missing fields.
         /// </summary>
         public char Filler { get; set; }
 
         /// <summary>
-        /// Inserts field text into the record being marshalled
+        /// Inserts field text into the record being marshalled.
         /// </summary>
-        /// <param name="position">the position of the field in the record</param>
-        /// <param name="text">the field text to insert</param>
+        /// <param name="position">the position of the field in the record.</param>
+        /// <param name="text">the field text to insert.</param>
         /// <param name="commit">true to commit the current field length, or false
         /// if the field is optional and should not extend the record length
-        /// unless a subsequent field is appended to the record</param>
+        /// unless a subsequent field is appended to the record.</param>
         public void SetFieldText(int position, string text, bool commit)
         {
             var index = GetAdjustedFieldPosition(position);
@@ -58,7 +58,7 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
         }
 
         /// <summary>
-        /// Clear is invoked after each bean object (record or group) is marshalled
+        /// Clear is invoked after each bean object (record or group) is marshalled.
         /// </summary>
         public override void Clear()
         {
@@ -73,7 +73,7 @@ namespace BeanIO.Internal.Parser.Format.FixedLength
         /// </summary>
         /// <returns>
         /// The newly created record object.
-        /// </returns>
+        /// .</returns>
         protected override object ToRecordObject()
         {
             var record = new StringBuilder();

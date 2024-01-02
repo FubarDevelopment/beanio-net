@@ -15,13 +15,13 @@ namespace BeanIO.Internal.Config
         /// <summary>
         /// Gets the component type of this selector.
         /// </summary>
-        /// <returns>either <see cref="F:ComponentType.Record"/> or <see cref="F:ComponentType.Group"/></returns>
+        /// <returns>either <see cref="F:ComponentType.Record"/> or <see cref="F:ComponentType.Group"/>.</returns>
         ComponentType ComponentType { get; }
 
         /// <summary>
         /// Gets the name of this component.
         /// </summary>
-        string Name { get; }
+        string? Name { get; }
 
         /// <summary>
         /// Gets the minimum occurrences of this component.
@@ -39,7 +39,7 @@ namespace BeanIO.Internal.Config
         /// <remarks>
         /// Records and groups assigned the same order number may appear in any order.
         /// </remarks>
-        /// <returns>the component order (starting at 1)</returns>
+        /// <returns>the component order (starting at 1).</returns>
         int? Order { get; set; }
     }
 }

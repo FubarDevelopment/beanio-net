@@ -19,15 +19,15 @@ namespace BeanIO.Internal.Parser
     internal class RecordCollection : RecordAggregation
     {
         /// <summary>
-        /// Gets the <see cref="IProperty"/> implementation type
+        /// Gets the <see cref="IProperty"/> implementation type.
         /// </summary>
         public override PropertyType Type => Internal.Parser.PropertyType.AggregationCollection;
 
         /// <summary>
-        /// Unmarshals a record
+        /// Unmarshals a record.
         /// </summary>
-        /// <param name="context">The <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if this component was present in the unmarshalled record, or false otherwise</returns>
+        /// <param name="context">The <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if this component was present in the unmarshalled record, or false otherwise.</returns>
         public override bool Unmarshal(UnmarshallingContext context)
         {
             // allow the delegate to unmarshal itself
@@ -45,7 +45,9 @@ namespace BeanIO.Internal.Parser
                         PropertyValue.Set(context, aggregation);
                     }
 
-                    var collection = (IList)aggregation;
+                    var collection =
+                        (IList?)aggregation
+                        ?? throw new BeanIOException("Aggregation type is not available");
                     collection.Add(aggregatedValue);
                 }
             }
@@ -56,10 +58,10 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Marshals a record
+        /// Marshals a record.
         /// </summary>
-        /// <param name="context">The <see cref="MarshallingContext"/></param>
-        /// <returns>whether a value was marshalled</returns>
+        /// <param name="context">The <see cref="MarshallingContext"/>.</param>
+        /// <returns>whether a value was marshalled.</returns>
         public override bool Marshal(MarshallingContext context)
         {
             var minOccurs = MinOccurs;
@@ -100,9 +102,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Sets the property value for marshaling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <param name="value">the property value</param>
-        public override void SetValue(ParsingContext context, object value)
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <param name="value">the property value.</param>
+        public override void SetValue(ParsingContext context, object? value)
         {
             // convert empty collections to null so that parent parsers
             // will consider this property missing during marshalling
@@ -114,8 +116,8 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns whether this parser or any of its descendant have content for marshalling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <returns>true if there is content for marshalling, false otherwise</returns>
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <returns>true if there is content for marshalling, false otherwise.</returns>
         public override bool HasContent(ParsingContext context)
         {
             var collection = GetCollection(context);
@@ -123,15 +125,15 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Returns the collection value being parsed
+        /// Returns the collection value being parsed.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <returns>the <see cref="IList"/></returns>
-        protected virtual ICollection GetCollection(ParsingContext context)
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <returns>the <see cref="IList"/>.</returns>
+        protected virtual ICollection? GetCollection(ParsingContext context)
         {
 #pragma warning disable SA1100
             // ReSharper disable once RedundantBaseQualifier
-            return (ICollection)base.GetValue(context);
+            return (ICollection?)base.GetValue(context);
 #pragma warning restore SA1100
         }
     }

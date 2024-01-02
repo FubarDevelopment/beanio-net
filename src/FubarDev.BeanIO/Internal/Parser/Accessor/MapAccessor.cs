@@ -30,9 +30,9 @@ namespace BeanIO.Internal.Parser.Accessor
         /// <summary>
         /// Returns the property value from a bean object.
         /// </summary>
-        /// <param name="bean">the bean object to get the property from</param>
-        /// <returns>the property value</returns>
-        public object GetValue(object bean)
+        /// <param name="bean">the bean object to get the property from.</param>
+        /// <returns>the property value.</returns>
+        public object? GetValue(object bean)
         {
             return ((IDictionary)bean)[_key];
         }
@@ -40,9 +40,9 @@ namespace BeanIO.Internal.Parser.Accessor
         /// <summary>
         /// Sets the property value on a bean object.
         /// </summary>
-        /// <param name="bean">the bean object to set the property</param>
-        /// <param name="value">the property value</param>
-        public void SetValue(object bean, object value)
+        /// <param name="bean">the bean object to set the property.</param>
+        /// <param name="value">the property value.</param>
+        public void SetValue(object bean, object? value)
         {
             ((IDictionary)bean)[_key] = value;
         }

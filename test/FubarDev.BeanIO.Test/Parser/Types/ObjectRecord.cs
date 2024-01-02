@@ -33,7 +33,7 @@ namespace BeanIO.Parser.Types
 
         public char? CharacterValue { get; set; }
 
-        public string StringValue { get; set; }
+        public string? StringValue { get; set; }
 
         public LocalDate? DateValue { get; set; }
 
@@ -43,7 +43,7 @@ namespace BeanIO.Parser.Types
 
         public Guid? Id { get; set; }
 
-        public Uri Url { get; set; }
+        public Uri? Url { get; set; }
 
         public TypeEnum? Enum1 { get; set; }
 

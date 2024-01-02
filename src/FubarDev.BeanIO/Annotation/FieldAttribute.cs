@@ -28,8 +28,8 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Initializes a new instance of the <see cref="FieldAttribute"/> class.
         /// </summary>
-        /// <param name="name">The field name</param>
-        public FieldAttribute(string name)
+        /// <param name="name">The field name.</param>
+        public FieldAttribute(string? name)
         {
             Name = name;
             At = int.MinValue;
@@ -45,7 +45,7 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Gets the field name.
         /// </summary>
-        public string Name { get; private set; }
+        public string? Name { get; private set; }
 
         /// <summary>
         /// Gets or sets the absolute position of the field.
@@ -96,32 +96,32 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Gets or sets the getter method.
         /// </summary>
-        public string Getter { get; set; }
+        public string? Getter { get; set; }
 
         /// <summary>
         /// Gets or sets the setter method.
         /// </summary>
-        public string Setter { get; set; }
+        public string? Setter { get; set; }
 
         /// <summary>
         /// Gets or sets the field type, if it can not be detected from the method or field declaration.
         /// </summary>
-        public Type Type { get; set; }
+        public Type? Type { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="ITypeHandler" /> implementation class for this field.
         /// </summary>
-        public Type HandlerType { get; set; }
+        public Type? HandlerType { get; set; }
 
         /// <summary>
         /// Gets or sets the name of a registered <see cref="ITypeHandler" />.
         /// </summary>
-        public string HandlerName { get; set; }
+        public string? HandlerName { get; set; }
 
         /// <summary>
         /// Gets or sets the format passed to the <see cref="ITypeHandler" />.
         /// </summary>
-        public string Format { get; set; }
+        public string? Format { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to trim the field text before validation and type handling.
@@ -136,12 +136,12 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Gets or sets the regular expression for validating and/or matching field text.
         /// </summary>
-        public string RegEx { get; set; }
+        public string? RegEx { get; set; }
 
         /// <summary>
         /// Gets or sets the literal text for validating or matching field text.
         /// </summary>
-        public string Literal { get; set; }
+        public string? Literal { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this field text is required.
@@ -157,7 +157,7 @@ namespace BeanIO.Annotation
         /// <remarks>
         /// The value is parsed into a Java object using the assigned type handler.
         /// </remarks>
-        public string DefaultValue { get; set; }
+        public string? DefaultValue { get; set; }
 
         /// <summary>
         /// Gets or sets the minimum length of the field text (after trimming if enabled).
@@ -172,7 +172,7 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Gets or sets the collection type for repeating fields, if it cannot be detected from the field or method declaration.
         /// </summary>
-        public Type CollectionType { get; set; }
+        public Type? CollectionType { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether an empty string should be converted to null, or null
@@ -196,7 +196,7 @@ namespace BeanIO.Annotation
         /// <remarks>
         /// Does not apply to XML formatted streams.
         /// </remarks>
-        public string OccursRef { get; set; }
+        public string? OccursRef { get; set; }
 
         /// <summary>
         /// Gets or sets the XML type of this field.
@@ -206,17 +206,17 @@ namespace BeanIO.Annotation
         /// <summary>
         /// Gets or sets the XML attribute or element name.
         /// </summary>
-        public string XmlName { get; set; }
+        public string? XmlName { get; set; }
 
         /// <summary>
         /// Gets or sets the XML namespace prefix of this field.
         /// </summary>
-        public string XmlPrefix { get; set; }
+        public string? XmlPrefix { get; set; }
 
         /// <summary>
         /// Gets or sets the XML namespace URI of this field.
         /// </summary>
-        public string XmlNamespace { get; set; }
+        public string? XmlNamespace { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the element is nillable.
@@ -224,7 +224,7 @@ namespace BeanIO.Annotation
         public bool IsNullable { get; set; }
 
         /// <summary>
-        /// Gets or sets the behavior if the default value should be unmarshalled during configuration
+        /// Gets or sets the behavior if the default value should be unmarshalled during configuration.
         /// </summary>
         public ParseDefaultBehavior ParseDefault { get; set; }
 

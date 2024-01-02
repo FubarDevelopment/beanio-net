@@ -13,11 +13,11 @@ namespace BeanIO.Parser.Xml.Types
         /// <summary>
         /// Formats an object into field text.
         /// </summary>
-        /// <param name="value">The value to format, which may be null</param>
-        /// <returns>The formatted field text, or <code>null</code> to indicate the value is not present</returns>
-        public override string Format(object value)
+        /// <param name="value">The value to format, which may be null.</param>
+        /// <returns>The formatted field text, or <see langword="null" /> to indicate the value is not present.</returns>
+        public override string? Format(object? value)
         {
-            if (string.Equals("nil", value))
+            if (Equals("nil", value))
                 return Value.Nil;
             return base.Format(value);
         }

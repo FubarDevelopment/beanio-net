@@ -18,7 +18,7 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="MalformedRecordException" /> class.
         /// </summary>
-        /// <param name="contexts">The record context(s) that caused the exception</param>
+        /// <param name="contexts">The record context(s) that caused the exception.</param>
         public MalformedRecordException(params IRecordContext[] contexts)
             : base(contexts)
         {
@@ -27,8 +27,8 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="MalformedRecordException"/> class.
         /// </summary>
-        /// <param name="message">The error message</param>
-        /// <param name="contexts">The record context(s) that caused the exception</param>
+        /// <param name="message">The error message.</param>
+        /// <param name="contexts">The record context(s) that caused the exception.</param>
         public MalformedRecordException(string message, params IRecordContext[] contexts)
             : base(message, contexts)
         {
@@ -37,9 +37,9 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="MalformedRecordException"/> class.
         /// </summary>
-        /// <param name="message">The error message</param>
-        /// <param name="inner">The inner exception</param>
-        /// <param name="contexts">The record context(s) that caused the exception</param>
+        /// <param name="message">The error message.</param>
+        /// <param name="inner">The inner exception.</param>
+        /// <param name="contexts">The record context(s) that caused the exception.</param>
         public MalformedRecordException(string message, Exception inner, params IRecordContext[] contexts)
             : base(message, inner, contexts)
         {

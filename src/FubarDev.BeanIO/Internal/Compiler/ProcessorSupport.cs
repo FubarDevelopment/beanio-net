@@ -12,7 +12,7 @@ using BeanIO.Internal.Config;
 namespace BeanIO.Internal.Compiler
 {
     /// <summary>
-    /// A base class for configuration processors
+    /// A base class for configuration processors.
     /// </summary>
     /// <remarks>
     /// The class provides support for traversing a tree of stream
@@ -24,22 +24,14 @@ namespace BeanIO.Internal.Compiler
         private readonly Stack<ComponentConfig> _componentConfigurations = new Stack<ComponentConfig>();
 
         /// <summary>
-        /// Gets the parent component for the component being processed
+        /// Gets the parent component for the component being processed.
         /// </summary>
-        protected virtual ComponentConfig Parent
-        {
-            get
-            {
-                if (_componentConfigurations.Count > 1)
-                    return _componentConfigurations.Skip(1).First();
-                return null;
-            }
-        }
+        protected virtual ComponentConfig? Parent => _componentConfigurations.Skip(1).FirstOrDefault();
 
         /// <summary>
-        /// Processes a stream configuration
+        /// Processes a stream configuration.
         /// </summary>
-        /// <param name="stream">the <see cref="StreamConfig"/> to process</param>
+        /// <param name="stream">the <see cref="StreamConfig"/> to process.</param>
         public virtual void Process(StreamConfig stream)
         {
             try
@@ -79,9 +71,9 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Recursively preprocesses a component and its descendants
+        /// Recursively preprocesses a component and its descendants.
         /// </summary>
-        /// <param name="component">the component to preprocess</param>
+        /// <param name="component">the component to preprocess.</param>
         protected virtual void HandleComponent(ComponentConfig component)
         {
             _componentConfigurations.Push(component);
@@ -124,81 +116,81 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Initializes a stream configuration before its children have been processed
+        /// Initializes a stream configuration before its children have been processed.
         /// </summary>
-        /// <param name="stream">the stream configuration to process</param>
+        /// <param name="stream">the stream configuration to process.</param>
         protected virtual void InitializeStream(StreamConfig stream)
         {
         }
 
         /// <summary>
-        /// Finalizes a stream configuration after its children have been processed
+        /// Finalizes a stream configuration after its children have been processed.
         /// </summary>
-        /// <param name="stream">the stream configuration to finalize</param>
+        /// <param name="stream">the stream configuration to finalize.</param>
         protected virtual void FinalizeStream(StreamConfig stream)
         {
         }
 
         /// <summary>
-        /// Initializes a group configuration before its children have been processed
+        /// Initializes a group configuration before its children have been processed.
         /// </summary>
-        /// <param name="group">the group configuration to process</param>
+        /// <param name="group">the group configuration to process.</param>
         protected virtual void InitializeGroup(GroupConfig group)
         {
         }
 
         /// <summary>
-        /// Finalizes a group configuration after its children have been processed
+        /// Finalizes a group configuration after its children have been processed.
         /// </summary>
-        /// <param name="group">the group configuration to finalize</param>
+        /// <param name="group">the group configuration to finalize.</param>
         protected virtual void FinalizeGroup(GroupConfig group)
         {
         }
 
         /// <summary>
-        /// Initializes a record configuration before its children have been processed
+        /// Initializes a record configuration before its children have been processed.
         /// </summary>
-        /// <param name="record">the record configuration to process</param>
+        /// <param name="record">the record configuration to process.</param>
         protected virtual void InitializeRecord(RecordConfig record)
         {
         }
 
         /// <summary>
-        /// Finalizes a record configuration after its children have been processed
+        /// Finalizes a record configuration after its children have been processed.
         /// </summary>
-        /// <param name="record">the record configuration to finalize</param>
+        /// <param name="record">the record configuration to finalize.</param>
         protected virtual void FinalizeRecord(RecordConfig record)
         {
         }
 
         /// <summary>
-        /// Initializes a segment configuration before its children have been processed
+        /// Initializes a segment configuration before its children have been processed.
         /// </summary>
-        /// <param name="segment">the segment configuration to process</param>
+        /// <param name="segment">the segment configuration to process.</param>
         protected virtual void InitializeSegment(SegmentConfig segment)
         {
         }
 
         /// <summary>
-        /// Finalizes a segment configuration after its children have been processed
+        /// Finalizes a segment configuration after its children have been processed.
         /// </summary>
-        /// <param name="segment">the segment configuration to finalize</param>
+        /// <param name="segment">the segment configuration to finalize.</param>
         protected virtual void FinalizeSegment(SegmentConfig segment)
         {
         }
 
         /// <summary>
-        /// Processes a field configuration
+        /// Processes a field configuration.
         /// </summary>
-        /// <param name="field">the field configuration to process</param>
+        /// <param name="field">the field configuration to process.</param>
         protected virtual void HandleField(FieldConfig field)
         {
         }
 
         /// <summary>
-        /// Processes a constant configuration
+        /// Processes a constant configuration.
         /// </summary>
-        /// <param name="constant">the constant configuration to process</param>
+        /// <param name="constant">the constant configuration to process.</param>
         protected virtual void HandleConstant(ConstantConfig constant)
         {
         }

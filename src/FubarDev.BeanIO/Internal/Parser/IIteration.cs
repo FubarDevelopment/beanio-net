@@ -24,8 +24,8 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns the index of the current iteration relative to its parent.
         /// </summary>
-        /// <param name="context">The context of this iteration</param>
-        /// <returns>the index of the current iteration</returns>
+        /// <param name="context">The context of this iteration.</param>
+        /// <returns>the index of the current iteration.</returns>
         int GetIterationIndex(ParsingContext context);
     }
 }

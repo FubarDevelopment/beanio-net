@@ -17,8 +17,8 @@ namespace BeanIO.Stream.Xml
         /// <summary>
         /// Unmarshals a single record.
         /// </summary>
-        /// <param name="text">The record text to unmarshal</param>
-        /// <returns>The unmarshalled record object</returns>
+        /// <param name="text">The record text to unmarshal.</param>
+        /// <returns>The unmarshalled record object.</returns>
         public object Unmarshal(string text)
         {
             try

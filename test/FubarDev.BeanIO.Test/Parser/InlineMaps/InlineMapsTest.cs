@@ -8,8 +8,6 @@ using System.Collections.Generic;
 using BeanIO.Annotation;
 using BeanIO.Builder;
 
-using JetBrains.Annotations;
-
 using Xunit;
 
 namespace BeanIO.Parser.InlineMaps
@@ -65,7 +63,7 @@ namespace BeanIO.Parser.InlineMaps
             var record = Assert.IsType<AnnotatedRecord>(u.Unmarshal(text));
             Assert.NotNull(record.Map);
             Assert.Collection(
-                record.Map,
+                record.Map!,
                 item =>
                     {
                         Assert.Equal("key1", item.Key);
@@ -90,7 +88,7 @@ namespace BeanIO.Parser.InlineMaps
             var record = Assert.IsType<AnnotatedRecord2>(u.Unmarshal(text));
             Assert.NotNull(record.Map);
             Assert.Collection(
-                record.Map,
+                record.Map!,
                 item =>
                 {
                     Assert.Equal("key1", item.Key);
@@ -106,30 +104,30 @@ namespace BeanIO.Parser.InlineMaps
             Assert.Equal(text, m.Marshal(record).ToString());
         }
 
-        [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+        // ReSharper disable UnusedAutoPropertyAccessor.Local
         private class AnnotatedSegment
         {
             [Field(At = 0)]
-            public string Key { get; set; }
+            public string? Key { get; set; }
 
             [Field(At = 1)]
-            public string Value { get; set; }
+            public string? Value { get; set; }
         }
 
         [Record]
-        [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
         private class AnnotatedRecord
         {
             [Segment(At = 0, Key = "Key", MinOccurs = 0, MaxOccurs = -1)]
-            public IDictionary<string, AnnotatedSegment> Map { get; set; }
+            public IDictionary<string, AnnotatedSegment>? Map { get; set; }
         }
 
         [Record]
-        [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
         private class AnnotatedRecord2
         {
             [Segment(At = 0, Key = "Key", MinOccurs = 0, MaxOccurs = 5)]
-            public IDictionary<string, AnnotatedSegment> Map { get; set; }
+            public IDictionary<string, AnnotatedSegment>? Map { get; set; }
         }
+
+        // ReSharper restore UnusedAutoPropertyAccessor.Local
     }
 }

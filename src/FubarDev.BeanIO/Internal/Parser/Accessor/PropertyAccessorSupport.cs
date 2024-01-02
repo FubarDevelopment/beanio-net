@@ -20,22 +20,22 @@ namespace BeanIO.Internal.Parser.Accessor
         /// </summary>
         public int? ConstructorArgumentIndex
         {
-            get { return _constructorArgumentIndex; }
-            set { _constructorArgumentIndex = (value != null && value == -1) ? null : value; }
+            get => _constructorArgumentIndex;
+            set => _constructorArgumentIndex = (value != null && value == -1) ? null : value;
         }
 
         /// <summary>
         /// Returns the property value from a bean object.
         /// </summary>
-        /// <param name="bean">the bean object to get the property from</param>
-        /// <returns>the property value</returns>
-        public abstract object GetValue(object bean);
+        /// <param name="bean">the bean object to get the property from.</param>
+        /// <returns>the property value.</returns>
+        public abstract object? GetValue(object bean);
 
         /// <summary>
         /// Sets the property value on a bean object.
         /// </summary>
-        /// <param name="bean">the bean object to set the property</param>
-        /// <param name="value">the property value</param>
-        public abstract void SetValue(object bean, object value);
+        /// <param name="bean">the bean object to set the property.</param>
+        /// <param name="value">the property value.</param>
+        public abstract void SetValue(object bean, object? value);
     }
 }

@@ -24,7 +24,7 @@ namespace BeanIO.Types
         {
             var handler = new IntegerTypeHandler
                 {
-                    Pattern = Tuple.Create(NumberStyles.HexNumber, "X")
+                    Pattern = (NumberStyles.HexNumber, "X")
                 };
             Assert.Equal(16, handler.Parse("10"));
         }
@@ -34,7 +34,7 @@ namespace BeanIO.Types
         {
             var handler = new IntegerTypeHandler
             {
-                Pattern = Tuple.Create(NumberStyles.Any, "0")
+                Pattern = (NumberStyles.Any, "0")
             };
             Assert.Throws<TypeConversionException>(() => handler.Parse("10a"));
         }

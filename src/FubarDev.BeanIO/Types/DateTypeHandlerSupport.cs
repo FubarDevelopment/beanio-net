@@ -4,11 +4,10 @@
 // </copyright>
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 using BeanIO.Config;
-
-using JetBrains.Annotations;
 
 using NodaTime;
 using NodaTime.Text;
@@ -23,11 +22,11 @@ namespace BeanIO.Types
     {
         private readonly Func<CultureInfo, string> _getDefaultPatternFunc;
 
-        private OffsetPattern[] _offsetPatterns;
+        private OffsetPattern[]? _offsetPatterns;
 
-        private string _pattern;
+        private string? _pattern;
 
-        private LocalDateTimePattern _format;
+        private LocalDateTimePattern? _format;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DateTypeHandlerSupport"/> class.
@@ -40,7 +39,7 @@ namespace BeanIO.Types
         /// <summary>
         /// Initializes a new instance of the <see cref="DateTypeHandlerSupport"/> class.
         /// </summary>
-        /// <param name="pattern">The pattern to use for parsing and formatting</param>
+        /// <param name="pattern">The pattern to use for parsing and formatting.</param>
         protected DateTypeHandlerSupport(string pattern)
             : this()
         {
@@ -50,19 +49,19 @@ namespace BeanIO.Types
         /// <summary>
         /// Initializes a new instance of the <see cref="DateTypeHandlerSupport"/> class.
         /// </summary>
-        /// <param name="getDefaultPatternFunc">a function to get the default pattern</param>
-        protected DateTypeHandlerSupport([NotNull] Func<CultureInfo, string> getDefaultPatternFunc)
+        /// <param name="getDefaultPatternFunc">a function to get the default pattern.</param>
+        protected DateTypeHandlerSupport(Func<CultureInfo, string> getDefaultPatternFunc)
         {
-            if (getDefaultPatternFunc == null)
-                throw new ArgumentNullException(nameof(getDefaultPatternFunc));
-            _getDefaultPatternFunc = getDefaultPatternFunc;
+            _getDefaultPatternFunc =
+                getDefaultPatternFunc
+                ?? throw new ArgumentNullException(nameof(getDefaultPatternFunc));
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DateTypeHandlerSupport"/> class.
         /// </summary>
-        /// <param name="getDefaultPatternFunc">a function to get the default pattern</param>
-        /// <param name="pattern">The pattern to use for parsing and formatting</param>
+        /// <param name="getDefaultPatternFunc">a function to get the default pattern.</param>
+        /// <param name="pattern">The pattern to use for parsing and formatting.</param>
         protected DateTypeHandlerSupport(Func<CultureInfo, string> getDefaultPatternFunc, string pattern)
             : this(getDefaultPatternFunc)
         {
@@ -75,7 +74,7 @@ namespace BeanIO.Types
         /// <remarks>
         /// If not set, the UTC time zone is used.
         /// </remarks>
-        public DateTimeZone TimeZone { get; set; }
+        public DateTimeZone? TimeZone { get; set; }
 
         /// <summary>
         /// Gets or sets the time zone ID for interpreting dates.
@@ -83,33 +82,37 @@ namespace BeanIO.Types
         /// <remarks>
         /// If not set, the UTC time zone is used.
         /// </remarks>
-        public string TimeZoneId
+        public string? TimeZoneId
         {
-            get
-            {
-                return TimeZone?.Id;
-            }
+            get => TimeZone?.Id;
             set
             {
-                var timeZoneId = value;
-                if (timeZoneId.StartsWith("GMT", StringComparison.OrdinalIgnoreCase))
-                    timeZoneId = "UTC" + timeZoneId.Substring(3);
-                if (timeZoneId.IndexOfAny(new[] { '+', '-' }) != -1)
+                if (string.IsNullOrEmpty(value))
                 {
-                    var offset = timeZoneId.Substring(3).Trim();
-                    ParseResult<Offset> lastResult = null;
-                    foreach (var offsetPattern in OffsetPatterns)
-                    {
-                        lastResult = offsetPattern.Parse(offset);
-                        if (lastResult.Success)
-                            break;
-                    }
-
-                    TimeZone = lastResult == null ? null : DateTimeZone.ForOffset(lastResult.GetValueOrThrow());
+                    TimeZone = null;
                 }
                 else
                 {
-                    TimeZone = string.IsNullOrEmpty(value) ? null : DateTimeZoneProviders.Tzdb[timeZoneId];
+                    var timeZoneId = value!;
+                    if (timeZoneId.StartsWith("GMT", StringComparison.OrdinalIgnoreCase))
+                        timeZoneId = "UTC" + timeZoneId.Substring(3);
+                    if (timeZoneId.IndexOfAny(new[] { '+', '-' }) != -1)
+                    {
+                        var offset = timeZoneId.Substring(3).Trim();
+                        ParseResult<Offset>? lastResult = null;
+                        foreach (var offsetPattern in OffsetPatterns)
+                        {
+                            lastResult = offsetPattern.Parse(offset);
+                            if (lastResult.Success)
+                                break;
+                        }
+
+                        TimeZone = lastResult == null ? null : DateTimeZone.ForOffset(lastResult.GetValueOrThrow());
+                    }
+                    else
+                    {
+                        TimeZone = DateTimeZoneProviders.Tzdb[timeZoneId];
+                    }
                 }
             }
         }
@@ -122,19 +125,16 @@ namespace BeanIO.Types
         /// <summary>
         /// Gets or sets the date/time pattern used by the <see cref="LocalDateTimePattern"/>.
         /// </summary>
-        public string Pattern
+        public string? Pattern
         {
-            get
-            {
-                return _pattern;
-            }
+            get => _pattern;
             set
             {
                 try
                 {
                     if (!string.IsNullOrEmpty(value))
                     {
-                        var nodaTimePattern = ConvertToNodaTimePattern(value);
+                        var nodaTimePattern = ConvertToNodaTimePattern(value!);
                         LocalDateTimePattern.Create(nodaTimePattern, Culture);
                     }
 
@@ -152,34 +152,35 @@ namespace BeanIO.Types
         /// </summary>
         public abstract Type TargetType { get; }
 
-        private LocalDateTimePattern DateFormat => _format ?? (_format = CreateDateFormat());
+        private LocalDateTimePattern DateFormat => _format ??= CreateDateFormat();
 
-        private OffsetPattern[] OffsetPatterns => _offsetPatterns ?? (_offsetPatterns = new[]
-                                                  {
-                                                      OffsetPattern.Create("g", Culture),
-                                                      OffsetPattern.Create("+H:mm:ss", Culture),
-                                                      OffsetPattern.Create("+H:mm", Culture),
-                                                      OffsetPattern.Create("+H", Culture),
-                                                  });
+        private OffsetPattern[] OffsetPatterns =>
+            _offsetPatterns ??= new[]
+            {
+                OffsetPattern.Create("g", Culture),
+                OffsetPattern.Create("+H:mm:ss", Culture),
+                OffsetPattern.Create("+H:mm", Culture),
+                OffsetPattern.Create("+H", Culture),
+            };
 
         /// <summary>
         /// Parses field text into an object.
         /// </summary>
-        /// <param name="text">The field text to parse, which may be null if the field was not passed in the record</param>
-        /// <returns>The parsed object</returns>
-        public abstract object Parse(string text);
+        /// <param name="text">The field text to parse, which may be null if the field was not passed in the record.</param>
+        /// <returns>The parsed object.</returns>
+        public abstract object? Parse(string? text);
 
         /// <summary>
         /// Formats an object into field text.
         /// </summary>
-        /// <param name="value">The value to format, which may be null</param>
-        /// <returns>The formatted field text, or <code>null</code> to indicate the value is not present</returns>
-        public abstract string Format(object value);
+        /// <param name="value">The value to format, which may be null.</param>
+        /// <returns>The formatted field text, or <see langword="null" /> to indicate the value is not present.</returns>
+        public abstract string? Format(object? value);
 
         /// <summary>
         /// Configures this type handler.
         /// </summary>
-        /// <param name="properties">The properties for customizing the instance</param>
+        /// <param name="properties">The properties for customizing the instance.</param>
         public virtual void Configure(Properties properties)
         {
             var pattern = properties["format"];
@@ -196,9 +197,9 @@ namespace BeanIO.Types
         /// <summary>
         /// Parses the local date (and/or time) into a <see cref="ZonedDateTime"/>.
         /// </summary>
-        /// <param name="text">The text to parse</param>
-        /// <returns>The parsed date (and/or time)</returns>
-        protected ZonedDateTime? ParseDate(string text)
+        /// <param name="text">The text to parse.</param>
+        /// <returns>The parsed date (and/or time).</returns>
+        protected ZonedDateTime? ParseDate(string? text)
         {
             if (string.IsNullOrEmpty(text))
                 return null;
@@ -209,7 +210,7 @@ namespace BeanIO.Types
             {
                 try
                 {
-                    var dt = DateFormat.Parse(text).GetValueOrThrow();
+                    var dt = DateFormat.Parse(text!).GetValueOrThrow();
                     result = IsLenient ? dt.InZoneLeniently(tz) : dt.InZoneStrictly(tz);
                 }
                 catch (UnparsableValueException ex)
@@ -217,7 +218,7 @@ namespace BeanIO.Types
                     if (Pattern == null || !IsLenient)
                         throw new TypeConversionException(ex.Message, ex);
 
-                    var temp = text.Substring(0, Math.Min(Pattern.Length, text.Length));
+                    var temp = text!.Substring(0, Math.Min(Pattern.Length, text.Length));
                     var dt = DateFormat.Parse(temp).GetValueOrThrow();
                     result = IsLenient ? dt.InZoneLeniently(tz) : dt.InZoneStrictly(tz);
                 }
@@ -236,7 +237,7 @@ namespace BeanIO.Types
                     {
                         try
                         {
-                            var temp = text.Substring(0, Math.Min(Pattern.Length, text.Length));
+                            var temp = text!.Substring(0, Math.Min(Pattern.Length, text.Length));
                             dt = DateTime.ParseExact(temp, Pattern, Culture, DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AssumeUniversal);
                             dt = dt.ToUniversalTime();
                         }
@@ -261,9 +262,10 @@ namespace BeanIO.Types
         /// <summary>
         /// Formats a local date using the given pattern.
         /// </summary>
-        /// <param name="date">The <see cref="LocalDateTime"/> to format</param>
-        /// <returns>null or the formatted <paramref name="date"/></returns>
-        protected string FormatDate(LocalDateTime? date)
+        /// <param name="date">The <see cref="LocalDateTime"/> to format.</param>
+        /// <returns>null or the formatted <paramref name="date"/>.</returns>
+        [return: NotNullIfNotNull(nameof(date))]
+        protected string? FormatDate(LocalDateTime? date)
         {
             if (date == null)
                 return null;
@@ -273,9 +275,10 @@ namespace BeanIO.Types
         /// <summary>
         /// Formats a local date using the given pattern.
         /// </summary>
-        /// <param name="date">The <see cref="ZonedDateTime"/> to format</param>
-        /// <returns>null or the formatted <paramref name="date"/></returns>
-        protected string FormatDate(ZonedDateTime? date)
+        /// <param name="date">The <see cref="ZonedDateTime"/> to format.</param>
+        /// <returns>null or the formatted <paramref name="date"/>.</returns>
+        [return: NotNullIfNotNull(nameof(date))]
+        protected string? FormatDate(ZonedDateTime? date)
         {
             if (date == null)
                 return null;
@@ -283,20 +286,20 @@ namespace BeanIO.Types
         }
 
         /// <summary>
-        /// Creates a <see cref="LocalDateTimePattern"/>
+        /// Creates a <see cref="LocalDateTimePattern"/>.
         /// </summary>
-        /// <returns>The created <see cref="LocalDateTimePattern"/></returns>
+        /// <returns>The created <see cref="LocalDateTimePattern"/>.</returns>
         protected virtual LocalDateTimePattern CreateDateFormat()
         {
             if (string.IsNullOrEmpty(_pattern))
                 return CreateDefaultDateFormat();
-            return LocalDateTimePattern.Create(ConvertToNodaTimePattern(_pattern), Culture);
+            return LocalDateTimePattern.Create(ConvertToNodaTimePattern(_pattern!), Culture);
         }
 
         /// <summary>
         /// Creates a default <see cref="LocalDateTimePattern"/> when no <see cref="Pattern"/> is specified.
         /// </summary>
-        /// <returns>The created <see cref="LocalDateTimePattern"/></returns>
+        /// <returns>The created <see cref="LocalDateTimePattern"/>.</returns>
         protected virtual LocalDateTimePattern CreateDefaultDateFormat()
         {
             return LocalDateTimePattern.Create(_getDefaultPatternFunc(Culture), Culture);

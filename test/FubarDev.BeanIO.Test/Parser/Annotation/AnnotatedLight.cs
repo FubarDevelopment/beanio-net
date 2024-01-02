@@ -16,6 +16,6 @@ namespace BeanIO.Parser.Annotation
         public int Quantity { get; set; }
 
         [Segment(At = 1, CollectionType = typeof(List<AnnotatedBulb>), MinOccurs = 2, MaxOccurs = 2)]
-        public IList<AnnotatedBulb> Bulbs { get; set; }
+        public IList<AnnotatedBulb>? Bulbs { get; set; }
     }
 }

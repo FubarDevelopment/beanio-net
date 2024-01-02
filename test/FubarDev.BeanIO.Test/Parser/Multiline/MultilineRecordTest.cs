@@ -42,6 +42,7 @@ namespace BeanIO.Parser.Multiline
                 Assert.Equal("George", buyer.FirstName);
                 Assert.Equal("Smith", buyer.LastName);
 
+                Assert.NotNull(order.Items);
                 Assert.Collection(
                     order.Items,
                     item =>
@@ -114,6 +115,7 @@ namespace BeanIO.Parser.Multiline
                 Assert.Equal(2, batch.BatchCount);
 
                 var orderList = batch.Orders;
+                Assert.NotNull(orderList);
                 Assert.Collection(
                     orderList,
                     order =>
@@ -134,7 +136,11 @@ namespace BeanIO.Parser.Multiline
                 // read batch #2
                 batch = Assert.IsType<OrderBatch>(reader.Read());
                 Assert.Equal(1, batch.BatchCount);
-                Assert.Equal("103", batch.Orders[0].Id);
+                orderList = batch.Orders;
+                Assert.NotNull(orderList);
+                Assert.Collection(
+                    orderList,
+                    order => Assert.Equal("103", order.Id));
             }
             finally
             {
@@ -157,6 +163,7 @@ namespace BeanIO.Parser.Multiline
                     list,
                     orderList =>
                         {
+                            Assert.NotNull(orderList.Orders);
                             Assert.Collection(
                                 orderList.Orders,
                                 order => Assert.Equal("100", order.Id),
@@ -164,6 +171,7 @@ namespace BeanIO.Parser.Multiline
                         },
                     orderList =>
                         {
+                            Assert.NotNull(orderList.Orders);
                             Assert.Collection(
                                 orderList.Orders,
                                 order => Assert.Equal("103", order.Id));
@@ -199,6 +207,7 @@ namespace BeanIO.Parser.Multiline
                 var order = Assert.IsType<Beans.Order>(reader.Read());
 
                 var itemMap = order.ItemMap;
+                Assert.NotNull(itemMap);
                 Assert.Collection(
                     itemMap,
                     item =>

@@ -6,22 +6,22 @@
 namespace BeanIO.Annotation
 {
     /// <summary>
-    /// The behavior for parsing the default value during configuration
+    /// The behavior for parsing the default value during configuration.
     /// </summary>
     public enum ParseDefaultBehavior
     {
         /// <summary>
-        /// As configured in the <code>beanio.properties</code> (default: <code>Unmarshal</code>)
+        /// As configured in the <c>beanio.properties</c> (default: <c>Unmarshal</c>).
         /// </summary>
         Default,
 
         /// <summary>
-        /// Unmarshal the default value during configuration
+        /// Unmarshal the default value during configuration.
         /// </summary>
         Parse,
 
         /// <summary>
-        /// Keep the default value as text
+        /// Keep the default value as text.
         /// </summary>
         DontParse,
     }

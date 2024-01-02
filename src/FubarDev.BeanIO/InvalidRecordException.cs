@@ -20,7 +20,7 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidRecordException" /> class.
         /// </summary>
-        /// <param name="contexts">The record context(s) that caused the exception</param>
+        /// <param name="contexts">The record context(s) that caused the exception.</param>
         public InvalidRecordException(params IRecordContext[] contexts)
             : base(contexts)
         {
@@ -29,8 +29,8 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidRecordException"/> class.
         /// </summary>
-        /// <param name="message">The error message</param>
-        /// <param name="contexts">The record context(s) that caused the exception</param>
+        /// <param name="message">The error message.</param>
+        /// <param name="contexts">The record context(s) that caused the exception.</param>
         public InvalidRecordException(string message, params IRecordContext[] contexts)
             : base(message, contexts)
         {
@@ -39,9 +39,9 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidRecordException"/> class.
         /// </summary>
-        /// <param name="message">The error message</param>
-        /// <param name="inner">The inner exception</param>
-        /// <param name="contexts">The record context(s) that caused the exception</param>
+        /// <param name="message">The error message.</param>
+        /// <param name="inner">The inner exception.</param>
+        /// <param name="contexts">The record context(s) that caused the exception.</param>
         public InvalidRecordException(string message, Exception inner, params IRecordContext[] contexts)
             : base(message, inner, contexts)
         {
@@ -50,7 +50,7 @@ namespace BeanIO
         /// <summary>
         /// Gets the name of the record or group that failed validation.
         /// </summary>
-        public virtual string RecordName
+        public virtual string? RecordName
         {
             get
             {
@@ -62,11 +62,11 @@ namespace BeanIO
         /// <summary>
         /// Returns a textual representation of this exception.
         /// </summary>
-        /// <returns>the textual representation of this exception</returns>
+        /// <returns>the textual representation of this exception.</returns>
         public override string ToString()
         {
             var message = base.ToString();
-            if (RecordContexts.Count == 0)
+            if (RecordContexts == null || RecordContexts.Count == 0)
                 return message;
             var s = new StringBuilder(message);
             return AppendMessageDetails(s).ToString();
@@ -80,6 +80,11 @@ namespace BeanIO
         protected virtual StringBuilder AppendMessageDetails(StringBuilder stringBuilder)
         {
             var context = RecordContext;
+            if (context == null)
+            {
+                return stringBuilder;
+            }
+
             if (context.HasRecordErrors)
             {
                 foreach (var error in context.RecordErrors)

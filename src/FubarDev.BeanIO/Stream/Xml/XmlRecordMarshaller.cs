@@ -31,7 +31,7 @@ namespace BeanIO.Stream.Xml
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlRecordMarshaller"/> class.
         /// </summary>
-        /// <param name="config">the <see cref="XmlRecordMarshaller"/> configuration</param>
+        /// <param name="config">the <see cref="XmlRecordMarshaller"/> configuration.</param>
         public XmlRecordMarshaller(XmlParserConfiguration config)
         {
             _config = config ?? new XmlParserConfiguration();
@@ -39,10 +39,10 @@ namespace BeanIO.Stream.Xml
         }
 
         /// <summary>
-        /// Marshals a single record object to a <code>String</code>.
+        /// Marshals a single record object to a <c>String</c>.
         /// </summary>
-        /// <param name="record">Record the record object to marshal</param>
-        /// <returns>The marshalled record text</returns>
+        /// <param name="record">Record the record object to marshal.</param>
+        /// <returns>The marshalled record text.</returns>
         public string Marshal(object record)
         {
             try
@@ -56,10 +56,10 @@ namespace BeanIO.Stream.Xml
         }
 
         /// <summary>
-        /// Marshals a <see cref="XDocument"/>
+        /// Marshals a <see cref="XDocument"/>.
         /// </summary>
-        /// <param name="document">the <see cref="XDocument"/> to marshal</param>
-        /// <returns>the marshalled record text</returns>
+        /// <param name="document">the <see cref="XDocument"/> to marshal.</param>
+        /// <returns>the marshalled record text.</returns>
         protected virtual string Marshal(XDocument document)
         {
             if (!_config.SuppressHeader)
@@ -81,9 +81,9 @@ namespace BeanIO.Stream.Xml
         }
 
         /// <summary>
-        /// Initializes this writer after the configuration has been set
+        /// Initializes this writer after the configuration has been set.
         /// </summary>
-        /// <returns>the new <see cref="XmlWriterSettings"/></returns>
+        /// <returns>the new <see cref="XmlWriterSettings"/>.</returns>
         private XmlWriterSettings Init()
         {
             var settings = new XmlWriterSettings()

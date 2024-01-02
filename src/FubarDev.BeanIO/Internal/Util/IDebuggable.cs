@@ -17,9 +17,9 @@ namespace BeanIO.Internal.Util
     internal interface IDebuggable
     {
         /// <summary>
-        /// Prints the internal view of the stream configuration
+        /// Prints the internal view of the stream configuration.
         /// </summary>
-        /// <param name="writer">the <see cref="TextWriter"/> to write to</param>
+        /// <param name="writer">the <see cref="TextWriter"/> to write to.</param>
         void Debug(TextWriter writer);
     }
 }

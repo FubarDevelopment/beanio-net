@@ -25,7 +25,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Initializes a new instance of the <see cref="Component"/> class.
         /// </summary>
-        /// <param name="size">the initial child capacity</param>
+        /// <param name="size">the initial child capacity.</param>
         protected Component(int size)
             : base(size)
         {
@@ -38,7 +38,7 @@ namespace BeanIO.Internal.Parser
         /// This method should be overridden by subclasses that need to register
         /// one or more parser context variables.
         /// </remarks>
-        /// <param name="locals">set of local variables</param>
+        /// <param name="locals">set of local variables.</param>
         public virtual void RegisterLocals(ISet<IParserLocal> locals)
         {
             foreach (Component c in Children)

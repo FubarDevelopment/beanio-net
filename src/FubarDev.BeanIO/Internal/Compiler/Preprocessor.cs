@@ -33,11 +33,11 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Gets the stream configuration
+        /// Gets the stream configuration.
         /// </summary>
         protected StreamConfig Stream => _stream;
 
-        protected PropertyConfig PropertyRoot { get; set; }
+        protected PropertyConfig? PropertyRoot { get; set; }
 
         protected override void InitializeStream(StreamConfig stream)
         {
@@ -51,9 +51,9 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Finalizes a stream configuration after its children have been processed
+        /// Finalizes a stream configuration after its children have been processed.
         /// </summary>
-        /// <param name="stream">the stream configuration to finalize</param>
+        /// <param name="stream">the stream configuration to finalize.</param>
         protected override void FinalizeStream(StreamConfig stream)
         {
             FinalizeGroup(stream);
@@ -64,9 +64,9 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Initializes a group configuration before its children have been processed
+        /// Initializes a group configuration before its children have been processed.
         /// </summary>
-        /// <param name="group">the group configuration to process</param>
+        /// <param name="group">the group configuration to process.</param>
         protected override void InitializeGroup(GroupConfig group)
         {
             if (group.MinOccurs == null)
@@ -107,9 +107,9 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Finalizes a group configuration after its children have been processed
+        /// Finalizes a group configuration after its children have been processed.
         /// </summary>
-        /// <param name="group">the group configuration to finalize</param>
+        /// <param name="group">the group configuration to finalize.</param>
         protected override void FinalizeGroup(GroupConfig group)
         {
             // order must be set for all group children, or for none of them
@@ -139,7 +139,7 @@ namespace BeanIO.Internal.Compiler
                 {
                     if (child.Order < lastOrder)
                         throw new BeanIOConfigurationException($"'{child.Name}' {typeDescription} configuration is out of order");
-                    lastOrder = child.Order.Value;
+                    lastOrder = child.Order.GetValueOrDefault();
                 }
                 else
                 {
@@ -159,9 +159,9 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Initializes a record configuration before its children have been processed
+        /// Initializes a record configuration before its children have been processed.
         /// </summary>
-        /// <param name="record">the record configuration to process</param>
+        /// <param name="record">the record configuration to process.</param>
         protected override void InitializeRecord(RecordConfig record)
         {
             // a record is ignored if a 'class' was not set and the property root is null
@@ -192,9 +192,9 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Finalizes a record configuration after its children have been processed
+        /// Finalizes a record configuration after its children have been processed.
         /// </summary>
-        /// <param name="record">the record configuration to finalize</param>
+        /// <param name="record">the record configuration to finalize.</param>
         protected override void FinalizeRecord(RecordConfig record)
         {
             FinalizeSegment(record);
@@ -204,9 +204,9 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Initializes a segment configuration before its children have been processed
+        /// Initializes a segment configuration before its children have been processed.
         /// </summary>
-        /// <param name="segment">the segment configuration to process</param>
+        /// <param name="segment">the segment configuration to process.</param>
         protected override void InitializeSegment(SegmentConfig segment)
         {
             if (segment.Name == null)
@@ -260,9 +260,9 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Finalizes a segment configuration after its children have been processed
+        /// Finalizes a segment configuration after its children have been processed.
         /// </summary>
-        /// <param name="segment">the segment configuration to finalize</param>
+        /// <param name="segment">the segment configuration to finalize.</param>
         protected override void FinalizeSegment(SegmentConfig segment)
         {
             if (segment.PropertyList.Any(x => x.IsIdentifier))
@@ -270,9 +270,9 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Processes a field configuration
+        /// Processes a field configuration.
         /// </summary>
-        /// <param name="field">the field configuration to process</param>
+        /// <param name="field">the field configuration to process.</param>
         protected override void HandleField(FieldConfig field)
         {
             // ignore fields that belong to ignored records
@@ -333,9 +333,9 @@ namespace BeanIO.Internal.Compiler
         }
 
         /// <summary>
-        /// Processes a constant configuration
+        /// Processes a constant configuration.
         /// </summary>
-        /// <param name="constant">the constant configuration to process</param>
+        /// <param name="constant">the constant configuration to process.</param>
         protected override void HandleConstant(ConstantConfig constant)
         {
             constant.IsBound = true;
@@ -348,7 +348,7 @@ namespace BeanIO.Internal.Compiler
         /// This method validates a record identifying field has a literal or regular expression
         /// configured for identifying a record.
         /// </summary>
-        /// <param name="field">the record identifying field configuration to validate</param>
+        /// <param name="field">the record identifying field configuration to validate.</param>
         protected virtual void ValidateRecordIdentifyingCriteria(FieldConfig field)
         {
             // validate regex or literal is configured for record identifying fields
@@ -358,7 +358,7 @@ namespace BeanIO.Internal.Compiler
 
         private class ComponentConfigComparer : IComparer<ComponentConfig>
         {
-            public int Compare(ComponentConfig x, ComponentConfig y)
+            public int Compare(ComponentConfig? x, ComponentConfig? y)
             {
                 var p1 = GetPosition(x);
                 var p2 = GetPosition(y);
@@ -369,11 +369,14 @@ namespace BeanIO.Internal.Compiler
                 return p1.Value.CompareTo(p2.Value);
             }
 
-            private int? GetPosition(ComponentConfig config)
+            private int? GetPosition(ComponentConfig? config)
             {
                 int? result = null;
-                switch (config.ComponentType)
+                switch (config?.ComponentType)
                 {
+                    case null:
+                        result = null;
+                        break;
                     case ComponentType.Field:
                     case ComponentType.Segment:
                         result = ((PropertyConfig)config).Position;

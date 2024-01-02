@@ -9,24 +9,24 @@ using System.Reflection;
 namespace BeanIO.Config.SchemeHandlers
 {
     /// <summary>
-    /// Handles loading from a <code>resource:</code> URI.
+    /// Handles loading from a <c>resource:</c> URI.
     /// </summary>
     public class ResourceSchemeHandler : ISchemeHandler
     {
         /// <summary>
-        /// Gets the schema this handler supports (e.g. file)
+        /// Gets the schema this handler supports (e.g. file).
         /// </summary>
-        public string Scheme => "resource";
+        public string Schema => "resource";
 
         /// <summary>
-        /// This functions opens a stream for the given <paramref name="resource"/> <see cref="Uri"/>
+        /// This functions opens a stream for the given <paramref name="resource"/> <see cref="Uri"/>.
         /// </summary>
-        /// <param name="resource">The resource to load the mapping from</param>
-        /// <returns>the stream to read the mapping from</returns>
-        public System.IO.Stream Open(Uri resource)
+        /// <param name="resource">The resource to load the mapping from.</param>
+        /// <returns>the stream to read the mapping from.</returns>
+        public System.IO.Stream? Open(Uri resource)
         {
-            if (resource.Scheme != Scheme)
-                throw new ArgumentOutOfRangeException($"Only '{Scheme}' URLs are allowed");
+            if (resource.Scheme != Schema)
+                throw new ArgumentOutOfRangeException($"Only '{Schema}' URLs are allowed");
 
             var resName = resource.LocalPath;
             var commaIndex = resName.IndexOf(',');
@@ -41,19 +41,20 @@ namespace BeanIO.Config.SchemeHandlers
             if (resStream == null)
             {
                 // Partial workaround for .NET Core bug: https://github.com/dotnet/cli/issues/3247
-                string commonSequence;
-                var commonLength = LongestCommonSubstring(asmName.Name, resName, out commonSequence);
+                var commonLength = LongestCommonSubstring(asmName.Name, resName, out var commonSequence);
                 if (commonLength > 1)
                 {
+                    var asmNameName = asmName.Name ??
+                                      throw new InvalidOperationException($"Assembly has no name {asmName}");
                     commonSequence = commonSequence.TrimEnd('.');
                     var asmNameEndsWithResName =
-                        asmName.Name.EndsWith($".{commonSequence}", StringComparison.OrdinalIgnoreCase)
-                        || asmName.Name.EndsWith($".{commonSequence}.Test", StringComparison.OrdinalIgnoreCase)
-                        || asmName.Name.EndsWith($".{commonSequence}.Tests", StringComparison.OrdinalIgnoreCase);
+                        asmNameName.EndsWith($".{commonSequence}", StringComparison.OrdinalIgnoreCase)
+                        || asmNameName.EndsWith($".{commonSequence}.Test", StringComparison.OrdinalIgnoreCase)
+                        || asmNameName.EndsWith($".{commonSequence}.Tests", StringComparison.OrdinalIgnoreCase);
                     if (asmNameEndsWithResName && resName.StartsWith($"{commonSequence}.", StringComparison.OrdinalIgnoreCase))
                     {
                         var resNameWithoutNamespace = resName.Substring(commonSequence.Length + 1);
-                        resName = $"{asmName.Name}.{resNameWithoutNamespace}";
+                        resName = $"{asmNameName}.{resNameWithoutNamespace}";
                         resStream = resAssembly.GetManifestResourceStream(resName);
                     }
                 }
@@ -62,13 +63,13 @@ namespace BeanIO.Config.SchemeHandlers
             return resStream;
         }
 
-        private static int LongestCommonSubstring(string str1, string str2, out string sequence)
+        private static int LongestCommonSubstring(string? str1, string? str2, out string sequence)
         {
             sequence = string.Empty;
             if (string.IsNullOrEmpty(str1) || string.IsNullOrEmpty(str2))
                 return 0;
 
-            var num = new int[str1.Length, str2.Length];
+            var num = new int[str1!.Length, str2!.Length];
             int maxlen = 0;
             int lastSubsBegin = 0;
             var sequenceBuilder = new System.Text.StringBuilder();

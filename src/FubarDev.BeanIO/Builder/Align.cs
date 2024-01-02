@@ -8,17 +8,17 @@ using System;
 namespace BeanIO.Builder
 {
     /// <summary>
-    /// The text alignment
+    /// The text alignment.
     /// </summary>
     public enum Align
     {
         /// <summary>
-        /// Text is aligned to the left
+        /// Text is aligned to the left.
         /// </summary>
         Left,
 
         /// <summary>
-        /// Text is aligned to the right
+        /// Text is aligned to the right.
         /// </summary>
         Right,
     }

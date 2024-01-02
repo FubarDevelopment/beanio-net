@@ -6,13 +6,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 
 using BeanIO.Internal.Util;
 using BeanIO.Types;
-
-using JetBrains.Annotations;
 
 namespace BeanIO.Internal.Parser
 {
@@ -24,9 +21,10 @@ namespace BeanIO.Internal.Parser
     /// </remarks>
     internal class Field : ParserComponent, IProperty
     {
-        private readonly ParserLocal<object> _value = new ParserLocal<object>(Value.Missing);
+        private readonly ParserLocal<object?> _value = new ParserLocal<object?>(Value.Missing);
 
-        private Regex _regex;
+        private Regex? _regex;
+        private IFieldFormat? _format;
 
         public Field()
             : base(0)
@@ -52,19 +50,19 @@ namespace BeanIO.Internal.Parser
         public override int? Size => Format.Size;
 
         /// <summary>
-        /// Gets the <see cref="IProperty"/> implementation type
+        /// Gets the <see cref="IProperty"/> implementation type.
         /// </summary>
         public PropertyType Type => Parser.PropertyType.Simple;
 
         /// <summary>
-        /// Gets or sets the property accessor
+        /// Gets or sets the property accessor.
         /// </summary>
-        public IPropertyAccessor Accessor { get; set; }
+        public IPropertyAccessor? Accessor { get; set; }
 
         /// <summary>
-        /// Gets or sets the bean property type
+        /// Gets or sets the bean property type.
         /// </summary>
-        public Type PropertyType { get; set; }
+        public Type? PropertyType { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this parser or any descendant of this parser is used to identify
@@ -77,17 +75,21 @@ namespace BeanIO.Internal.Parser
         /// </summary>
         public override bool IsOptional => Format.IsLazy;
 
-        public IFieldFormat Format { get; set; }
+        public IFieldFormat Format
+        {
+            get => _format ?? throw new InvalidOperationException("Format property not initialized");
+            set => _format = value;
+        }
 
         public bool IsBound { get; set; }
 
-        public string Regex
+        public string? Regex
         {
             get { return _regex?.ToString(); }
             set { _regex = value == null ? null : new Regex(value); }
         }
 
-        public string Literal { get; set; }
+        public string? Literal { get; set; }
 
         public bool IsTrim { get; set; }
 
@@ -99,9 +101,9 @@ namespace BeanIO.Internal.Parser
 
         public int? MaxLength { get; set; }
 
-        public object DefaultValue { get; set; }
+        public object? DefaultValue { get; set; }
 
-        public ITypeHandler Handler { get; set; }
+        public ITypeHandler? Handler { get; set; }
 
         public bool ErrorIfNullPrimitive { get; set; }
 
@@ -116,13 +118,13 @@ namespace BeanIO.Internal.Parser
         /// </summary>
         public bool ValidateOnMarshal { get; set; }
 
-        protected Regex RegexPattern => _regex;
+        protected Regex? RegexPattern => _regex;
 
         /// <summary>
         /// Returns whether this parser and its children match a record being unmarshalled.
         /// </summary>
-        /// <param name="context">The <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if matched, false otherwise</returns>
+        /// <param name="context">The <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if matched, false otherwise.</returns>
         public override bool Matches(UnmarshallingContext context)
         {
             if (!IsIdentifier)
@@ -131,10 +133,10 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Unmarshals a record
+        /// Unmarshals a record.
         /// </summary>
-        /// <param name="context">The <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if this component was present in the unmarshalled record, or false otherwise</returns>
+        /// <param name="context">The <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if this component was present in the unmarshalled record, or false otherwise.</returns>
         public override bool Unmarshal(UnmarshallingContext context)
         {
             var text = Format.Extract(context, true);
@@ -149,7 +151,7 @@ namespace BeanIO.Internal.Parser
 
             if (!ParseDefault)
             {
-                var defaultValueAsString = (string)DefaultValue;
+                var defaultValueAsString = (string?)DefaultValue;
                 if (defaultValueAsString != null && string.Equals(text, defaultValueAsString))
                 {
                     text = null;
@@ -176,13 +178,13 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Marshals a record
+        /// Marshals a record.
         /// </summary>
-        /// <param name="context">The <see cref="MarshallingContext"/></param>
-        /// <returns>whether a value was marshalled</returns>
+        /// <param name="context">The <see cref="MarshallingContext"/>.</param>
+        /// <returns>whether a value was marshalled.</returns>
         public override bool Marshal(MarshallingContext context)
         {
-            string text;
+            string? text;
 
             if (Literal != null)
             {
@@ -271,8 +273,8 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns whether this parser or any of its descendant have content for marshalling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <returns>true if there is content for marshalling, false otherwise</returns>
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <returns>true if there is content for marshalling, false otherwise.</returns>
         public override bool HasContent(ParsingContext context)
         {
             if (!IsBound)
@@ -283,18 +285,18 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Clears the current property value.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
         public override void ClearValue(ParsingContext context)
         {
             _value.Set(context, Value.Missing);
         }
 
         /// <summary>
-        /// Creates the property value and returns it
+        /// Creates the property value and returns it.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <returns>the property value</returns>
-        public object CreateValue(ParsingContext context)
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <returns>the property value.</returns>
+        public object? CreateValue(ParsingContext context)
         {
             return GetValue(context);
         }
@@ -302,9 +304,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Sets the property value for marshaling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <param name="value">the property value</param>
-        public override void SetValue(ParsingContext context, object value)
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <param name="value">the property value.</param>
+        public override void SetValue(ParsingContext context, object? value)
         {
             _value.Set(context, value ?? Value.Missing);
         }
@@ -312,9 +314,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns the unmarshalled property value.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <returns>the property value</returns>
-        public override object GetValue(ParsingContext context)
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <returns>the property value.</returns>
+        public override object? GetValue(ParsingContext context)
         {
             return _value.Get(context);
         }
@@ -325,8 +327,8 @@ namespace BeanIO.Internal.Parser
         /// <remarks>
         /// Called by <see cref="TreeNode{T}.Add"/>.
         /// </remarks>
-        /// <param name="child">the node to test</param>
-        /// <returns>true if the child is allowed</returns>
+        /// <param name="child">the node to test.</param>
+        /// <returns>true if the child is allowed.</returns>
         public override bool IsSupportedChild(Component child)
         {
             return false;
@@ -339,7 +341,7 @@ namespace BeanIO.Internal.Parser
         /// This method should be overridden by subclasses that need to register
         /// one or more parser context variables.
         /// </remarks>
-        /// <param name="locals">set of local variables</param>
+        /// <param name="locals">set of local variables.</param>
         public override void RegisterLocals(ISet<IParserLocal> locals)
         {
             if (locals.Add(_value))
@@ -347,20 +349,20 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <inheritdoc />
-        public bool Defines(object value)
+        public bool Defines(object? value)
         {
             if (value == null)
                 return false;
             if (!IsIdentifier)
                 return true;
 
-            if (!value.GetType().IsInstanceOf(PropertyType))
+            if (PropertyType != null && !value.GetType().IsInstanceOf(PropertyType))
                 return false;
 
             return IsMatch(FormatValue(value));
         }
 
-        protected virtual bool IsMatch(string text)
+        protected virtual bool IsMatch(string? text)
         {
             if (text == null || ReferenceEquals(text, Value.Invalid) || ReferenceEquals(text, Value.Nil))
                 return false;
@@ -371,9 +373,9 @@ namespace BeanIO.Internal.Parser
             return true;
         }
 
-        protected virtual string FormatValue(object value)
+        protected virtual string? FormatValue(object? value)
         {
-            string text;
+            string? text;
 
             if (Handler != null)
             {
@@ -393,13 +395,13 @@ namespace BeanIO.Internal.Parser
             }
             else
             {
-                text = value.ToString();
+                text = value?.ToString();
             }
 
             return text;
         }
 
-        protected virtual object ParseValue(UnmarshallingContext context, [CanBeNull] string fieldText)
+        protected virtual object? ParseValue(UnmarshallingContext context, string? fieldText)
         {
             var valid = true;
             var text = fieldText;
@@ -467,7 +469,7 @@ namespace BeanIO.Internal.Parser
                 }
 
                 // validate minimum length
-                if (text.Length < MinLength)
+                if (text!.Length < MinLength)
                 {
                     context.AddFieldError(Name, fieldText, "minLength", MinLength, MaxLength);
                     valid = false;
@@ -481,7 +483,7 @@ namespace BeanIO.Internal.Parser
                 }
 
                 // validate the regular expression
-                if (Regex != null && !RegexPattern.IsMatch(text))
+                if (RegexPattern is { } regex && !regex.IsMatch(text))
                 {
                     context.AddFieldError(Name, fieldText, "regex", Regex);
                     valid = false;
@@ -496,7 +498,7 @@ namespace BeanIO.Internal.Parser
             try
             {
                 var value = (Handler == null) ? text : Handler.Parse(text);
-                if (value == null && ErrorIfNullPrimitive && PropertyType != null && PropertyType.GetTypeInfo().IsPrimitive)
+                if (value == null && ErrorIfNullPrimitive && PropertyType != null && PropertyType.IsPrimitive)
                 {
                     context.AddFieldError(Name, fieldText, "type", "Primitive property values cannot be null");
                     return Value.Invalid;

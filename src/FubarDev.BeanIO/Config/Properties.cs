@@ -5,61 +5,61 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace BeanIO.Config
 {
     /// <summary>
-    /// Replacement for Java Properties
+    /// Replacement for Java Properties.
     /// </summary>
-    public class Properties : IReadOnlyDictionary<string, string>
+    public class Properties : IReadOnlyDictionary<string, string?>
     {
-        private readonly IReadOnlyDictionary<string, string> _dictionary;
+        private readonly IReadOnlyDictionary<string, string?> _dictionary;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Properties"/> class.
         /// </summary>
-        /// <param name="dictionary">The dictionary to use to provide the properties</param>
-        public Properties(IReadOnlyDictionary<string, string> dictionary)
+        /// <param name="dictionary">The dictionary to use to provide the properties.</param>
+        public Properties(IReadOnlyDictionary<string, string?> dictionary)
         {
             _dictionary = dictionary;
         }
 
         /// <summary>
-        /// Gets the number of entries
+        /// Gets the number of entries.
         /// </summary>
         public int Count => _dictionary.Count;
 
         /// <summary>
-        /// Gets all keys
+        /// Gets all keys.
         /// </summary>
         public IEnumerable<string> Keys => _dictionary.Keys;
 
         /// <summary>
-        /// Gets all values
+        /// Gets all values.
         /// </summary>
-        public IEnumerable<string> Values => _dictionary.Values;
+        public IEnumerable<string?> Values => _dictionary.Values;
 
         /// <summary>
-        /// Gets the property for the given key
+        /// Gets the property for the given key.
         /// </summary>
-        /// <param name="key">The key to query</param>
-        /// <returns>the value of the key or null if not found</returns>
-        public string this[string key]
+        /// <param name="key">The key to query.</param>
+        /// <returns>the value of the key or null if not found.</returns>
+        public string? this[string key]
         {
             get
             {
-                string result;
-                if (!_dictionary.TryGetValue(key, out result))
+                if (!_dictionary.TryGetValue(key, out var result))
                     result = null;
                 return result;
             }
         }
 
         /// <summary>
-        /// Returns the enumerator for the properties
+        /// Returns the enumerator for the properties.
         /// </summary>
-        /// <returns>the enumerator for the properties</returns>
-        public IEnumerator<KeyValuePair<string, string>> GetEnumerator()
+        /// <returns>the enumerator for the properties.</returns>
+        public IEnumerator<KeyValuePair<string, string?>> GetEnumerator()
         {
             return _dictionary.GetEnumerator();
         }
@@ -71,22 +71,22 @@ namespace BeanIO.Config
         }
 
         /// <summary>
-        /// Is there a property with the given key?
+        /// Is there a property with the given key?.
         /// </summary>
-        /// <param name="key">The key to search for</param>
-        /// <returns>true when the key exists</returns>
+        /// <param name="key">The key to search for.</param>
+        /// <returns>true when the key exists.</returns>
         public bool ContainsKey(string key)
         {
             return _dictionary.ContainsKey(key);
         }
 
         /// <summary>
-        /// Try to get a property using the given key
+        /// Try to get a property using the given key.
         /// </summary>
-        /// <param name="key">the key to search for</param>
-        /// <param name="value">the value to set when the key was found</param>
-        /// <returns>true when the key was found</returns>
-        public bool TryGetValue(string key, out string value)
+        /// <param name="key">the key to search for.</param>
+        /// <param name="value">the value to set when the key was found.</param>
+        /// <returns>true when the key was found.</returns>
+        public bool TryGetValue(string key, [NotNullWhen(true)] out string? value)
         {
             return _dictionary.TryGetValue(key, out value);
         }

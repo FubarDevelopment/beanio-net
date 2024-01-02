@@ -7,8 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using JetBrains.Annotations;
-
 using Xunit;
 
 namespace BeanIO.Parser.Validation
@@ -44,7 +42,7 @@ namespace BeanIO.Parser.Validation
             }
         }
 
-        private void TestValid(ValidationInfo info, [UsedImplicitly] string recordName, object expected)
+        private void TestValid(ValidationInfo info, string recordName, object expected)
         {
             info.LineNumber = info.LineNumber + 1;
             var record = Assert.IsType<Dictionary<string, object>>(info.Reader.Read());
@@ -53,7 +51,7 @@ namespace BeanIO.Parser.Validation
             Assert.Equal(info.LineNumber, info.Reader.LineNumber);
         }
 
-        private void TestInvalid(ValidationInfo info, [UsedImplicitly] string recordName, string fieldText, string message)
+        private void TestInvalid(ValidationInfo info, string recordName, string fieldText, string message)
         {
             info.LineNumber = info.LineNumber + 1;
             var ex = Assert.ThrowsAny<InvalidRecordException>(() => info.Reader.Read());
@@ -61,7 +59,8 @@ namespace BeanIO.Parser.Validation
             Assert.Equal(info.LineNumber, info.Reader.LineNumber);
 
             var ctx = ex.RecordContext;
-            Assert.Equal(recordName, ctx.RecordName);
+            Assert.NotNull(ctx);
+            Assert.Equal(recordName, ctx!.RecordName);
             Assert.Equal(info.LineNumber, ctx.LineNumber);
             Assert.Equal(fieldText, ctx.GetFieldText("field"));
             if (!string.IsNullOrEmpty(message))

@@ -12,7 +12,7 @@ namespace BeanIO.Internal.Parser.Format.Flat
     internal interface IFlatFieldFormat : IFieldFormat
     {
         /// <summary>
-        /// Gets the field position
+        /// Gets the field position.
         /// </summary>
         /// <remarks>
         /// <para>In a delimited/CSV stream format, the position is the index of the field in the

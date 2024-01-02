@@ -12,7 +12,7 @@ using Xunit;
 namespace BeanIO.Parser.Xml.Wrapper
 {
     /// <summary>
-    /// Test cases for testing XML wrapper elements
+    /// Test cases for testing XML wrapper elements.
     /// </summary>
     public sealed class XmlWrapperTest : XmlParserTest
     {
@@ -48,10 +48,11 @@ namespace BeanIO.Parser.Xml.Wrapper
                 person = Assert.IsType<Person>(reader.Read());
                 Assert.Equal(string.Empty, person.FirstName);
                 Assert.Equal(Person.DefaultName, person.LastName);
+                Assert.NotNull(person.Color);
                 Assert.Empty(person.Color);
-                addressList = person.AddressList;
+                Assert.NotNull(person.AddressList);
                 Assert.Collection(
-                    addressList,
+                    person.AddressList,
                     item => Assert.Equal("CO", item.State),
                     item => Assert.Equal("IL", item.State));
                 person.LastName = null;

@@ -14,12 +14,12 @@ namespace BeanIO.Parser.Collection
     /// </summary>
     public class CollectionBean
     {
-        public List<string> List { get; set; }
+        public List<string>? List { get; set; }
 
-        public ISet<char?> Set { get; set; }
+        public ISet<char?>? Set { get; set; }
 
-        public int[] Array { get; set; }
+        public int[]? Array { get; set; }
 
-        public List<Person> ObjectList { get; set; }
+        public List<Person>? ObjectList { get; set; }
     }
 }

@@ -35,11 +35,11 @@ namespace BeanIO.Stream.FixedLength
 
         private readonly char? _recordTerminator;
 
-        private readonly CommentReader _commentReader;
+        private readonly CommentReader? _commentReader;
 
         private readonly TextReader _in;
 
-        private string _recordText;
+        private string? _recordText;
 
         private int _recordLineNumber;
 
@@ -52,7 +52,7 @@ namespace BeanIO.Stream.FixedLength
         /// <summary>
         /// Initializes a new instance of the <see cref="FixedLengthReader"/> class.
         /// </summary>
-        /// <param name="reader">the input stream to read from</param>
+        /// <param name="reader">the input stream to read from.</param>
         public FixedLengthReader(TextReader reader)
             : this(reader, null)
         {
@@ -61,12 +61,11 @@ namespace BeanIO.Stream.FixedLength
         /// <summary>
         /// Initializes a new instance of the <see cref="FixedLengthReader"/> class.
         /// </summary>
-        /// <param name="reader">the input stream to read from</param>
-        /// <param name="config">the reader configuration settings or null to accept defaults</param>
-        public FixedLengthReader(TextReader reader, FixedLengthParserConfiguration config)
+        /// <param name="reader">the input stream to read from.</param>
+        /// <param name="config">the reader configuration settings or null to accept defaults.</param>
+        public FixedLengthReader(TextReader reader, FixedLengthParserConfiguration? config)
         {
-            if (config == null)
-                config = new FixedLengthParserConfiguration();
+            config ??= new FixedLengthParserConfiguration();
 
             _in = reader;
 
@@ -114,7 +113,7 @@ namespace BeanIO.Stream.FixedLength
         /// <remarks>The type of object returned depends on the format of the stream.</remarks>
         /// <returns>
         /// The record value, or null if the end of the stream was reached.
-        /// </returns>
+        /// .</returns>
         public int RecordLineNumber
         {
             get
@@ -130,17 +129,17 @@ namespace BeanIO.Stream.FixedLength
         /// </summary>
         /// <returns>
         /// The unparsed text of the last record read
-        /// </returns>
-        public string RecordText => _recordText;
+        /// .</returns>
+        public string? RecordText => _recordText;
 
         /// <summary>
         /// Reads a single record from this input stream.
         /// </summary>
         /// <returns>
         /// The type of object returned depends on the format of the stream.
-        /// </returns>
+        /// .</returns>
         /// <returns>The record value, or null if the end of the stream was reached.</returns>
-        public object Read()
+        public object? Read()
         {
             if (_eof)
             {
@@ -258,11 +257,11 @@ namespace BeanIO.Stream.FixedLength
         }
 
         /// <summary>
-        /// Returns true if the given character matches the record separator
+        /// Returns true if the given character matches the record separator.
         /// </summary>
         /// <remarks>This method also updates the internal <see cref="F:_skipLF"/> flag.</remarks>
-        /// <param name="ch">the character to test</param>
-        /// <returns>true if the character signifies the end of the record</returns>
+        /// <param name="ch">the character to test.</param>
+        /// <returns>true if the character signifies the end of the record.</returns>
         private bool IsEndOfRecord(char ch)
         {
             if (_recordTerminator != null)

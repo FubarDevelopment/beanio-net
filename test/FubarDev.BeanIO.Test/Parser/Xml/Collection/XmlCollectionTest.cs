@@ -3,7 +3,6 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-using System.Collections.Generic;
 using System.IO;
 
 using Xunit;
@@ -33,7 +32,7 @@ namespace BeanIO.Parser.Xml.Collection
             {
                 var person = Assert.IsType<Person>(reader.Read());
                 Assert.Equal("John", person.FirstName);
-                var list = person.Color;
+                Assert.NotNull(person.Color);
                 Assert.Collection(
                     person.Color,
                     item => Assert.Equal("Red", item),
@@ -43,6 +42,7 @@ namespace BeanIO.Parser.Xml.Collection
 
                 person = Assert.IsType<Person>(reader.Read());
                 Assert.Equal("George", person.FirstName);
+                Assert.NotNull(person.Color);
                 Assert.Empty(person.Color);
                 writer.Write(person);
 

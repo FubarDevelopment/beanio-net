@@ -17,7 +17,7 @@ namespace BeanIO.Stream
         /// <summary>
         /// Initializes a new instance of the <see cref="RecordIOException"/> class.
         /// </summary>
-        /// <param name="message">The error message</param>
+        /// <param name="message">The error message.</param>
         public RecordIOException(string message)
             : base(message)
         {
@@ -26,8 +26,8 @@ namespace BeanIO.Stream
         /// <summary>
         /// Initializes a new instance of the <see cref="RecordIOException"/> class.
         /// </summary>
-        /// <param name="message">The error message</param>
-        /// <param name="innerException">The inner exception</param>
+        /// <param name="message">The error message.</param>
+        /// <param name="innerException">The inner exception.</param>
         public RecordIOException(string message, Exception innerException)
             : base(message, innerException)
         {

@@ -20,7 +20,7 @@ namespace BeanIO.Stream.Csv
     /// <para>The CSV format supported is defined by specification RFC 4180.
     /// By default, there is one exception: lines that span multiple records will
     /// throw an exception.  To allow quoted multi-line fields, simply set
-    /// <see cref="P:CsvParserConfiguration.IsMultilineEnabled"/> to <code>true</code> when constructing the reader.</para>
+    /// <see cref="P:CsvParserConfiguration.IsMultilineEnabled"/> to <c>true</c> when constructing the reader.</para>
     /// <para>
     /// The reader also supports the following customizations:
     /// <list type="bullet">
@@ -41,7 +41,7 @@ namespace BeanIO.Stream.Csv
 
         private readonly string _endQuote;
 
-        private readonly string _escapeChar;
+        private readonly string? _escapeChar;
 
         private readonly bool _multilineEnabled;
 
@@ -49,11 +49,11 @@ namespace BeanIO.Stream.Csv
 
         private readonly bool _unquotedQuotesAllowed;
 
-        private readonly CommentReader _commentReader;
+        private readonly CommentReader? _commentReader;
 
         private readonly TextReader _in;
 
-        private List<string> _fieldList = new List<string>();
+        private List<string>? _fieldList = new List<string>();
 
         private int _lineNumber;
 
@@ -62,7 +62,7 @@ namespace BeanIO.Stream.Csv
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvReader"/> class.
         /// </summary>
-        /// <param name="reader">the input stream to read from</param>
+        /// <param name="reader">the input stream to read from.</param>
         public CsvReader(TextReader reader)
             : this(reader, null)
         {
@@ -71,12 +71,11 @@ namespace BeanIO.Stream.Csv
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvReader"/> class.
         /// </summary>
-        /// <param name="reader">the input stream to read from</param>
-        /// <param name="config">the reader configuration settings or <code>null</code> to accept defaults</param>
-        public CsvReader(TextReader reader, CsvParserConfiguration config)
+        /// <param name="reader">the input stream to read from.</param>
+        /// <param name="config">the reader configuration settings or <see langword="null" /> to accept defaults.</param>
+        public CsvReader(TextReader reader, CsvParserConfiguration? config)
         {
-            if (config == null)
-                config = new CsvParserConfiguration();
+            config ??= new CsvParserConfiguration();
 
             _in = reader;
             _delim = config.Delimiter.ToString();
@@ -106,7 +105,7 @@ namespace BeanIO.Stream.Csv
         /// <remarks>The type of object returned depends on the format of the stream.</remarks>
         /// <returns>
         /// The record value, or null if the end of the stream was reached.
-        /// </returns>
+        /// .</returns>
         public int RecordLineNumber { get; private set; }
 
         /// <summary>
@@ -114,18 +113,18 @@ namespace BeanIO.Stream.Csv
         /// </summary>
         /// <returns>
         /// The unparsed text of the last record read
-        /// </returns>
-        public string RecordText { get; private set; }
+        /// .</returns>
+        public string? RecordText { get; private set; }
 
         /// <summary>
         /// Reads a single record from this input stream.
         /// </summary>
         /// <returns>
         /// The type of object returned depends on the format of the stream.
-        /// </returns>
+        /// .</returns>
         /// <returns>The record value, or null if the end of the stream was reached.</returns>
         [SuppressMessage("StyleCopPlus.StyleCopPlusRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
-        public object Read()
+        public object? Read()
         {
             // _fieldList is set to null when the end of stream is reached
             if (_fieldList == null)
@@ -425,7 +424,7 @@ namespace BeanIO.Stream.Csv
         /// Advances the input stream to the end of the record so that subsequent reads
         /// might be possible.
         /// </summary>
-        /// <param name="text">the current record text</param>
+        /// <param name="text">the current record text.</param>
         private void Recover(StringBuilder text)
         {
             int n;

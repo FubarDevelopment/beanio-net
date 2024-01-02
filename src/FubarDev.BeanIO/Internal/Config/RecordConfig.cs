@@ -15,14 +15,14 @@ namespace BeanIO.Internal.Config
     public class RecordConfig : SegmentConfig, ISelectorConfig
     {
         /// <summary>
-        /// Gets the component type
+        /// Gets the component type.
         /// </summary>
         /// <returns>
         /// One of <see cref="F:ComponentType.Group"/>,
         /// <see cref="F:ComponentType.Record"/>, <see cref="F:ComponentType.Segment"/>
         /// <see cref="F:ComponentType.Field"/>, <see cref="F:ComponentType.Constant"/>,
         /// <see cref="F:ComponentType.Wrapper"/>, or <see cref="F:ComponentType.Stream"/>
-        /// </returns>
+        /// .</returns>
         public override ComponentType ComponentType => ComponentType.Record;
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace BeanIO.Internal.Config
         /// <remarks>
         /// Records and groups assigned the same order number may appear in any order.
         /// </remarks>
-        /// <returns>the component order (starting at 1)</returns>
+        /// <returns>the component order (starting at 1).</returns>
         public int? Order { get; set; }
     }
 }

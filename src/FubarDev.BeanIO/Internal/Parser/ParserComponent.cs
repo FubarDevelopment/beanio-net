@@ -13,7 +13,7 @@ namespace BeanIO.Internal.Parser
     internal abstract class ParserComponent : Component, IParser
     {
         /// <summary>
-        /// map key used to store the state of the 'count' attribute
+        /// map key used to store the state of the 'count' attribute.
         /// </summary>
         public const string COUNT_KEY = "count";
 
@@ -27,7 +27,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Initializes a new instance of the <see cref="ParserComponent"/> class.
         /// </summary>
-        /// <param name="size">the initial child capacity</param>
+        /// <param name="size">the initial child capacity.</param>
         protected ParserComponent(int size)
             : base(size)
         {
@@ -59,50 +59,50 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns whether this parser and its children match a record being unmarshalled.
         /// </summary>
-        /// <param name="context">The <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if matched, false otherwise</returns>
+        /// <param name="context">The <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if matched, false otherwise.</returns>
         public abstract bool Matches(UnmarshallingContext context);
 
         /// <summary>
-        /// Unmarshals a record
+        /// Unmarshals a record.
         /// </summary>
-        /// <param name="context">The <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if this component was present in the unmarshalled record, or false otherwise</returns>
+        /// <param name="context">The <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if this component was present in the unmarshalled record, or false otherwise.</returns>
         public abstract bool Unmarshal(UnmarshallingContext context);
 
         /// <summary>
-        /// Marshals a record
+        /// Marshals a record.
         /// </summary>
-        /// <param name="context">The <see cref="MarshallingContext"/></param>
-        /// <returns>whether a value was marshalled</returns>
+        /// <param name="context">The <see cref="MarshallingContext"/>.</param>
+        /// <returns>whether a value was marshalled.</returns>
         public abstract bool Marshal(MarshallingContext context);
 
         /// <summary>
         /// Returns whether this parser or any of its descendant have content for marshalling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <returns>true if there is content for marshalling, false otherwise</returns>
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <returns>true if there is content for marshalling, false otherwise.</returns>
         public abstract bool HasContent(ParsingContext context);
 
         /// <summary>
         /// Clears the current property value.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
         public abstract void ClearValue(ParsingContext context);
 
         /// <summary>
         /// Sets the property value for marshaling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <param name="value">the property value</param>
-        public abstract void SetValue(ParsingContext context, object value);
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <param name="value">the property value.</param>
+        public abstract void SetValue(ParsingContext context, object? value);
 
         /// <summary>
         /// Returns the unmarshalled property value.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <returns>the property value</returns>
-        public abstract object GetValue(ParsingContext context);
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <returns>the property value.</returns>
+        public abstract object? GetValue(ParsingContext context);
 
         /// <summary>
         /// Returns whether a node is a supported child of this node.
@@ -110,8 +110,8 @@ namespace BeanIO.Internal.Parser
         /// <remarks>
         /// Called by <see cref="TreeNode{T}.Add"/>.
         /// </remarks>
-        /// <param name="child">the node to test</param>
-        /// <returns>true if the child is allowed</returns>
+        /// <param name="child">the node to test.</param>
+        /// <returns>true if the child is allowed.</returns>
         public override bool IsSupportedChild(Component child)
         {
             return child is IParser;

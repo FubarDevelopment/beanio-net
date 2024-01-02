@@ -4,7 +4,6 @@
 // </copyright>
 
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -16,7 +15,7 @@ using BeanIO.Internal.Util;
 namespace BeanIO.Stream.Xml
 {
     /// <summary>
-    /// A <see cref="XmlReader"/> is used to read records from a XML input stream
+    /// A <see cref="XmlReader"/> is used to read records from a XML input stream.
     /// </summary>
     /// <remarks>
     /// <para>Each XML record read from the input stream is parsed into a Document Object Model (DOM).
@@ -36,37 +35,37 @@ namespace BeanIO.Stream.Xml
     public class XmlReader : IRecordReader
     {
         /// <summary>
-        /// the input stream to read from
+        /// the input stream to read from.
         /// </summary>
         private readonly System.Xml.XmlReader _in;
 
         /// <summary>
-        /// the base document used to define the group structure of the XML read from the input stream
+        /// the base document used to define the group structure of the XML read from the input stream.
         /// </summary>
         private readonly XDocument _document;
 
         /// <summary>
         /// set to true if the base document was null during construction and the XML input stream
-        /// will be fully read
+        /// will be fully read.
         /// </summary>
         private readonly bool _readFully;
 
         /// <summary>
-        /// the parent node is the record node's parent in the base document
+        /// the parent node is the record node's parent in the base document.
         /// </summary>
-        private XContainer _parentNode;
+        private XContainer? _parentNode;
 
         /// <summary>
-        /// the "root" element of the last record read
+        /// the "root" element of the last record read.
         /// </summary>
-        private XElement _recordNode;
+        private XElement? _recordNode;
 
         private bool _eof;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlReader"/> class.
         /// </summary>
-        /// <param name="reader">the input stream to read from</param>
+        /// <param name="reader">the input stream to read from.</param>
         public XmlReader(TextReader reader)
             : this(reader, null)
         {
@@ -75,11 +74,11 @@ namespace BeanIO.Stream.Xml
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlReader"/> class.
         /// </summary>
-        /// <param name="reader">the input stream to read from</param>
+        /// <param name="reader">the input stream to read from.</param>
         /// <param name="baseDocument">the base document object model (DOM) that defines the
-        /// group structure of the XML. May be <code>null</code> if fully reading
+        /// group structure of the XML. May be <see langword="null" /> if fully reading
         /// the XML document.</param>
-        public XmlReader(TextReader reader, XDocument baseDocument)
+        public XmlReader(TextReader reader, XDocument? baseDocument)
         {
             RecordLineNumber = -1;
             var readerSettings = new XmlReaderSettings()
@@ -109,7 +108,7 @@ namespace BeanIO.Stream.Xml
         /// <remarks>The type of object returned depends on the format of the stream.</remarks>
         /// <returns>
         /// The record value, or null if the end of the stream was reached.
-        /// </returns>
+        /// .</returns>
         public int RecordLineNumber { get; private set; }
 
         /// <summary>
@@ -117,7 +116,7 @@ namespace BeanIO.Stream.Xml
         /// </summary>
         /// <returns>
         /// The unparsed text of the last record read
-        /// </returns>
+        /// .</returns>
         public string RecordText => _document.ToString();
 
         /// <summary>
@@ -125,9 +124,9 @@ namespace BeanIO.Stream.Xml
         /// </summary>
         /// <returns>
         /// The type of object returned depends on the format of the stream.
-        /// </returns>
+        /// .</returns>
         /// <returns>The record value, or null if the end of the stream was reached.</returns>
-        public object Read()
+        public object? Read()
         {
             if (_eof)
                 return null;
@@ -160,13 +159,13 @@ namespace BeanIO.Stream.Xml
         }
 
         /// <summary>
-        /// Appends the next record read from the XML stream reader to the base document object model
+        /// Appends the next record read from the XML stream reader to the base document object model.
         /// </summary>
         /// <remarks>
-        /// TODO: Isn't there a better way?
+        /// TODO: Maybe there's a better way.
         /// </remarks>
-        /// <returns><code>true</code> if a record was found, or <tt>false</tt> if the end of the
-        /// stream was reached</returns>
+        /// <returns><c>true</c> if a record was found, or <tt>false</tt> if the end of the
+        /// stream was reached.</returns>
         private bool ReadRecord()
         {
             // the record position stores the number of elements deep in the record, or -1 if a
@@ -188,10 +187,9 @@ namespace BeanIO.Stream.Xml
                             // handle the root element of the document
                             if (node == null)
                             {
-                                node = _document.Root;
+                                node = _document.Root!;
                                 if (IsNode((XElement)node, _in.NamespaceURI, _in.LocalName))
                                 {
-                                    Debug.Assert(node != null, "node != null");
                                     node.SetAnnotation(new GroupCountAnnotation(1));
                                     continue;
                                 }
@@ -227,7 +225,9 @@ namespace BeanIO.Stream.Xml
                             e.SetAttributeValue(attrName, _in.GetAttribute(i));
                         }
 
-                        Debug.Assert(node != null, "node != null");
+                        if (node == null)
+                            throw new InvalidOperationException("node == null");
+
                         node.Add(e);
                         node = e;
 
@@ -243,7 +243,8 @@ namespace BeanIO.Stream.Xml
                     case XmlNodeType.CDATA:
                         if (recordPosition >= 0)
                         {
-                            Debug.Assert(node != null, "node != null");
+                            if (node == null)
+                                throw new InvalidOperationException("node == null");
                             node.Add(new XText(_in.Value));
                         }
 
@@ -255,7 +256,8 @@ namespace BeanIO.Stream.Xml
 
                 if (closeElement)
                 {
-                    Debug.Assert(node != null, "node != null");
+                    if (node == null)
+                        throw new InvalidOperationException("node == null");
                     var parent = node.Parent;
                     if (parent != null && parent.NodeType == XmlNodeType.Element)
                     {
@@ -284,22 +286,22 @@ namespace BeanIO.Stream.Xml
         /// <summary>
         /// Searches a DOM element for a child element matching the given XML namespace and local name.
         /// </summary>
-        /// <param name="parent">the parent DOM element</param>
-        /// <param name="ns">the XML namespace to match</param>
-        /// <param name="name">the XML local name to match</param>
-        /// <returns>the matched child element, or <code>null</code> if not found</returns>
-        private XElement FindChild(XElement parent, string ns, string name)
+        /// <param name="parent">the parent DOM element.</param>
+        /// <param name="ns">the XML namespace to match.</param>
+        /// <param name="name">the XML local name to match.</param>
+        /// <returns>the matched child element, or <see langword="null" /> if not found.</returns>
+        private XElement? FindChild(XElement parent, string ns, string name)
         {
             return parent.Elements().FirstOrDefault(x => IsNode(x, ns, name));
         }
 
         /// <summary>
-        /// Returns whether a XML node matches a given namespace and local name
+        /// Returns whether a XML node matches a given namespace and local name.
         /// </summary>
-        /// <param name="node">the Node to test</param>
-        /// <param name="ns">the namespace to match</param>
-        /// <param name="name">the local name to match</param>
-        /// <returns><code>true</code> if the Node matches the given XML namespace and local name</returns>
+        /// <param name="node">the Node to test.</param>
+        /// <param name="ns">the namespace to match.</param>
+        /// <param name="name">the local name to match.</param>
+        /// <returns><c>true</c> if the Node matches the given XML namespace and local name.</returns>
         private bool IsNode(XElement node, string ns, string name)
         {
             var handlingModeAttr = node.Annotation<NamespaceModeAnnotation>();

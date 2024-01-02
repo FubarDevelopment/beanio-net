@@ -145,7 +145,7 @@ namespace BeanIO.Stream
 
             StrictStringReader input = new StrictStringReader("hi\\");
 
-            RecordIOException error = null;
+            RecordIOException? error = null;
 
             var reader = new FixedLengthReader(input, config);
             try

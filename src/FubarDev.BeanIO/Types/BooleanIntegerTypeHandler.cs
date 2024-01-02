@@ -25,17 +25,17 @@ namespace BeanIO.Types
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="int"/> value to be used for <code>true</code>
+        /// Gets or sets the <see cref="int"/> value to be used for <c>true</c>.
         /// </summary>
         public int TrueValue { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="int"/> value to be used for <code>false</code>
+        /// Gets or sets the <see cref="int"/> value to be used for <see langword="false" />.
         /// </summary>
         public int? FalseValue { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="int"/> value to be used for <code>null</code>
+        /// Gets or sets the <see cref="int"/> value to be used for <see langword="null" />.
         /// </summary>
         public int? NullValue { get; set; }
 
@@ -47,16 +47,15 @@ namespace BeanIO.Types
         /// <summary>
         /// Parses field text into an object.
         /// </summary>
-        /// <param name="text">The field text to parse, which may be null if the field was not passed in the record</param>
-        /// <returns>The parsed object</returns>
-        public virtual object Parse(string text)
+        /// <param name="text">The field text to parse, which may be null if the field was not passed in the record.</param>
+        /// <returns>The parsed object.</returns>
+        public virtual object? Parse(string? text)
         {
             if (string.IsNullOrEmpty(text))
                 return null;
 
             const NumberStyles styles = NumberStyles.Integer;
-            int intValue;
-            if (!int.TryParse(text, styles, Culture, out intValue))
+            if (!int.TryParse(text, styles, Culture, out var intValue))
                 throw new FormatException($"Number value '{text}' doesn't match the number styles {styles}");
 
             if (intValue == TrueValue)
@@ -70,9 +69,9 @@ namespace BeanIO.Types
         /// <summary>
         /// Formats an object into field text.
         /// </summary>
-        /// <param name="value">The value to format, which may be null</param>
-        /// <returns>The formatted field text, or <code>null</code> to indicate the value is not present</returns>
-        public virtual string Format(object value)
+        /// <param name="value">The value to format, which may be null.</param>
+        /// <returns>The formatted field text, or <see langword="null" /> to indicate the value is not present.</returns>
+        public virtual string Format(object? value)
         {
             if (value == null)
                 return string.Format(Culture, "{0}", NullValue);

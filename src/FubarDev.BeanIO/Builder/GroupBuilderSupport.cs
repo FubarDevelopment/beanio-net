@@ -22,8 +22,8 @@ namespace BeanIO.Builder
         /// <summary>
         /// Adds a group to this component.
         /// </summary>
-        /// <param name="group">the group to add</param>
-        /// <returns>The value of <see cref="PropertyBuilderSupport{T,TConfig}.Me"/></returns>
+        /// <param name="group">the group to add.</param>
+        /// <returns>The value of <see cref="PropertyBuilderSupport{T,TConfig}.Me"/>.</returns>
         public T AddGroup(GroupBuilder group)
         {
             Config.Add(group.Build());
@@ -33,8 +33,8 @@ namespace BeanIO.Builder
         /// <summary>
         /// Adds a group to this component by using the group annotation for the given type.
         /// </summary>
-        /// <param name="group">The type that has group annotations</param>
-        /// <returns>The value of <see cref="PropertyBuilderSupport{T,TConfig}.Me"/></returns>
+        /// <param name="group">The type that has group annotations.</param>
+        /// <returns>The value of <see cref="PropertyBuilderSupport{T,TConfig}.Me"/>.</returns>
         public T AddGroup(Type group)
         {
             var gc = AnnotationParser.CreateGroupConfig(group);
@@ -47,8 +47,8 @@ namespace BeanIO.Builder
         /// <summary>
         /// Adds a record to this component.
         /// </summary>
-        /// <param name="record">the record to add</param>
-        /// <returns>The value of <see cref="PropertyBuilderSupport{T,TConfig}.Me"/></returns>
+        /// <param name="record">the record to add.</param>
+        /// <returns>The value of <see cref="PropertyBuilderSupport{T,TConfig}.Me"/>.</returns>
         public T AddRecord(RecordBuilder record)
         {
             Config.Add(record.Build());
@@ -58,8 +58,8 @@ namespace BeanIO.Builder
         /// <summary>
         /// Adds a group to this component by using the record annotation for the given type.
         /// </summary>
-        /// <param name="record">The type that has record annotations</param>
-        /// <returns>The value of <see cref="PropertyBuilderSupport{T,TConfig}.Me"/></returns>
+        /// <param name="record">The type that has record annotations.</param>
+        /// <returns>The value of <see cref="PropertyBuilderSupport{T,TConfig}.Me"/>.</returns>
         public T AddRecord(Type record)
         {
             var gc = AnnotationParser.CreateRecordConfig(record);

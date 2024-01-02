@@ -20,9 +20,9 @@ namespace BeanIO.Stream.Delimited
     /// delimiter.  For example, if the record "Field1,2", "Field3" is written
     /// using a comma delimiter and backslash escape character, the following text
     /// will be written to the output stream:
-    /// <code>
+    /// <c>
     /// Field1\,2,Field3
-    /// </code>
+    /// </c>
     /// Note that no validation is performed when a record is written, so if an escape character
     /// is not configured and a field contains a delimiting character, the generated
     /// output may be invalid.</para>
@@ -40,7 +40,7 @@ namespace BeanIO.Stream.Delimited
         /// <summary>
         /// Initializes a new instance of the <see cref="DelimitedWriter"/> class.
         /// </summary>
-        /// <param name="textWriter">the output stream to write to</param>
+        /// <param name="textWriter">the output stream to write to.</param>
         public DelimitedWriter(TextWriter textWriter)
             : this(textWriter, '\t')
         {
@@ -49,8 +49,8 @@ namespace BeanIO.Stream.Delimited
         /// <summary>
         /// Initializes a new instance of the <see cref="DelimitedWriter"/> class.
         /// </summary>
-        /// <param name="textWriter">the output stream to write to</param>
-        /// <param name="delimiter">the field delimiting character</param>
+        /// <param name="textWriter">the output stream to write to.</param>
+        /// <param name="delimiter">the field delimiting character.</param>
         public DelimitedWriter(TextWriter textWriter, char delimiter)
             : this(textWriter, new DelimitedParserConfiguration(delimiter))
         {
@@ -59,8 +59,8 @@ namespace BeanIO.Stream.Delimited
         /// <summary>
         /// Initializes a new instance of the <see cref="DelimitedWriter"/> class.
         /// </summary>
-        /// <param name="textWriter">the output stream to write to</param>
-        /// <param name="config">the delimited parser configuration</param>
+        /// <param name="textWriter">the output stream to write to.</param>
+        /// <param name="config">the delimited parser configuration.</param>
         public DelimitedWriter(TextWriter textWriter, DelimitedParserConfiguration config)
         {
             _out = textWriter;
@@ -74,9 +74,14 @@ namespace BeanIO.Stream.Delimited
         /// <summary>
         /// Writes a record object to this output stream.
         /// </summary>
-        /// <param name="record">Record the record object to write</param>
-        public void Write(object record)
+        /// <param name="record">Record the record object to write.</param>
+        public void Write(object? record)
         {
+            if (record == null)
+            {
+                throw new ArgumentNullException(nameof(record));
+            }
+
             Write((string[])record);
         }
 
@@ -99,7 +104,7 @@ namespace BeanIO.Stream.Delimited
         /// <summary>
         /// Writes a record object to this output stream.
         /// </summary>
-        /// <param name="record">Record the record object to write</param>
+        /// <param name="record">Record the record object to write.</param>
         public void Write(string[] record)
         {
             if (_escapeChar != null)

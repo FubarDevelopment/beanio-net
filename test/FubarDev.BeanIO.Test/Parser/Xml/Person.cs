@@ -15,31 +15,25 @@ namespace BeanIO.Parser.Xml
 
         public const int DefaultAge = -1;
 
-        public Person()
-        {
-            LastName = DefaultName;
-            Age = DefaultAge;
-        }
+        public string? Type { get; set; }
 
-        public string Type { get; set; }
+        public string? Gender { get; set; }
 
-        public string Gender { get; set; }
+        public string? FirstName { get; set; }
 
-        public string FirstName { get; set; }
+        public string? LastName { get; set; } = DefaultName;
 
-        public string LastName { get; set; }
+        public List<string>? Color { get; set; }
 
-        public List<string> Color { get; set; }
+        public Address? Address { get; set; }
 
-        public Address Address { get; set; }
+        public List<Address>? AddressList { get; set; }
 
-        public List<Address> AddressList { get; set; }
-
-        public int? Age { get; set; }
+        public int? Age { get; set; } = DefaultAge;
 
         public override string ToString()
         {
-            return string.Format("{0}: {1} {2}: {3} {4}", Gender, FirstName, LastName, Color.ToDebug(), AddressList.ToDebug());
+            return string.Format("{0}: {1} {2}: {3} {4}", Gender, FirstName, LastName, Color?.ToDebug(), AddressList?.ToDebug());
         }
     }
 }

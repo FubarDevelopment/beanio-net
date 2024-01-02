@@ -76,7 +76,7 @@ namespace BeanIO.Stream
         }
 
         [Fact]
-        public void TestCharacaterOutofQuotedField()
+        public void TestCharacterOutOfQuotedField()
         {
             Assert.Throws<RecordIOException>(() => CreateReader("\"1\",\"\",\"3\"2\n\r1,2").Read());
         }

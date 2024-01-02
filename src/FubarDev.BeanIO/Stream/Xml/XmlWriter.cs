@@ -17,17 +17,15 @@ using BeanIO.Internal.Parser.Format.Xml;
 using BeanIO.Internal.Parser.Format.Xml.Annotations;
 using BeanIO.Internal.Util;
 
-using JetBrains.Annotations;
-
 namespace BeanIO.Stream.Xml
 {
     /// <summary>
-    /// A <see cref="XmlWriter"/> is used to write records to a XML output stream
+    /// A <see cref="XmlWriter"/> is used to write records to a XML output stream.
     /// </summary>
     /// <remarks>
     /// <para>A document object model (DOM) is used to represent a record.  Group elements,
     /// as indicated by a user data key (see below), are not closed when a record is written.
-    /// When <see cref="Write(object)"/> with <code>null</code> is called, an open group element is closed.
+    /// When <see cref="Write(object)"/> with <see langword="null"/> is called, an open group element is closed.
     /// Finally, calling <see cref="Flush"/> will close all remaining group elements and complete the document.</para>
     /// <para>A <see cref="XmlWriter"/> makes use of the DOM user data feature to pass additional
     /// information to and from the parser.  The <see cref="IsGroupElementAnnotation"/> user data is
@@ -49,40 +47,40 @@ namespace BeanIO.Stream.Xml
         #endregion
 
         /// <summary>
-        /// The underlying writer
+        /// The underlying writer.
         /// </summary>
         private readonly FilterWriter _writer;
 
         /// <summary>
-        /// XML parser configuration
+        /// XML parser configuration.
         /// </summary>
         private readonly XmlParserConfiguration _config;
 
         /// <summary>
-        /// The XML stream writer to write to
+        /// The XML stream writer to write to.
         /// </summary>
         private readonly System.Xml.XmlWriter _out;
 
-        private readonly Encoding _encoding;
+        private readonly Encoding? _encoding;
 
         /// <summary>
-        /// Map of auto-generated namespaces to namespace prefixes
+        /// Map of auto-generated namespaces to namespace prefixes.
         /// </summary>
-        private Dictionary<string, string> _namespaceMap = new Dictionary<string, string>();
+        private Dictionary<string, string> _namespaceMap = new();
 
         private ISet<string> _usedPrefixes = new HashSet<string>();
 
-        private ElementStack _elementStack;
+        private ElementStack? _elementStack;
 
         private int _namespaceIndex;
 
         /// <summary>
-        /// whether a XML header needs to be output before writing a record
+        /// whether a XML header needs to be output before writing a record.
         /// </summary>
         private bool _outputHeader;
 
         /// <summary>
-        /// the minimum level last stored when the state was updated
+        /// the minimum level last stored when the state was updated.
         /// </summary>
         private int _dirtyLevel;
 
@@ -91,8 +89,8 @@ namespace BeanIO.Stream.Xml
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlWriter"/> class.
         /// </summary>
-        /// <param name="writer">the output stream to write to</param>
-        public XmlWriter([NotNull] TextWriter writer)
+        /// <param name="writer">the output stream to write to.</param>
+        public XmlWriter(TextWriter writer)
             : this(writer, null)
         {
         }
@@ -100,9 +98,9 @@ namespace BeanIO.Stream.Xml
         /// <summary>
         /// Initializes a new instance of the <see cref="XmlWriter"/> class.
         /// </summary>
-        /// <param name="writer">the output stream to write to</param>
-        /// <param name="config">the XML writer configuration</param>
-        public XmlWriter([NotNull] TextWriter writer, XmlParserConfiguration config)
+        /// <param name="writer">the output stream to write to.</param>
+        /// <param name="config">the XML writer configuration.</param>
+        public XmlWriter(TextWriter writer, XmlParserConfiguration? config)
         {
             if (writer == null)
                 throw new ArgumentNullException(nameof(writer));
@@ -128,8 +126,8 @@ namespace BeanIO.Stream.Xml
         /// <summary>
         /// Writes a record object to this output stream.
         /// </summary>
-        /// <param name="record">Record the record object to write</param>
-        public void Write(object record)
+        /// <param name="record">Record the record object to write.</param>
+        public void Write(object? record)
         {
             // write the XMl header if needed
             if (_outputHeader)
@@ -154,7 +152,7 @@ namespace BeanIO.Stream.Xml
             else
             {
                 // otherwise we write the record (i.e. DOM tree) to the stream
-                Write(((XDocument)record).Root);
+                Write(((XDocument)record).Root!);
             }
         }
 
@@ -186,18 +184,16 @@ namespace BeanIO.Stream.Xml
 
         /// <summary>
         /// Updates a <see cref="IDictionary{TKey,TValue}"/> with the current state of the Writer to allow for
-        /// restoration at a later time
+        /// restoration at a later time.
         /// </summary>
-        /// <param name="ns">a string to prefix all state keys with</param>
-        /// <param name="state">the <see cref="IDictionary{TKey,TValue}"/> to update with the latest state</param>
-        public void UpdateState(string ns, IDictionary<string, object> state)
+        /// <param name="ns">a string to prefix all state keys with.</param>
+        /// <param name="state">the <see cref="IDictionary{TKey,TValue}"/> to update with the latest state.</param>
+        public void UpdateState(string ns, IDictionary<string, object?> state)
         {
             state[GetKey(ns, OUTPUT_HEADER_KEY)] = _outputHeader;
             state[GetKey(ns, NAMESPACE_MAP_KEY)] = ToToken(_namespaceMap);
 
-            object n;
-
-            if (!state.TryGetValue(GetKey(ns, LEVEL_KEY), out n))
+            if (!state.TryGetValue(GetKey(ns, LEVEL_KEY), out var n))
                 n = 0;
             var lastLevel = Convert.ToInt32(n);
 
@@ -216,10 +212,10 @@ namespace BeanIO.Stream.Xml
             for (int i = _level; i > to; i--)
             {
                 var stackPrefix = $"{ns}.s{i}";
-                state[GetKey(stackPrefix, STACK_ELEMENT_KEY)] = e.ToToken();
+                state[GetKey(stackPrefix, STACK_ELEMENT_KEY)] = e?.ToToken();
 
                 var nsMapKey = GetKey(stackPrefix, STACK_NS_MAP_KEY);
-                var token = ToToken(e.Namespaces);
+                var token = ToToken(e?.Namespaces);
                 if (token == null)
                 {
                     state.Remove(nsMapKey);
@@ -229,7 +225,7 @@ namespace BeanIO.Stream.Xml
                     state[nsMapKey] = token;
                 }
 
-                e = _elementStack.Parent;
+                e = e?.Parent;
             }
 
             _dirtyLevel = _level;
@@ -238,19 +234,15 @@ namespace BeanIO.Stream.Xml
         }
 
         /// <summary>
-        /// Restores a <see cref="IDictionary{TKey,TValue}"/> of previously stored state information
+        /// Restores a <see cref="IDictionary{TKey,TValue}"/> of previously stored state information.
         /// </summary>
-        /// <param name="ns">a string to prefix all state keys with</param>
-        /// <param name="state">the <see cref="IReadOnlyDictionary{TKey,TValue}"/> containing the state to restore</param>
-        public void RestoreState(string ns, IReadOnlyDictionary<string, object> state)
+        /// <param name="ns">a string to prefix all state keys with.</param>
+        /// <param name="state">the <see cref="IReadOnlyDictionary{TKey,TValue}"/> containing the state to restore.</param>
+        public void RestoreState(string ns, IReadOnlyDictionary<string, object?> state)
         {
-            object o;
-            _outputHeader = (bool)GetRequired(ns, OUTPUT_HEADER_KEY, state);
+            _outputHeader = GetRequired(ns, OUTPUT_HEADER_KEY, state) is true;
             var key = GetKey(ns, NAMESPACE_MAP_KEY);
-            if (!state.TryGetValue(key, out o))
-                o = null;
-            var token = (string)o;
-            if (token != null)
+            if (state.TryGetValue(key, out var o) && o is string token)
             {
                 _namespaceMap = ToMap(token, key);
                 _namespaceIndex = _namespaceMap.Count;
@@ -276,7 +268,9 @@ namespace BeanIO.Stream.Xml
                 {
                     var stackPrefix = $"{ns}.s{i + 1}";
 
-                    var e = ElementStack.FromToken(_elementStack, (string)GetRequired(stackPrefix, STACK_ELEMENT_KEY, state));
+                    var e = ElementStack.FromToken(
+                        _elementStack,
+                        (string)GetRequired(stackPrefix, STACK_ELEMENT_KEY, state));
                     if (e.IsDefaultNamespace())
                     {
                         _out.WriteStartElement(e.Name);
@@ -287,14 +281,14 @@ namespace BeanIO.Stream.Xml
                     }
                     else
                     {
-                        _out.WriteStartElement(e.Prefix, e.Name, e.Namespace);
+                        _out.WriteStartElement(e.Prefix!, e.Name, e.Namespace);
                     }
 
                     // create a stack item
                     Push(e);
 
                     // add namespaces
-                    var nsMap = (string)state[GetKey(stackPrefix, STACK_NS_MAP_KEY)];
+                    var nsMap = (string?)state[GetKey(stackPrefix, STACK_NS_MAP_KEY)];
                     if (nsMap != null)
                     {
                         var s = nsMap.Trim().Split(' ');
@@ -304,6 +298,11 @@ namespace BeanIO.Stream.Xml
                         }
 
                         Debug.Assert(_elementStack != null, "_elementStack != null");
+                        if (_elementStack == null)
+                        {
+                            throw new InvalidOperationException("Element stack not initialized yet");
+                        }
+
                         for (var n = 0; n < s.Length; n += 2)
                         {
                             _elementStack.AddNamespace(s[n + 1], s[n]);
@@ -326,28 +325,28 @@ namespace BeanIO.Stream.Xml
         }
 
         /// <summary>
-        /// Retrieves a value from a Map for a given key prepended with the namespace
+        /// Retrieves a value from a Map for a given key prepended with the namespace.
         /// </summary>
-        /// <param name="ns">a string to prefix all state keys with</param>
-        /// <param name="key">the key to build the namespace prefixed key for</param>
-        /// <param name="state">the <see cref="IDictionary{TKey,TValue}"/> containing the state to restore</param>
-        /// <returns>the value for the given <paramref name="ns"/> and <paramref name="key"/></returns>
-        private static object GetRequired(string ns, string key, IReadOnlyDictionary<string, object> state)
+        /// <param name="ns">a string to prefix all state keys with.</param>
+        /// <param name="key">the key to build the namespace prefixed key for.</param>
+        /// <param name="state">the <see cref="IDictionary{TKey,TValue}"/> containing the state to restore.</param>
+        /// <returns>the value for the given <paramref name="ns"/> and <paramref name="key"/>.</returns>
+        private static object GetRequired(string ns, string key, IReadOnlyDictionary<string, object?> state)
         {
             key = GetKey(ns, key);
-            object value;
-            if (!state.TryGetValue(key, out value))
+            if (!state.TryGetValue(key, out var value))
                 throw new InvalidOperationException($"Missing state information for key '{key}'");
-            return value;
+            return value ?? throw new InvalidOperationException("State information for key '{key}' is null");
         }
 
         /// <summary>
-        /// Constructs a Map from a String of space delimited key-values pairings
+        /// Constructs a Map from a String of space delimited key-values pairings.
         /// </summary>
-        /// <param name="token">the token to parse</param>
-        /// <param name="key">the key (for informational purposes only)</param>
-        /// <returns>the new dictionary containing the data from the token</returns>
-        private static Dictionary<string, string> ToMap([CanBeNull] string token, string key)
+        /// <param name="token">the token to parse.</param>
+        /// <param name="key">the key (for informational purposes only).</param>
+        /// <returns>the new dictionary containing the data from the token.</returns>
+        [return: NotNullIfNotNull(nameof(token))]
+        private static Dictionary<string, string>? ToMap(string? token, string key)
         {
             if (token == null)
                 return null;
@@ -364,11 +363,11 @@ namespace BeanIO.Stream.Xml
         }
 
         /// <summary>
-        /// Converts a Map to a String of space delimited key-value pairings
+        /// Converts a Map to a String of space delimited key-value pairings.
         /// </summary>
-        /// <param name="map">the dictionary to serialize</param>
-        /// <returns>the serialized dictionary</returns>
-        private static string ToToken(IReadOnlyDictionary<string, string> map)
+        /// <param name="map">the dictionary to serialize.</param>
+        /// <returns>the serialized dictionary.</returns>
+        private static string? ToToken(IReadOnlyDictionary<string, string>? map)
         {
             if (map == null || map.Count == 0)
                 return null;
@@ -393,14 +392,14 @@ namespace BeanIO.Stream.Xml
         }
 
         /// <summary>
-        /// Recursively writes an element to the XML stream writer
+        /// Recursively writes an element to the XML stream writer.
         /// </summary>
-        /// <param name="element">the DOM element to write</param>
+        /// <param name="element">the DOM element to write.</param>
         [SuppressMessage("StyleCopPlus.StyleCopPlusRules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Reviewed. Suppression is OK here.")]
         private void Write(XElement element)
         {
             var name = element.Name.LocalName;
-            string prefix;
+            string? prefix;
             var ns = element.Name.NamespaceName;
 
             var nsHandling = NamespaceAwareElementComparer.GetHandlingModeFor(element);
@@ -453,13 +452,18 @@ namespace BeanIO.Stream.Xml
                 }
                 else
                 {
-                    _out.WriteStartElement(string.Empty, name, ns ?? string.Empty);
+                    _out.WriteStartElement(string.Empty, name, ns);
                 }
 
                 Push(ns, prefix, name);
-                if (_config.NamespaceMap != null)
+                if (_config.NamespaceMap.Count != 0)
                 {
                     Debug.Assert(_elementStack != null, "_elementStack != null");
+                    if (_elementStack == null)
+                    {
+                        throw new InvalidOperationException("Element stack not initialized yet");
+                    }
+
                     foreach (var entry in _config.NamespaceMap)
                     {
                         namespacesToAdd.Add(Tuple.Create(entry.Key, entry.Value));
@@ -498,10 +502,10 @@ namespace BeanIO.Stream.Xml
             }
 
             var namespaceInsertIndex = 0;
-            var attributesToAdd = new List<Tuple<string, XName, string>>();
+            var attributesToAdd = new List<(string? Prefix, XName Name, string Value)>();
 
             // write attributes
-            ISet<string> attPrefixSet = null;
+            ISet<string>? attPrefixSet = null;
 
             var map = element.Attributes().ToList();
             if (map.Count > 0)
@@ -524,11 +528,11 @@ namespace BeanIO.Stream.Xml
 
                 if (string.IsNullOrEmpty(attNamespace))
                 {
-                    attributesToAdd.Add(new Tuple<string, XName, string>(null, attName, att.Value));
+                    attributesToAdd.Add((null, attName, att.Value));
                 }
                 else if (nsHandling != NamespaceHandlingMode.NoPrefix || !string.Equals(attPrefix, "xmlns") || !string.Equals(attNamespace, ns, StringComparison.Ordinal))
                 {
-                    var p = _elementStack.FindPrefix(attNamespace);
+                    var p = _elementStack?.FindPrefix(attNamespace);
 
                     var declareNamespace = false;
                     if (p == null)
@@ -569,7 +573,7 @@ namespace BeanIO.Stream.Xml
                     }
                     else
                     {
-                        attributesToAdd.Add(new Tuple<string, XName, string>(attPrefix, XName.Get(attName, attNamespace), att.Value));
+                        attributesToAdd.Add((attPrefix, XName.Get(attName, attNamespace), att.Value));
                     }
                 }
             }
@@ -583,9 +587,9 @@ namespace BeanIO.Stream.Xml
 
             foreach (var attributeToAdd in attributesToAdd)
             {
-                var attPrefix = attributeToAdd.Item1;
-                var attName = attributeToAdd.Item2;
-                var attValue = attributeToAdd.Item3;
+                var attPrefix = attributeToAdd.Prefix;
+                var attName = attributeToAdd.Name;
+                var attValue = attributeToAdd.Value;
                 if (attPrefix != null)
                 {
                     _out.WriteAttributeString(attPrefix, attName.LocalName, attName.NamespaceName, attValue);
@@ -643,7 +647,7 @@ namespace BeanIO.Stream.Xml
             _out.WriteEndElement();
         }
 
-        private void Push(string ns, string prefix, string name)
+        private void Push(string? ns, string? prefix, string name)
         {
             Push(new ElementStack(_elementStack, ns, prefix, name));
         }
@@ -656,6 +660,11 @@ namespace BeanIO.Stream.Xml
 
         private void Pop()
         {
+            if (_elementStack == null)
+            {
+                throw new InvalidOperationException("Element stack not initialized yet");
+            }
+
             _elementStack = _elementStack.Parent;
             --_level;
             _dirtyLevel = Math.Min(_dirtyLevel, _level);
@@ -702,7 +711,7 @@ namespace BeanIO.Stream.Xml
                     _baseWriter.Write(value);
             }
 
-            public override void WriteLine(string value)
+            public override void WriteLine(string? value)
             {
                 if (!SuppressOutput)
                     base.WriteLine(value);

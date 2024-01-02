@@ -11,7 +11,7 @@ using System.Linq;
 namespace BeanIO.Config
 {
     /// <summary>
-    /// Reads properties from a stream
+    /// Reads properties from a stream.
     /// </summary>
     public class PropertiesStreamProvider : IPropertiesProvider
     {
@@ -20,7 +20,7 @@ namespace BeanIO.Config
         /// <summary>
         /// Initializes a new instance of the <see cref="PropertiesStreamProvider"/> class.
         /// </summary>
-        /// <param name="stream">The stream to read from</param>
+        /// <param name="stream">The stream to read from.</param>
         public PropertiesStreamProvider(System.IO.Stream stream)
         {
             using (var reader = new StreamReader(stream))
@@ -28,9 +28,9 @@ namespace BeanIO.Config
         }
 
         /// <summary>
-        /// Reads all properties
+        /// Reads all properties.
         /// </summary>
-        /// <returns>A dictionary with all properties read</returns>
+        /// <returns>A dictionary with all properties read.</returns>
         public Properties Read()
         {
             var content = _content;
@@ -40,8 +40,8 @@ namespace BeanIO.Config
                           where !l.StartsWith("!")
                           let equalSignIndex = l.IndexOf('=')
                           where equalSignIndex != -1
-                          select new KeyValuePair<string, string>(l.Substring(0, equalSignIndex), l.Substring(equalSignIndex + 1)))
-                .ToDictionary(x => x.Key.Trim(), x => x.Value.TrimStart());
+                          select new KeyValuePair<string, string?>(l.Substring(0, equalSignIndex), l.Substring(equalSignIndex + 1)))
+                .ToDictionary(x => x.Key.Trim(), x => x.Value?.TrimStart());
             return new Properties(result);
         }
     }

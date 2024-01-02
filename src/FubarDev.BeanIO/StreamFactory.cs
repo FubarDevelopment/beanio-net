@@ -23,9 +23,9 @@ namespace BeanIO
         /// <summary>
         /// Creates a new instance of the configured <see cref="StreamFactory"/>.
         /// </summary>
-        /// <returns>The new <see cref="StreamFactory"/></returns>
+        /// <returns>The new <see cref="StreamFactory"/>.</returns>
         /// <exception cref="BeanIOConfigurationException">Will be thrown when the <see cref="StreamFactory"/>
-        /// instance isn't configured or cannot be instantiated</exception>
+        /// instance isn't configured or cannot be instantiated.</exception>
         public static StreamFactory NewInstance()
         {
             var className = Settings.Instance[Settings.STREAM_FACTORY_CLASS];
@@ -34,7 +34,8 @@ namespace BeanIO
 
             try
             {
-                var factory = (StreamFactory)Type.GetType(className).NewInstance();
+                var factory = (StreamFactory?)Type.GetType(className).NewInstance()
+                              ?? throw new InvalidOperationException("$Failed to create instance of '{className}'");
                 factory.Init();
                 return factory;
             }
@@ -47,9 +48,9 @@ namespace BeanIO
         /// <summary>
         /// Creates a new <see cref="IBeanReader"/> for reading from the given input stream.
         /// </summary>
-        /// <param name="name">The name of the stream in the mapping file</param>
-        /// <param name="input">The input stream to read from</param>
-        /// <returns>The new <see cref="IBeanReader"/></returns>
+        /// <param name="name">The name of the stream in the mapping file.</param>
+        /// <param name="input">The input stream to read from.</param>
+        /// <returns>The new <see cref="IBeanReader"/>.</returns>
         public virtual IBeanReader CreateReader(string name, TextReader input)
         {
             return CreateReader(name, input, CultureInfo.CurrentCulture);
@@ -58,17 +59,17 @@ namespace BeanIO
         /// <summary>
         /// Creates a new <see cref="IBeanReader"/> for reading from the given input stream.
         /// </summary>
-        /// <param name="name">The name of the stream in the mapping file</param>
-        /// <param name="input">The input stream to read from</param>
+        /// <param name="name">The name of the stream in the mapping file.</param>
+        /// <param name="input">The input stream to read from.</param>
         /// <param name="culture">The culture used to format error messages.</param>
-        /// <returns>The new <see cref="IBeanReader"/></returns>
+        /// <returns>The new <see cref="IBeanReader"/>.</returns>
         public abstract IBeanReader CreateReader(string name, TextReader input, CultureInfo culture);
 
         /// <summary>
         /// Creates a new <see cref="IUnmarshaller"/> for unmarshalling records.
         /// </summary>
-        /// <param name="name">The name of the stream in the mapping file</param>
-        /// <returns>The new <see cref="IUnmarshaller"/></returns>
+        /// <param name="name">The name of the stream in the mapping file.</param>
+        /// <returns>The new <see cref="IUnmarshaller"/>.</returns>
         public virtual IUnmarshaller CreateUnmarshaller(string name)
         {
             return CreateUnmarshaller(name, CultureInfo.CurrentCulture);
@@ -77,24 +78,24 @@ namespace BeanIO
         /// <summary>
         /// Creates a new <see cref="IUnmarshaller"/> for unmarshalling records.
         /// </summary>
-        /// <param name="name">The name of the stream in the mapping file</param>
+        /// <param name="name">The name of the stream in the mapping file.</param>
         /// <param name="culture">The culture used to format error messages.</param>
-        /// <returns>The new <see cref="IUnmarshaller"/></returns>
+        /// <returns>The new <see cref="IUnmarshaller"/>.</returns>
         public abstract IUnmarshaller CreateUnmarshaller(string name, CultureInfo culture);
 
         /// <summary>
         /// Creates a new <see cref="IBeanWriter"/> for writing to the given output stream.
         /// </summary>
-        /// <param name="name">The name of the stream in the mapping file</param>
-        /// <param name="output">The output stream to write to</param>
-        /// <returns>The new <see cref="IBeanWriter"/></returns>
+        /// <param name="name">The name of the stream in the mapping file.</param>
+        /// <param name="output">The output stream to write to.</param>
+        /// <returns>The new <see cref="IBeanWriter"/>.</returns>
         public abstract IBeanWriter CreateWriter(string name, TextWriter output);
 
         /// <summary>
         /// Creates a new <see cref="IMarshaller"/> for marshalling records.
         /// </summary>
-        /// <param name="name">The name of the stream in the mapping file</param>
-        /// <returns>The new <see cref="IMarshaller"/></returns>
+        /// <param name="name">The name of the stream in the mapping file.</param>
+        /// <returns>The new <see cref="IMarshaller"/>.</returns>
         public abstract IMarshaller CreateMarshaller(string name);
 
         /// <summary>
@@ -106,7 +107,7 @@ namespace BeanIO
         /// <summary>
         /// Loads a BeanIO mapping file, and adds the configured streams to this factory.
         /// </summary>
-        /// <param name="input">The input stream to read the mapping file from</param>
+        /// <param name="input">The input stream to read the mapping file from.</param>
         public virtual void Load(System.IO.Stream input)
         {
             Load(input, null);
@@ -115,7 +116,7 @@ namespace BeanIO
         /// <summary>
         /// Loads a BeanIO mapping, and adds the configured streams to this factory.
         /// </summary>
-        /// <param name="source">The source to read the mapping file from</param>
+        /// <param name="source">The source to read the mapping file from.</param>
         public virtual void Load(Uri source)
         {
             Load(source, null);
@@ -124,27 +125,29 @@ namespace BeanIO
         /// <summary>
         /// Loads a BeanIO mapping file, and adds the configured streams to this factory.
         /// </summary>
-        /// <param name="source">The source to read the mapping file from</param>
-        /// <param name="properties">user <see cref="Properties"/> for property substitution</param>
-        public virtual void Load(Uri source, Properties properties)
+        /// <param name="source">The source to read the mapping file from.</param>
+        /// <param name="properties">user <see cref="Properties"/> for property substitution.</param>
+        public virtual void Load(Uri source, Properties? properties)
         {
-            var handler = Settings.Instance.GetSchemeHandler(source, true);
-            using (var input = handler.Open(source))
-                Load(input, properties);
+            var handler = Settings.Instance.GetSchemeHandler(source, true)!;
+            using var input = handler.Open(source);
+            if (input == null)
+                throw new BeanIOConfigurationException($"Resource '{source}' not found in classpath for import");
+            Load(input, properties);
         }
 
         /// <summary>
         /// Loads a BeanIO mapping file, and adds the configured streams to this factory.
         /// </summary>
-        /// <param name="input">The input stream to read the mapping file from</param>
-        /// <param name="properties">user <see cref="Properties"/> for property substitution</param>
-        public abstract void Load(System.IO.Stream input, Properties properties);
+        /// <param name="input">The input stream to read the mapping file from.</param>
+        /// <param name="properties">user <see cref="Properties"/> for property substitution.</param>
+        public abstract void Load(System.IO.Stream input, Properties? properties);
 
         /// <summary>
         /// Test whether a mapping configuration exists for a named stream.
         /// </summary>
-        /// <param name="name">The name of the stream in the mapping file</param>
-        /// <returns>true if a mapping configuration is found for the named stream</returns>
+        /// <param name="name">The name of the stream in the mapping file.</param>
+        /// <returns>true if a mapping configuration is found for the named stream.</returns>
         public abstract bool IsMapped(string name);
 
         /// <summary>

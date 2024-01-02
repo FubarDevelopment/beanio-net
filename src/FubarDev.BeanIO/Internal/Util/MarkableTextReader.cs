@@ -4,6 +4,7 @@
 // </copyright>
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace BeanIO.Internal.Util
@@ -15,7 +16,7 @@ namespace BeanIO.Internal.Util
     {
         private int? _peekBuffer;
 
-        private int[] _markBuffer;
+        private int[]? _markBuffer;
 
         private int _markBufferPosition;
 
@@ -24,7 +25,7 @@ namespace BeanIO.Internal.Util
         /// <summary>
         /// Initializes a new instance of the <see cref="MarkableTextReader"/> class.
         /// </summary>
-        /// <param name="innerReader">The reader to read from</param>
+        /// <param name="innerReader">The reader to read from.</param>
         public MarkableTextReader(TextReader innerReader)
         {
             BaseReader = innerReader;
@@ -35,12 +36,13 @@ namespace BeanIO.Internal.Util
         /// </summary>
         public TextReader BaseReader { get; }
 
+        [MemberNotNullWhen(true, nameof(_markBuffer))]
         private bool HasRemainingMarkBufferData => _markBuffer != null && _markBufferPosition < _markBufferSize;
 
         /// <summary>
-        /// Peeks for the next character
+        /// Peeks for the next character.
         /// </summary>
-        /// <returns>The character that would be read next</returns>
+        /// <returns>The character that would be read next.</returns>
         public override int Peek()
         {
             if (HasRemainingMarkBufferData)
@@ -51,7 +53,7 @@ namespace BeanIO.Internal.Util
         }
 
         /// <summary>
-        /// Reads the next character
+        /// Reads the next character.
         /// </summary>
         /// <returns>The next character that was read from the <see cref="BaseReader"/>,
         /// or -1 if the end of the stream was reached.</returns>
@@ -81,7 +83,7 @@ namespace BeanIO.Internal.Util
         /// <summary>
         /// Marks the position and initializes a buffer to be read from after a <see cref="Reset"/>.
         /// </summary>
-        /// <param name="readAheadLimit">The buffer size</param>
+        /// <param name="readAheadLimit">The buffer size.</param>
         public virtual void Mark(int readAheadLimit)
         {
             var oldBuffer = _markBuffer;
@@ -102,7 +104,7 @@ namespace BeanIO.Internal.Util
         }
 
         /// <summary>
-        /// Resets the read position
+        /// Resets the read position.
         /// </summary>
         public virtual void Reset()
         {

@@ -15,47 +15,48 @@ namespace BeanIO.Internal.Parser
     internal interface IStreamFormat
     {
         /// <summary>
-        /// Gets the name of the stream
+        /// Gets the name of the stream.
         /// </summary>
         string Name { get; }
 
         /// <summary>
-        /// Creates a new unmarshalling context
+        /// Creates a new unmarshalling context.
         /// </summary>
-        /// <returns>the new <see cref="UnmarshallingContext"/></returns>
-        UnmarshallingContext CreateUnmarshallingContext();
+        /// <param name="messageFactory">The message factory.</param>
+        /// <returns>the new <see cref="UnmarshallingContext"/>.</returns>
+        UnmarshallingContext CreateUnmarshallingContext(IMessageFactory messageFactory);
 
         /// <summary>
-        /// Creates a new marshalling context
+        /// Creates a new marshalling context.
         /// </summary>
-        /// <param name="streaming">true if marshalling to a stream</param>
-        /// <returns>the new <see cref="MarshallingContext"/></returns>
+        /// <param name="streaming">true if marshalling to a stream.</param>
+        /// <returns>the new <see cref="MarshallingContext"/>.</returns>
         MarshallingContext CreateMarshallingContext(bool streaming);
 
         /// <summary>
-        /// Creates a new record marshaller
+        /// Creates a new record marshaller.
         /// </summary>
-        /// <returns>the new <see cref="IRecordMarshaller"/></returns>
+        /// <returns>the new <see cref="IRecordMarshaller"/>.</returns>
         IRecordMarshaller CreateRecordMarshaller();
 
         /// <summary>
-        /// Creates a new record unmarshaller
+        /// Creates a new record unmarshaller.
         /// </summary>
-        /// <returns>the new <see cref="IRecordUnmarshaller"/></returns>
+        /// <returns>the new <see cref="IRecordUnmarshaller"/>.</returns>
         IRecordUnmarshaller CreateRecordUnmarshaller();
 
         /// <summary>
-        /// Creates a new record reader
+        /// Creates a new record reader.
         /// </summary>
-        /// <param name="reader">the <see cref="TextReader"/> to read records from</param>
-        /// <returns>the new <see cref="IRecordReader"/></returns>
+        /// <param name="reader">the <see cref="TextReader"/> to read records from.</param>
+        /// <returns>the new <see cref="IRecordReader"/>.</returns>
         IRecordReader CreateRecordReader(TextReader reader);
 
         /// <summary>
-        /// Creates a new record writer
+        /// Creates a new record writer.
         /// </summary>
-        /// <param name="writer">the <see cref="TextWriter"/> to write records to</param>
-        /// <returns>the new <see cref="IRecordWriter"/></returns>
+        /// <param name="writer">the <see cref="TextWriter"/> to write records to.</param>
+        /// <returns>the new <see cref="IRecordWriter"/>.</returns>
         IRecordWriter CreateRecordWriter(TextWriter writer);
     }
 }

@@ -15,15 +15,15 @@ namespace BeanIO.Internal.Compiler
     internal interface IParserFactory
     {
         /// <summary>
-        /// Gets or sets the type handler factory to use for resolving type handlers
+        /// Gets or sets the type handler factory to use for resolving type handlers.
         /// </summary>
         TypeHandlerFactory TypeHandlerFactory { get; set; }
 
         /// <summary>
-        /// Creates a new stream parser from a given stream configuration
+        /// Creates a new stream parser from a given stream configuration.
         /// </summary>
-        /// <param name="config">the stream configuration</param>
-        /// <returns>the created <see cref="Parser.Stream"/></returns>
+        /// <param name="config">the stream configuration.</param>
+        /// <returns>the created <see cref="Parser.Stream"/>.</returns>
         Parser.Stream CreateStream(StreamConfig config);
     }
 }

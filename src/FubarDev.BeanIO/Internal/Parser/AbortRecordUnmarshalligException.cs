@@ -21,7 +21,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Initializes a new instance of the <see cref="AbortRecordUnmarshalligException"/> class.
         /// </summary>
-        /// <param name="message">the error message (for debugging purposes only)</param>
+        /// <param name="message">the error message (for debugging purposes only).</param>
         public AbortRecordUnmarshalligException(string message)
             : base(message)
         {

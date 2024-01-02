@@ -12,7 +12,7 @@ using BeanIO.Internal.Util;
 namespace BeanIO.Internal.Parser
 {
     /// <summary>
-    /// Base class for parser components capable of aggregating descendant properties
+    /// Base class for parser components capable of aggregating descendant properties.
     /// </summary>
     internal abstract class Aggregation : DelegatingParser, IProperty, IIteration
     {
@@ -29,27 +29,27 @@ namespace BeanIO.Internal.Parser
         public abstract bool IsProperty { get; }
 
         /// <summary>
-        /// Gets or sets the property that dictates the number of occurrences or null if its not dynamic
+        /// Gets or sets the property that dictates the number of occurrences or null if its not dynamic.
         /// </summary>
-        public Field Occurs { get; set; }
+        public Field? Occurs { get; set; }
 
         /// <summary>
-        /// Gets or sets the minimum occurrences
+        /// Gets or sets the minimum occurrences.
         /// </summary>
         public int MinOccurs { get; set; }
 
         /// <summary>
-        /// Gets or sets the maximum occurrences
+        /// Gets or sets the maximum occurrences.
         /// </summary>
         public int? MaxOccurs { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether null should be returned for an empty collection
+        /// Gets or sets a value indicating whether null should be returned for an empty collection.
         /// </summary>
         public bool IsLazy { get; set; }
 
         /// <summary>
-        /// Gets the <see cref="IProperty"/> implementation type
+        /// Gets the <see cref="IProperty"/> implementation type.
         /// </summary>
         public abstract PropertyType Type { get; }
 
@@ -57,29 +57,22 @@ namespace BeanIO.Internal.Parser
         /// Gets or sets a value indicating whether this parser or any descendant of this parser is used to identify
         /// a record during unmarshalling.
         /// </summary>
-        /// <returns>false; iterations cannot be used to identify records</returns>
+        /// <returns>false; iterations cannot be used to identify records.</returns>
         public override bool IsIdentifier
         {
-            get
-            {
-                return false;
-            }
-            set
-            {
-                if (value)
-                    throw new NotSupportedException();
-            }
+            get => false;
+            set => _ = value ? throw new NotSupportedException() : value;
         }
 
         /// <summary>
-        /// Gets or sets the property accessor
+        /// Gets or sets the property accessor.
         /// </summary>
-        public IPropertyAccessor Accessor { get; set; }
+        public IPropertyAccessor? Accessor { get; set; }
 
         /// <summary>
-        /// Gets or sets the bean property type
+        /// Gets or sets the bean property type.
         /// </summary>
-        public Type PropertyType { get; set; }
+        public Type? PropertyType { get; set; }
 
         /// <summary>
         /// Gets the size of the components that make up a single iteration.
@@ -97,27 +90,27 @@ namespace BeanIO.Internal.Parser
         public override bool IsOptional => MinOccurs == 0;
 
         /// <summary>
-        /// Returns the length of aggregation
+        /// Returns the length of aggregation.
         /// </summary>
-        /// <param name="value">the aggregation value</param>
-        /// <returns>the length</returns>
-        public abstract int Length(object value);
+        /// <param name="value">the aggregation value.</param>
+        /// <returns>the length.</returns>
+        public abstract int Length(object? value);
 
         /// <summary>
-        /// Creates the property value and returns it
+        /// Creates the property value and returns it.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <returns>the property value</returns>
-        public abstract object CreateValue(ParsingContext context);
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <returns>the property value.</returns>
+        public abstract object? CreateValue(ParsingContext context);
 
         /// <inheritdoc />
-        public abstract bool Defines(object value);
+        public abstract bool Defines(object? value);
 
         /// <summary>
         /// Returns the index of the current iteration relative to its parent.
         /// </summary>
-        /// <param name="context">The context of this iteration</param>
-        /// <returns>the index of the current iteration</returns>
+        /// <param name="context">The context of this iteration.</param>
+        /// <returns>the index of the current iteration.</returns>
         public int GetIterationIndex(ParsingContext context)
         {
             return _index.Get(context).GetValueOrDefault();
@@ -130,7 +123,7 @@ namespace BeanIO.Internal.Parser
         /// This method should be overridden by subclasses that need to register
         /// one or more parser context variables.
         /// </remarks>
-        /// <param name="locals">set of local variables</param>
+        /// <param name="locals">set of local variables.</param>
         public override void RegisterLocals(ISet<IParserLocal> locals)
         {
             if (locals.Add(_index))
@@ -138,10 +131,10 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Marshals a record
+        /// Marshals a record.
         /// </summary>
-        /// <param name="context">The <see cref="MarshallingContext"/></param>
-        /// <returns>whether a value was marshalled</returns>
+        /// <param name="context">The <see cref="MarshallingContext"/>.</param>
+        /// <returns>whether a value was marshalled.</returns>
         public override bool Marshal(MarshallingContext context)
         {
             var min = MinOccurs;
@@ -158,10 +151,10 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Unmarshals a record
+        /// Unmarshals a record.
         /// </summary>
-        /// <param name="context">The <see cref="UnmarshallingContext"/></param>
-        /// <returns>true if this component was present in the unmarshalled record, or false otherwise</returns>
+        /// <param name="context">The <see cref="UnmarshallingContext"/>.</param>
+        /// <returns>true if this component was present in the unmarshalled record, or false otherwise.</returns>
         public override bool Unmarshal(UnmarshallingContext context)
         {
             var min = MinOccurs;
@@ -199,9 +192,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Sets the property value for marshaling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <param name="value">the property value</param>
-        public override void SetValue(ParsingContext context, object value)
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <param name="value">the property value.</param>
+        public override void SetValue(ParsingContext context, object? value)
         {
             if (Occurs != null && !Occurs.IsBound)
             {
@@ -219,9 +212,9 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Called by <see cref="TreeNode{T}.ToString"/> to append node parameters to the output
+        /// Called by <see cref="TreeNode{T}.ToString"/> to append node parameters to the output.
         /// </summary>
-        /// <param name="s">The output to append</param>
+        /// <param name="s">The output to append.</param>
         protected override void ToParamString(StringBuilder s)
         {
             base.ToParamString(s);

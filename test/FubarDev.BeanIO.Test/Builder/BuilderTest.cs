@@ -5,7 +5,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Text;
 using System.Xml;
 
@@ -27,15 +26,17 @@ namespace BeanIO.Builder
         public void TestXmlParserBuilder()
         {
             var b = new XmlParserBuilder();
-            var p = (XmlRecordParserFactory)b.Build().Create();
+            var r = b.Build();
+            Assert.NotNull(r.Create);
+            var p = (XmlRecordParserFactory)r.Create!();
             Assert.Null(p.Indentation);
             Assert.Null(p.LineSeparator);
             Assert.NotNull(p.Version);
             Assert.Equal(new Version(1, 0), p.Version);
             Assert.NotNull(p.Encoding);
-            Assert.Equal("utf-8", p.GetEncoding().WebName);
+            Assert.Equal("utf-8", p.GetEncoding()?.WebName);
             Assert.False(p.SuppressHeader);
-            Assert.Null(p.NamespaceMap);
+            Assert.Empty(p.NamespaceMap);
 
             b = new XmlParserBuilder()
                 .Indent()
@@ -44,7 +45,9 @@ namespace BeanIO.Builder
                 .LineSeparator("\n")
                 .AddNamespace("r", "rock")
                 .AddNamespace("p", "paper");
-            p = (XmlRecordParserFactory)b.Build().Create();
+            r = b.Build();
+            Assert.NotNull(r.Create);
+            p = (XmlRecordParserFactory)r.Create!();
             Assert.Equal(2, p.Indentation);
             Assert.Equal(new Version(2, 0), p.Version);
             Assert.Equal(Encoding.ASCII, p.GetEncoding());
@@ -67,7 +70,9 @@ namespace BeanIO.Builder
         public void TestDelimitedParserBuilder()
         {
             var b = new DelimitedParserBuilder();
-            var p = (DelimitedRecordParserFactory)b.Build().Create();
+            var r = b.Build();
+            Assert.NotNull(r.Create);
+            var p = (DelimitedRecordParserFactory)r.Create!();
             Assert.Equal('\t', p.Delimiter);
             Assert.Null(p.Escape);
             Assert.Null(p.LineContinuationCharacter);
@@ -80,18 +85,23 @@ namespace BeanIO.Builder
                 .EnableLineContinuation('&')
                 .EnableComments("#", "!")
                 .RecordTerminator("\n");
-            p = (DelimitedRecordParserFactory)b.Build().Create();
+            r = b.Build();
+            Assert.NotNull(r.Create);
+            p = (DelimitedRecordParserFactory)r.Create!();
             Assert.Equal(',', p.Delimiter);
             Assert.Equal('\\', p.Escape);
             Assert.Equal('&', p.LineContinuationCharacter);
+            Assert.NotNull(p.Comments);
             Assert.Collection(
-                p.Comments,
+                p.Comments!,
                 item => Assert.Equal("#", item),
                 item => Assert.Equal("!", item));
             Assert.Equal("\n", p.RecordTerminator);
 
             b = new DelimitedParserBuilder('|');
-            p = (DelimitedRecordParserFactory)b.Build().Create();
+            r = b.Build();
+            Assert.NotNull(r.Create);
+            p = (DelimitedRecordParserFactory)r.Create!();
             Assert.Equal('|', p.Delimiter);
         }
 
@@ -99,7 +109,9 @@ namespace BeanIO.Builder
         public void TestFixedLengthParserBuilder()
         {
             var b = new FixedLengthParserBuilder();
-            var p = (FixedLengthRecordParserFactory)b.Build().Create();
+            var r = b.Build();
+            Assert.NotNull(r.Create);
+            var p = (FixedLengthRecordParserFactory)r.Create!();
             Assert.Null(p.LineContinuationCharacter);
             Assert.Null(p.Comments);
             Assert.Null(p.RecordTerminator);
@@ -108,10 +120,13 @@ namespace BeanIO.Builder
                 .EnableLineContinuation('\\')
                 .EnableComments("#", "!")
                 .RecordTerminator("\r\n");
-            p = (FixedLengthRecordParserFactory)b.Build().Create();
+            r = b.Build();
+            Assert.NotNull(r.Create);
+            p = (FixedLengthRecordParserFactory)r.Create!();
             Assert.Equal('\\', p.LineContinuationCharacter);
+            Assert.NotNull(p.Comments);
             Assert.Collection(
-                p.Comments,
+                p.Comments!,
                 item => Assert.Equal("#", item),
                 item => Assert.Equal("!", item));
             Assert.Equal("\r\n", p.RecordTerminator);
@@ -121,7 +136,9 @@ namespace BeanIO.Builder
         public void TestCsvParserBuilder()
         {
             var b = new CsvParserBuilder();
-            var p = (CsvRecordParserFactory)b.Build().Create();
+            var r = b.Build();
+            Assert.NotNull(r.Create);
+            var p = (CsvRecordParserFactory)r.Create!();
             Assert.Equal(',', p.Delimiter);
             Assert.Equal('"', p.Quote);
             Assert.Equal('"', p.Escape);
@@ -142,7 +159,9 @@ namespace BeanIO.Builder
                 .AllowUnquotedWhitespace()
                 .EnableComments("#", "!")
                 .RecordTerminator("\r");
-            p = (CsvRecordParserFactory)b.Build().Create();
+            r = b.Build();
+            Assert.NotNull(r.Create);
+            p = (CsvRecordParserFactory)r.Create!();
             Assert.Equal('|', p.Delimiter);
             Assert.Equal('\'', p.Quote);
             Assert.Equal('\\', p.Escape);
@@ -150,8 +169,9 @@ namespace BeanIO.Builder
             Assert.True(p.AlwaysQuote);
             Assert.True(p.IsWhitespaceAllowed);
             Assert.True(p.UnquotedQuotesAllowed);
+            Assert.NotNull(p.Comments);
             Assert.Collection(
-                p.Comments,
+                p.Comments!,
                 item => Assert.Equal("#", item),
                 item => Assert.Equal("!", item));
             Assert.Equal("\r", p.RecordTerminator);
@@ -192,7 +212,9 @@ namespace BeanIO.Builder
             Assert.Equal("bundle", c.ResourceBundle);
             Assert.True(c.IsStrict);
             Assert.True(c.IgnoreUnidentifiedRecords);
-            Assert.Same(csvParser, c.ParserFactory.Create());
+            Assert.NotNull(c.ParserFactory);
+            Assert.NotNull(c.ParserFactory!.Create);
+            Assert.Same(csvParser, c.ParserFactory.Create!());
             Assert.Collection(
                 c.Children,
                 child =>
@@ -210,12 +232,14 @@ namespace BeanIO.Builder
                 handler =>
                     {
                         Assert.Equal("birthDate", handler.Name);
-                        Assert.Same(birthDateHandler, handler.Create());
+                        Assert.NotNull(handler.Create);
+                        Assert.Same(birthDateHandler, handler.Create!());
                     },
                 handler =>
                     {
-                        Assert.Equal(typeof(string).GetTypeInfo().AssemblyQualifiedName, handler.Name);
-                        Assert.Same(stringTypeHandler, handler.Create());
+                        Assert.Equal(typeof(string).AssemblyQualifiedName, handler.Name);
+                        Assert.NotNull(handler.Create);
+                        Assert.Same(stringTypeHandler, handler.Create!());
                     });
 
             var xmlParser = new XmlParserBuilder();
@@ -225,7 +249,9 @@ namespace BeanIO.Builder
             c = b.Build();
             Assert.Equal("fixedlength", c.Format);
             Assert.Equal(AccessMode.Write, c.Mode);
-            Assert.IsType<XmlRecordParserFactory>(c.ParserFactory.Create());
+            Assert.NotNull(c.ParserFactory);
+            Assert.NotNull(c.ParserFactory!.Create);
+            Assert.IsType<XmlRecordParserFactory>(c.ParserFactory.Create!());
         }
 
         [Fact]
@@ -418,8 +444,8 @@ namespace BeanIO.Builder
              .XmlNamespace("namespace")
              .TypeHandler("typeHandler");
             c = b.Build();
-            Assert.Equal(typeof(int).GetTypeInfo().AssemblyQualifiedName, c.Type);
-            Assert.Equal(typeof(List<object>).GetTypeInfo().AssemblyQualifiedName, c.Collection);
+            Assert.Equal(typeof(int).AssemblyQualifiedName, c.Type);
+            Assert.Equal(typeof(List<object>).AssemblyQualifiedName, c.Collection);
             Assert.Equal("GetField", c.Getter);
             Assert.Equal("SetField", c.Setter);
             Assert.False(c.IsBound);
@@ -454,7 +480,7 @@ namespace BeanIO.Builder
             b = new FieldBuilder("field")
                 .TypeHandler<StringTypeHandler>();
             c = b.Build();
-            Assert.Equal(typeof(StringTypeHandler).GetTypeInfo().AssemblyQualifiedName, c.TypeHandler);
+            Assert.Equal(typeof(StringTypeHandler).AssemblyQualifiedName, c.TypeHandler);
 
             var th = new StringTypeHandler();
             b = new FieldBuilder("field")

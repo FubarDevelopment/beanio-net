@@ -12,10 +12,10 @@ namespace BeanIO.Stream.FixedLength
     public class FixedLengthRecordParser : IRecordMarshaller, IRecordUnmarshaller
     {
         /// <summary>
-        /// Marshals a single record object to a <code>String</code>.
+        /// Marshals a single record object to a <c>String</c>.
         /// </summary>
-        /// <param name="record">Record the record object to marshal</param>
-        /// <returns>The marshalled record text</returns>
+        /// <param name="record">Record the record object to marshal.</param>
+        /// <returns>The marshalled record text.</returns>
         public string Marshal(object record)
         {
             return Marshal((string)record);
@@ -24,18 +24,18 @@ namespace BeanIO.Stream.FixedLength
         /// <summary>
         /// Unmarshals a single record.
         /// </summary>
-        /// <param name="text">The record text to unmarshal</param>
-        /// <returns>The unmarshalled record object</returns>
+        /// <param name="text">The record text to unmarshal.</param>
+        /// <returns>The unmarshalled record object.</returns>
         public object Unmarshal(string text)
         {
             return text;
         }
 
         /// <summary>
-        /// Marshals a single record object to a <code>String</code>.
+        /// Marshals a single record object to a <c>String</c>.
         /// </summary>
-        /// <param name="record">Record the record object to marshal</param>
-        /// <returns>The marshalled record text</returns>
+        /// <param name="record">Record the record object to marshal.</param>
+        /// <returns>The marshalled record text.</returns>
         public string Marshal(string record)
         {
             return record;

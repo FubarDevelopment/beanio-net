@@ -4,6 +4,7 @@
 // </copyright>
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 using BeanIO.Config;
@@ -15,11 +16,11 @@ namespace BeanIO.Internal.Util
         private static readonly bool LAZY_IF_EMPTY = Settings.Instance.GetBoolean(Settings.LAZY_IF_EMPTY);
 
         /// <summary>
-        /// Returns whether the given object has a value
+        /// Returns whether the given object has a value.
         /// </summary>
-        /// <param name="obj">the object to test</param>
-        /// <returns>true if the object is not null (and not the empty string based on configuration)</returns>
-        public static bool HasValue(object obj)
+        /// <param name="obj">the object to test.</param>
+        /// <returns>true if the object is not null (and not the empty string based on configuration).</returns>
+        public static bool HasValue([NotNullWhen(true)] object? obj)
         {
             if (obj == null)
                 return false;
@@ -31,23 +32,23 @@ namespace BeanIO.Internal.Util
         }
 
         /// <summary>
-        /// Substitutes <code>${key,default}</code> place holders with their property values.
+        /// Substitutes <c>${key,default}</c> place holders with their property values.
         /// </summary>
-        /// <param name="text">the template text</param>
-        /// <param name="properties">the user provided property values</param>
-        /// <returns>the text after property substitution</returns>
-        public static string DoPropertySubstitution(string text, Properties properties)
+        /// <param name="text">the template text.</param>
+        /// <param name="properties">the user provided property values.</param>
+        /// <returns>the text after property substitution.</returns>
+        public static string? DoPropertySubstitution(string? text, Properties? properties)
         {
             return DoPropertySubstitution(text, new DictionaryProperties(properties));
         }
 
         /// <summary>
-        /// Substitutes <code>${key,default}</code> place holders with their property values.
+        /// Substitutes <c>${key,default}</c> place holders with their property values.
         /// </summary>
-        /// <param name="text">the template text</param>
-        /// <param name="properties">the user provided property values</param>
-        /// <returns>the text after property substitution</returns>
-        public static string DoPropertySubstitution(string text, IPropertySource properties)
+        /// <param name="text">the template text.</param>
+        /// <param name="properties">the user provided property values.</param>
+        /// <returns>the text after property substitution.</returns>
+        public static string? DoPropertySubstitution(string? text, IPropertySource properties)
         {
             if (text == null || text.Length < 3)
                 return text;
@@ -56,7 +57,7 @@ namespace BeanIO.Internal.Util
             if (i < 0)
                 return text;
 
-            StringBuilder s = null;
+            StringBuilder? s = null;
             var state = 1;
             var keyBegin = i;
             var valueBegin = 0;
@@ -105,7 +106,7 @@ namespace BeanIO.Internal.Util
                         {
                             var length = valueBegin > 0 ? valueBegin - keyBegin - 2 : i - keyBegin - 2;
                             var key = new string(cs, keyBegin + 2, length);
-                            string value = null;
+                            string? value = null;
                             if (properties != null)
                                 value = properties.GetProperty(key);
                             if (value == null && valueBegin > 0)
@@ -138,24 +139,23 @@ namespace BeanIO.Internal.Util
 
         private class DictionaryProperties : IPropertySource
         {
-            private readonly Properties _properties;
+            private readonly Properties? _properties;
 
-            public DictionaryProperties(Properties properties)
+            public DictionaryProperties(Properties? properties)
             {
                 _properties = properties;
             }
 
             /// <summary>
-            /// Returns the property value for a given key
+            /// Returns the property value for a given key.
             /// </summary>
-            /// <param name="key">the property key</param>
-            /// <returns>the property value</returns>
-            public string GetProperty(string key)
+            /// <param name="key">the property key.</param>
+            /// <returns>the property value.</returns>
+            public string? GetProperty(string key)
             {
                 if (_properties == null)
                     return null;
-                string result;
-                if (!_properties.TryGetValue(key, out result))
+                if (!_properties.TryGetValue(key, out var result))
                     result = null;
                 return result;
             }

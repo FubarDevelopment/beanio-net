@@ -22,17 +22,17 @@ namespace BeanIO.Types
         }
 
         /// <summary>
-        /// Gets or sets the character to be used for <code>true</code>.
+        /// Gets or sets the character to be used for <c>true</c>.
         /// </summary>
         public char TrueValue { get; set; }
 
         /// <summary>
-        /// Gets or sets the character to be used for <code>false</code>.
+        /// Gets or sets the character to be used for <see langword="false" />.
         /// </summary>
         public char? FalseValue { get; set; }
 
         /// <summary>
-        /// Gets or sets the character to be used for <code>null</code>
+        /// Gets or sets the character to be used for <see langword="null" />.
         /// </summary>
         public char? NullValue { get; set; }
 
@@ -44,14 +44,14 @@ namespace BeanIO.Types
         /// <summary>
         /// Parses field text into an object.
         /// </summary>
-        /// <param name="text">The field text to parse, which may be null if the field was not passed in the record</param>
-        /// <returns>The parsed object</returns>
-        public virtual object Parse(string text)
+        /// <param name="text">The field text to parse, which may be null if the field was not passed in the record.</param>
+        /// <returns>The parsed object.</returns>
+        public virtual object? Parse(string? text)
         {
             if (string.IsNullOrEmpty(text))
                 return null;
 
-            if (text.Length != 1)
+            if (text!.Length != 1)
                 throw new FormatException($"Invalid value '{text}' (too long)");
 
             var ch = text[0];
@@ -66,9 +66,9 @@ namespace BeanIO.Types
         /// <summary>
         /// Formats an object into field text.
         /// </summary>
-        /// <param name="value">The value to format, which may be null</param>
-        /// <returns>The formatted field text, or <code>null</code> to indicate the value is not present</returns>
-        public virtual string Format(object value)
+        /// <param name="value">The value to format, which may be null.</param>
+        /// <returns>The formatted field text, or <see langword="null" /> to indicate the value is not present.</returns>
+        public virtual string Format(object? value)
         {
             if (value == null)
                 return $"{NullValue}";

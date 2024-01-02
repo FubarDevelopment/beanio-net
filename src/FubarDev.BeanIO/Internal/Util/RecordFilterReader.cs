@@ -15,7 +15,7 @@ namespace BeanIO.Internal.Util
     /// </summary>
     public class RecordFilterReader : MarkableTextReader
     {
-        private StringBuilder _record;
+        private StringBuilder? _record;
 
         private bool _skipLf;
 
@@ -24,7 +24,7 @@ namespace BeanIO.Internal.Util
         /// <summary>
         /// Initializes a new instance of the <see cref="RecordFilterReader"/> class.
         /// </summary>
-        /// <param name="innerReader">The reader to read from</param>
+        /// <param name="innerReader">The reader to read from.</param>
         public RecordFilterReader(TextReader innerReader)
             : base(innerReader)
         {
@@ -32,28 +32,28 @@ namespace BeanIO.Internal.Util
         }
 
         /// <summary>
-        /// Gets the current line number
+        /// Gets the current line number.
         /// </summary>
         public int LineNumber { get; private set; }
 
         /// <summary>
-        /// Gets the current line position
+        /// Gets the current line position.
         /// </summary>
         public int Position { get; private set; }
 
         /// <summary>
-        /// Called when a new record was started
+        /// Called when a new record was started.
         /// </summary>
-        /// <param name="text">The text the record was started with</param>
-        public void RecordStarted(string text = null)
+        /// <param name="text">The text the record was started with.</param>
+        public void RecordStarted(string? text = null)
         {
             _record = new StringBuilder(text ?? string.Empty);
         }
 
         /// <summary>
-        /// Called when the current record was completed
+        /// Called when the current record was completed.
         /// </summary>
-        /// <returns>The text the record was made of</returns>
+        /// <returns>The text the record was made of.</returns>
         public string RecordCompleted()
         {
             if (_record == null)
@@ -64,7 +64,7 @@ namespace BeanIO.Internal.Util
         }
 
         /// <summary>
-        /// Reads the next character
+        /// Reads the next character.
         /// </summary>
         /// <returns>The next character that was read from the <see cref="MarkableTextReader.BaseReader"/>,
         /// or -1 if the end of the stream was reached.</returns>
@@ -108,7 +108,7 @@ namespace BeanIO.Internal.Util
         /// <summary>
         /// Marks the position and initializes a buffer to be read from after a <see cref="MarkableTextReader.Reset"/>.
         /// </summary>
-        /// <param name="readAheadLimit">The buffer size</param>
+        /// <param name="readAheadLimit">The buffer size.</param>
         public override void Mark(int readAheadLimit)
         {
             base.Mark(readAheadLimit);
@@ -116,7 +116,7 @@ namespace BeanIO.Internal.Util
         }
 
         /// <summary>
-        /// Resets the read position
+        /// Resets the read position.
         /// </summary>
         public override void Reset()
         {
@@ -128,6 +128,8 @@ namespace BeanIO.Internal.Util
             }
             else
             {
+                if (_record == null)
+                    throw new InvalidOperationException("RecordStarted() not called");
                 _record.Length = _mark;
             }
         }

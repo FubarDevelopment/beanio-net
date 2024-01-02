@@ -18,7 +18,7 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="UnidentifiedRecordException" /> class.
         /// </summary>
-        /// <param name="context">The record context that caused the exception</param>
+        /// <param name="context">The record context that caused the exception.</param>
         public UnidentifiedRecordException(IRecordContext context)
             : base(context)
         {
@@ -27,8 +27,8 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="UnidentifiedRecordException"/> class.
         /// </summary>
-        /// <param name="message">The error message</param>
-        /// <param name="context">The record context that caused the exception</param>
+        /// <param name="message">The error message.</param>
+        /// <param name="context">The record context that caused the exception.</param>
         public UnidentifiedRecordException(string message, IRecordContext context)
             : base(message, context)
         {
@@ -37,9 +37,9 @@ namespace BeanIO
         /// <summary>
         /// Initializes a new instance of the <see cref="UnidentifiedRecordException"/> class.
         /// </summary>
-        /// <param name="message">The error message</param>
-        /// <param name="inner">The inner exception</param>
-        /// <param name="context">The record context that caused the exception</param>
+        /// <param name="message">The error message.</param>
+        /// <param name="inner">The inner exception.</param>
+        /// <param name="context">The record context that caused the exception.</param>
         public UnidentifiedRecordException(string message, Exception inner, IRecordContext context)
             : base(message, inner, context)
         {

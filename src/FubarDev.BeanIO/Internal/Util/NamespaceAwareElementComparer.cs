@@ -36,14 +36,29 @@ namespace BeanIO.Internal.Util
             return string.CompareOrdinal(name1.ToString(), name2.ToString());
         }
 
-        public static NamespaceHandlingMode GetHandlingModeFor(XElement element)
+        public static NamespaceHandlingMode GetHandlingModeFor(XElement? element)
         {
-            var nsHandlingModeAttr = element.Annotation<NamespaceModeAnnotation>();
+            var nsHandlingModeAttr = element?.Annotation<NamespaceModeAnnotation>();
             return nsHandlingModeAttr?.HandlingMode ?? NamespaceHandlingMode.UseNamespace;
         }
 
-        public int Compare(XElement x, XElement y)
+        public int Compare(XElement? x, XElement? y)
         {
+            if (ReferenceEquals(x, y))
+            {
+                return 0;
+            }
+
+            if (ReferenceEquals(x, null))
+            {
+                return -1;
+            }
+
+            if (ReferenceEquals(y, null))
+            {
+                return 1;
+            }
+
             var hm1 = GetHandlingModeFor(x);
             var hm2 = GetHandlingModeFor(y);
             return Compare(hm1, x.Name, hm2, y.Name);

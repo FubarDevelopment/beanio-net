@@ -26,7 +26,7 @@ namespace BeanIO.Internal.Parser
         public bool IsMatchNull { get; set; }
 
         /// <summary>
-        /// Gets the <see cref="IProperty"/> implementation type
+        /// Gets the <see cref="IProperty"/> implementation type.
         /// </summary>
         public abstract PropertyType Type { get; }
 
@@ -36,14 +36,14 @@ namespace BeanIO.Internal.Parser
         public bool IsIdentifier { get; set; }
 
         /// <summary>
-        /// Gets or sets the property accessor
+        /// Gets or sets the property accessor.
         /// </summary>
-        public IPropertyAccessor Accessor { get; set; }
+        public IPropertyAccessor? Accessor { get; set; }
 
         /// <summary>
-        /// Gets or sets the bean property type
+        /// Gets or sets the bean property type.
         /// </summary>
-        public Type PropertyType { get; set; }
+        public required Type? PropertyType { get; set; }
 
         /// <summary>
         /// Clears the property value.
@@ -51,18 +51,18 @@ namespace BeanIO.Internal.Parser
         /// <remarks>
         /// A subsequent call to <see cref="IProperty.GetValue"/> should return null, or <see cref="F:Value.Missing"/> for lazy property values.
         /// </remarks>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
         public abstract void ClearValue(ParsingContext context);
 
         /// <summary>
-        /// Creates the property value and returns it
+        /// Creates the property value and returns it.
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <returns>the property value</returns>
-        public abstract object CreateValue(ParsingContext context);
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <returns>the property value.</returns>
+        public abstract object? CreateValue(ParsingContext context);
 
         /// <summary>
-        /// Returns the value of this property
+        /// Returns the value of this property.
         /// </summary>
         /// <remarks>
         /// <para>When unmarshalling, this method should return <see cref="F:Value.Missing"/> if the field
@@ -71,20 +71,20 @@ namespace BeanIO.Internal.Parser
         /// segment bound to a bean object, or null if required. Null field properties should
         /// always return <see cref="F:Value.Missing"/>.</para>
         /// </remarks>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
         /// <returns>the property value,
         /// or <see cref="F:Value.Missing"/> if not present in the stream,
-        /// or <see cref="F:Value.Invalid"/> if the field was invalid</returns>
-        public abstract object GetValue(ParsingContext context);
+        /// or <see cref="F:Value.Invalid"/> if the field was invalid.</returns>
+        public abstract object? GetValue(ParsingContext context);
 
         /// <summary>
         /// Sets the property value (before marshalling).
         /// </summary>
-        /// <param name="context">the <see cref="ParsingContext"/></param>
-        /// <param name="value">the property value</param>
-        public abstract void SetValue(ParsingContext context, object value);
+        /// <param name="context">the <see cref="ParsingContext"/>.</param>
+        /// <param name="value">the property value.</param>
+        public abstract void SetValue(ParsingContext context, object? value);
 
-        public abstract bool Defines(object value);
+        public abstract bool Defines(object? value);
 
         /// <summary>
         /// Returns whether a node is a supported child of this node.
@@ -92,21 +92,21 @@ namespace BeanIO.Internal.Parser
         /// <remarks>
         /// Called by <see cref="TreeNode{T}.Add"/>.
         /// </remarks>
-        /// <param name="child">the node to test</param>
-        /// <returns>true if the child is allowed</returns>
+        /// <param name="child">the node to test.</param>
+        /// <returns>true if the child is allowed.</returns>
         public override bool IsSupportedChild(Component child)
         {
             return child is IProperty;
         }
 
         /// <summary>
-        /// Called by <see cref="TreeNode{T}.ToString"/> to append node parameters to the output
+        /// Called by <see cref="TreeNode{T}.ToString"/> to append node parameters to the output.
         /// </summary>
-        /// <param name="s">The output to append</param>
+        /// <param name="s">The output to append.</param>
         protected override void ToParamString(StringBuilder s)
         {
             base.ToParamString(s);
-            if (PropertyType != null)
+            if (PropertyType != null!)
                 s.AppendFormat(", type={0}", Type);
             s.AppendFormat(", {0}", DebugUtil.FormatOption("rid", IsIdentifier))
              .AppendFormat(", {0}", DebugUtil.FormatOption("required", IsRequired));

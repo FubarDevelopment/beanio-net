@@ -15,18 +15,18 @@ namespace BeanIO.Internal.Parser
     {
         private readonly UnmarshallingContext _context;
 
-        private readonly ISelector _layout;
+        private readonly ISelector? _layout;
 
-        private object _recordValue;
+        private object? _recordValue;
 
-        private string _recordText;
+        private string? _recordText;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UnmarshallerImpl"/> class.
         /// </summary>
-        /// <param name="context">the <see cref="UnmarshallingContext"/></param>
-        /// <param name="layout">the stream layout</param>
-        /// <param name="recordUnmarshaller">the <see cref="IRecordUnmarshaller"/> for converting record text to record values</param>
+        /// <param name="context">the <see cref="UnmarshallingContext"/>.</param>
+        /// <param name="layout">the stream layout.</param>
+        /// <param name="recordUnmarshaller">the <see cref="IRecordUnmarshaller"/> for converting record text to record values.</param>
         public UnmarshallerImpl(UnmarshallingContext context, ISelector layout, IRecordUnmarshaller recordUnmarshaller)
         {
             _context = context;
@@ -37,7 +37,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets the record or group name of the most recent unmarshalled bean object.
         /// </summary>
-        public string RecordName { get; private set; }
+        public string? RecordName { get; private set; }
 
         /// <summary>
         /// Gets record information for the most recent unmarshalled bean object.
@@ -50,15 +50,12 @@ namespace BeanIO.Internal.Parser
         /// <remarks>
         /// This method is supported by all stream formats.
         /// </remarks>
-        /// <param name="record">The record text to unmarshal</param>
-        /// <returns>The unmarshalled bean object</returns>
-        public object Unmarshal(string record)
+        /// <param name="record">The record text to unmarshal.</param>
+        /// <returns>The unmarshalled bean object.</returns>
+        public object? Unmarshal(string record)
         {
-            if (record == null)
-                throw new ArgumentNullException(nameof(record));
-
             RecordName = null;
-            _recordText = record;
+            _recordText = record ?? throw new ArgumentNullException(nameof(record));
 
             return Unmarshal();
         }
@@ -69,9 +66,9 @@ namespace BeanIO.Internal.Parser
         /// <remarks>
         /// This method is supported by CSV and delimited formatted streams only.
         /// </remarks>
-        /// <param name="fields">The fields to unmarshal</param>
-        /// <returns>The unmarshalled bean object</returns>
-        public object Unmarshal(IList<string> fields)
+        /// <param name="fields">The fields to unmarshal.</param>
+        /// <returns>The unmarshalled bean object.</returns>
+        public object? Unmarshal(IList<string?> fields)
         {
             if (fields == null)
                 throw new ArgumentNullException(nameof(fields));
@@ -91,9 +88,9 @@ namespace BeanIO.Internal.Parser
         /// <remarks>
         /// This method is supported by CSV and delimited formatted streams only.
         /// </remarks>
-        /// <param name="fields">The fields to unmarshal</param>
-        /// <returns>The unmarshalled bean object</returns>
-        public object Unmarshal(string[] fields)
+        /// <param name="fields">The fields to unmarshal.</param>
+        /// <returns>The unmarshalled bean object.</returns>
+        public object? Unmarshal(string?[] fields)
         {
             if (fields == null)
                 throw new ArgumentNullException(nameof(fields));
@@ -110,9 +107,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Unmarshals a bean object from the given element.
         /// </summary>
-        /// <param name="node">The <see cref="XElement"/> to unmarshal</param>
-        /// <returns>The unmarshalled bean object</returns>
-        public object Unmarshal(XContainer node)
+        /// <param name="node">The <see cref="XElement"/> to unmarshal.</param>
+        /// <returns>The unmarshalled bean object.</returns>
+        public object? Unmarshal(XContainer node)
         {
             if (node == null)
                 throw new ArgumentNullException(nameof(node));
@@ -127,17 +124,17 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Internal unmarshal method
+        /// Internal unmarshal method.
         /// </summary>
-        /// <returns>the unmarshalled object</returns>
-        private object Unmarshal()
+        /// <returns>the unmarshalled object.</returns>
+        private object? Unmarshal()
         {
             _context.NextRecord();
 
-            ISelector parser;
+            ISelector? parser;
             try
             {
-                parser = _layout.MatchNext(_context);
+                parser = _layout?.MatchNext(_context);
             }
             catch (UnexpectedRecordException)
             {
@@ -147,7 +144,7 @@ namespace BeanIO.Internal.Parser
 
             if (parser == null)
             {
-                parser = _layout.MatchAny(_context);
+                parser = _layout?.MatchAny(_context);
                 if (parser != null)
                     throw _context.RecordUnexpectedException(parser.Name);
                 throw _context.RecordUnidentifiedException();
@@ -205,7 +202,7 @@ namespace BeanIO.Internal.Parser
             /// <remarks>The type of object returned depends on the format of the stream.</remarks>
             /// <returns>
             /// The record value, or null if the end of the stream was reached.
-            /// </returns>
+            /// .</returns>
             public int RecordLineNumber => 0;
 
             /// <summary>
@@ -213,17 +210,17 @@ namespace BeanIO.Internal.Parser
             /// </summary>
             /// <returns>
             /// The unparsed text of the last record read
-            /// </returns>
-            public string RecordText => _unmarshaller._recordText;
+            /// .</returns>
+            public string? RecordText => _unmarshaller._recordText;
 
             /// <summary>
             /// Reads a single record from this input stream.
             /// </summary>
             /// <returns>
             /// The type of object returned depends on the format of the stream.
-            /// </returns>
+            /// .</returns>
             /// <returns>The record value, or null if the end of the stream was reached.</returns>
-            public object Read()
+            public object? Read()
             {
                 try
                 {

@@ -24,16 +24,16 @@ namespace BeanIO.Types.Xml
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the formatted value should be numeric
+        /// Gets or sets a value indicating whether the formatted value should be numeric.
         /// </summary>
         public bool IsNumericFormatEnabled { get; set; }
 
         /// <summary>
         /// Formats an object into field text.
         /// </summary>
-        /// <param name="value">The value to format, which may be null</param>
-        /// <returns>The formatted field text, or <code>null</code> to indicate the value is not present</returns>
-        public override string Format(object value)
+        /// <param name="value">The value to format, which may be null.</param>
+        /// <returns>The formatted field text, or <see langword="null" /> to indicate the value is not present.</returns>
+        public override string? Format(object? value)
         {
             if (value == null)
                 return null;
@@ -46,7 +46,7 @@ namespace BeanIO.Types.Xml
         /// <summary>
         /// Configures this type handler.
         /// </summary>
-        /// <param name="properties">The properties for customizing the instance</param>
+        /// <param name="properties">The properties for customizing the instance.</param>
         public virtual void Configure(Properties properties)
         {
             var v = properties["numeric"];

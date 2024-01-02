@@ -32,7 +32,7 @@ namespace BeanIO.Stream.Delimited
         /// <summary>
         /// Initializes a new instance of the <see cref="DelimitedRecordParser"/> class.
         /// </summary>
-        /// <param name="config">the <see cref="DelimitedParserConfiguration"/></param>
+        /// <param name="config">the <see cref="DelimitedParserConfiguration"/>.</param>
         public DelimitedRecordParser(DelimitedParserConfiguration config)
         {
             _delim = config.Delimiter;
@@ -42,10 +42,10 @@ namespace BeanIO.Stream.Delimited
         }
 
         /// <summary>
-        /// Marshals a single record object to a <code>String</code>.
+        /// Marshals a single record object to a <c>String</c>.
         /// </summary>
-        /// <param name="record">Record the record object to marshal</param>
-        /// <returns>The marshalled record text</returns>
+        /// <param name="record">Record the record object to marshal.</param>
+        /// <returns>The marshalled record text.</returns>
         public string Marshal(object record)
         {
             return Marshal((string[])record);
@@ -54,8 +54,8 @@ namespace BeanIO.Stream.Delimited
         /// <summary>
         /// Unmarshals a single record.
         /// </summary>
-        /// <param name="text">The record text to unmarshal</param>
-        /// <returns>The unmarshalled record object</returns>
+        /// <param name="text">The record text to unmarshal.</param>
+        /// <returns>The unmarshalled record object.</returns>
         public object Unmarshal(string text)
         {
             _fieldList.Clear();
@@ -103,10 +103,10 @@ namespace BeanIO.Stream.Delimited
         }
 
         /// <summary>
-        /// Marshals a single record object to a <code>String</code>.
+        /// Marshals a single record object to a <c>String</c>.
         /// </summary>
-        /// <param name="record">Record the record object to marshal</param>
-        /// <returns>The marshalled record text</returns>
+        /// <param name="record">Record the record object to marshal.</param>
+        /// <returns>The marshalled record text.</returns>
         public string Marshal(string[] record)
         {
             var text = new StringBuilder();

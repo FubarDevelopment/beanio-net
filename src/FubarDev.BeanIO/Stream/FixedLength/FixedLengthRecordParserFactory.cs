@@ -29,8 +29,8 @@ namespace BeanIO.Stream.FixedLength
         /// <summary>
         /// Creates a parser for reading records from an input stream.
         /// </summary>
-        /// <param name="reader">The input stream to read from</param>
-        /// <returns>The created <see cref="IRecordReader"/></returns>
+        /// <param name="reader">The input stream to read from.</param>
+        /// <returns>The created <see cref="IRecordReader"/>.</returns>
         public IRecordReader CreateReader(TextReader reader)
         {
             return new FixedLengthReader(reader, this);
@@ -39,8 +39,8 @@ namespace BeanIO.Stream.FixedLength
         /// <summary>
         /// Creates a parser for writing records to an output stream.
         /// </summary>
-        /// <param name="writer">The output stream to write to</param>
-        /// <returns>The new <see cref="IRecordWriter"/></returns>
+        /// <param name="writer">The output stream to write to.</param>
+        /// <returns>The new <see cref="IRecordWriter"/>.</returns>
         public IRecordWriter CreateWriter(TextWriter writer)
         {
             return new FixedLengthWriter(writer, RecordTerminator);
@@ -49,7 +49,7 @@ namespace BeanIO.Stream.FixedLength
         /// <summary>
         /// Creates a parser for marshalling records.
         /// </summary>
-        /// <returns>The created <see cref="IRecordMarshaller"/></returns>
+        /// <returns>The created <see cref="IRecordMarshaller"/>.</returns>
         public IRecordMarshaller CreateMarshaller()
         {
             return _parser;
@@ -58,7 +58,7 @@ namespace BeanIO.Stream.FixedLength
         /// <summary>
         /// Creates a parser for unmarshalling records.
         /// </summary>
-        /// <returns>The created <see cref="IRecordUnmarshaller"/></returns>
+        /// <returns>The created <see cref="IRecordUnmarshaller"/>.</returns>
         public IRecordUnmarshaller CreateUnmarshaller()
         {
             return _parser;

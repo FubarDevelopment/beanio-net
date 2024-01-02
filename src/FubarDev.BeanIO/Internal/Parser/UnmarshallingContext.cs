@@ -25,32 +25,32 @@ namespace BeanIO.Internal.Parser
     internal abstract class UnmarshallingContext : ParsingContext
     {
         /// <summary>
-        /// a list of record contexts (for parsing record groups)
+        /// a list of record contexts (for parsing record groups).
         /// </summary>
         private readonly List<ErrorContext> _recordList = new List<ErrorContext>();
 
         /// <summary>
-        /// indicates the last record read from the reader has been processed
+        /// indicates the last record read from the reader has been processed.
         /// </summary>
         private bool _isProcessed = true;
 
         /// <summary>
-        /// the top level component name being unmarshalled
+        /// the top level component name being unmarshalled.
         /// </summary>
-        private string _componentName;
+        private string? _componentName;
 
         /// <summary>
-        /// indicates the component being unmarshalled is a record group (otherwise just a record)
+        /// indicates the component being unmarshalled is a record group (otherwise just a record).
         /// </summary>
         private bool _isRecordGroup;
 
         /// <summary>
-        /// the current record context
+        /// the current record context.
         /// </summary>
         private ErrorContext _recordContext = new ErrorContext();
 
         /// <summary>
-        /// indicates the record context was queried and must therefore be recreated when the next record is read
+        /// indicates the record context was queried and must therefore be recreated when the next record is read.
         /// </summary>
         private bool _isDirty;
 
@@ -70,12 +70,12 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Gets or sets the <see cref="IRecordReader"/> to read from.
         /// </summary>
-        public IRecordReader RecordReader { get; set; }
+        public IRecordReader? RecordReader { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="IMessageFactory"/> for formatting error messages.
         /// </summary>
-        public IMessageFactory MessageFactory { get; set; }
+        public required IMessageFactory MessageFactory { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="CultureInfo"/> to format error messages in.
@@ -99,12 +99,12 @@ namespace BeanIO.Internal.Parser
         public bool IsEof { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating whether a field error was reported while parsing
+        /// Gets a value indicating whether a field error was reported while parsing.
         /// </summary>
         public bool HasFieldErrors => _recordContext.HasFieldErrors;
 
         /// <summary>
-        /// Gets a value indicating whether a record level error was reported while parsing
+        /// Gets a value indicating whether a record level error was reported while parsing.
         /// </summary>
         public bool HasRecordErrors => _recordContext.HasRecordErrors;
 
@@ -116,17 +116,17 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Sets the value of the record returned from the <see cref="IRecordReader"/>
+        /// Sets the value of the record returned from the <see cref="IRecordReader"/>.
         /// </summary>
-        /// <param name="value">the record value read by a <see cref="IRecordReader"/></param>
-        public abstract void SetRecordValue(object value);
+        /// <param name="value">the record value read by a <see cref="IRecordReader"/>.</param>
+        public abstract void SetRecordValue(object? value);
 
         /// <summary>
         /// Converts a <see cref="string"/>[] to a record value.
         /// </summary>
-        /// <param name="array">the <see cref="string"/>[] to convert</param>
-        /// <returns>the record value, or null if not supported</returns>
-        public virtual object ToRecordValue(string[] array)
+        /// <param name="array">the <see cref="string"/>[] to convert.</param>
+        /// <returns>the record value, or null if not supported.</returns>
+        public virtual object? ToRecordValue(string?[] array)
         {
             return null;
         }
@@ -134,9 +134,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Converts a <see cref="List{T}"/> to a record value.
         /// </summary>
-        /// <param name="list">the <see cref="List{T}"/> to convert</param>
-        /// <returns>the record value, or null if not supported</returns>
-        public virtual object ToRecordValue(IList<string> list)
+        /// <param name="list">the <see cref="List{T}"/> to convert.</param>
+        /// <returns>the record value, or null if not supported.</returns>
+        public virtual object? ToRecordValue(IList<string?> list)
         {
             return null;
         }
@@ -144,9 +144,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Converts a <see cref="XElement"/> to a record value.
         /// </summary>
-        /// <param name="element">The <see cref="XElement"/> to convert</param>
-        /// <returns>the record value, or null if not supported</returns>
-        public virtual object ToRecordValue(XContainer element)
+        /// <param name="element">The <see cref="XElement"/> to convert.</param>
+        /// <returns>the record value, or null if not supported.</returns>
+        public virtual object? ToRecordValue(XContainer element)
         {
             return null;
         }
@@ -155,9 +155,9 @@ namespace BeanIO.Internal.Parser
         /// Prepares this context for unmarshalling a record (or group of records that
         /// are combined to form a single bean object).
         /// </summary>
-        /// <param name="componentName">the record or group name to be unmarshalled</param>
-        /// <param name="isRecordGroup">true if the component is a group, false if it is a record</param>
-        public virtual void Prepare(string componentName, bool isRecordGroup)
+        /// <param name="componentName">the record or group name to be unmarshalled.</param>
+        /// <param name="isRecordGroup">true if the component is a group, false if it is a record.</param>
+        public virtual void Prepare(string? componentName, bool isRecordGroup)
         {
             // clear any context state information before parsing the next record
             if (_isDirty)
@@ -181,9 +181,14 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// This method must be invoked before a record is unmarshalled.
         /// </summary>
-        /// <param name="recordName">the name of the record</param>
-        public void RecordStarted(string recordName)
+        /// <param name="recordName">the name of the record.</param>
+        public void RecordStarted(string? recordName)
         {
+            if (RecordReader == null)
+            {
+                throw new BeanIOException($"The record reader was not set for the {nameof(UnmarshallingContext)}");
+            }
+
             ++RecordCount;
 
             _recordContext.RecordName = recordName;
@@ -221,6 +226,11 @@ namespace BeanIO.Internal.Parser
         /// </summary>
         public void NextRecord()
         {
+            if (RecordReader == null)
+            {
+                throw new BeanIOException($"The record reader was not set for the {nameof(UnmarshallingContext)}");
+            }
+
             if (!_isProcessed || IsEof)
                 return;
 
@@ -292,8 +302,8 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns the record context for a record read for the last unmarshalled bean object.
         /// </summary>
-        /// <param name="index">the index of the record</param>
-        /// <returns>the <see cref="IRecordContext"/></returns>
+        /// <param name="index">the index of the record.</param>
+        /// <returns>the <see cref="IRecordContext"/>.</returns>
         public IRecordContext GetRecordContext(int index)
         {
             if (_isRecordGroup)
@@ -311,9 +321,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Sets the raw field text for a named field.
         /// </summary>
-        /// <param name="fieldName">the name of the field</param>
-        /// <param name="text">the raw field text</param>
-        public void SetFieldText(string fieldName, string text)
+        /// <param name="fieldName">the name of the field.</param>
+        /// <param name="text">the raw field text.</param>
+        public void SetFieldText(string fieldName, string? text)
         {
             _recordContext.SetFieldText(fieldName, text, IsRepeating);
         }
@@ -321,19 +331,19 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Adds a field error to this record.
         /// </summary>
-        /// <param name="fieldName">the name of the field in error</param>
-        /// <param name="fieldText">the invalid field text</param>
-        /// <param name="rule">the name of the failed validation rule</param>
-        /// <param name="args">an optional list of parameters for formatting the error message</param>
-        /// <returns>the formatted field error message</returns>
-        public string AddFieldError(string fieldName, string fieldText, string rule, params object[] args)
+        /// <param name="fieldName">the name of the field in error.</param>
+        /// <param name="fieldText">the invalid field text.</param>
+        /// <param name="rule">the name of the failed validation rule.</param>
+        /// <param name="args">an optional list of parameters for formatting the error message.</param>
+        /// <returns>the formatted field error message.</returns>
+        public string AddFieldError(string? fieldName, string? fieldText, string rule, params object?[] args)
         {
             var lineNumber = _recordContext.LineNumber;
             var recordName = _recordContext.RecordName;
             var recordLabel = MessageFactory.GetRecordLabel(recordName) ?? $"'{recordName}'";
             var fieldLabel = MessageFactory.GetFieldLabel(recordName, fieldName) ?? $"'{fieldName}'";
 
-            var messageParams = new object[4 + args.Length];
+            var messageParams = new object?[4 + args.Length];
             messageParams[0] = lineNumber;
             messageParams[1] = recordLabel;
             messageParams[2] = fieldLabel;
@@ -342,16 +352,20 @@ namespace BeanIO.Internal.Parser
 
             var pattern = MessageFactory.GetFieldErrorMessage(recordName, fieldName, rule);
             var message = string.Format(Culture, pattern, messageParams);
-            _recordContext.AddFieldError(fieldName, message);
+            if (fieldName != null)
+            {
+                _recordContext.AddFieldError(fieldName, message);
+            }
+
             return message;
         }
 
         /// <summary>
         /// Adds a record level error to this record.
         /// </summary>
-        /// <param name="rule">the name of the failed validation rule</param>
-        /// <param name="args">an optional list of parameters for formatting the error message</param>
-        /// <returns>the formatted record error message</returns>
+        /// <param name="rule">the name of the failed validation rule.</param>
+        /// <param name="args">an optional list of parameters for formatting the error message.</param>
+        /// <returns>the formatted record error message.</returns>
         public string AddRecordError(string rule, params object[] args)
         {
             return AddRecordError(_recordContext, rule, args);
@@ -360,11 +374,11 @@ namespace BeanIO.Internal.Parser
         public BeanReaderException NewMalformedRecordException(RecordIOException cause)
         {
             return new MalformedRecordException(
-                $"Malformed record at line {RecordReader.RecordLineNumber}: {cause.Message}",
+                $"Malformed record at line {RecordReader?.RecordLineNumber}: {cause.Message}",
                 RecordException(null, "malformed", cause.Message));
         }
 
-        public BeanReaderException NewUnsatisfiedGroupException(string groupName)
+        public BeanReaderException NewUnsatisfiedGroupException(string? groupName)
         {
             if (IsEof)
             {
@@ -374,11 +388,11 @@ namespace BeanIO.Internal.Parser
             }
 
             return new UnexpectedRecordException(
-                $"Expected record from group '{groupName}' at line {RecordReader.RecordLineNumber}",
+                $"Expected record from group '{groupName}' at line {RecordReader?.RecordLineNumber}",
                 RecordException(groupName, "unsatisfied"));
         }
 
-        public BeanReaderException NewUnsatisfiedRecordException(string recordName)
+        public BeanReaderException NewUnsatisfiedRecordException(string? recordName)
         {
             if (IsEof)
             {
@@ -388,31 +402,31 @@ namespace BeanIO.Internal.Parser
             }
 
             return new UnexpectedRecordException(
-                $"Expected record '{recordName}' at line {RecordReader.RecordLineNumber}",
+                $"Expected record '{recordName}' at line {RecordReader?.RecordLineNumber}",
                 RecordException(recordName, "unsatisfied"));
         }
 
-        public BeanReaderException RecordUnexpectedException(string recordName)
+        public BeanReaderException RecordUnexpectedException(string? recordName)
         {
             return new UnexpectedRecordException(
-                $"Unexpected record '{recordName}' at line {RecordReader.RecordLineNumber}",
+                $"Unexpected record '{recordName}' at line {RecordReader?.RecordLineNumber}",
                 RecordException(recordName, "unexpected"));
         }
 
         public BeanReaderException RecordUnidentifiedException()
         {
             return new UnidentifiedRecordException(
-                $"Unidentified record at line {RecordReader.RecordLineNumber}",
+                $"Unidentified record at line {RecordReader?.RecordLineNumber}",
                 RecordException(null, "unidentified"));
         }
 
         /// <summary>
         /// Adds a record level error to this record.
         /// </summary>
-        /// <param name="errorContext">the error context to update</param>
-        /// <param name="rule">the name of the failed validation rule</param>
-        /// <param name="args">an optional list of parameters for formatting the error message</param>
-        /// <returns>the formatted record error message</returns>
+        /// <param name="errorContext">the error context to update.</param>
+        /// <param name="rule">the name of the failed validation rule.</param>
+        /// <param name="args">an optional list of parameters for formatting the error message.</param>
+        /// <returns>the formatted record error message.</returns>
         protected string AddRecordError(ErrorContext errorContext, string rule, params object[] args)
         {
             var lineNumber = errorContext.LineNumber;
@@ -421,7 +435,7 @@ namespace BeanIO.Internal.Parser
             var recordLabel = (recordName != null ? MessageFactory.GetRecordLabel(recordName) : null)
                               ?? $"'{recordName}'";
 
-            var messageParams = new object[3 + args.Length];
+            var messageParams = new object?[3 + args.Length];
             messageParams[0] = lineNumber;
             messageParams[1] = recordLabel;
             messageParams[2] = errorContext.RecordText;
@@ -436,11 +450,11 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Handles a record level exception and returns a new <see cref="ErrorContext"/> for the exception.
         /// </summary>
-        /// <param name="recordName">the name of the record that failed</param>
-        /// <param name="rule">the record level rule that failed validation</param>
-        /// <param name="args">message parameters for formatting the error message</param>
-        /// <returns>the created <see cref="ErrorContext"/></returns>
-        protected ErrorContext RecordException(string recordName, string rule, params object[] args)
+        /// <param name="recordName">the name of the record that failed.</param>
+        /// <param name="rule">the record level rule that failed validation.</param>
+        /// <param name="args">message parameters for formatting the error message.</param>
+        /// <returns>the created <see cref="ErrorContext"/>.</returns>
+        protected ErrorContext RecordException(string? recordName, string rule, params object[] args)
         {
             _isProcessed = true;
 
@@ -448,7 +462,7 @@ namespace BeanIO.Internal.Parser
                 {
                     RecordName = recordName,
                     LineNumber = LineNumber,
-                    RecordText = RecordReader.RecordText
+                    RecordText = RecordReader?.RecordText
                 };
 
             AddRecordError(ec, rule, args);

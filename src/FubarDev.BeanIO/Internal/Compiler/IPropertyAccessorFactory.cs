@@ -16,12 +16,12 @@ namespace BeanIO.Internal.Compiler
     internal interface IPropertyAccessorFactory
     {
         /// <summary>
-        /// Creates a new <see cref="IPropertyAccessor"/>
+        /// Creates a new <see cref="IPropertyAccessor"/>.
         /// </summary>
-        /// <param name="parent">the parent bean object type</param>
-        /// <param name="property">the property to access</param>
-        /// <param name="carg">the constructor argument index</param>
-        /// <returns>the new <see cref="IPropertyAccessor"/></returns>
+        /// <param name="parent">the parent bean object type.</param>
+        /// <param name="property">the property to access.</param>
+        /// <param name="carg">the constructor argument index.</param>
+        /// <returns>the new <see cref="IPropertyAccessor"/>.</returns>
         IPropertyAccessor CreatePropertyAccessor(Type parent, PropertyDescriptor property, int? carg);
     }
 }

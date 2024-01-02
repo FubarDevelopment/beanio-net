@@ -16,11 +16,11 @@ namespace BeanIO.Internal.Config
     internal interface IConfigurationLoader
     {
         /// <summary>
-        /// Loads a BeanIO configuration from an input stream
+        /// Loads a BeanIO configuration from an input stream.
         /// </summary>
-        /// <param name="input">the input stream to read the configuration from</param>
-        /// <param name="properties">the <see cref="Properties"/> for expansion in the mapping file</param>
-        /// <returns>a collection of loaded BeanIO configurations</returns>
-        ICollection<BeanIOConfig> LoadConfiguration(System.IO.Stream input, Properties properties);
+        /// <param name="input">the input stream to read the configuration from.</param>
+        /// <param name="properties">the <see cref="Properties"/> for expansion in the mapping file.</param>
+        /// <returns>a collection of loaded BeanIO configurations.</returns>
+        ICollection<BeanIOConfig> LoadConfiguration(System.IO.Stream input, Properties? properties);
     }
 }

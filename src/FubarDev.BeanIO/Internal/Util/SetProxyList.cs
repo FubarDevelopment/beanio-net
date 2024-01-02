@@ -22,9 +22,13 @@ namespace BeanIO.Internal.Util
         {
             _instance = instance;
             Type collectionType = instance.GetType();
-            TypeInfo collectionTypeInfo = collectionType.GetTypeInfo();
-            _addMethod = collectionTypeInfo.DeclaredMethods.FirstOrDefault(x => x.IsPublic && !x.IsStatic && x.Name == "Add" && x.GetParameters().Length == 1);
-            _countProperty = collectionTypeInfo.DeclaredProperties.FirstOrDefault(x => x.CanRead && x.GetMethod.IsPublic && !x.GetMethod.IsStatic && x.Name == "Count");
+            Type collectionTypeInfo = collectionType;
+            _addMethod = collectionTypeInfo
+                .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                .First(x => x.IsPublic && !x.IsStatic && x.Name == "Add" && x.GetParameters().Length == 1);
+            _countProperty = collectionTypeInfo
+                .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                .First(x => x.CanRead && x.GetMethod!.IsPublic && !x.GetMethod.IsStatic && x.Name == "Count");
         }
 
         public IEnumerable Instance => _instance;
@@ -33,25 +37,19 @@ namespace BeanIO.Internal.Util
 
         public bool IsReadOnly => false;
 
-        public int Count => (int)_countProperty.GetMethod.Invoke(_instance, null);
+        public int Count => (int?)_countProperty.GetMethod!.Invoke(_instance, null) ?? 0;
 
-        public bool IsSynchronized
+        public bool IsSynchronized => throw new NotSupportedException();
+
+        public object SyncRoot => throw new NotSupportedException();
+
+        public object? this[int index]
         {
-            get { throw new NotSupportedException(); }
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
         }
 
-        public object SyncRoot
-        {
-            get { throw new NotSupportedException(); }
-        }
-
-        public object this[int index]
-        {
-            get { throw new NotSupportedException(); }
-            set { throw new NotSupportedException(); }
-        }
-
-        public int Add(object value)
+        public int Add(object? value)
         {
             _addMethod.Invoke(_instance, new[] { value });
             return 0;
@@ -62,22 +60,22 @@ namespace BeanIO.Internal.Util
             throw new NotSupportedException();
         }
 
-        public bool Contains(object value)
+        public bool Contains(object? value)
         {
             throw new NotSupportedException();
         }
 
-        public int IndexOf(object value)
+        public int IndexOf(object? value)
         {
             throw new NotSupportedException();
         }
 
-        public void Insert(int index, object value)
+        public void Insert(int index, object? value)
         {
             throw new NotSupportedException();
         }
 
-        public void Remove(object value)
+        public void Remove(object? value)
         {
             throw new NotSupportedException();
         }

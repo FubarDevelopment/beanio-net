@@ -3,6 +3,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
+using System;
 using System.Collections.Concurrent;
 using System.Globalization;
 using System.IO;
@@ -21,31 +22,35 @@ namespace BeanIO.Internal
     internal class DefaultStreamFactory : StreamFactory
     {
         private readonly ConcurrentDictionary<string, Parser.Stream> _contextMap = new ConcurrentDictionary<string, Parser.Stream>();
+        private StreamCompiler? _compiler;
 
         /// <summary>
-        /// Gets or sets the mapping compiler to use for compiling streams
+        /// Gets or sets the mapping compiler to use for compiling streams.
         /// </summary>
-        public StreamCompiler Compiler { get; set; }
+        public StreamCompiler Compiler
+        {
+            get => _compiler ?? throw new InvalidOperationException("No compiler set");
+            set => _compiler = value;
+        }
 
         /// <summary>
-        /// Adds a stream to this manager
+        /// Adds a stream to this manager.
         /// </summary>
-        /// <param name="stream">the <see cref="Parser.Stream"/> to add</param>
+        /// <param name="stream">the <see cref="Parser.Stream"/> to add.</param>
         public void AddStream(Parser.Stream stream)
         {
             _contextMap[stream.Name] = stream;
         }
 
         /// <summary>
-        /// Removes the named stream from this manager
+        /// Removes the named stream from this manager.
         /// </summary>
-        /// <param name="name">the name of the stream to remove</param>
-        /// <returns>the removed <see cref="Parser.Stream"/>, or <code>null</code> if
-        /// the there was no stream for the given name</returns>
-        public Parser.Stream RemoveStream(string name)
+        /// <param name="name">the name of the stream to remove.</param>
+        /// <returns>the removed <see cref="Parser.Stream"/>, or <see langword="null" /> if
+        /// the there was no stream for the given name.</returns>
+        public Parser.Stream? RemoveStream(string name)
         {
-            Parser.Stream result;
-            if (_contextMap.TryRemove(name, out result))
+            if (_contextMap.TryRemove(name, out var result))
                 return result;
             return null;
         }
@@ -53,14 +58,13 @@ namespace BeanIO.Internal
         /// <summary>
         /// Creates a new <see cref="IBeanReader"/> for reading from the given input stream.
         /// </summary>
-        /// <param name="name">The name of the stream in the mapping file</param>
-        /// <param name="input">The input stream to read from</param>
+        /// <param name="name">The name of the stream in the mapping file.</param>
+        /// <param name="input">The input stream to read from.</param>
         /// <param name="culture">The culture used to format error messages.</param>
-        /// <returns>The new <see cref="IBeanReader"/></returns>
-        public override IBeanReader CreateReader(string name, TextReader input, CultureInfo culture)
+        /// <returns>The new <see cref="IBeanReader"/>.</returns>
+        public override IBeanReader CreateReader(string name, TextReader input, CultureInfo? culture)
         {
-            if (culture == null)
-                culture = CultureInfo.CurrentCulture;
+            culture ??= CultureInfo.CurrentCulture;
 
             var stream = GetStream(name);
             switch (stream.Mode)
@@ -76,13 +80,12 @@ namespace BeanIO.Internal
         /// <summary>
         /// Creates a new <see cref="IUnmarshaller"/> for unmarshalling records.
         /// </summary>
-        /// <param name="name">The name of the stream in the mapping file</param>
+        /// <param name="name">The name of the stream in the mapping file.</param>
         /// <param name="culture">The culture used to format error messages.</param>
-        /// <returns>The new <see cref="IUnmarshaller"/></returns>
-        public override IUnmarshaller CreateUnmarshaller(string name, CultureInfo culture)
+        /// <returns>The new <see cref="IUnmarshaller"/>.</returns>
+        public override IUnmarshaller CreateUnmarshaller(string name, CultureInfo? culture)
         {
-            if (culture == null)
-                culture = CultureInfo.CurrentCulture;
+            culture ??= CultureInfo.CurrentCulture;
 
             var stream = GetStream(name);
             switch (stream.Mode)
@@ -98,9 +101,9 @@ namespace BeanIO.Internal
         /// <summary>
         /// Creates a new <see cref="IBeanWriter"/> for writing to the given output stream.
         /// </summary>
-        /// <param name="name">The name of the stream in the mapping file</param>
-        /// <param name="output">The output stream to write to</param>
-        /// <returns>The new <see cref="IBeanWriter"/></returns>
+        /// <param name="name">The name of the stream in the mapping file.</param>
+        /// <param name="output">The output stream to write to.</param>
+        /// <returns>The new <see cref="IBeanWriter"/>.</returns>
         public override IBeanWriter CreateWriter(string name, TextWriter output)
         {
             var stream = GetStream(name);
@@ -117,8 +120,8 @@ namespace BeanIO.Internal
         /// <summary>
         /// Creates a new <see cref="IMarshaller"/> for marshalling records.
         /// </summary>
-        /// <param name="name">The name of the stream in the mapping file</param>
-        /// <returns>The new <see cref="IMarshaller"/></returns>
+        /// <param name="name">The name of the stream in the mapping file.</param>
+        /// <returns>The new <see cref="IMarshaller"/>.</returns>
         public override IMarshaller CreateMarshaller(string name)
         {
             var stream = GetStream(name);
@@ -144,9 +147,9 @@ namespace BeanIO.Internal
         /// <summary>
         /// Loads a BeanIO mapping file, and adds the configured streams to this factory.
         /// </summary>
-        /// <param name="input">The input stream to read the mapping file from</param>
-        /// <param name="properties">user <see cref="Properties"/> for property substitution</param>
-        public override void Load(System.IO.Stream input, Properties properties)
+        /// <param name="input">The input stream to read the mapping file from.</param>
+        /// <param name="properties">user <see cref="Properties"/> for property substitution.</param>
+        public override void Load(System.IO.Stream input, Properties? properties)
         {
             var streams = Compiler.LoadMapping(input, properties);
             foreach (var stream in streams)
@@ -156,8 +159,8 @@ namespace BeanIO.Internal
         /// <summary>
         /// Test whether a mapping configuration exists for a named stream.
         /// </summary>
-        /// <param name="name">The name of the stream in the mapping file</param>
-        /// <returns>true if a mapping configuration is found for the named stream</returns>
+        /// <param name="name">The name of the stream in the mapping file.</param>
+        /// <returns>true if a mapping configuration is found for the named stream.</returns>
         public override bool IsMapped(string name)
         {
             return _contextMap.ContainsKey(name);
@@ -173,14 +176,13 @@ namespace BeanIO.Internal
         }
 
         /// <summary>
-        /// Returns the named stream
+        /// Returns the named stream.
         /// </summary>
-        /// <param name="name">the name of the stream</param>
-        /// <returns>the <see cref="Parser.Stream"/></returns>
+        /// <param name="name">the name of the stream.</param>
+        /// <returns>the <see cref="Parser.Stream"/>.</returns>
         protected Parser.Stream GetStream(string name)
         {
-            Parser.Stream stream;
-            if (!_contextMap.TryGetValue(name, out stream))
+            if (!_contextMap.TryGetValue(name, out var stream))
                 throw new BeanIOException($"No stream mapping configured for name '{name}'");
             return stream;
         }

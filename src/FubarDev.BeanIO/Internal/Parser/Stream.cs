@@ -10,59 +10,59 @@ using System.IO;
 
 using BeanIO.Builder;
 
-using JetBrains.Annotations;
-
 namespace BeanIO.Internal.Parser
 {
     internal class Stream
     {
-        private ISet<IParserLocal> _locals;
+        private ISet<IParserLocal> _locals = new HashSet<IParserLocal>();
+        private ISelector? _layout;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Stream"/> class.
         /// </summary>
-        /// <param name="format">the <see cref="IStreamFormat"/></param>
-        public Stream([NotNull] IStreamFormat format)
+        /// <param name="format">the <see cref="IStreamFormat"/>.</param>
+        public Stream(IStreamFormat format)
         {
-            if (format == null)
-                throw new ArgumentNullException(nameof(format));
-            Format = format;
+            Format = format ?? throw new ArgumentNullException(nameof(format));
             Mode = AccessMode.ReadWrite;
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="IStreamFormat"/>
+        /// Gets or sets the <see cref="IStreamFormat"/>.
         /// </summary>
-        [NotNull]
         public IStreamFormat Format { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="ISelector"/>
+        /// Gets or sets the <see cref="ISelector"/>.
         /// </summary>
-        public ISelector Layout { get; set; }
+        public ISelector Layout
+        {
+            get => _layout ?? throw new InvalidOperationException("Layout not initialized");
+            set => _layout = value;
+        }
 
         /// <summary>
-        /// Gets or sets the <see cref="AccessMode"/>
+        /// Gets or sets the <see cref="AccessMode"/>.
         /// </summary>
         public AccessMode Mode { get; set; }
 
         /// <summary>
-        /// Gets or sets the <see cref="IMessageFactory"/>
+        /// Gets or sets the <see cref="IMessageFactory"/>.
         /// </summary>
-        public IMessageFactory MessageFactory { get; set; }
+        public required IMessageFactory MessageFactory { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to ignore unidentified records
+        /// Gets or sets a value indicating whether to ignore unidentified records.
         /// </summary>
         public bool IgnoreUnidentifiedRecords { get; set; }
 
         /// <summary>
-        /// Gets the name of this stream
+        /// Gets the name of this stream.
         /// </summary>
         public string Name => Format.Name;
 
         /// <summary>
-        /// Initializes the <see cref="Stream"/>
+        /// Initializes the <see cref="Stream"/>.
         /// </summary>
         public void Init()
         {
@@ -72,19 +72,18 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Creates a new <see cref="IBeanReader"/> for reading from the given input stream
+        /// Creates a new <see cref="IBeanReader"/> for reading from the given input stream.
         /// </summary>
-        /// <param name="textReader">the input stream to read from</param>
-        /// <param name="culture">the locale to use for rendering error messages</param>
-        /// <returns>the new <see cref="IBeanReader"/></returns>
-        public IBeanReader CreateBeanReader([NotNull] TextReader textReader, CultureInfo culture)
+        /// <param name="textReader">the input stream to read from.</param>
+        /// <param name="culture">the locale to use for rendering error messages.</param>
+        /// <returns>the new <see cref="IBeanReader"/>.</returns>
+        public IBeanReader CreateBeanReader(TextReader textReader, CultureInfo culture)
         {
             if (textReader == null)
                 throw new ArgumentNullException(nameof(textReader));
 
-            var context = Format.CreateUnmarshallingContext();
+            var context = Format.CreateUnmarshallingContext(MessageFactory);
             InitContext(context);
-            context.MessageFactory = MessageFactory;
             context.Culture = culture;
             context.RecordReader = Format.CreateRecordReader(textReader);
 
@@ -96,11 +95,11 @@ namespace BeanIO.Internal.Parser
         }
 
         /// <summary>
-        /// Creates a new <see cref="IBeanWriter"/> for writing to the given output stream
+        /// Creates a new <see cref="IBeanWriter"/> for writing to the given output stream.
         /// </summary>
-        /// <param name="textWriter">the output stream to write to</param>
-        /// <returns>the new <see cref="IBeanWriter"/></returns>
-        public IBeanWriter CreateBeanWriter([NotNull] TextWriter textWriter)
+        /// <param name="textWriter">the output stream to write to.</param>
+        /// <returns>the new <see cref="IBeanWriter"/>.</returns>
+        public IBeanWriter CreateBeanWriter(TextWriter textWriter)
         {
             if (textWriter == null)
                 throw new ArgumentNullException(nameof(textWriter));
@@ -116,17 +115,16 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Creates a new <see cref="IUnmarshaller"/>.
         /// </summary>
-        /// <param name="culture">the locale to use for rendering error messages</param>
-        /// <returns>the new <see cref="IUnmarshaller"/></returns>
+        /// <param name="culture">the locale to use for rendering error messages.</param>
+        /// <returns>the new <see cref="IUnmarshaller"/>.</returns>
         public IUnmarshaller CreateUnmarshaller(CultureInfo culture)
         {
             var recordUnmarshaller = Format.CreateRecordUnmarshaller();
             if (recordUnmarshaller == null)
                 throw new InvalidOperationException("Unmarshaller not supported for stream format");
 
-            var context = Format.CreateUnmarshallingContext();
+            var context = Format.CreateUnmarshallingContext(MessageFactory);
             InitContext(context);
-            context.MessageFactory = MessageFactory;
             context.Culture = culture;
 
             return new UnmarshallerImpl(context, Layout, recordUnmarshaller);
@@ -135,7 +133,7 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Creates a new <see cref="IMarshaller"/>.
         /// </summary>
-        /// <returns>the new <see cref="IMarshaller"/></returns>
+        /// <returns>the new <see cref="IMarshaller"/>.</returns>
         public IMarshaller CreateMarshaller()
         {
             var recordMarshaller = Format.CreateRecordMarshaller();

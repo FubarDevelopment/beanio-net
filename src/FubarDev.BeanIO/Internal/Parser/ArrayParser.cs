@@ -7,19 +7,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 using BeanIO.Internal.Util;
 
 namespace BeanIO.Internal.Parser
 {
     /// <summary>
-    /// The <see cref="ArrayParser"/> class
+    /// The <see cref="ArrayParser"/> class.
     /// </summary>
     internal class ArrayParser : CollectionParser
     {
         /// <summary>
-        /// Gets the <see cref="IProperty"/> implementation type
+        /// Gets the <see cref="IProperty"/> implementation type.
         /// </summary>
         public override PropertyType Type => Internal.Parser.PropertyType.AggregationArray;
 
@@ -31,9 +30,9 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Returns the unmarshalled property value.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <returns>the property value</returns>
-        public override object GetValue(ParsingContext context)
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <returns>the property value.</returns>
+        public override object? GetValue(ParsingContext context)
         {
             if (IsInvalid(context))
                 return base.GetValue(context);
@@ -57,18 +56,18 @@ namespace BeanIO.Internal.Parser
         /// <summary>
         /// Sets the property value for marshaling.
         /// </summary>
-        /// <param name="context">The <see cref="ParsingContext"/></param>
-        /// <param name="value">the property value</param>
-        public override void SetValue(ParsingContext context, object value)
+        /// <param name="context">The <see cref="ParsingContext"/>.</param>
+        /// <param name="value">the property value.</param>
+        public override void SetValue(ParsingContext context, object? value)
         {
-            IList collection = null;
+            IList? collection = null;
             if (value != null)
             {
                 var arr = (Array)value;
                 var length = arr.Length;
                 if (length > 0)
                 {
-                    collection = (IList)(from constructor in typeof(List<>).MakeGenericType(ElementType).GetTypeInfo().DeclaredConstructors
+                    collection = (IList)(from constructor in typeof(List<>).MakeGenericType(ElementType).GetConstructors()
                                          let parameters = constructor.GetParameters()
                                          where parameters.Length == 1 && parameters[0].ParameterType == typeof(int)
                                          select constructor).Single().Invoke(new object[] { length });
