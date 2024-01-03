@@ -4,6 +4,17 @@
 
 # Latest changes
 
+## 5.0.0
+
+* Using Nullable Reference Types
+* NuGet updates
+  * NodaTime 3.1.10
+* Minimum target framework is
+  * .NET Framework 4.7.2
+  * .NET Standard 2.0
+  * .NET 6.0
+* C++/CLI is only supported when using `PackageReference` instead of `packages.config`
+
 ## 4.1.0
 
 * Supports a new experimental property accessor factory `asm` which uses compiled expression trees instead of reflection

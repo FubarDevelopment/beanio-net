@@ -15,11 +15,10 @@
 - Minimum .NET Framework version is 4.7.2
 - Dropped support for .NET Standard below 2.0
 - Dropped support für C++/CLI when not using PackageReference</PackageReleaseNotes>
-    <PackageIconUrl>https://github.com/FubarDevelopment/beanio-net/raw/master/beanio-logo.png</PackageIconUrl>
-    <PackageProjectUrl>https://github.com/FubarDevelopment/beanio-net</PackageProjectUrl>
-    <PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/FubarDevelopment/beanio-net</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIconUrl>beanio-logo.png</PackageIconUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,12 +26,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AdditionalFiles Include="..\..\stylecop.json" Link="stylecop.json" />
+    <AdditionalFiles Include="..\..\stylecop.json" Link="stylecop.json" Visible="false" />
     <None Include="Xsd\**\*">
       <PackagePath>src/Xsd/</PackagePath>
       <Pack>true</Pack>
     </None>
-    <None Include="..\..\*.md;..\..\beanio-logo.png;..\..\LICENSE.txt">
+    <None Include="..\..\*.md;..\..\beanio-logo.png;..\..\LICENSE.txt" Visible="false">
       <PackagePath>/</PackagePath>
       <Pack>true</Pack>
     </None>
