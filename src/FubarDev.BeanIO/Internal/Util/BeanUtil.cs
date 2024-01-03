@@ -354,7 +354,7 @@ namespace BeanIO.Internal.Util
                 var typeInfo = _typeInfo;
                 while (typeInfo != typeof(object))
                 {
-                    methodInfo = typeInfo.GetMethod(name);
+                    methodInfo = typeInfo.GetMethod(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
                     if (methodInfo != null)
                         break;
                     if (typeInfo.BaseType == null)

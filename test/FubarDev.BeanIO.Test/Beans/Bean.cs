@@ -37,5 +37,14 @@ namespace BeanIO.Beans
         public Bean? record;
         public Bean? segment;
         #endregion
+
+        public int? NoOpSetter
+        {
+            get => 1;
+        }
+
+        private void SetNoOpSetter(int? value)
+        {
+        }
     }
 }
