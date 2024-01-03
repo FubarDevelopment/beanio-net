@@ -1,6 +1,6 @@
-<beanio xmlns="http://www.beanio.org/2012/03" 
+<beanio xmlns="http://www.beanio.org/2016/07"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.beanio.org/2012/03 http://www.beanio.org/2012/03/mapping.xsd">
+  xsi:schemaLocation="http://www.beanio.org/2016/07 http://www.beanio.org/2016/07/mapping.xsd">
 
   <stream name="s1" format="csv">
     <record name="record" class="map">

@@ -1,4 +1,4 @@
-<beanio xmlns="http://www.beanio.org/2012/03">
+<beanio xmlns="http://www.beanio.org/2016/07">
 
   <stream name="stream1" format="csv" ignoreUnidentifiedRecords="true">
   

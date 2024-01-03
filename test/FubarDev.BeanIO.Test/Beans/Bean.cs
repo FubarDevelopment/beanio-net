@@ -18,7 +18,7 @@ namespace BeanIO.Beans
     [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "directly ported from the Java source code")]
     public class Bean
     {
-        #region simple properties
+        #region simple fields
         public string? type;
         public string? text;
         public string? field1;
@@ -27,12 +27,12 @@ namespace BeanIO.Beans
         public LocalDate? date;
         #endregion
 
-        #region collection properties
+        #region collection fields
         public Hashtable? map;
         public ArrayList? list;
         #endregion
 
-        #region bean properties
+        #region bean fields
         public Bean? group;
         public Bean? record;
         public Bean? segment;

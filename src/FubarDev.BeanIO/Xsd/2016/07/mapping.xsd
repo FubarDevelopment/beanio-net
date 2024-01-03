@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <schema
   xmlns="http://www.w3.org/2001/XMLSchema"
-  xmlns:tns="http://www.beanio.org/2015/06"
+  xmlns:tns="http://www.beanio.org/2016/07"
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   elementFormDefault="qualified"
   targetNamespace="http://www.beanio.org/2016/07"
